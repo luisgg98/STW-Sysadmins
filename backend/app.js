@@ -15,7 +15,7 @@ app.set('view engine', 'pug');
 
 // Using morgan, module for logging
 app.use(morgan('dev'));
-//Format indicates how we want to see the loogging
+//Format indicates how we want to see the login
 
 // Allow nodejs to use JSON
 app.use(express.json());
