@@ -5,10 +5,9 @@ var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
 var swaggerJSDoc = require('swagger-jsdoc');
 
-
+// MUST BE CHANGED BECAUSE WE ONLY USE /API
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
 
 var app = express();
 
@@ -36,16 +35,11 @@ var options = {
 // initialize swagger jsdoc
 var swaggerSpec = swaggerJSDoc(options);
 
-
 // server swagger
 app.get('/swagger.json',function (req,res) {
   res.setHeader('Content-Type','application/json');
   res.send(swaggerSpec);
 });
-
-// view engine setup
-app.set('views', path.join(__dirname,'app_server', 'views'));
-app.set('view engine', 'pug');
 
 // Using morgan, module for logging
 app.use(morgan('dev'));
@@ -55,12 +49,15 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
 // Necessary to use the interface of Swagger
 app.use(express.static(path.join(__dirname, 'public')));
 
+// MUST BE CHANGED
+// ACTUALLY I OUR PROJECTS WE ONLY ARE GOING TO USE /API
+// BECAUSE FRONTEND DOES THE REST
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
