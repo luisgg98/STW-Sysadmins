@@ -1,9 +1,10 @@
-var express = require('express');
-var router = express.Router();
-const maincontroller = require('../controllers/main');
+const express = require('express')
+const User = require('../models/user')
+const router = express.Router()
 
+router.get("/", async (req, res) => {
+    const users = await User.find()
+    res.send(users)
+})
 
-/* GET home page. */
-router.get('/',maincontroller.index);
-
-module.exports = router;
+module.exports = router

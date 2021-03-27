@@ -10,6 +10,7 @@ const cors = require('cors')
 const passport = require('passport')
 // Link to the swagger configuration
 const swaggerSpec = require('./config/swagger')
+require('./config/database');
 
 //Loading the models
 //require('./models/*')
@@ -20,7 +21,7 @@ var apiRouter = require('./routes/api');
 var app = express();
 
 //Passport is required to authentication
-require('./config/passport')(passport);
+//require('./config/passport')(passport);
 // This will initialize the passport object on every request
 app.use(passport.initialize());
 
