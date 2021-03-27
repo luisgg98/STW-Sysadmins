@@ -11,3 +11,5 @@ const company = new mongoose.Schema({
     }
 });
 company.index({coords: '2dsphere'});
+
+module.exports = mongoose.model("company", company)

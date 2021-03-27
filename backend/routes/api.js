@@ -1,9 +1,10 @@
-var express = require('express');
-const User = require('../models/user')
-var router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-var usersRouter = require('./apiContent/users');
+const usersRouter = require('./apiContent/users')
+const companiesRouter = require('./apiContent/companies')
 
-router.use('/users',usersRouter);
+router.use('/users', usersRouter);
+router.use('/companies', companiesRouter)
 
 module.exports = router;
