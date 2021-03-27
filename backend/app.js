@@ -12,7 +12,7 @@ const passport = require('passport')
 const swaggerSpec = require('./config/swagger')
 
 //Loading the models
-require('./models/*')
+//require('./models/*')
 
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
