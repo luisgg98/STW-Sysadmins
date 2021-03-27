@@ -3,43 +3,25 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
-var swaggerJSDoc = require('swagger-jsdoc');
+// Necessary to communicate to the frontend
+const cors = require('cors')
+//Necessary for the use of JWT
+// Authentication
+const passport = require('passport')
+// Link to the swagger configuration
+const swaggerSpec = require('./config/swagger')
 
-// MUST BE CHANGED BECAUSE WE ONLY USE /API
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var apiRouter = require('./routes/api');
 
 var app = express();
+//Loading the models
+require('./models/*')
 
-var swaggerport = (process.env.PORT || '3000');
-var nodeSwagger = `localhost:${swaggerport}`;
-
-var swaggerDefinition = {
-  info:{
-    title:' Zitations web application API',
-    version:'1.0.0',
-    description:'API for the web application Zitations'
-  },
-  host:nodeSwagger,
-  basePath:'/api/', //where the services are
-  schemes:['http','https'] //working on http, in heroku we have to add https
-};
-
-var options = {
-  swaggerDefinition:swaggerDefinition,
-  // path to the API docs
-  apis:['./routes/*']
-
-};
-
-// initialize swagger jsdoc
-var swaggerSpec = swaggerJSDoc(options);
-
-// server swagger
-app.get('/swagger.json',function (req,res) {
-  res.setHeader('Content-Type','application/json');
-  res.send(swaggerSpec);
-});
+//Passport is required to authentication
+require('./config/passport')(passport);
+// This will initialize the passport object on every request
+app.use(passport.initialize());
 
 // Using morgan, module for logging
 app.use(morgan('dev'));
@@ -50,14 +32,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// Allows our Angular application to make HTTP requests to Express application
+app.use(cors());
+
 // Necessary to use the interface of Swagger
 app.use(express.static(path.join(__dirname, 'public')));
 
-// MUST BE CHANGED
-// ACTUALLY I OUR PROJECTS WE ONLY ARE GOING TO USE /API
-// BECAUSE FRONTEND DOES THE REST
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api', apiRouter);
+
+// server swagger
+app.get('/swagger.json',function (req,res) {
+  res.setHeader('Content-Type','application/json');
+  res.send(swaggerSpec);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
