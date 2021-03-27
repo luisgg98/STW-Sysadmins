@@ -3,7 +3,7 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const fs = require('fs');
 const path = require('path');
 // TODO MUST BE CHANGED according to our database
-const User = require('mongoose').model('User');
+const User = require('mongoose').model('user');
 
 // The idea is to have a file where the public key and the private
 //key are stored

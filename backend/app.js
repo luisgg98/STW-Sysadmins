@@ -11,12 +11,13 @@ const passport = require('passport')
 // Link to the swagger configuration
 const swaggerSpec = require('./config/swagger')
 
+//Loading the models
+require('./models/*')
+
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
 
 var app = express();
-//Loading the models
-require('./models/*')
 
 //Passport is required to authentication
 require('./config/passport')(passport);

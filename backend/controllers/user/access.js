@@ -1,4 +1,4 @@
-const utils = require('../lib/utils');
+//const utils = require('../lib/utils');
 
 // TODO CREATE THE FUNCTIONS TO LOGIN,REGISTER AND DELETE ACCOUNT
 
