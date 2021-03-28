@@ -7,8 +7,10 @@ let register = async (req, res) => {
             nif: req.body.nif,
             email : req.body.email,
             password: req.body.password,
-            alt: req.body.alt,
-            long: req.body.long
+            location: {
+                type: "Point",
+                coordinates: [req.body.alt,  req.body.long]
+            }
         })
         await company.save()
         res.send(company)
