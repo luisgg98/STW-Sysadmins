@@ -1,6 +1,6 @@
 const express = require('express')
-const Company = require('../../models/company')
-const ControllerCompany = require('../../controllers/companies/access')
+const Company = require('../models/company')
+const ControllerCompany = require('../controllers/companies/access')
 const router = express.Router()
 
 //const passport = require('passport');

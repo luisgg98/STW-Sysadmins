@@ -1,29 +1,38 @@
-//const utils = require('../lib/utils');
+const utils = require('../../lib/utils')
 const User = require('../../models/user')
 
-// TODO CREATE THE FUNCTIONS TO LOGIN,REGISTER AND DELETE ACCOUNT
+// TODO can't be two users with same phone number
 let register = async (req, res) => {
     try {
+        // Hash password with a salt
+        let password = utils.genPassword(req.body.password)
         const user = new User({
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             phone: req.body.phone,
             email: req.body.email,
-            password: req.body.password
+            password: password.hash,
+            salt: password.salt
         })
+
         await user.save()
         res.send(user)
     } catch {
-        res.status(404)
-        res.send({ error: "Bad params!" })
+        res.status(422)
+        res.send({ error: "Bad parameters!" })
     }
 }
 
 let login = async (req, res) => {
     try {
         const user = await User.findOne({ phone: req.body.phone })
-        // todo gestionar contraseña
-        res.send(user)
+        if (utils.validPassword(req.body.password, user.password, user.salt)) {
+            res.status(200)
+            res.send(user)
+        } else {
+            res.status(401)
+            res.send({ error: "Incorrect login"})
+        }
     } catch {
         res.status(404)
         res.send({ error: "User doesn't exist!" })
@@ -39,9 +48,6 @@ let update = async (req, res) => {
         }
         if (req.body.last_name) {
             user.last_name = req.body.last_name
-        }
-        if (req.body.phone) {
-            user.phone = req.body.phone
         }
         if (req.body.email) {
             user.email = req.body.email

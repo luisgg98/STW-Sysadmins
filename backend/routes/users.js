@@ -1,5 +1,5 @@
 const express = require('express')
-const ControllerUser = require('../../controllers/user/access')
+const ControllerUser = require('../controllers/user/access')
 const router = express.Router()
 //const passport = require('passport');
 //const accessController = require('../../controllers/user/access');
@@ -24,11 +24,13 @@ router.post("/register", ControllerUser.register)
  */
 router.post("/login", ControllerUser.login)
 
+// TODO patch could fail in some browsers
 router.patch("/update/:phone", ControllerUser.update)
 
 /*
  * Deletes de user with phone number :phone
  */
+// TODO delete could fail in some browsers
 router.delete("/delete/:phone", ControllerUser.delete)
 
 module.exports = router;

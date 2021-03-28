@@ -2,14 +2,14 @@ const crypto = require('crypto');
 const jsonwebtoken = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
-
+/*
 //It necessary to have previously a private key to cypher
 // the JWT token
 const pathToKey = path.join(__dirname, '..', 'id_rsa_priv.pem');
 // The main idea is to have randomly created a file which contains
 //this necessary keys
 const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
-
+*/
 /**
  * -------------- HELPER FUNCTIONS ----------------
  */
@@ -24,8 +24,8 @@ const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
  * the decrypted hash/salt with the password that the user provided at login
  */
 function validPassword(password, hash, salt) {
-    var hashVerify = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
-    return hash === hashVerify;
+    let hashVerify = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex')
+    return hash === hashVerify
 }
 
 /**
@@ -39,19 +39,20 @@ function validPassword(password, hash, salt) {
  * You would then store the hashed password in the database and then re-hash it to verify later (similar to what we do here)
  */
 function genPassword(password) {
-    var salt = crypto.randomBytes(32).toString('hex');
-    var genHash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
+    let salt = crypto.randomBytes(32).toString('hex')
+    let genHash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex')
     // In Computer Security our teacher told us something about it
     return {
         salt: salt,
         hash: genHash
-    };
+    }
 }
 
 
 /**
  * @param {*} user - The user object.  We need this to set the JWT `sub` payload property to the MongoDB user ID
  */
+/*
 function issueJWT(user) {
     // TODO CHECK THE WHAT IS AND ID IN MONGODB
     const _id = user._id;
@@ -71,7 +72,8 @@ function issueJWT(user) {
         expires: expiresIn
     }
 }
+*/
 
 module.exports.validPassword = validPassword;
 module.exports.genPassword = genPassword;
-module.exports.issueJWT = issueJWT;
+//module.exports.issueJWT = issueJWT;

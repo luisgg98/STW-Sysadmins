@@ -1,12 +1,15 @@
+const utils = require('../../lib/utils')
 const Company = require('../../models/company')
 
 let register = async (req, res) => {
     try {
+        let password = utils.genPassword(req.body.password)
         const company = new Company({
             name: req.body.name,
             nif: req.body.nif,
             email : req.body.email,
-            password: req.body.password,
+            password: password.hash,
+            salt: password.salt,
             location: {
                 type: "Point",
                 coordinates: [req.body.alt,  req.body.long]
@@ -15,16 +18,20 @@ let register = async (req, res) => {
         await company.save()
         res.send(company)
     } catch {
-        res.status(404)
-        res.send({ error: "Bad params!" })
+        res.status(422)
+        res.send({ error: "Bad parameters!" })
     }
 }
 
 let login = async (req, res) => {
     try {
         const company = await Company.findOne({ nif: req.body.nif })
-        // todo manage password
-        res.send(company)
+        if (utils.validPassword(req.body.password, company.password, company.salt)) {
+            res.send(company)
+        } else {
+            res.status(401)
+            res.send({ error: "Incorrect login"})
+        }
     } catch {
         res.status(404)
         res.send({ error: "Company doesn't exist!" })
