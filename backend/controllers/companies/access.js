@@ -1,16 +1,21 @@
 const Company = require('../../models/company')
 
 let register = async (req, res) => {
-    const company = new Company({
-        name: req.body.name,
-        nif: req.body.nif,
-        email : req.body.email,
-        password: req.body.password,
-        alt: req.body.alt,
-        long: req.body.long
-    })
-    await company.save()
-    res.send(company)
+    try {
+        const company = new Company({
+            name: req.body.name,
+            nif: req.body.nif,
+            email : req.body.email,
+            password: req.body.password,
+            alt: req.body.alt,
+            long: req.body.long
+        })
+        await company.save()
+        res.send(company)
+    } catch {
+        res.status(404)
+        res.send({ error: "Bad params!" })
+    }
 }
 
 let login = async (req, res) => {

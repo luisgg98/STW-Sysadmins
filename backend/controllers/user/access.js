@@ -3,15 +3,20 @@ const User = require('../../models/user')
 
 // TODO CREATE THE FUNCTIONS TO LOGIN,REGISTER AND DELETE ACCOUNT
 let register = async (req, res) => {
-    const user = new User({
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        phone: req.body.phone,
-        email: req.body.email,
-        password: req.body.password
-    })
-    await user.save()
-    res.send(user)
+    try {
+        const user = new User({
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            phone: req.body.phone,
+            email: req.body.email,
+            password: req.body.password
+        })
+        await user.save()
+        res.send(user)
+    } catch {
+        res.status(404)
+        res.send({ error: "Bad params!" })
+    }
 }
 
 let login = async (req, res) => {
