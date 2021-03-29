@@ -3,7 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node config/settings"
+    "start": "node getKeys.js && node config/settings"
+  },
+  "engines": {
+    "node": ">=14.15.5",
+    "npm": ">=7.5.4"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

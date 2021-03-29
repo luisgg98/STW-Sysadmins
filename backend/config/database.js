@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 // Define a database connection string
-const dbURI = 'mongodb://localhost/zitation';
+//const uri = process.env.MONGODB_URI;
+const dbURI = process.env.MONGODB_URI || 'mongodb://localhost/zitation';
 
 // Opened a Mongoose connection at application startup
 mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology: true});

@@ -1,3 +1,2 @@
 #!/bin/bash
-node getKeys.js
-DEBUG=backend:* npm start
+node getKeys.js && DEBUG=backend:* npm start
