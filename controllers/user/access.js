@@ -1,4 +1,5 @@
 const utils = require('../../lib/utils')
+const validate_email = require('../../services/validate_email')
 const User = require('../../models/user')
 
 // TODO can't be two users with same phone number
@@ -6,17 +7,22 @@ let register = async (req, res) => {
     try {
         // Hash password with a salt
         let password = utils.genPassword(req.body.password)
-        const user = new User({
-            first_name: req.body.first_name,
-            last_name: req.body.last_name,
-            phone: req.body.phone,
-            email: req.body.email,
-            password: password.hash,
-            salt: password.salt
-        })
+        if (validate_email.validateEmail(req.body.email)) {
+            const user = new User({
+                first_name: req.body.first_name,
+                last_name: req.body.last_name,
+                phone: req.body.phone,
+                email: req.body.email,
+                password: password.hash,
+                salt: password.salt
+            })
+            await user.save()
+            res.send(user)
+        } else {
+            res.status(422)
+            res.send({ error: "Wrong email format!" })
+        }
 
-        await user.save()
-        res.send(user)
     } catch {
         res.status(422)
         res.send({ error: "Bad parameters!" })
@@ -54,7 +60,9 @@ let update = async (req, res) => {
             user.email = req.body.email
         }
         if (req.body.password) {
-            user.password = req.body.password
+            let password = utils.genPassword(req.body.password)
+            user.password = password.hash
+            user.salt = password.salt
         }
 
         await user.save()

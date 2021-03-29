@@ -1,22 +1,28 @@
 const utils = require('../../lib/utils')
+const validate_email = require('../../services/validate_email')
 const Company = require('../../models/company')
 
 let register = async (req, res) => {
     try {
         let password = utils.genPassword(req.body.password)
-        const company = new Company({
-            name: req.body.name,
-            nif: req.body.nif,
-            email : req.body.email,
-            password: password.hash,
-            salt: password.salt,
-            location: {
-                type: "Point",
-                coordinates: [req.body.alt,  req.body.long]
-            }
-        })
-        await company.save()
-        res.send(company)
+        if (validate_email.validateEmail(req.body.email)) {
+            const company = new Company({
+                name: req.body.name,
+                nif: req.body.nif,
+                email : req.body.email,
+                password: password.hash,
+                salt: password.salt,
+                location: {
+                    type: "Point",
+                    coordinates: [req.body.alt,  req.body.long]
+                }
+            })
+            await company.save()
+            res.send(company)
+        } else {
+            res.status(422)
+            res.send({ error: "Wrong email format" })
+        }
     } catch {
         res.status(422)
         res.send({ error: "Bad parameters!" })
