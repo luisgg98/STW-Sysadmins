@@ -40,7 +40,10 @@
       // Begin Swagger UI call region
       // MUST CHANGE WHEN IT IS DEPLOY IN HEROKU
       const ui = SwaggerUIBundle({
-        url: "http://localhost:3000/swagger.json", // <--- CHECK THIS
+        //Change in deployment
+        // LOCAL: "http://localhost:3000/swagger.json",
+        // HEROKU:
+        url: "http://stw-zitation.herokuapp.com/swagger.json", // <--- CHECK THIS
         dom_id: '#swagger-ui',
         deepLinking: true,
         presets: [
