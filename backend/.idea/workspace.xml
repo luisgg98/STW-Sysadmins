@@ -1,7 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5eab8c6a-6c97-4dd1-895c-6ff8bc578a47" name="Default Changelist" comment="JWT security working for USERS&#10;commit required to heroku send help" />
+    <list default="true" id="5eab8c6a-6c97-4dd1-895c-6ff8bc578a47" name="Default Changelist" comment="JWT security working for USERS&#10;commit required to heroku send help">
+      <change beforePath="$PROJECT_DIR$/../.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/backend.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Procfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/database.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/passport.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/settings" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/swagger.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/companies/access.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/user/access.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/getKeys.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/company.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/user.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/favicon-16x16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/favicon-32x32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/oauth2-redirect.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-bundle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-bundle.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-es-bundle-core.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-es-bundle-core.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-es-bundle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-es-bundle.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-standalone-preset.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-standalone-preset.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/companies.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/users.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/user/user.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/start.sh" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -63,7 +112,7 @@
       <workItem from="1616944626227" duration="500000" />
       <workItem from="1616998798730" duration="9759000" />
       <workItem from="1617008930429" duration="285000" />
-      <workItem from="1617009314601" duration="4049000" />
+      <workItem from="1617009314601" duration="4102000" />
     </task>
     <task id="LOCAL-00001" summary="Restructured">
       <created>1616346893956</created>
