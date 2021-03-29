@@ -5,6 +5,7 @@ const company = new mongoose.Schema({
     nif : { type : String, required: true},
     email : { type : String, required: true},
     password : { type : String, required: true},
+    salt : { type : String, required: true},
     location: {
         type: { type: String },
         coordinates: [Number]
