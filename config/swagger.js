@@ -1,6 +1,8 @@
 let swaggerJSDoc = require('swagger-jsdoc');
 let swaggerport = (process.env.PORT || '3000');
-let nodeSwagger = `localhost:${swaggerport}`;
+//TODO CREATE ENVIRONMENT VARIABLES
+let nodeSwagger = `stw-zitation.herokuapp.com:${swaggerport}`;
+//let nodeSwagger = `localhost:${swaggerport}`;
 
 let swaggerDefinition = {
     info:{
