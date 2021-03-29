@@ -22,5 +22,4 @@ let options = {
 // initialize swagger jsdoc
 let swaggerSpec = swaggerJSDoc(options)
 
-
 module.exports= swaggerSpec

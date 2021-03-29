@@ -2,14 +2,14 @@ const crypto = require('crypto');
 const jsonwebtoken = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
-/*
+
 //It necessary to have previously a private key to cypher
 // the JWT token
 const pathToKey = path.join(__dirname, '..', 'id_rsa_priv.pem');
 // The main idea is to have randomly created a file which contains
 //this necessary keys
 const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
-*/
+
 /**
  * -------------- HELPER FUNCTIONS ----------------
  */
@@ -52,7 +52,7 @@ function genPassword(password) {
 /**
  * @param {*} user - The user object.  We need this to set the JWT `sub` payload property to the MongoDB user ID
  */
-/*
+// User can be a company
 function issueJWT(user) {
     // TODO CHECK THE WHAT IS AND ID IN MONGODB
     const _id = user._id;
@@ -72,8 +72,7 @@ function issueJWT(user) {
         expires: expiresIn
     }
 }
-*/
 
 module.exports.validPassword = validPassword;
 module.exports.genPassword = genPassword;
-//module.exports.issueJWT = issueJWT;
+module.exports.issueJWT = issueJWT;

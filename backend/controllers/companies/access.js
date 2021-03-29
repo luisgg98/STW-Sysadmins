@@ -27,7 +27,8 @@ let login = async (req, res) => {
     try {
         const company = await Company.findOne({ nif: req.body.nif })
         if (utils.validPassword(req.body.password, company.password, company.salt)) {
-            res.send(company)
+            const tokenObject = utils.issueJWT(company);
+            res.send({ success: true, token: tokenObject.token, expiresIn: tokenObject.expires })
         } else {
             res.status(401)
             res.send({ error: "Incorrect login"})
@@ -40,7 +41,7 @@ let login = async (req, res) => {
 
 let update = async (req, res) => {
     try {
-        const company = await Company.findOne({ nif: req.params.nif })
+        const company = await Company.findOne({ nif: req.params.nif });
 
         if (req.body.name) {
             company.name = req.body.name

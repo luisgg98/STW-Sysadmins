@@ -28,7 +28,8 @@ let login = async (req, res) => {
         const user = await User.findOne({ phone: req.body.phone })
         if (utils.validPassword(req.body.password, user.password, user.salt)) {
             res.status(200)
-            res.send(user)
+            const tokenObject = utils.issueJWT(user);
+            res.send({ success: true, token: tokenObject.token, expiresIn: tokenObject.expires })
         } else {
             res.status(401)
             res.send({ error: "Incorrect login"})

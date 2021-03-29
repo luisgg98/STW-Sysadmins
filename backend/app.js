@@ -11,19 +11,15 @@ const passport = require('passport')
 // Link to the swagger configuration
 const swaggerSpec = require('./config/swagger')
 require('./config/database');
-
-//Loading the models
-//require('./models/*')
-
+require('./config/passport');
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
 
 var app = express();
 
 //Passport is required to authentication
-//require('./config/passport')(passport);
 // This will initialize the passport object on every request
-app.use(passport.initialize());
+app.use(passport.initialize())
 
 // Using morgan, module for logging
 app.use(morgan('dev'));

@@ -1,10 +1,7 @@
 const express = require('express')
-const Company = require('../models/company')
 const ControllerCompany = require('../controllers/companies/access')
 const router = express.Router()
-
-//const passport = require('passport');
-//const accessController = require('../../controllers/user/access');
+const passport = require('passport');
 
 /*
     Creates a new company
@@ -16,11 +13,11 @@ router.post("/register", ControllerCompany.register)
  */
 router.post("/login", ControllerCompany.login)
 
-router.patch("/update/:nif", ControllerCompany.update)
+router.patch("/update/:nif",passport.authenticate('jwt',{session:false}), ControllerCompany.update)
 
 /*
 * Deletes the company with nif number :nif
 */
-router.delete("/delete/:nif", ControllerCompany.delete)
+router.delete("/delete/:nif",passport.authenticate('jwt',{session:false}), ControllerCompany.delete)
 
 module.exports = router

@@ -1,18 +1,7 @@
 const express = require('express')
 const ControllerUser = require('../controllers/user/access')
 const router = express.Router()
-//const passport = require('passport');
-//const accessController = require('../../controllers/user/access');
-
-/***
- * TODO USING THIS CODE WE CAN VALIDATE THE JWT TOKEN THE FRONTEND SEND TO US
- * passport.authenticate('jwt', { session: false }), (req, res, next) => {
-    res.status(200).json({ success: true, msg: "You are successfully authenticated to this route!"});
-}
- */
-router.get('/protected', (req, res, next) => {
-    // FOUND ON THE INTERNET, DON'T MIND ABOUT IT
-});
+const passport = require('passport');
 
 /*
     Creates a new user
@@ -25,12 +14,12 @@ router.post("/register", ControllerUser.register)
 router.post("/login", ControllerUser.login)
 
 // TODO patch could fail in some browsers
-router.patch("/update/:phone", ControllerUser.update)
+router.patch("/update/:phone",passport.authenticate('jwt',{session:false}),ControllerUser.update);
 
 /*
  * Deletes de user with phone number :phone
  */
 // TODO delete could fail in some browsers
-router.delete("/delete/:phone", ControllerUser.delete)
+router.delete("/delete/:phone",passport.authenticate('jwt',{session:false}), ControllerUser.delete)
 
 module.exports = router;
