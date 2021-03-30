@@ -2,29 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5eab8c6a-6c97-4dd1-895c-6ff8bc578a47" name="Default Changelist" comment="Companies model fixed, companies CRUD operations working">
-      <change afterPath="$PROJECT_DIR$/config/swagger.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/swagger.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/swagger.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/swagger.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/user/access.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/user/access.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/api-docs/favicon-16x16.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/api-docs/favicon-32x32.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/api-docs/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/api-docs/oauth2-redirect.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-bundle.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-bundle.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-es-bundle-core.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-es-bundle-core.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-es-bundle.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-es-bundle.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-standalone-preset.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-standalone-preset.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui.js.map" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/companies.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/companies.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

@@ -1,36 +1,325 @@
-openapi: 3.0.0
+openapi: "3.0.0"
 info:
-  title: Sample API
-  description: Optional multiline or single-line description in HTML.
-  version: 0.1.9
+  description: "This is the API for Zitation app.  You can find out more about this app in [project wiki](#)."
+  version: "1.0.0"
+  title: "Zitation API"
+  contact:
+    email: "757024@unizar.es"
 servers:
-  - url: http://api.example.com/v1
-    description: Optional server description, e.g. Main (production) server
-  - url: http://staging-api.example.com
-    description: Optional server description, e.g. Internal staging server for testing
+  - url: "https://stw-zitation.herokuapp.com/api"
+    description: Production server
+tags:
+  - name: "User"
+    description: "Operations about users"
+  - name: "Company"
+    description: "Operations about companies"
 paths:
-  /users:
-    get:
-      summary: Returns a list of users.
-      description: Optional extended description in CommonMark or HTML.
+  /users/register:
+    post:
+      tags:
+        - "User"
+      summary: "Add a new user to the database"
+      requestBody:
+        description: "User object to be added to the database"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User_register"
       responses:
-        '200':    # status code
-          description: A JSON array of user names
+        "200":
+          description: "User created"
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
-
+                $ref: '#/components/schemas/User_registered'
+        "422":
+          description: "Wrong email format"
+        "405":
+          description: "Bad parameters"
+  /users/login:
+    post:
+      tags:
+        - "User"
+      summary: "Retrieve security token of an user"
+      requestBody:
+        description: "User phone and password to retrieve security token"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User_login"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User_retrieved"
+          links:
+            token:
+              operationId: updateUser, deleteUser
+        "401":
+          description: "Incorrect login"
+        "404":
+          description: "User not found"
+  /users/update/{phone}:
+    patch:
+      operationId: updateUser
+      security:
+        - bearerAuth: []
+      tags:
+        - "User"
+      summary: "Update user data"
+      parameters:
+        - in: "path"
+          name: "phone"
+          description: "Phone number of user to update"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: "User data to change"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User_update"
+      responses:
+        "200":
+          description: "User updated"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User_registered'
+        "404":
+          description: "User doesn't exist"
+  /users/delete/{phone}:
+    delete:
+      operationId: deleteUser
+      security:
+        - bearerAuth: []
+      tags:
+        - "User"
+      summary: "Delete an user"
+      parameters:
+        - in: path
+          name: "phone"
+          description: "Phone number of user to delete"
+          required: true
+          schema:
+            type: "integer"
+      responses:
+        "404":
+          description: "User doesn't exist"
+  /companies/register:
+    post:
+      tags:
+        - "Company"
+      summary: "Add a new company to the database"
+      requestBody:
+        description: "Company object to be added to the database"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Company_register"
+      responses:
+        "200":
+          description: "Company created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company_registered'
+        "422":
+          description: "Wrong email format"
+        "405":
+          description: "Bad parameters"
+  /companies/login:
+    post:
+      tags:
+        - "Company"
+      summary: "Retrieve security token of a company"
+      requestBody:
+        description: "Company nif and password to retrieve security token"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Company_login"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User_retrieved"
+          links:
+            token:
+              operationId: updateCompany, deleteCompany
+        "401":
+          description: "Incorrect login"
+        "404":
+          description: "Company not found"
+  /companies/update/{nif}:
+    patch:
+      operationId: updateCompany
+      security:
+        - bearerAuth: []
+      tags:
+        - "Company"
+      summary: "Update company data"
+      parameters:
+        - in: "path"
+          name: "nif"
+          description: "Nif number of company to update"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: "Company data to change"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Company_update"
+      responses:
+        "200":
+          description: "Company updated"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company_registered'
+        "404":
+          description: "User doesn't exist"
+  /companies/delete/{nif}:
+    delete:
+      operationId: deleteCompany
+      security:
+        - bearerAuth: []
+      tags:
+        - "Company"
+      summary: "Delete a company"
+      parameters:
+        - in: path
+          name: "nif"
+          description: "nif number of company to delete"
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: "Company deleted"
+        "404":
+          description: "Company doesn't exist"
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
-    Companylogin:
+    User_register:
+      type: object
+      properties:
+        phone:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - phone
+        - first_name
+        - last_name
+        - password
+    User_registered:
+      type: object
+      properties:
+        phone:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        salt:
+          type: string
+      required:
+        - phone
+        - first_name
+        - last_name
+        - password
+        - salt
+    User_login:
+      type: object
+      properties:
+        phone:
+          type: integer
+        password:
+          type: string
+      required:
+        - phone
+        - password
+    User_retrieved:
+      type: object
+      properties:
+        success:
+          type: boolean
+        token:
+          type: string
+        expiresIn:
+          type: string
+    User_update:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    Company_register:
       type: object
       properties:
         nif:
           type: string
+        name:
+          type: string
+        email:
+          type: string
         password:
+          type: string
+        location:
+          type: object
+          properties:
+            alt:
+              type: integer
+            long:
+              type: integer
+      required:
+        - nif
+        - name
+        - password
+        - location
+    Company_registered:
+      type: object
+      properties:
+        nif:
+          type: string
+        name:
           type: string
         email:
           type: string
@@ -45,37 +334,40 @@ components:
               type: integer
             long:
               type: integer
-
-
-
-          {
-            "_id": "60633a2e3e0302287f18f80e",
-            "name": "luis",
-            "nif": "1",
-            "email": "ho@ho.com",
-            "password": "1f9ffe23bba75a3e646da32705843fe09ab37a36a01a319b9aa1ec44c9c8de31538350d0cdcfe3a52f662aa7ba6fcaf1211bfb909379e2be5fd25da538119415",
-            "salt": "14af4cbd70b589693ec3fbeac844d7547e60c07f263cfdad0ec58e056d8c25cb",
-            "location": {
-              "type": "Point",
-              "coordinates": [
-                  30,
-                  30
-              ]
-            },
-            "__v":
-
-              Token:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  token:
-                    type: string
-                  expiresIn:
-                    type: string
-
-            {
-              "success": true,
-              "token": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MDYzM2Q2MDA3YmFlNTAwMWNjYWI3OTUiLCJpYXQiOjE2MTcxMTY2Mjk4MjYsImV4cCI6MTYxNzExNjcxNjIyNn0.mEXHlvRrVBeDZd-vRHkOqwAfhQShQG-GHNT2nnPAk_CaZzQ2bGarIXMlHeoLbNRbfFq_TG24HhDceyzOkp3hgUNpLEusa2mJS2Ji0bMIYu08x666E6AyEovsHtThtR1NApm6w5GZXZvz92DcSgL-QQ0JJenDsd_3HdotcsxL_FSVTzjXv9LC2fxascsR7wGTNLVgZ68EbW_cqP6ppuoitko2VyZFFJ74lvV9-ajAg00eOVu4LrZvsjtN0DIOdmZIsO4QaBEfSejuwIe2xd1-OzqUGCbjFWfGuOGL6BXPG2vPlQXjvG93kE_ag8PpEA9Pi-KFaaCdVckTwWL9Viy1wxxr4mpZBRnk0nermugAs0cymIyf6ZZW1iWCsyjnloUMZbLo2oLOPolHZYSBUiPohRXZPUobsgdZgEMf0INA9_0L2KKzECtZfJtxyIp8blrwoAIBuSEq76yDxYmW6exxLB0oRjcTvnwfMsPE92u3Mq53luD0vmfaRp7cQRFP03Cexw9_K63sPsU5wMpugqiFP1fU5vr5O6o4vQuaJEx1qA5iPpDyjC4fxPy2DZ0yGVbEPXLgMNhCzNJHM1mLVFtAWuB1nsBDKxBYt0rlH8FapojnDQQ2l8qUa0jVDus-9sO6OK4ztwbDb0PXWIauZlsoHebNH1zWlc2YK684g0JbsVU",
-              "expiresIn": "1d"
-            }
+      required:
+        - nif
+        - name
+        - password
+        - location
+        - salt
+    Company_login:
+      type: object
+      properties:
+        nif:
+          type: string
+        password:
+          type: string
+      required:
+        - nif
+        - password
+    Company_update:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        salt:
+          type: string
+        location:
+          type: object
+          properties:
+            alt:
+              type: integer
+            long:
+              type: integer
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

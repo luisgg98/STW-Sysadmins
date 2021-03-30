@@ -19,7 +19,7 @@ let register = async (req, res) => {
             await user.save()
             res.send(user)
         } else {
-            res.status(422)
+            res.status(405)
             res.send({ error: "Wrong email format!" })
         }
 
