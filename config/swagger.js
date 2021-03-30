@@ -17,7 +17,8 @@ let swaggerDefinition = {
 let options = {
     swaggerDefinition:swaggerDefinition,
     // path to the API docs
-    apis:['../routes/*.js']
+    // Paths to files containing OpenAPI definitions
+    apis: ['./routes/*.js'],
 
 };
 
