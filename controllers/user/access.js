@@ -31,7 +31,7 @@ let register = async (req, res) => {
 
 let login = async (req, res) => {
     try {
-        const user = await User.findOne({ phone: req.body.phone })
+        const user = await User.findOne({ email: req.body.email })
         if (utils.validPassword(req.body.password, user.password, user.salt)) {
             res.status(200)
             const tokenObject = utils.issueJWT(user);
@@ -48,7 +48,7 @@ let login = async (req, res) => {
 
 let update = async (req, res) => {
     try {
-        const user = await User.findOne({ phone: req.params.phone })
+        const user = await User.findOne({ email: req.params.email })
 
         if (req.body.first_name) {
             user.first_name = req.body.first_name
@@ -75,7 +75,7 @@ let update = async (req, res) => {
 
 let delete_user = async (req, res) => {
     try {
-        await User.deleteOne({ phone: req.params.phone })
+        await User.deleteOne({ email: req.params.email })
         res.status(204).send()
     } catch {
         res.status(404)

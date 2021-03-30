@@ -43,7 +43,7 @@ paths:
         - "User"
       summary: "Retrieve security token of an user"
       requestBody:
-        description: "User phone and password to retrieve security token"
+        description: "User email and password to retrieve security token"
         required: true
         content:
           application/json:
@@ -63,7 +63,7 @@ paths:
           description: "Incorrect login"
         "404":
           description: "User not found"
-  /users/update/{phone}:
+  /users/update/{email}:
     patch:
       operationId: updateUser
       security:
@@ -73,11 +73,12 @@ paths:
       summary: "Update user data"
       parameters:
         - in: "path"
-          name: "phone"
-          description: "Phone number of user to update"
+          name: "email"
+          description: "Email address of user to update"
           required: true
           schema:
-            type: integer
+            type: string
+            format: email
       requestBody:
         description: "User data to change"
         required: true
@@ -94,7 +95,7 @@ paths:
                 $ref: '#/components/schemas/User_registered'
         "404":
           description: "User doesn't exist"
-  /users/delete/{phone}:
+  /users/delete/{email}:
     delete:
       operationId: deleteUser
       security:
@@ -104,8 +105,8 @@ paths:
       summary: "Delete an user"
       parameters:
         - in: path
-          name: "phone"
-          description: "Phone number of user to delete"
+          name: "email"
+          description: "Email address of user to delete"
           required: true
           schema:
             type: "integer"
@@ -237,6 +238,7 @@ components:
         - phone
         - first_name
         - last_name
+        - email
         - password
     User_registered:
       type: object
@@ -263,12 +265,13 @@ components:
     User_login:
       type: object
       properties:
-        phone:
-          type: integer
+        email:
+          type: string
+          format: email
         password:
           type: string
       required:
-        - phone
+        - email
         - password
     User_retrieved:
       type: object
@@ -300,6 +303,7 @@ components:
           type: string
         email:
           type: string
+          format: email
         password:
           type: string
         location:
