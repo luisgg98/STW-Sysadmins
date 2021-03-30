@@ -2,10 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5eab8c6a-6c97-4dd1-895c-6ff8bc578a47" name="Default Changelist" comment="Companies model fixed, companies CRUD operations working">
+      <change afterPath="$PROJECT_DIR$/config/swagger.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/company.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/company.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/swagger.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/favicon-16x16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/favicon-32x32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/oauth2-redirect.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-bundle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-bundle.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-es-bundle-core.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-es-bundle-core.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-es-bundle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-es-bundle.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-standalone-preset.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui-standalone-preset.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/api-docs/swagger-ui.js.map" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/companies.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/companies.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/users.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +52,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="javascript.nodejs.core.library.configured.version" value="14.16.0" />
+    <property name="javascript.nodejs.core.library.configured.version" value="14.15.5" />
     <property name="javascript.nodejs.core.library.typings.version" value="14.14.37" />
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -41,10 +61,10 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/config" />
       <recent name="$PROJECT_DIR$/routes/apiContent" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/controllers" />
-      <recent name="$PROJECT_DIR$/config" />
       <recent name="$PROJECT_DIR$/database/connections" />
     </key>
   </component>
@@ -71,6 +91,7 @@
       <workItem from="1617009314601" duration="4049000" />
       <workItem from="1617017461221" duration="1894000" />
       <workItem from="1617028806080" duration="1352000" />
+      <workItem from="1617113190706" duration="1838000" />
     </task>
     <task id="LOCAL-00001" summary="Restructured">
       <created>1616346893956</created>
@@ -142,7 +163,21 @@
       <option name="project" value="LOCAL" />
       <updated>1617017696184</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Companies model fixed, companies CRUD operations working">
+      <created>1617097097646</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1617097097646</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Companies model fixed, companies CRUD operations working">
+      <created>1617097122336</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1617097122336</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

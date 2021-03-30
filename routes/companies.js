@@ -8,7 +8,7 @@ const passport = require('passport');
  */
 /**
  * @swagger
- * /api/companies/register:
+ * /register:
  *   post:
  *     tags:
  *     description: Register a company
