@@ -22,3 +22,60 @@ paths:
                 type: array
                 items:
                   type: string
+
+components:
+  schemas:
+    Companylogin:
+      type: object
+      properties:
+        nif:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        salt:
+          type: string
+        location:
+          type: object
+          properties:
+            alt:
+              type: integer
+            long:
+              type: integer
+
+
+
+          {
+            "_id": "60633a2e3e0302287f18f80e",
+            "name": "luis",
+            "nif": "1",
+            "email": "ho@ho.com",
+            "password": "1f9ffe23bba75a3e646da32705843fe09ab37a36a01a319b9aa1ec44c9c8de31538350d0cdcfe3a52f662aa7ba6fcaf1211bfb909379e2be5fd25da538119415",
+            "salt": "14af4cbd70b589693ec3fbeac844d7547e60c07f263cfdad0ec58e056d8c25cb",
+            "location": {
+              "type": "Point",
+              "coordinates": [
+                  30,
+                  30
+              ]
+            },
+            "__v":
+
+              Token:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  token:
+                    type: string
+                  expiresIn:
+                    type: string
+
+            {
+              "success": true,
+              "token": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MDYzM2Q2MDA3YmFlNTAwMWNjYWI3OTUiLCJpYXQiOjE2MTcxMTY2Mjk4MjYsImV4cCI6MTYxNzExNjcxNjIyNn0.mEXHlvRrVBeDZd-vRHkOqwAfhQShQG-GHNT2nnPAk_CaZzQ2bGarIXMlHeoLbNRbfFq_TG24HhDceyzOkp3hgUNpLEusa2mJS2Ji0bMIYu08x666E6AyEovsHtThtR1NApm6w5GZXZvz92DcSgL-QQ0JJenDsd_3HdotcsxL_FSVTzjXv9LC2fxascsR7wGTNLVgZ68EbW_cqP6ppuoitko2VyZFFJ74lvV9-ajAg00eOVu4LrZvsjtN0DIOdmZIsO4QaBEfSejuwIe2xd1-OzqUGCbjFWfGuOGL6BXPG2vPlQXjvG93kE_ag8PpEA9Pi-KFaaCdVckTwWL9Viy1wxxr4mpZBRnk0nermugAs0cymIyf6ZZW1iWCsyjnloUMZbLo2oLOPolHZYSBUiPohRXZPUobsgdZgEMf0INA9_0L2KKzECtZfJtxyIp8blrwoAIBuSEq76yDxYmW6exxLB0oRjcTvnwfMsPE92u3Mq53luD0vmfaRp7cQRFP03Cexw9_K63sPsU5wMpugqiFP1fU5vr5O6o4vQuaJEx1qA5iPpDyjC4fxPy2DZ0yGVbEPXLgMNhCzNJHM1mLVFtAWuB1nsBDKxBYt0rlH8FapojnDQQ2l8qUa0jVDus-9sO6OK4ztwbDb0PXWIauZlsoHebNH1zWlc2YK684g0JbsVU",
+              "expiresIn": "1d"
+            }
