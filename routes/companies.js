@@ -28,7 +28,6 @@ const passport = require('passport');
  *     - name: "email"
  *       in: query
  *       description: "Email to contact the company"
- *       required: true
  *       type: "string"
  *     - name: "password"
  *       in: query
@@ -49,7 +48,7 @@ const passport = require('passport');
  *       200:
  *         description: An array of locations
  *         schema:
- *           $ref: '#/models/Company'
+ *           $ref: '#/models/company'
  */
 router.post("/register", ControllerCompany.register)
 

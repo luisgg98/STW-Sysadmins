@@ -3,9 +3,7 @@ const ControllerUser = require('../controllers/user/access')
 const router = express.Router()
 const passport = require('passport');
 
-/*
-    Creates a new user
- */
+
 router.post("/register", ControllerUser.register)
 
 /*
