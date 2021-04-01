@@ -1,4 +1,4 @@
-const utils = require('../../lib/utils')
+const utils = require('../../services/utils')
 const validate_email = require('../../services/validate_email')
 const User = require('../../models/user')
 
