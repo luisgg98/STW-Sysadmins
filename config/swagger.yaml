@@ -36,7 +36,7 @@ paths:
         "422":
           description: "Wrong email format"
         "405":
-          description: "Bad parameters"
+          description: "Wrong json format, check docs for further info /api-docs"
   /users/login:
     post:
       tags:
@@ -93,8 +93,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User_registered'
+        "401":
+          description: "Error: Unauthorized"
         "404":
-          description: "User doesn't exist"
+          description: "User not found"
   /users/delete/{email}:
     delete:
       operationId: deleteUser
@@ -111,8 +113,12 @@ paths:
           schema:
             type: "integer"
       responses:
+        "200":
+          description: "User deleted"
+        "401":
+          description: "Error: Unauthorized"
         "404":
-          description: "User doesn't exist"
+          description: "User not found"
   /companies/register:
     post:
       tags:
@@ -135,7 +141,7 @@ paths:
         "422":
           description: "Wrong email format"
         "405":
-          description: "Bad parameters"
+          description: "Wrong json format, check docs for further info /api-doc"
   /companies/login:
     post:
       tags:
@@ -191,8 +197,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Company_registered'
+        "401":
+          description: "Error: Unauthorized"
         "404":
-          description: "User doesn't exist"
+          description: "Company not found"
   /companies/delete/{nif}:
     delete:
       operationId: deleteCompany
@@ -211,8 +219,10 @@ paths:
       responses:
         "204":
           description: "Company deleted"
+        "401":
+          description: "Error: Unauthorized"
         "404":
-          description: "Company doesn't exist"
+          description: "Company not found"
 components:
   securitySchemes:
     bearerAuth:

@@ -25,7 +25,7 @@ let register = async (req, res) => {
 
     } catch {
         res.status(422)
-        res.send({ error: "Bad parameters!" })
+        res.send({ error: "Wrong json format, check docs for further info /api-docs" })
     }
 }
 
@@ -42,7 +42,7 @@ let login = async (req, res) => {
         }
     } catch {
         res.status(404)
-        res.send({ error: "User doesn't exist!" })
+        res.send({ error: "User not found" })
     }
 }
 
@@ -69,7 +69,7 @@ let update = async (req, res) => {
         res.send(user)
     } catch {
         res.status(404)
-        res.send({ error: "User doesn't exist!" })
+        res.send({ error: "User not found" })
     }
 }
 
@@ -79,7 +79,7 @@ let delete_user = async (req, res) => {
         res.status(204).send()
     } catch {
         res.status(404)
-        res.send({ error: "User doesn't exist!" })
+        res.send({ error: "User not found" })
     }
 }
 

@@ -24,8 +24,8 @@ let register = async (req, res) => {
             res.send({ error: "Wrong email format" })
         }
     } catch {
-        res.status(422)
-        res.send({ error: "Bad parameters!" })
+        res.status(405)
+        res.send({ error: "Wrong json format, check docs for further info /api-doc" })
     }
 }
 
@@ -41,7 +41,7 @@ let login = async (req, res) => {
         }
     } catch {
         res.status(404)
-        res.send({ error: "Company doesn't exist!" })
+        res.send({ error: "Company not found" })
     }
 }
 
@@ -69,7 +69,7 @@ let update = async (req, res) => {
         res.send(company)
     } catch {
         res.status(404)
-        res.send({ error: "Company doesn't exist!" })
+        res.send({ error: "Company not found" })
     }
 }
 
@@ -79,7 +79,7 @@ let delete_company = async (req, res) => {
         res.status(204).send()
     } catch {
         res.status(404)
-        res.send({ error: "Company doesn't exist!" })
+        res.send({ error: "Company not found" })
     }
 }
 
