@@ -1,6 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, {  useState, useContext } from "react";
 import { UserContext } from "../../../UserContext";
 import { login } from "../../../services/AuthService";
+import { Link } from "react-router-dom";
+import axios from 'axios';
 
 const LoginForm = () => {
     // Datos del formulario
@@ -14,6 +16,30 @@ const LoginForm = () => {
 
     // Datos del usuario hacer login
     const { user, setUser } = useContext(UserContext);
+
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        console.log("handling submit");
+        setUser({
+            email: details.email,
+            password: details.password
+        })
+        const user = {
+            email: details.email,
+            password: details.password
+        }
+        require('axios-debug-log')
+        axios.post(`https://stw-zitation.herokuapp.com/api/users/login`,  user ,
+            { headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => {
+                console.log(res);
+                console.log(res.data);
+            })
+    }
 
     function loginHandler(e) {
         e.preventDefault();
@@ -30,13 +56,17 @@ const LoginForm = () => {
     }
 
     return (
-        <form onSubmit={loginHandler}>
+        //use this line if you want to test with hardcoded data
+        // <form onSubmit={loginHandler} class="col-5" >
+        //Use this line if you want to call the api
+        <form onSubmit={handleSubmit} class="col-5" >
             <div className="form-inner">
-                <h2>Login</h2>
+                <h3 class="d-flex justify-content-center">Login</h3>
                 {error !== "" ? <div className="error">{error}</div> : ""}
                 <div className="form-group">
-                    <label htmlFor="email">Email: </label>
+                    <label htmlFor="email" >Email: </label>
                     <input
+                        className="form-control"
                         type="email"
                         name="email"
                         id="email"
@@ -47,8 +77,9 @@ const LoginForm = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="password">Password: </label>
+                    <label htmlFor="password" >Password: </label>
                     <input
+                        className="form-control"
                         type="password"
                         name="password"
                         id="password"
@@ -58,7 +89,10 @@ const LoginForm = () => {
                         value={details.password}
                     />
                 </div>
-                <input type="submit" value="Login" />
+                <input type="submit" className="btn btn-primary btn-block" value="Login" />
+                <span>
+                        ¿Todavia no tiene una cuenta? <Link to='/registro'> Registrarse </Link>
+                </span>
             </div>
         </form>
     );

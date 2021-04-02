@@ -1,7 +1,8 @@
-import { useContext } from "react";
-import userContext from "../App";
+import axios from 'axios';
+import react from 'react';
 
 const userDB = {
+    phone: "666777888",
     email: "user@user.com",
     password: "user123",
 };
@@ -19,9 +20,20 @@ function login(details) {
     }
 }
 
+function signup(details) {
+    console.log(details);
+
+    if (details.phone === userDB.phone &&
+        details.email === userDB.email &&
+        details.password === userDB.password) {
+        return true;
+    }
+    else return false;
+}
+
 function logout() {
     console.log("Logout");
     // TODO: Añadir logica de logout
 }
 
-export { login, logout };
+export { login, logout, signup };

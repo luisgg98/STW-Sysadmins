@@ -26,12 +26,12 @@ const LoginPage = () => {
                 </div>
             ) : (
                 <div>
-                    <h1>Zitation</h1>
-                    <LoginForm />
-                    <span>
-                      ¿Todavia no tiene una cuenta? <Link to='/registro'> Registrarse </Link> 
-                    </span>
-                    
+                    <div class="d-flex justify-content-center display-4 pl-4 ml-5" >
+                        <Link to='/'> Zitation </Link>
+                    </div>
+                    <div class="col-12 d-flex justify-content-center pt-4">
+                        <LoginForm />
+                    </div>
                 </div>
             )}
         </div>
