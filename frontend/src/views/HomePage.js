@@ -4,13 +4,14 @@ import Header from "../components/common/Headers/Header";
 import HomeSlogan from "../components/common/PlainText/HomeSlogan";
 import SearchBar from "../components/common/Bars/SearchBar";
 import CategoryCards from "../components/common/Buttons/CategoryCards";
+import { Container } from "react-bootstrap";
+
 
 const HomePage = () => {
     return (
         <div>
             <Header />
-            <HomeSlogan />
-            <RegistrarNegocioButton />
+            {/* <HomeSlogan /> */}
             <SearchBar />
             <CategoryCards />
         </div>

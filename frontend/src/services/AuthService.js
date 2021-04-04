@@ -1,5 +1,3 @@
-import axios from 'axios';
-import react from 'react';
 
 const userDB = {
     phone: "666777888",
