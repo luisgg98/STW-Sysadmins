@@ -3,48 +3,71 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   Link
 } from "react-router-dom";
+import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import RegistrarNegocio from '../../../views/RegistrarNegocio';
 
-
-const ZitationName = () => {
-  return (
-    <div class=" d-flex justify-content-center col-xl-10 pt-1 ml-auto">
-      <div class="col-6"> </div>
-      <div class="col-6 display-4 pl-4 ml-5" >Zitation</div>
-    </div>
-  )
-}
 
 const LoginButton = () => {
   return (
-    <div class="d-flex col-xl-2 ml-auto pt-2 justify-content-end pl
-        -2">
-          <Link to="/login" >
-            <button class="btn btn-md btn-lg btn-primary mr-5 mt-2" >Log In</button>
-          </Link>
-        </div>
+    <Link to="/login">
+      <Button>
+        Log In
+      </Button>
+    </Link>
+  )
+}
+
+const ZitationHeader = () => {
+  return (
+    <Link to="/">
+      <div class="display-4"> Zitation </div>
+    </Link>
+  )
+}
+
+const RegistrarNegocioButton = () => {
+  return (
+    <Link to="/registrarNegocio">
+      <Button>
+        Registrar Negocio
+      </Button>
+    </Link>
   )
 }
 
 const Header = () => {
-  return (
-    <header class="blog-header pt-1">
-      <div class="row d-flex flex-nowrap justify-content-between">
-        <ZitationName />
-        <LoginButton />
-        {/* <div class=" d-flex justify-content-center col-xl-10 pt-1 ml-auto">
-          <div class="col-6"> </div>
-          <div class="col-6 display-4 pl-4 ml-5" >Zitation</div>
-        </div> */}
-        {/* <div class="d-flex col-xl-2 ml-auto pt-2 justify-content-end pl
-        -2">
-          <Link to="/login" >
-            <button class="btn btn-md btn-lg btn-primary mr-5 mt-2" >Log In</button>
-          </Link>
-        </div> */}
-      </div>
-    </header>
-  )
+
+return (
+      <Card bg="Light" className="text-center" border={'white'.toLowerCase()}>
+      <Card.Header >
+        <Row >
+          <Col xl={8} lg={8} md={8} sm={8} >
+            <Row className="justify-content-center my-auto">
+              <Col>
+                <div></div>
+              </Col>
+              <Col>
+                <ZitationHeader />
+              </Col>
+            </Row>
+          </Col>
+          <Col xl={4} lg={4} md={4} sm={4} className="my-auto">
+            <LoginButton />
+          </Col>
+        </Row>
+
+      </Card.Header>
+      <Card.Body >
+        <Card.Text>
+          ¿Tienes un negocio y quieres ofrecer un servicio de cita previa sin complicarte?<br />
+                ¿Quieres evitar hacer colas y reservar cita previa en los locales que frecuentas?<br />
+                ¡En ese caso Zitation es tu web!
+      </Card.Text>
+        <RegistrarNegocioButton />
+      </Card.Body >
+    </Card>
+);
 }
 
 export default Header;
-export { Header, ZitationName, LoginButton };
+export { Header, ZitationHeader, LoginButton };

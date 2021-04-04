@@ -6,14 +6,15 @@ import MapPage from "./views/MapPage"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useState } from "react";
 import { UserContext } from "./UserContext";
-
+import RegisterPage from "./views/RegisterPage";
+import {Container} from 'react-bootstrap'
 
 export default function App() {
     const [user, setUser] = useState({ name: "", email: "" });
 
     return (
         <Router>
-            <div className="App">
+            <Container fluid="true" className="App">
                 <UserContext.Provider value={{ user, setUser }}>
                     <Switch>
                         <Route path="/login">
@@ -33,7 +34,7 @@ export default function App() {
                         </Route>
                     </Switch>
                 </UserContext.Provider>
-            </div>
+            </Container>
         </Router>
     );
 }
