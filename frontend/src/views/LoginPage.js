@@ -15,7 +15,7 @@ const LoginPage = () => {
     return (
         <div>
             {user.email !== "" ? (
-                <div className="Perfil">
+                <div>
                     <h1>Mi cuenta</h1>
                     <p>
                         <span>{user.email}</span>
