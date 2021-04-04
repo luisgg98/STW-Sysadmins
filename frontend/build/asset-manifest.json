@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/static/css/main.6dea0f05.chunk.css",
+    "main.js": "/static/js/main.62c1d6b7.chunk.js",
+    "main.js.map": "/static/js/main.62c1d6b7.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.0374a655.js",
+    "runtime-main.js.map": "/static/js/runtime-main.0374a655.js.map",
+    "static/css/2.4c97ca4f.chunk.css": "/static/css/2.4c97ca4f.chunk.css",
+    "static/js/2.b187f443.chunk.js": "/static/js/2.b187f443.chunk.js",
+    "static/js/2.b187f443.chunk.js.map": "/static/js/2.b187f443.chunk.js.map",
+    "static/js/3.bedea62b.chunk.js": "/static/js/3.bedea62b.chunk.js",
+    "static/js/3.bedea62b.chunk.js.map": "/static/js/3.bedea62b.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.4c97ca4f.chunk.css.map": "/static/css/2.4c97ca4f.chunk.css.map",
+    "static/css/main.6dea0f05.chunk.css.map": "/static/css/main.6dea0f05.chunk.css.map",
+    "static/js/2.b187f443.chunk.js.LICENSE.txt": "/static/js/2.b187f443.chunk.js.LICENSE.txt",
+    "static/media/deporte.f0c2a855.jpeg": "/static/media/deporte.f0c2a855.jpeg",
+    "static/media/ocio.1e72a914.jpeg": "/static/media/ocio.1e72a914.jpeg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.0374a655.js",
+    "static/css/2.4c97ca4f.chunk.css",
+    "static/js/2.b187f443.chunk.js",
+    "static/css/main.6dea0f05.chunk.css",
+    "static/js/main.62c1d6b7.chunk.js"
+  ]
+}
