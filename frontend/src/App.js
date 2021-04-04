@@ -5,10 +5,23 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useState } from "react";
 import { UserContext } from "./UserContext";
 import RegisterPage from "./views/RegisterPage";
-import {Container} from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
+
+const express = require('express')
+const path = require('path');
+
+const app = express()
+const port = process.env.PORT || 3000 // Heroku will need the PORT environment variable
+
+app.use(express.static(path.join(__dirname, 'build')));
+
+app.listen(port, () => console.log(`App is live on port ${port}!`))
+
+
 
 export default function App() {
     const [user, setUser] = useState({ name: "", email: "" });
+
 
     return (
         <Router>
@@ -24,7 +37,7 @@ export default function App() {
                         <Route path="/registrarNegocio">
                             <RegistrarNegocio />
                         </Route>
-                        <Route path="/">
+                        <Route path="https://zitation.herokuapp.com/">
                             <HomePage />
                         </Route>
                     </Switch>
