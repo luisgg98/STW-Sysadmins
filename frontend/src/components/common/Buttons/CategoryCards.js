@@ -26,7 +26,7 @@ const CategoryCards = () => {
     <Card.Body>
       <Card.Title>Deporte</Card.Title>
       <Card.Text>
-        This card has supporting text below as a natural lead-in to additional
+        This cardd has supporting text below as a natural lead-in to additional
         content.{' '}
       </Card.Text>
     </Card.Body>
