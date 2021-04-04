@@ -87,7 +87,7 @@ const UserSignUpForm = () => {
         //User signuphandler if you want to worki with local hardcoded testing
         // <form onSubmit={signUpHandler} class="col-5" >
         //Use handleSubmit if you want to work with the API
-        <form onSubmit={handleSubmit} class="col-5" >
+        <form onSubmit={handleSubmit} className="col-9"  >
             <h3 class="d-flex justify-content-center">Sign Up</h3>
             {error !== "" ? <div className="error">{error}</div> : ""}
             <div className="form-group">

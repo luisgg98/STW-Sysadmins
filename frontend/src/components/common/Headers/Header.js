@@ -4,7 +4,7 @@ import {
   Link
 } from "react-router-dom";
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
-import RegistrarNegocio from '../../../views/RegistrarNegocio';
+import RegistrarNegocioButton from "../Buttons/RegistrarNegocioButton";
 
 
 const LoginButton = () => {
@@ -19,27 +19,43 @@ const LoginButton = () => {
 
 const ZitationHeader = () => {
   return (
-    <Link to="/">
-      <div class="display-4"> Zitation </div>
-    </Link>
+    <Row className="justify-content-center mx-auto">
+      <Link to="/">
+        <div class="display-4"> Zitation </div>
+      </Link>
+    </Row>
   )
 }
 
-const RegistrarNegocioButton = () => {
+// const RegistrarNegocioButton = () => {
+//   return (
+//     <Link to="/registrarNegocio">
+//       <Button>
+//         Registrar Negocio
+//       </Button>
+//     </Link>
+//   )
+// }
+
+const PageDescription = () => {
   return (
-    <Link to="/registrarNegocio">
-      <Button>
-        Registrar Negocio
-      </Button>
-    </Link>
+    <Card bg="Light" className="text-center" border={'white'.toLowerCase()}>
+      <Card.Body >
+        <Card.Text>
+          ¿Tienes un negocio y quieres ofrecer un servicio de cita previa sin complicarte?<br />
+                ¿Quieres evitar hacer colas y reservar cita previa en los locales que frecuentas?<br />
+                ¡En ese caso Zitation es tu web!
+      </Card.Text>
+      </Card.Body >
+    </Card>
   )
 }
 
 const Header = () => {
 
-return (
-      <Card bg="Light" className="text-center" border={'white'.toLowerCase()}>
-      <Card.Header >
+  return (
+    <Card bg="Light" className="text-center" border={'white'.toLowerCase()}>
+      <Card.Header>
         <Row >
           <Col xl={8} lg={8} md={8} sm={8} >
             <Row className="justify-content-center my-auto">
@@ -66,8 +82,8 @@ return (
         <RegistrarNegocioButton />
       </Card.Body >
     </Card>
-);
+  );
 }
 
 export default Header;
-export { Header, ZitationHeader, LoginButton };
+export { Header, ZitationHeader, LoginButton, PageDescription };

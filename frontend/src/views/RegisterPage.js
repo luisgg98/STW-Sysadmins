@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import HomeSlogan from "../components/common/PlainText/HomeSlogan"
+import { PageDescription, ZitationHeader } from "../components/common/Headers/Header"
 import UserSignUpForm from "../components/common/Forms/UserSignUpForm"
 import { UserContext } from "../UserContext";
 import { logout } from "../services/AuthService";
+import { Container, Row, Col } from "react-bootstrap";
 
 const RegisterPage = () => {
 
@@ -15,11 +16,10 @@ const RegisterPage = () => {
     }
 
     return (
-        <div>
-            <div class="d-flex justify-content-center display-4 pl-4 ml-5" >
-                <Link to='/'> Zitation </Link>
-            </div>
-
+        <Container>
+            <Row className="justify-content-center mx-auto">
+                <ZitationHeader className="mx-auto" />
+            </Row>
             { user.email !== "" ? (
                 <div className="Perfil">
                     <h1>Mi cuenta registrada</h1>
@@ -32,17 +32,19 @@ const RegisterPage = () => {
                     </Link>
                 </div>
             ) : (
-                <div>
-                    <HomeSlogan />
-                    <div class="py-2 my-2"></div>
-                    <div class="col-12 d-flex justify-content-center pt-4">
+                <div >
+                    <Row className="justify-content-center">
+                        <PageDescription />
+                    </Row>
+                    <Row className="justify-content-center">
                         <UserSignUpForm />
-                    </div>
+                    </Row>
                 </div>
 
-            )}
-        </div>
-    )
+            )
+            }
+        </Container >
+    );
 }
 
 export default RegisterPage;
