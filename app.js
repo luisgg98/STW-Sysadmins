@@ -17,6 +17,9 @@ require('./config/database');
 require('./config/passport');
 const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/api');
+// This allows us to do cron scheduled activities
+const cron = require('node-cron');
+const ta=require('./services/transparency_aragon')
 
 const app = express();
 
@@ -35,6 +38,20 @@ app.use(cookieParser());
 
 // Allows our Angular application to make HTTP requests to Express application
 app.use(cors());
+
+// Schedule tasks to be run on the server.
+// Two in the morning '0 0 2 * * *'
+cron.schedule('0 0 2 * * *', async function() {
+  console.log('---------------------');
+  console.log('Running Cron Job');
+  await ta.getCasesFile().then(r => {
+    console.log('Cron Job working correctly');
+  }).catch((error) => {
+    console.log('Cron Job working error, something goes wrong');
+    console.log('Error '+ error );
+  });
+  console.log('---------------------');
+});
 
 // Necessary to use the interface of Swagger
 //app.use(express.static(path.join(__dirname, 'public')));

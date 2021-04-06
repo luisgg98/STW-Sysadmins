@@ -68,3 +68,5 @@ id_rsa_pub.pem
 db/
 
 .idea/
+#Downloaded file which contains the information of covid in Zaragoza
+.covid_data.xlsx

@@ -3,4 +3,4 @@ function validateEmail(email) {
     return re.test(email);
 }
 
-exports.validateEmail = validateEmail
+exports.validateEmail = validateEmail;
