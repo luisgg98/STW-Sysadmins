@@ -41,7 +41,7 @@ app.use(cors());
 
 // Schedule tasks to be run on the server.
 // Two in the morning '0 0 2 * * *'
-cron.schedule('0 0 2 * * *', async function() {
+cron.schedule('0 */1 * * * *', async function() {
   console.log('---------------------');
   console.log('Running Cron Job');
   await ta.getCasesFile().then(r => {

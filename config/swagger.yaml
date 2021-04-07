@@ -13,6 +13,8 @@ tags:
     description: "Operations about users"
   - name: "Company"
     description: "Operations about companies"
+  - name: "HealthZone"
+    description: "Operations about health zones from Zaragoza"
 paths:
   /users/register:
     post:
@@ -223,6 +225,23 @@ paths:
           description: "Error: Unauthorized"
         "404":
           description: "Company not found"
+  /healthzone:
+    get:
+      operationId: getAllHealhzone
+      tags:
+        - "HealthZone"
+      responses:
+        "200":
+          description: "Receive all basic health zone information from Zaragoza"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthZoneData'
+        "404":
+          description: "No health zones data found"
+        "500":
+          description: "Internal server error, something went wrong while searching for Health Zones"
+
 components:
   securitySchemes:
     bearerAuth:
@@ -382,6 +401,21 @@ components:
               type: integer
             long:
               type: integer
+    HealthZoneData:
+      type: Object
+      properties:
+        name:
+          type: String
+        newcases:
+          type: integer
+        percentage:
+          type: float
+        ZBSwithCases:
+          type: integer
+        radius:
+          type: integer
+
+
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

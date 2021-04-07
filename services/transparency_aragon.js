@@ -58,6 +58,8 @@ async function downloadFile(url, filePath) {
 
 /**
  *
+ * @param date
+ * @returns {string}
  */
 function formatDate(date){
     if(date >= 10){
@@ -76,7 +78,6 @@ function buildUrl(day,month,year){
     month = formatDate(month);
     day = formatDate(day);
     let url = `https://transparencia.aragon.es/sites/default/files/documents/${year}${month}${day}_casos_confirmados_zbs.xlsx`
-    console.log(url);
     return url;
 }
 
@@ -92,16 +93,12 @@ async function getCasesFile() {
     //That means it weekend and the data is not update on weekends
     do {
         let today_date = new Date();
-        console.log(today_date)
         let today_day = today_date.getDay();
 
         if (today_day > 5) {
             let yesterday = moment().subtract((today_day - 5), 'days');
-            console.log(yesterday.format());
             today_date = new Date(yesterday.format());
-            console.log(today_date);
         }
-        console.log(today_date.getMonth())
         url = buildUrl(today_date.getDate(), (today_date.getMonth() + 1), today_date.getFullYear());
 
         await downloadFile(url, filePath).then(r => {
@@ -113,10 +110,13 @@ async function getCasesFile() {
         });
     } while (!correctAccess && attempts<3);
 
-    console.log('Good bye');
     if(correctAccess){
         //Update the information in the mongodb database
-        await updateDatabase();
+        let result_delete = await deleteOldData();
+        if(result_delete){
+            updateDatabase();
+        }
+
     }
 
 
@@ -125,56 +125,112 @@ async function getCasesFile() {
 /**
  * 
  */
-let updateDatabase =  async () =>{
+function  updateDatabase() {
     try {
         let workbook = new Excel.Workbook();
 
-        workbook.xlsx.readFile(filePath).then(function () {
+        workbook.xlsx.readFile(filePath).then(async function () {
 
             //Get sheet by Name
             let worksheet = workbook.getWorksheet(1);
             let startinit = 15;
 
-            while (worksheet.getRow(startinit).getCell(2).value != 'Zona de salud' && startinit < 300) {
+            while (!getInit(worksheet.getRow(startinit).getCell(2).value) && startinit < 60) {
                 startinit = startinit + 1
             }
 
             let limit = startinit + 1;
 
-            while (worksheet.getRow(limit).getCell(2).value != 'Total casos confirmados' && limit < 400) {
+            while (!getFinal(worksheet.getRow(limit).getCell(2).value) && limit < 90) {
                 limit = limit + 1
             }
 
             let index_column = startinit + 1;
-
             while (index_column < limit) {
-                let row = worksheet.getRow(index_column);
-                let ZonaSalud = row.getCell(2).value;
-                let newcases = row.getCell(3).value;
-                let percentage = row.getCell(4).value;
-                let ZBSwithCases = row.getCell(5).value;
-
-                const healthzone = new Healthzone({
-                    name: ZonaSalud,
-                    newcases: newcases,
-                    percentage: percentage,
-                    ZBSwithCases: ZBSwithCases,
-                    radius: 500,
-                    location: {
-                        type: "Point",
-                        coordinates: [req.body.alt, req.body.long]
+                try{
+                    let row = worksheet.getRow(index_column);
+                    let ZonaSalud = row.getCell(2).value;
+                    let newcases = row.getCell(3).value;
+                    let percentage = row.getCell(4).value;
+                    let percentage_result = getResultPercentage(percentage);
+                    let ZBSwithCases = row.getCell(5).value;
+                    console.log(ZonaSalud + ' ' + newcases + ' ' + percentage + ' ' + ZBSwithCases);
+                    if(ZonaSalud != null){
+                        const healthzone = new Healthzone({
+                            name: ZonaSalud,
+                            newcases: newcases,
+                            percentage: percentage_result,
+                            ZBSwithCases: ZBSwithCases,
+                            radius: 500
+                        });
+                        await healthzone.save();
                     }
-                });
-                await healthzone.save();
-                console.log(ZonaSalud + ' ' + newcases + ' ' + percentage + ' ' + ZBSwithCases);
+                }
+                catch (e) {
+                    console.log({ error: e })
+                }
                 index_column = index_column + 1;
             }
 
         });
+    //Once it has finished updating the database the XLSX is no longer needed
+    fs.unlinkSync(filePath);
     }catch {
-        res.status(405)
-        res.send({ error: "Wrong json format, check docs for further info /api-doc" })
+        console.log({ error: "Error getting the information HealthZone" })
     }
+
+}
+
+/**
+ *
+ * @param cell
+ * @returns {*}
+ */
+function getFinal(cell){
+    return (cell != null && (cell.includes('Total') || cell.includes('TOTAL')));
+
+}
+
+/**
+ *
+ * @param cell
+ * @returns {*}
+ */
+function getInit(cell){
+    return (cell != null && cell.includes('Zona de salud'));
+
+}
+
+/**
+ *
+ * @param percentage
+ * @returns {number|*}
+ */
+function getResultPercentage(percentage){
+    if(percentage == null){
+        return 0;
+    }
+    else{
+        return percentage['result'];
+    }
+
+}
+
+/**
+ *
+ */
+async function deleteOldData() {
+    let success = false;
+    try{
+        await Healthzone.deleteMany();
+        success = true;
+    }
+    catch (e) {
+        console.log("Error trying to delete old healthzone information");
+        console.log("Error: " + e);
+    }
+    return success;
+
 
 }
 
