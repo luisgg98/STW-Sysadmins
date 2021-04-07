@@ -2,6 +2,7 @@ const fs = require('fs');
 const https = require('https');
 const moment = require('moment');
 const Excel  = require("exceljs");
+const Healthzone = require('../models/healthzone');
 
 //CONSTANT VARIABLES
 const filePath = "../covid_data.xlsx";
@@ -115,7 +116,7 @@ async function getCasesFile() {
     console.log('Good bye');
     if(correctAccess){
         //Update the information in the mongodb database
-        updateDatabase();
+        await updateDatabase();
     }
 
 
@@ -124,38 +125,57 @@ async function getCasesFile() {
 /**
  * 
  */
-function updateDatabase() {
-    let workbook = new Excel.Workbook();
+let updateDatabase =  async () =>{
+    try {
+        let workbook = new Excel.Workbook();
 
-    workbook.xlsx.readFile(filePath).then(function () {
+        workbook.xlsx.readFile(filePath).then(function () {
 
-        //Get sheet by Name
-        let worksheet=workbook.getWorksheet(1);
-        let startinit = 15;
+            //Get sheet by Name
+            let worksheet = workbook.getWorksheet(1);
+            let startinit = 15;
 
-        while(worksheet.getRow(startinit).getCell(2).value != 'Zona de salud' && startinit < 300){
-            startinit = startinit +1
-        }
+            while (worksheet.getRow(startinit).getCell(2).value != 'Zona de salud' && startinit < 300) {
+                startinit = startinit + 1
+            }
 
-        let limit = startinit + 1;
+            let limit = startinit + 1;
 
-        while(worksheet.getRow(limit).getCell(2).value != 'Total casos confirmados' && limit < 400){
-            limit = limit +1
-        }
+            while (worksheet.getRow(limit).getCell(2).value != 'Total casos confirmados' && limit < 400) {
+                limit = limit + 1
+            }
 
-        let index_column= startinit + 1;
+            let index_column = startinit + 1;
 
-        while(index_column < limit){
-            let row = worksheet.getRow(index_column);
-            let ZonaSalud = row.getCell(2).value;
-            let newcases = row.getCell(3).value;
-            let percentage = row.getCell(4).value;
-            let ZBSwithCases = row.getCell(5).value;
-            console.log(ZonaSalud + ' ' + newcases +' ' + percentage+ ' ' + ZBSwithCases);
-            index_column = index_column +1;
-        }
+            while (index_column < limit) {
+                let row = worksheet.getRow(index_column);
+                let ZonaSalud = row.getCell(2).value;
+                let newcases = row.getCell(3).value;
+                let percentage = row.getCell(4).value;
+                let ZBSwithCases = row.getCell(5).value;
 
-    });
+                const healthzone = new Healthzone({
+                    name: ZonaSalud,
+                    newcases: newcases,
+                    percentage: percentage,
+                    ZBSwithCases: ZBSwithCases,
+                    radius: 500,
+                    location: {
+                        type: "Point",
+                        coordinates: [req.body.alt, req.body.long]
+                    }
+                });
+                await healthzone.save();
+                console.log(ZonaSalud + ' ' + newcases + ' ' + percentage + ' ' + ZBSwithCases);
+                index_column = index_column + 1;
+            }
+
+        });
+    }catch {
+        res.status(405)
+        res.send({ error: "Wrong json format, check docs for further info /api-doc" })
+    }
+
 }
 
 module.exports.getCasesFile = getCasesFile;

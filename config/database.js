@@ -20,6 +20,7 @@ mongoose.connection.on('disconnected', () => {
 
 require('../models/user');
 require('../models/company');
+require('../models/healthzone');
 
 // Monitored some Node process events so that we can close the Mongoose connection when the application ends
 const gracefulShutdown = (msg, callback) => {
