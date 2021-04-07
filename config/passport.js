@@ -9,7 +9,8 @@ const Company = require('mongoose').model('company');
 
 // The idea is to have a file where the public key and the private
 // key are stored
-const pathToKey = path.join(__dirname, '..', 'id_rsa_pub.pem');
+const pathToKey = path.join(__dirname, '..', 'scripts','id_rsa_pub.pem');
+
 //It reads the keys from the file
 const PUB_KEY = fs.readFileSync(pathToKey, 'utf8');
 

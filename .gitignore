@@ -61,8 +61,8 @@ typings/
 .next
 
 #Key files
-id_rsa_priv.pem
-id_rsa_pub.pem
+scripts/id_rsa_priv.pem
+scripts/id_rsa_pub.pem
 
 #Mongodb
 db/

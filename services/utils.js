@@ -5,9 +5,10 @@ const path = require('path');
 
 //It necessary to have previously a private key to cypher
 // the JWT token
-const pathToKey = path.join(__dirname, '..', 'id_rsa_priv.pem');
+const pathToKey = path.join(__dirname, '..', 'scripts','id_rsa_priv.pem');
 // The main idea is to have randomly created a file which contains
 //this necessary keys
+
 const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
 
 /**

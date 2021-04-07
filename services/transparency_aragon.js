@@ -3,10 +3,8 @@ const https = require('https');
 const moment = require('moment');
 const Excel  = require("exceljs");
 const Healthzone = require('../models/healthzone');
-
-//CONSTANT VARIABLES
-const filePath = "../covid_data.xlsx";
-
+const District = require('../models/district');
+const  filePath ="scripts/covid_data.xlsx";
 /**
  * Downloads file from remote HTTPS host and puts its contents to the
  * specified location.
@@ -15,44 +13,42 @@ async function downloadFile(url, filePath) {
     const proto =  https;
     // A promise is a proxy for a no known value
     // It allows asynchronous code
-
         return new Promise((resolve, reject) => {
             //Stream between the new file an the request
-            const file = fs.createWriteStream(filePath);
+            const file = fs.createWriteStream(filePath, {flag: 'a+'});
             let fileInfo = null;
+            file.on('open', () => {
+                const request = proto.get(url, response => {
 
-            const request = proto.get(url, response => {
+                    if (response.statusCode !== 200) {
+                        reject(new Error(`Failed to get '${url}' (${response.statusCode})`));
+                    }
+                    fileInfo = {
+                        mime: response.headers['content-type'],
+                        size: parseInt(response.headers['content-length'], 10),
+                    };
+                    // Send data to the file
+                    response.pipe(file);
+                });
+                //Events which can occur once the connections is finished
+                // The destination stream is ended by the time it's called
+                file.on('finish', () => {
+                    console.log('The file has been closed without problems');
+                    resolve(fileInfo);
+                });
+                // In case there is a error with the request it triggers
+                request.on('error', err => {
+                    console.log('Error while requesting the file');
+                    fs.unlink(filePath, () => reject(err));
+                });
 
-                if (response.statusCode !== 200) {
-                    reject(new Error(`Failed to get '${url}' (${response.statusCode})`));
-                }
-                fileInfo = {
-                    mime: response.headers['content-type'],
-                    size: parseInt(response.headers['content-length'], 10),
-                };
-                // Send data to the file
-                response.pipe(file);
+                // This is here in case any errors occur
+                file.on('error', err => {
+                    console.log('Error while writing the data in the new file');
+                    fs.unlink(filePath, () => reject(err));
+                });
+                request.end();
             });
-            //Events which can occur once the connections is finished
-
-            // The destination stream is ended by the time it's called
-            file.on('finish', () => {
-                console.log('The file has been closed without problems');
-                resolve(fileInfo);
-            });
-            // In case there is a error with the request it triggers
-            request.on('error', err => {
-                console.log('Error while requesting the file');
-                fs.unlink(filePath, () => reject(err));
-            });
-
-            // This is here in case any errors occur
-            file.on('error', err => {
-                console.log('Error while writing the data in the new file');
-                fs.unlink(filePath, () => reject(err));
-            });
-
-            request.end();
         });
 }
 
@@ -72,6 +68,10 @@ function formatDate(date){
 
 /**
  *
+ * @param day
+ * @param month
+ * @param year
+ * @returns {string}
  */
 function buildUrl(day,month,year){
     year= year.toString();
@@ -83,16 +83,26 @@ function buildUrl(day,month,year){
 
 /**
  *
+ * @param month
+ * @param year
+ * @returns {number}
+ */
+let getDaysInMonth = function(month, year) {
+    // Here January is 1 based
+    //Day 0 is the last day in the previous month
+    return new Date(year, month, 0).getDate();
+};
+/**
+ *
  *
  */
 async function getCasesFile() {
-
     let url = "";
     let attempts = 1;
     let correctAccess = false;
     //That means it weekend and the data is not update on weekends
+    let today_date = new Date();
     do {
-        let today_date = new Date();
         let today_day = today_date.getDay();
 
         if (today_day > 5) {
@@ -107,18 +117,22 @@ async function getCasesFile() {
         }).catch((error) => {
             console.log(`Caught by try/catch: ${error}`);
             attempts = attempts + 1;
+            // Try to get the previous file
+            let yesterday = moment().subtract(attempts, 'days');
+            today_date = new Date(yesterday.format());
         });
-    } while (!correctAccess && attempts<3);
+    } while (!correctAccess && attempts < getDaysInMonth(today_date.getMonth(),today_date.getFullYear()));
 
     if(correctAccess){
         //Update the information in the mongodb database
+        console.log("Starting to delete the old data")
         let result_delete = await deleteOldData();
         if(result_delete){
+            console.log("Updating the database")
             updateDatabase();
         }
-
+        console.log("End of the updating database process")
     }
-
 
 }
 
@@ -126,11 +140,9 @@ async function getCasesFile() {
  * 
  */
 function  updateDatabase() {
+    let workbook = new Excel.Workbook();
     try {
-        let workbook = new Excel.Workbook();
-
         workbook.xlsx.readFile(filePath).then(async function () {
-
             //Get sheet by Name
             let worksheet = workbook.getWorksheet(1);
             let startinit = 15;
@@ -154,16 +166,31 @@ function  updateDatabase() {
                     let percentage = row.getCell(4).value;
                     let percentage_result = getResultPercentage(percentage);
                     let ZBSwithCases = row.getCell(5).value;
-                    console.log(ZonaSalud + ' ' + newcases + ' ' + percentage + ' ' + ZBSwithCases);
                     if(ZonaSalud != null){
-                        const healthzone = new Healthzone({
-                            name: ZonaSalud,
-                            newcases: newcases,
-                            percentage: percentage_result,
-                            ZBSwithCases: ZBSwithCases,
-                            radius: 500
-                        });
-                        await healthzone.save();
+                        //let district = District.findOne({ 'name': ZonaSalud });
+                        //let long = district.long;
+                        //let alt = district.alt;
+
+
+                        //if(district !=null){
+                            const healthzone = new Healthzone({
+                                name: ZonaSalud,
+                                newcases: newcases,
+                                percentage: percentage_result,
+                                ZBSwithCases: ZBSwithCases,
+                                radius: 500
+                            });
+                            /*
+                                            location: {
+                    type: "Point",
+                    coordinates: [alt,  long]
+                }
+                             */
+                            await healthzone.save();
+
+                       //}
+
+
                     }
                 }
                 catch (e) {
@@ -173,8 +200,6 @@ function  updateDatabase() {
             }
 
         });
-    //Once it has finished updating the database the XLSX is no longer needed
-    fs.unlinkSync(filePath);
     }catch {
         console.log({ error: "Error getting the information HealthZone" })
     }

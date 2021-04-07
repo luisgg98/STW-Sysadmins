@@ -41,8 +41,7 @@ app.use(cors());
 
 // Schedule tasks to be run on the server.
 // Two in the morning '0 0 2 * * *'
-cron.schedule('0 */1 * * * *', async function() {
-  console.log('---------------------');
+cron.schedule('0 0 2 * * *', async function() {
   console.log('Running Cron Job');
   await ta.getCasesFile().then(r => {
     console.log('Cron Job working correctly');
@@ -50,7 +49,16 @@ cron.schedule('0 */1 * * * *', async function() {
     console.log('Cron Job working error, something goes wrong');
     console.log('Error '+ error );
   });
-  console.log('---------------------');
+});
+
+const { exec } = require('child_process');
+// Updating our keys
+cron.schedule('0 0 3 * * *', async function() {
+  exec('node scripts/getKeys.js ', (err, stdout, stderr) => {
+    // the *entire* stdout and stderr (buffered)
+    console.log(`stdout: ${stdout}`);
+    console.log(`stderr: ${stderr}`);
+  });
 });
 
 // Necessary to use the interface of Swagger
