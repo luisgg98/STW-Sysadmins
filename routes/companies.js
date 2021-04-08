@@ -4,6 +4,11 @@ const router = express.Router()
 const passport = require('passport');
 
 /*
+    Get all companies and his location
+ */
+router.get("/get", ControllerCompany.get)
+
+/*
     Creates a new company
  */
 router.post("/register", ControllerCompany.register)
