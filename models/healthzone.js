@@ -5,7 +5,11 @@ const healthzone = new mongoose.Schema({
     newcases : { type : Number, required: false},
     percentage : { type : Number, required: false},
     ZBSwithCases : { type : Number, required: false},
-    radius : { type : Number, required: false}
+    radius : { type : Number, required: false},
+    location: {
+        type: { type: String },
+        coordinates: [Number]
+    }
 });
 healthzone.index({location: '2dsphere'});
 

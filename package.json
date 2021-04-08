@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node scripts/getKeys.js && node config/settings"
+    "start": "node config/settings"
   },
   "engines": {
     "node": ">=14.15.5",

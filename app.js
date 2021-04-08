@@ -39,6 +39,13 @@ app.use(cookieParser());
 // Allows our Angular application to make HTTP requests to Express application
 app.use(cors());
 
+const Healthzone = require('./models/healthzone');
+const getkeys = require('./scripts/getKeys');
+getkeys.genKeyPair();
+const loadDistrict =require('./scripts/loadDistrict');
+
+Healthzone.deleteMany({}, loadDistrict.loadCouncilInfo)
+
 // Schedule tasks to be run on the server.
 // Two in the morning '0 0 2 * * *'
 cron.schedule('0 0 2 * * *', async function() {
@@ -53,7 +60,7 @@ cron.schedule('0 0 2 * * *', async function() {
 
 const { exec } = require('child_process');
 // Updating our keys
-cron.schedule('0 0 3 * * *', async function() {
+cron.schedule('0 5 2 * * *', async function() {
   exec('node scripts/getKeys.js ', (err, stdout, stderr) => {
     // the *entire* stdout and stderr (buffered)
     console.log(`stdout: ${stdout}`);

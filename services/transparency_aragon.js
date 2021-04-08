@@ -2,8 +2,8 @@ const fs = require('fs');
 const https = require('https');
 const moment = require('moment');
 const Excel  = require("exceljs");
+const hz = require('../services/healthzone');
 const Healthzone = require('../models/healthzone');
-const District = require('../models/district');
 const  filePath ="scripts/covid_data.xlsx";
 /**
  * Downloads file from remote HTTPS host and puts its contents to the
@@ -125,12 +125,8 @@ async function getCasesFile() {
 
     if(correctAccess){
         //Update the information in the mongodb database
-        console.log("Starting to delete the old data")
-        let result_delete = await deleteOldData();
-        if(result_delete){
-            console.log("Updating the database")
-            updateDatabase();
-        }
+        console.log("Updating the database")
+        updateDatabase();
         console.log("End of the updating database process")
     }
 
@@ -167,29 +163,15 @@ function  updateDatabase() {
                     let percentage_result = getResultPercentage(percentage);
                     let ZBSwithCases = row.getCell(5).value;
                     if(ZonaSalud != null){
-                        //let district = District.findOne({ 'name': ZonaSalud });
-                        //let long = district.long;
-                        //let alt = district.alt;
-
-
-                        //if(district !=null){
-                            const healthzone = new Healthzone({
-                                name: ZonaSalud,
-                                newcases: newcases,
-                                percentage: percentage_result,
-                                ZBSwithCases: ZBSwithCases,
-                                radius: 500
-                            });
-                            /*
-                                            location: {
-                    type: "Point",
-                    coordinates: [alt,  long]
-                }
-                             */
-                            await healthzone.save();
-
-                       //}
-
+                        hz.mapDistrictWithHealthzone(ZonaSalud).then(async function (district) {
+                            if(district !=null){
+                                await hz.updateCovidHealthzone(district, newcases,percentage_result, ZBSwithCases,updateRadius(newcases));
+                            }
+                        }).catch((e) =>{
+                            if(!e.includes('Not found:')){
+                                console.log({ error: "Error updating the data of a district" + e })
+                            }
+                        });
 
                     }
                 }
@@ -204,6 +186,14 @@ function  updateDatabase() {
         console.log({ error: "Error getting the information HealthZone" })
     }
 
+}
+
+/**
+ *
+ * @param cases
+ */
+function updateRadius(cases) {
+    return (cases *20);
 }
 
 /**
@@ -238,24 +228,6 @@ function getResultPercentage(percentage){
     else{
         return percentage['result'];
     }
-
-}
-
-/**
- *
- */
-async function deleteOldData() {
-    let success = false;
-    try{
-        await Healthzone.deleteMany();
-        success = true;
-    }
-    catch (e) {
-        console.log("Error trying to delete old healthzone information");
-        console.log("Error: " + e);
-    }
-    return success;
-
 
 }
 
