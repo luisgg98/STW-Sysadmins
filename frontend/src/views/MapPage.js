@@ -7,7 +7,7 @@ const MapPage = () => {
         <div>
             <ZitationHeader/>
             <h1>Incidencia Covid-19 en Zaragoza</h1>
-            <CovidMap/>
+            <CovidMap />
         </div>
     );
 };

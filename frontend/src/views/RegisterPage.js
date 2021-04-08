@@ -4,7 +4,7 @@ import { PageDescription, ZitationHeader } from "../components/common/Headers/He
 import UserSignUpForm from "../components/common/Forms/UserSignUpForm"
 import { UserContext } from "../UserContext";
 import { logout } from "../services/AuthService";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 
 const RegisterPage = () => {
 

@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import LoginForm from "../components/common/Forms/LoginForm";
 import { UserContext } from "../UserContext";
 import { logout } from "../services/AuthService";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 import { PageDescription, ZitationHeader } from "../components/common/Headers/Header"
+
 
 const LoginPage = () => {
     const { user, setUser } = useContext(UserContext);

@@ -1,20 +1,18 @@
 import React, { useState, useContext } from "react";
 import { UserContext } from "../../../UserContext";
-import { signup } from "../../../services/AuthService";
+import { signup, submit_signup } from "../../../services/AuthService";
 import axios from "axios";
+import * as Yup from 'yup';
+
+validationSchema: Yup.object({
+    password: Yup.string().required('Password is required'),
+    passwordConfirmation: Yup.string()
+       .oneOf([Yup.ref('password'), null], 'Passwords must match')
+  });
 
 const UserSignUpForm = () => {
     // Datos del formulario
 
-    axios.interceptors.request.use(
-        (config) => {
-            console.log(config);
-            return config;
-        },
-        function (error) {
-            return Promise.reject(error);
-        }
-    );
 
     const [details, setDetails] = useState({
         phone: 0,
@@ -48,28 +46,14 @@ const UserSignUpForm = () => {
             lname: details.lname,
             password: details.password,
         });
-        const user = {
-            phone: Number(details.phone),
-            first_name: details.fname,
-            last_name: details.lname,
-            email: details.email,
-            password: details.password,
-        };
-        require("axios-debug-log");
-        axios
-            .post(
-                `https://stw-zitation.herokuapp.com/api/users/register`,
-                user,
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }
-            )
-            .then((res) => {
-                console.log(res);
-                console.log(res.data);
-            });
+        // const user = {
+        //     phone: Number(details.phone),
+        //     first_name: details.fname,
+        //     last_name: details.lname,
+        //     email: details.emaiÎl,
+        //     password: details.password,
+        // };
+
     }
     function signUpHandler(e) {
         e.preventDefault();
@@ -91,11 +75,7 @@ const UserSignUpForm = () => {
         //User signuphandler if you want to worki with local hardcoded testing
         // <form onSubmit={signUpHandler} class="col-5" >
         //Use handleSubmit if you want to work with the API
-<<<<<<< HEAD
         <form onSubmit={handleSubmit} className="col-9"  >
-=======
-        <form onSubmit={handleSubmit} class="col-5">
->>>>>>> 9568b41c0a3009555362398b25d5038a9c30f227
             <h3 class="d-flex justify-content-center">Sign Up</h3>
             {error !== "" ? <div className="error">{error}</div> : ""}
             <div className="form-group">

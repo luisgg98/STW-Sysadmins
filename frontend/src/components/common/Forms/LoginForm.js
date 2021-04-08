@@ -1,10 +1,16 @@
-import React, {  useState, useContext } from "react";
-import { UserContext } from "../../../UserContext";
-import { login } from "../../../services/AuthService";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import * as yup from 'yup';
+import { Button, Form } from "react-bootstrap";
+// import { Link } from "react-router-dom";
+import { UserContext } from "../../../UserContext"
+import API from "../../../services/AuthService"
 import axios from 'axios';
 
 const LoginForm = () => {
+
+    // Datos del usuario hacer login
+    const { user, setUser } = useContext(UserContext);
+
     // Datos del formulario
     const [details, setDetails] = useState({
         email: "",
@@ -14,88 +20,72 @@ const LoginForm = () => {
     // Mensaje de error
     const [error, setError] = useState("");
 
-    // Datos del usuario hacer login
-    const { user, setUser } = useContext(UserContext);
-
 
     function handleSubmit(e) {
         e.preventDefault();
         console.log("handling submit");
-        setUser({
-            email: details.email,
-            password: details.password
-        })
-        const user = {
-            email: details.email,
-            password: details.password
-        }
+
         require('axios-debug-log')
-        axios.post(`https://stw-zitation.herokuapp.com/api/users/login`,  user ,
-            { headers: {
+        axios.post(`https://stw-zitation.herokuapp.com/api/users/login`, details,
+            {
+                headers: {
                     'Content-Type': 'application/json'
                 }
+            }).then(
+                (response) => {
+                    if (response.status === 200) {
+                        setUser({
+                            email: details.email,
+                        })
+                    }
+                    else {
+                        console.log("error 40x");
+                    }
+                    console.log(response.status);
+                }
+            ).catch(e => {
+                console.log('catch error');
+                setUser({
+                    email: ''
+                })
             })
-            .then(res => {
-                console.log(res);
-                console.log(res.data);
-            })
-    }
-
-    function loginHandler(e) {
-        e.preventDefault();
-
-        if (login(details)) {
-            console.log("Logged in");
-            setUser({
-                email: details.email,
-            });
-        } else {
-            console.log("Details do not match!");
-            setError("Details do not match!");
-        }
     }
 
     return (
-        //use this line if you want to test with hardcoded data
-        // <form onSubmit={loginHandler} class="col-5" >
-        //Use this line if you want to call the api
-        <form onSubmit={handleSubmit} class="col-5" >
-            <div className="form-inner">
-                <h3 class="d-flex justify-content-center">Login</h3>
-                {error !== "" ? <div className="error">{error}</div> : ""}
-                <div className="form-group">
-                    <label htmlFor="email" >Email: </label>
-                    <input
-                        className="form-control"
+        <div>
+            <Form noValidate onSubmit={handleSubmit} >
+                <Form.Group controlId="formBasicEmail">
+                    <Form.Label>Email address</Form.Label>
+                    <Form.Control
                         type="email"
-                        name="email"
-                        id="email"
+                        placeholder="Enter email"
+                        value={details.email}
                         onChange={(e) =>
                             setDetails({ ...details, email: e.target.value })
-                        }
-                        value={details.email}
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password" >Password: </label>
-                    <input
-                        className="form-control"
+                        } 
+                        onError='error'/>
+                    <Form.Text className="text-muted">
+                        We'll never share your email with anyone else.
+                            </Form.Text>
+                </Form.Group>
+
+                <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control
                         type="password"
-                        name="password"
-                        id="password"
+                        placeholder="Password"
+                        value={details.password}
                         onChange={(e) =>
                             setDetails({ ...details, password: e.target.value })
                         }
-                        value={details.password}
-                    />
-                </div>
-                <input type="submit" className="btn btn-primary btn-block" value="Login" />
-                <span>
-                        ¿Todavia no tiene una cuenta? <Link to='/registro'> Registrarse </Link>
-                </span>
-            </div>
-        </form>
-    );
+                        onError='error' />
+                </Form.Group>
+                <Button variant="primary" type="submit">Log In</Button>
+            </Form>
+        </div>
+    )
+
+
 };
 
 export default LoginForm;
