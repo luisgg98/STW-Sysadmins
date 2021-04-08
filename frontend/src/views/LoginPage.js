@@ -20,7 +20,7 @@ const LoginPage = () => {
                 <ZitationHeader className="mx-auto" />
             </Row>
             {user.email !== "" ? (
-                <div className="Perfil">
+                <div>
                     <h1>Mi cuenta</h1>
                     <p>
                         <span>{user.email}</span>
