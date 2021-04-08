@@ -40,8 +40,6 @@ app.use(cookieParser());
 app.use(cors());
 
 const Healthzone = require('./models/healthzone');
-const getkeys = require('./scripts/getKeys');
-getkeys.genKeyPair();
 const loadDistrict =require('./scripts/loadDistrict');
 
 Healthzone.deleteMany({}, loadDistrict.loadCouncilInfo)
@@ -61,7 +59,7 @@ cron.schedule('0 0 2 * * *', async function() {
 const { exec } = require('child_process');
 // Updating our keys
 cron.schedule('0 5 2 * * *', async function() {
-  exec('node scripts/getKeys.js ', (err, stdout, stderr) => {
+  exec('node ./scripts/getKeys.js ', (err, stdout, stderr) => {
     // the *entire* stdout and stderr (buffered)
     console.log(`stdout: ${stdout}`);
     console.log(`stderr: ${stderr}`);
