@@ -241,7 +241,7 @@ paths:
           description: "Company not found"
   /healthzone:
     get:
-      operationId: getAllHealhzone
+      operationId: getAllHealthzone
       tags:
         - "HealthZone"
       responses:
@@ -250,23 +250,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: Object
-                    properties:
-                      name:
-                        type: String
-                      newcases:
-                        type: integer
-                      radius:
-                        type: integer
-                      location:
-                        type: object
-                        properties:
-                          alt:
-                            type: integer
-                          long:
-                            type: integer
+                $ref: '#/components/schemas/Healthzone'
         "404":
           description: "No health zones data found"
         "500":
@@ -444,6 +428,24 @@ components:
               type: integer
             long:
               type: integer
+    Healthzone:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          newcases:
+            type: integer
+          radius:
+            type: integer
+          location:
+            type: object
+            properties:
+              alt:
+                type: integer
+              long:
+                type: integer
 
 externalDocs:
   description: "Find out more about Swagger"
