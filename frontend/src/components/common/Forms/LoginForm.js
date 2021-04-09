@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import * as yup from 'yup';
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Row } from "react-bootstrap";
 // import { Link } from "react-router-dom";
 import { UserContext } from "../../../UserContext"
 import API from "../../../services/AuthService"
@@ -52,7 +52,7 @@ const LoginForm = () => {
         }
         catch (e) {
             console.log('catch error');
-            setError({ type: "wrong login" })
+            setError({ type: true })
             setForm({
                 email: '',
                 password: ''
@@ -64,6 +64,14 @@ const LoginForm = () => {
         }
     }
 
+    const AlertMessage = () => {
+        if (formValue.email === '' && error) {
+            return (<Alert variant="danger">
+                Credenciales incorrectas
+            </Alert>)
+        }
+        else return null
+    }
 
 
     return (
@@ -110,7 +118,7 @@ const LoginForm = () => {
                         value={formValue.password}
                         {...register("password", {
                             required: true,
-                            minLength: { value: 8, message: "minimum legth is 8" },
+                            // minLength: { value: 8, message: "minimum legth is 8" },
                             // pattern: { value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/, message: "Password must contain uppercase, lowercase, simbol and numbers." }
                         })}
                         onChange={(e) => {
@@ -126,6 +134,9 @@ const LoginForm = () => {
                     <Form.Control.Feedback type="invalid">Min legth is 8. Must contain uppercase, symbol and numbers.</Form.Control.Feedback>
                 </Form.Group>
                 <Button variant="primary" type="submit">Log In</Button>
+                <Row className="justify-content-center mx-auto pt-auto">
+                    <AlertMessage />
+                </Row>
             </Form>
         </div>
     )
