@@ -49,7 +49,7 @@ Healthzone.deleteMany({}, loadDistrict.loadCouncilInfo)
 // Schedule tasks to be run on the server.
 // Two in the morning '0 0 2 * * *'
 // Due to covid most business close at the hour
-cron.schedule('0 6 21 * * *', async function() {
+cron.schedule('0 0 23 * * *', async function() {
   console.log('Running Cron Job');
   await ta.getCasesFile().then(r => {
     console.log('Cron Job working correctly');
