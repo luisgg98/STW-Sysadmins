@@ -121,6 +121,20 @@ paths:
           description: "Error: Unauthorized"
         "404":
           description: "User not found"
+  /companies/get:
+    get:
+      operationId: getAllCompanies
+      tags:
+        - "Company"
+      responses:
+        "200":
+          description: "All companies correctly fetched"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Get_companies'
+        "500":
+          description: "Internal server error"
   /companies/register:
     post:
       tags:
@@ -339,6 +353,19 @@ components:
           format: email
         password:
           type: string
+    Get_companies:
+      type: array
+      items:
+        type: object
+        properties:
+          location:
+            type: array
+            items:
+              type: integer
+            minItems: 2
+            maxItems: 2
+          name:
+            type: string
     Company_register:
       type: object
       properties:

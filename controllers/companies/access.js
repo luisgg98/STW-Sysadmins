@@ -2,6 +2,16 @@ const utils = require('../../services/utils')
 const validate_email = require('../../services/validate_email')
 const Company = require('../../models/company')
 
+let get = async (req, res) => {
+    try {
+        const companies = await Company.find({}, {name: true, location: true})
+        res.send(companies)
+    } catch {
+        res.status(500)
+        res.send({error: "Internal server error"})
+    }
+}
+
 let register = async (req, res) => {
     try {
         let password = utils.genPassword(req.body.password)
@@ -83,6 +93,7 @@ let delete_company = async (req, res) => {
     }
 }
 
+exports.get = get
 exports.register = register
 exports.login = login
 exports.update = update
