@@ -11,6 +11,7 @@
     "axios-logger": "^2.5.0",
     "bootstrap": "^4.6.0",
     "express": "^4.17.1",
+    "formik": "^2.2.6",
     "leaflet": "^1.7.1",
     "react": "^17.0.2",
     "react-bootstrap": "^1.5.2",
