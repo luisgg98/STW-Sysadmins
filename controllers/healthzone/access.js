@@ -1,7 +1,12 @@
 
 const Healthzone = require('../../models/healthzone');
 
-
+/**
+ * Return of the information available about health zones
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let allHealthzone = async (req, res) => {
     try {
         let healthzones = await Healthzone.find();

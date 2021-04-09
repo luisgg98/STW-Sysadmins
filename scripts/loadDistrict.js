@@ -4,7 +4,8 @@ const hz = require('../services/healthzone');
 const url ='https://www.zaragoza.es/sede/servicio/distrito.json?fl=id,title,geometry&srsname=wgs84';
 
 /**
- *
+ * Variable used to request all data of districts from the city of Zaragoza
+ * by a get operation
  * @type {Promise<unknown>}
  */
 let loadCouncilData = new Promise((resolve, reject) => {
@@ -29,7 +30,8 @@ let loadCouncilData = new Promise((resolve, reject) => {
     });
 
 /**
- *
+ * Given the name of a district the function
+ * parses it
  * @param name
  * @returns {*}
  */

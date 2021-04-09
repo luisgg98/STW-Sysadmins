@@ -1,5 +1,8 @@
 #!/usr/bin/env node
-
+/**
+ * Creating the keys for encryption
+ * @type {{genKeyPair?: function(): void}}
+ */
 const getkeys = require('../scripts/getKeys');
 getkeys.genKeyPair();
 

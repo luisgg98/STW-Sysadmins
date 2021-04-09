@@ -3,8 +3,11 @@ const https = require('https');
 const moment = require('moment');
 const Excel  = require("exceljs");
 const hz = require('../services/healthzone');
-const Healthzone = require('../models/healthzone');
+
+// CONSTANT VARIABLES
 const  filePath ="scripts/covid_data.xlsx";
+
+//METHODS
 /**
  * Downloads file from remote HTTPS host and puts its contents to the
  * specified location.
@@ -53,7 +56,9 @@ async function downloadFile(url, filePath) {
 }
 
 /**
- *
+ * If the day is inferior to 10
+ * it adds a 0 and return it as
+ * a string
  * @param date
  * @returns {string}
  */
@@ -93,7 +98,13 @@ let getDaysInMonth = function(month, year) {
     return new Date(year, month, 0).getDate();
 };
 /**
+ * Asynchronous method which tries to download the excel file
+ * from the council city website.
+ *  If it fails downloading the file it tries to download the previous
+ *  one. I will try to download the file 30 or 31 times, depending on the
+ *  month. If finally it is incapable of downloading anything doesn't do anything else.
  *
+ *  Once the file is downloaded is time to update the database
  *
  */
 async function getCasesFile() {
@@ -133,7 +144,7 @@ async function getCasesFile() {
 }
 
 /**
- * 
+ * Update the previous information about the covid cases of the health zones
  */
 function  updateDatabase() {
     let workbook = new Excel.Workbook();
@@ -142,30 +153,27 @@ function  updateDatabase() {
             //Get sheet by Name
             let worksheet = workbook.getWorksheet(1);
             let startinit = 15;
-
+            // Finding the beginning of the table
             while (!getInit(worksheet.getRow(startinit).getCell(2).value) && startinit < 60) {
                 startinit = startinit + 1
             }
-
             let limit = startinit + 1;
-
+            // Finding the limits of the table
             while (!getFinal(worksheet.getRow(limit).getCell(2).value) && limit < 90) {
                 limit = limit + 1
             }
-
             let index_column = startinit + 1;
             while (index_column < limit) {
+                // Tries to read the data in the table
                 try{
                     let row = worksheet.getRow(index_column);
                     let ZonaSalud = row.getCell(2).value;
                     let newcases = row.getCell(3).value;
-                    let percentage = row.getCell(4).value;
-                    let percentage_result = getResultPercentage(percentage);
-                    let ZBSwithCases = row.getCell(5).value;
                     if(ZonaSalud != null){
+                        // Map the name of the district with a health zone
                         hz.mapDistrictWithHealthzone(ZonaSalud).then(async function (district) {
                             if(district !=null){
-                                await hz.updateCovidHealthzone(district, newcases,percentage_result, ZBSwithCases,updateRadius(newcases));
+                                await hz.updateCovidHealthzone(district, newcases,updateRadius(newcases));
                             }
                         }).catch((e) =>{
                             if(!e.includes('Not found:')){
@@ -176,6 +184,7 @@ function  updateDatabase() {
                     }
                 }
                 catch (e) {
+                    //Something about the reading goes wrong
                     console.log({ error: e })
                 }
                 index_column = index_column + 1;
@@ -189,11 +198,18 @@ function  updateDatabase() {
 }
 
 /**
- *
+ * Random way to get the value of the radius
  * @param cases
  */
 function updateRadius(cases) {
-    return (cases *20);
+    let radius = (cases * 15);
+    if(radius < 50){
+        radius = 50;
+    }
+    if(radius > 500){
+        radius = 500;
+    }
+    return radius;
 }
 
 /**
@@ -213,21 +229,6 @@ function getFinal(cell){
  */
 function getInit(cell){
     return (cell != null && cell.includes('Zona de salud'));
-
-}
-
-/**
- *
- * @param percentage
- * @returns {number|*}
- */
-function getResultPercentage(percentage){
-    if(percentage == null){
-        return 0;
-    }
-    else{
-        return percentage['result'];
-    }
 
 }
 

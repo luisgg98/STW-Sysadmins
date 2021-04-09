@@ -1,19 +1,17 @@
 
 const Healthzone = require('../models/healthzone');
 /**
- *
+ * Update the data related to a health zone
  * @param ZonaSalud
  * @param newcases
- * @param percentage_result
- * @param ZBSwithCases
  * @param radius
  * @returns {Promise<void>}
  */
-async function updateCovidHealthzone(ZonaSalud, newcases,percentage_result, ZBSwithCases,radius) {
+async function updateCovidHealthzone(ZonaSalud, newcases,radius) {
     try{
         Healthzone.updateOne(
             {name:ZonaSalud },
-            { $set:{newcases: newcases,percentage: percentage_result, ZBSwithCases:ZBSwithCases,radius:radius}},
+            { $set:{newcases: newcases,radius:radius}},
             {},
             function (err,res) {
 
@@ -26,7 +24,7 @@ async function updateCovidHealthzone(ZonaSalud, newcases,percentage_result, ZBSw
 }
 
 /**
- *
+ * Save a new health zone
  * @param title
  * @param coordinates
  * @returns {Promise<void>}
@@ -35,8 +33,6 @@ async function saveHealthzone(title ,coordinates){
     let healthzone = new Healthzone({
         name: title,
         newcases : 0,
-        percentage : 0,
-        ZBSwithCases : 0,
         radius : 0,
         location: {
             type: "Point",
@@ -47,6 +43,7 @@ async function saveHealthzone(title ,coordinates){
 }
 
 /**
+ * Map the name of the district to the name of a health zone
  * @param name
  */
 

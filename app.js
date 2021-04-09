@@ -42,6 +42,8 @@ app.use(cors());
 const Healthzone = require('./models/healthzone');
 const loadDistrict =require('./scripts/loadDistrict');
 
+//  In order not to duplicate the information about the
+// health zones is required to delete first the whole collection
 Healthzone.deleteMany({}, loadDistrict.loadCouncilInfo)
 
 // Schedule tasks to be run on the server.

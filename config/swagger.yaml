@@ -236,7 +236,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthZoneData'
+                type: array
+                items:
+                  type: Object
+                    properties:
+                      name:
+                        type: String
+                      newcases:
+                        type: integer
+                      radius:
+                        type: integer
+                      location:
+                        type: object
+                        properties:
+                          alt:
+                            type: integer
+                          long:
+                            type: integer
         "404":
           description: "No health zones data found"
         "500":
@@ -401,20 +417,6 @@ components:
               type: integer
             long:
               type: integer
-    HealthZoneData:
-      type: Object
-      properties:
-        name:
-          type: String
-        newcases:
-          type: integer
-        percentage:
-          type: float
-        ZBSwithCases:
-          type: integer
-        radius:
-          type: integer
-
 
 externalDocs:
   description: "Find out more about Swagger"
