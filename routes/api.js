@@ -9,5 +9,4 @@ router.use('/users', usersRouter);
 router.use('/companies', companiesRouter);
 router.use('/healthzone',healthZoneRouter);
 
-
 module.exports = router;

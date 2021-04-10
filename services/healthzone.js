@@ -7,14 +7,16 @@ const Healthzone = require('../models/healthzone');
  * @param radius
  * @returns {Promise<void>}
  */
-async function updateCovidHealthzone(ZonaSalud, newcases,radius) {
+async function updateCovidHealthzone(ZonaSalud, newcases,radius,date) {
     try{
         Healthzone.updateOne(
             {name:ZonaSalud },
-            { $set:{newcases: newcases,radius:radius}},
+            { $set:{newcases: newcases,radius:radius, date:date}},
             {},
             function (err,res) {
-
+                if(err){
+                    throw err;
+                }
             });
     }
     catch (e) {
@@ -30,16 +32,35 @@ async function updateCovidHealthzone(ZonaSalud, newcases,radius) {
  * @returns {Promise<void>}
  */
 async function saveHealthzone(title ,coordinates){
-    let healthzone = new Healthzone({
-        name: title,
-        newcases : 0,
-        radius : 0,
-        location: {
-            type: "Point",
-            coordinates: coordinates
-        }
-    });
-    await healthzone.save();
+    try{
+        Healthzone.findOne({name:title},{},{},async function(error,hz) {
+            if(error){
+                throw error;
+            }
+            if(hz == null){
+                let healthzone = new Healthzone({
+                    name: title,
+                    newcases : 0,
+                    radius : 0,
+                    location: {
+                        type: "Point",
+                        coordinates: coordinates
+                    }
+                });
+                await healthzone.save();
+            }
+            else{
+                console.log("Found: "+hz);
+            }
+
+        });
+
+    }
+    catch (e) {
+        console.log("Error while starting the Health zone database");
+        console.log("Problems with:");
+        console.log(e);
+    }
 }
 
 /**

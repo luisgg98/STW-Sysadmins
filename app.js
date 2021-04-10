@@ -1,6 +1,5 @@
 const createError = require('http-errors');
 const express = require('express');
-const path = require('path');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 // Necessary to communicate to the frontend
@@ -20,7 +19,6 @@ const apiRouter = require('./routes/api');
 // This allows us to do cron scheduled activities
 const cron = require('node-cron');
 const ta=require('./services/transparency_aragon')
-
 const app = express();
 
 //Passport is required to authentication
@@ -49,7 +47,7 @@ Healthzone.deleteMany({}, loadDistrict.loadCouncilInfo)
 // Schedule tasks to be run on the server.
 // Two in the morning '0 0 2 * * *'
 // Due to covid most business close at the hour
-cron.schedule('*/5 * * * *', async function() {
+cron.schedule('*/25 * * * *', async function() {
   console.log('Running Cron Job');
   await ta.getCasesFile().then(r => {
     console.log('Cron Job working correctly');
@@ -69,12 +67,8 @@ cron.schedule('11 23 * * *', async function() {
   });
 });
 
-// Necessary to use the interface of Swagger
-//app.use(express.static(path.join(__dirname, 'public')));
-
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
-
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

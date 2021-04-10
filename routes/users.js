@@ -3,9 +3,10 @@ const ControllerUser = require('../controllers/user/access')
 const router = express.Router()
 const passport = require('passport');
 
-
+/*
+ *
+ */
 router.post("/register", ControllerUser.register)
-
 /*
     Returns the info about an user
  */

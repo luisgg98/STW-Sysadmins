@@ -137,7 +137,7 @@ async function getCasesFile() {
     if(correctAccess){
         //Update the information in the mongodb database
         console.log("Updating the database")
-        updateDatabase();
+        updateDatabase(today_date.toISOString());
         console.log("End of the updating database process")
     }
 
@@ -146,7 +146,7 @@ async function getCasesFile() {
 /**
  * Update the previous information about the covid cases of the health zones
  */
-function  updateDatabase() {
+function  updateDatabase(date) {
     let workbook = new Excel.Workbook();
     try {
         workbook.xlsx.readFile(filePath).then(async function () {
@@ -173,7 +173,7 @@ function  updateDatabase() {
                         // Map the name of the district with a health zone
                         hz.mapDistrictWithHealthzone(ZonaSalud).then(async function (district) {
                             if(district !=null){
-                                await hz.updateCovidHealthzone(district, newcases,updateRadius(newcases));
+                                await hz.updateCovidHealthzone(district, newcases,updateRadius(newcases),date);
                             }
                         }).catch((e) =>{
                             if(!e.includes('Not found:')){
@@ -191,8 +191,9 @@ function  updateDatabase() {
             }
 
         });
-    }catch {
-        console.log({ error: "Error getting the information HealthZone" })
+    }catch(error) {
+        console.log("Error getting the information HealthZone" )
+        console.log({error: error})
     }
 
 }

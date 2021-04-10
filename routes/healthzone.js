@@ -7,7 +7,4 @@ const router = express.Router()
  */
 router.get("/", ControllerHealthZone.allHealthzone);
 
-
-
-
 module.exports = router

@@ -20,7 +20,6 @@ function genKeyPair() {
             format: 'pem' // Most common formatting choice
         }
     });
-
     // Create the public key file
     fs.writeFileSync(__dirname + '/id_rsa_pub.pem', keyPair.publicKey);
 
@@ -28,7 +27,6 @@ function genKeyPair() {
     fs.writeFileSync(__dirname + '/id_rsa_priv.pem', keyPair.privateKey);
 
     console.log("Keys done!")
-
 }
 
 // Generate the keypair

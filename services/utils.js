@@ -59,7 +59,6 @@ function issueJWT(user) {
     const _id = user._id;
     // In a day the token will be useless
     const expiresIn = '1d';
-
     // The payload of the token
     const payload = {
         sub: _id,
@@ -67,7 +66,6 @@ function issueJWT(user) {
     };
     // Signedtoken, (like the certificates in the Distributed Systems)
     const signedToken = jsonwebtoken.sign(payload, PRIV_KEY, { expiresIn: expiresIn, algorithm: 'RS256' });
-
     return {
         token: "Bearer " + signedToken,
         expires: expiresIn

@@ -4,6 +4,7 @@ const healthzone = new mongoose.Schema({
     name : { type: String, required: true},
     newcases : { type : Number, required: false},
     radius : { type : Number, required: false},
+    date: {type: String, required: false},
     location: {
         type: { type: String },
         coordinates: [Number]
