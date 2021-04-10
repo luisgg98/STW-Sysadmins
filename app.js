@@ -42,7 +42,7 @@ const loadDistrict =require('./scripts/loadDistrict');
 
 //  In order not to duplicate the information about the
 // health zones is required to delete first the whole collection
-Healthzone.deleteMany({}, loadDistrict.loadCouncilInfo)
+loadDistrict.loadCouncilInfo();
 
 // Schedule tasks to be run on the server.
 // Two in the morning '0 0 2 * * *'

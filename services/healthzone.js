@@ -49,10 +49,6 @@ async function saveHealthzone(title ,coordinates){
                 });
                 await healthzone.save();
             }
-            else{
-                console.log("Found: "+hz);
-            }
-
         });
 
     }

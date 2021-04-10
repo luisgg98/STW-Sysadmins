@@ -167,11 +167,13 @@ function  updateDatabase(date) {
                 // Tries to read the data in the table
                 try{
                     let row = worksheet.getRow(index_column);
+                    // Just getting the name and the new cases
                     let ZonaSalud = row.getCell(2).value;
-                    let newcases = row.getCell(3).value;
                     if(ZonaSalud != null){
+                        let newcases = row.getCell(3).value;
                         // Map the name of the district with a health zone
                         hz.mapDistrictWithHealthzone(ZonaSalud).then(async function (district) {
+                            // A District found
                             if(district !=null){
                                 await hz.updateCovidHealthzone(district, newcases,updateRadius(newcases),date);
                             }
