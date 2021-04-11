@@ -24,7 +24,7 @@ let register = async (req, res) => {
                 salt: password.salt,
                 location: {
                     type: "Point",
-                    coordinates: [req.body.alt,  req.body.long]
+                    coordinates: [req.body.lat,  req.body.long]
                 }
             })
             await company.save()
@@ -68,8 +68,8 @@ let update = async (req, res) => {
         if (req.body.email) {
             company.email = req.body.email
         }
-        if (req.body.alt) {
-            company.alt = req.body.alt
+        if (req.body.lat) {
+            company.lat = req.body.lat
         }
         if (req.body.long) {
             company.long = req.body.long
