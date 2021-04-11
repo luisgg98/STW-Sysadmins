@@ -239,6 +239,28 @@ paths:
           description: "Error: Unauthorized"
         "404":
           description: "Company not found"
+  /admin/login:
+    post:
+      operationId: loginAdmin
+      tags:
+        - "Admin"
+      summary: "Login admin user"
+      requestBody:
+        description: "username and password of admin"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Admin_login"
+      responses:
+        "200":
+          description: "Admin logged successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User_retrieved"
+        "401":
+          description: "Wrong credentials"
   /healthzone:
     get:
       operationId: getAllHealthzone
@@ -426,6 +448,13 @@ components:
               type: integer
             long:
               type: integer
+    Admin_login:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
     Healthzone:
       type: array
       items:

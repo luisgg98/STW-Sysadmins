@@ -65,9 +65,8 @@ function loadCouncilInfo() {
     }, function(reason) {
         console.log(reason); // Error!
     });
-
-
 }
+
 module.exports.loadCouncilInfo = loadCouncilInfo;
 
 

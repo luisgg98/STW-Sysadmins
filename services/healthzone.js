@@ -13,7 +13,7 @@ async function updateCovidHealthzone(ZonaSalud, newcases,radius,date) {
             {name:ZonaSalud },
             { $set:{newcases: newcases,radius:radius, date:date}},
             {},
-            function (err,res) {
+            function (err) {
                 if(err){
                     throw err;
                 }
@@ -38,6 +38,10 @@ async function saveHealthzone(title ,coordinates){
                 throw error;
             }
             if(hz == null){
+                // Change order of coordinates
+                let coord = coordinates[1]
+                coordinates[1] = coordinates[0]
+                coordinates[0] = coord
                 let healthzone = new Healthzone({
                     name: title,
                     newcases : 0,
