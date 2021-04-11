@@ -27,6 +27,7 @@ const LoginForm = () => {
 
 
 
+
     const { formState: { errors, touchedFields }, register, handleSubmit } = useForm();
 
     const onSubmit = async (e, data) => {
@@ -65,7 +66,7 @@ const LoginForm = () => {
     }
 
     const AlertMessage = () => {
-        if (formValue.email === '' && error) {
+        if (error) {
             return (<Alert variant="danger">
                 Credenciales incorrectas
             </Alert>)
@@ -133,8 +134,10 @@ const LoginForm = () => {
                         isInvalid={errors.password && touchedFields.password} />
                     <Form.Control.Feedback type="invalid">Min legth is 8. Must contain uppercase, symbol and numbers.</Form.Control.Feedback>
                 </Form.Group>
-                <Button variant="primary" type="submit">Log In</Button>
-                <Row className="justify-content-center mx-auto pt-auto">
+                <Row className="justify-content-center mx-auto ">
+                    <Button variant="primary" type="submit">Log In</Button>
+                </Row>
+                <Row className="justify-content-center mx-auto pt-2">
                     <AlertMessage />
                 </Row>
             </Form>
