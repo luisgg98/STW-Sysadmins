@@ -2,7 +2,7 @@ import React from "react";
 import { Formik } from "formik";
 import { Form,  Button } from "react-bootstrap";
 
-const CompanySignUp = () => {
+const CompanySignUpForm = () => {
     return (
         <div>
             <Formik
@@ -36,4 +36,4 @@ const CompanySignUp = () => {
     )
 }
 
-export default CompanySignUp;
+export default CompanySignUpForm;

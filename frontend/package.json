@@ -10,11 +10,13 @@
     "axios-debug-log": "^0.8.2",
     "axios-logger": "^2.5.0",
     "bootstrap": "^4.6.0",
+    "chart.js": "^2.5.2",
     "express": "^4.17.1",
     "formik": "^2.2.6",
     "leaflet": "^1.7.1",
     "react": "^17.0.2",
     "react-bootstrap": "^1.5.2",
+    "react-chartjs-2": "^2.11.1",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.0.4",
     "react-leaflet": "^3.1.0",
@@ -47,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "formik": "^2.2.6"
   }
 }

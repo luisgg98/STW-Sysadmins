@@ -3,14 +3,12 @@ import {Marker, Popup} from "react-leaflet";
 import React from "react";
 
 function Commerces() {
-    /**
-     * Devuelve un array de <Marker> los comercios
-     * */
+
     const comercios = fetchCommerces();
     let marcas = []
     comercios.forEach(function (comercio) {
-        let marca = <Marker position={comercio.location}>
-            <Popup>{comercio.name}</Popup>
+        let marca = <Marker key={comercio._id} position={comercio.location}>
+            <Popup key={comercio._id}>{comercio.name}</Popup>
         </Marker>;
         marcas.push(marca);
     });

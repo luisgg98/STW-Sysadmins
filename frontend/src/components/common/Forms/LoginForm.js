@@ -1,19 +1,14 @@
-import React, { useState, useContext } from "react";
-import * as yup from 'yup';
-import { Button, Form, Row } from "react-bootstrap";
-// import { Link } from "react-router-dom";
-import { UserContext } from "../../../UserContext"
-import API from "../../../services/AuthService"
+import React, {useState, useContext} from "react";
+import {Button, Form, Row} from "react-bootstrap";
+import {UserContext} from "../../../UserContext"
 import axios from 'axios';
-import { useForm } from 'react-hook-form';
-import { Alert } from "react-bootstrap";
+import {useForm} from 'react-hook-form';
+import {Alert} from "react-bootstrap";
 
 
 const LoginForm = () => {
     // Datos del usuario hacer login
-    const { user, setUser } = useContext(UserContext);
-
-    const [validated, setValidated] = useState(false);
+    const [, setUser] = useContext(UserContext);
 
     // Datos del formulario
     const [formValue, setForm] = useState({
@@ -25,10 +20,7 @@ const LoginForm = () => {
     const [error, setError] = useState("");
 
 
-
-
-
-    const { formState: { errors, touchedFields }, register, handleSubmit } = useForm();
+    const {formState: {errors, touchedFields}, register, handleSubmit} = useForm();
 
     const onSubmit = async (e, data) => {
         console.log("handling submit");
@@ -45,15 +37,13 @@ const LoginForm = () => {
                 setUser({
                     email: formValue.email,
                 })
-            }
-            else {
+            } else {
                 console.log("error 40x");
             }
             console.log(response.status);
-        }
-        catch (e) {
+        } catch (e) {
             console.log('catch error');
-            setError({ type: true })
+            setError({type: true})
             setForm({
                 email: '',
                 password: ''
@@ -70,14 +60,13 @@ const LoginForm = () => {
             return (<Alert variant="danger">
                 Credenciales incorrectas
             </Alert>)
-        }
-        else return null
+        } else return null
     }
 
 
     return (
         <div>
-            <Form noValidate onSubmit={handleSubmit(onSubmit)} >
+            <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control
@@ -86,14 +75,14 @@ const LoginForm = () => {
                         placeholder="Enter email"
                         value={formValue.email}
                         {...register("email", {
-                            required: { value: true, message: "Password is required" },
+                            required: {value: true, message: "Password is required"},
                             pattern: {
                                 value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
                                 message: "Wrong email format"
                             }
                         })}
                         onChange={(e) => {
-                            setForm({ ...formValue, email: e.target.value })
+                            setForm({...formValue, email: e.target.value})
                             if (errors.email) {
                                 // console.log("hay error");
                                 // console.log(errors.password.message)
@@ -108,7 +97,7 @@ const LoginForm = () => {
                     </Form.Control.Feedback>
                     <Form.Text className="text-muted">
                         We'll never share your email with anyone else.
-                            </Form.Text>
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword">
@@ -123,7 +112,7 @@ const LoginForm = () => {
                             // pattern: { value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/, message: "Password must contain uppercase, lowercase, simbol and numbers." }
                         })}
                         onChange={(e) => {
-                            setForm({ ...formValue, password: e.target.value })
+                            setForm({...formValue, password: e.target.value})
                             if (errors.password) {
                                 // console.log("hay error");
                                 // console.log(errors.password.message)
@@ -131,8 +120,9 @@ const LoginForm = () => {
                             }
                         }
                         }
-                        isInvalid={errors.password && touchedFields.password} />
-                    <Form.Control.Feedback type="invalid">Min legth is 8. Must contain uppercase, symbol and numbers.</Form.Control.Feedback>
+                        isInvalid={errors.password && touchedFields.password}/>
+                    <Form.Control.Feedback type="invalid">Min legth is 8. Must contain uppercase, symbol and
+                        numbers.</Form.Control.Feedback>
                 </Form.Group>
                 <Row className="justify-content-center mx-auto ">
                     <Button variant="primary" type="submit">Log In</Button>

@@ -1,12 +1,14 @@
 import HomePage from "./views/HomePage";
 import LoginPage from "./views/LoginPage";
-import RegistrarNegocio from "./views/RegistrarNegocio";
-import RegisterPage from "./views/RegisterPage";
+import RegistrarNegocio from "./views/CompanyRegistrationPage";
+import UserRegistrationPage from "./views/UserRegistrationPage";
 import MapPage from "./views/MapPage"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useState } from "react";
 import { UserContext } from "./UserContext";
 import { Container } from 'react-bootstrap'
+import AdminPage from "./views/AdminPage";
+import AccountPage from "./views/AccountPage";
 
 
 
@@ -23,13 +25,19 @@ export default function App() {
                             <LoginPage />
                         </Route>
                         <Route path="/registro">
-                            <RegisterPage />
+                            <UserRegistrationPage />
                         </Route>
                         <Route path="/registrarNegocio">
                             <RegistrarNegocio />
                         </Route>
                         <Route path="/mapa">
                             <MapPage />
+                        </Route>
+                        <Route path="/admin">
+                            <AdminPage />
+                        </Route>
+                        <Route path="/cuenta">
+                            <AccountPage />
                         </Route>
                         <Route path="/">
                             <HomePage />

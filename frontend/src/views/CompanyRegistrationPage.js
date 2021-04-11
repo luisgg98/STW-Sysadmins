@@ -1,12 +1,12 @@
 import { ZitationHeader } from "../components/common/Headers/Header"
-import CompanySignUp from "../components/common/Forms/CompanySignUp"
+import CompanySignUpForm from "../components/common/Forms/CompanySignUpForm"
 
 const RegistrarNegocio = () => {
   return (
     <div>
       <ZitationHeader />
       <h1>RegistrarNegocio</h1>
-      <CompanySignUp />
+      <CompanySignUpForm />
     </div>
   );
 };

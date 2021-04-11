@@ -1,8 +1,11 @@
-const healthZones = [{name: "Fernando el catolico", location: {lat: 41.6439085, lnt: -0.8923046}, radio: 350, cases: 12}]
+import axios from "axios";
 
-function fetchHealthZones() {
-    return healthZones
-    
+async function fetchHealthZones() {
+    try {
+        return await axios.get("https://stw-zitation.herokuapp.com/api/healthzone");
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 export {fetchHealthZones}
