@@ -1,16 +1,11 @@
 import axios from 'axios';
 
 
-
-
-
-
 const userDB = {
     phone: "666777888",
     email: "user@user.com",
     password: "user123",
 };
-
 
 
 function submit_signup(user) {
@@ -33,7 +28,6 @@ function submit_signup(user) {
 }
 
 
-
 function login(details) {
     console.log(details);
 
@@ -54,8 +48,7 @@ function signup(details) {
         details.email === userDB.email &&
         details.password === userDB.password) {
         return true;
-    }
-    else return false;
+    } else return false;
 }
 
 function logout() {
@@ -63,7 +56,7 @@ function logout() {
     // TODO: Añadir logica de logout
 }
 
-export { login, logout, signup};
+export {login, logout, signup};
 export default axios.create({
     baseURL: 'https://stw-zitation.herokuapp.com/'
 });

@@ -6,7 +6,7 @@ import { UserContext } from "../UserContext";
 import { logout } from "../services/AuthService";
 import { Container, Row } from "react-bootstrap";
 
-const RegisterPage = () => {
+const UserRegistrationPage = () => {
 
     const { user, setUser } = useContext(UserContext);
 
@@ -47,4 +47,4 @@ const RegisterPage = () => {
     );
 }
 
-export default RegisterPage;
+export default UserRegistrationPage;

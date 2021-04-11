@@ -5,15 +5,11 @@ import { UserContext } from "../UserContext";
 import { logout } from "../services/AuthService";
 import { Container, Row } from "react-bootstrap";
 import { PageDescription, ZitationHeader } from "../components/common/Headers/Header"
+import {Redirect} from "react-router-dom"
 
 
 const LoginPage = () => {
     const { user, setUser } = useContext(UserContext);
-
-    function logOutHandler() {
-        logout();
-        setUser({ email: "" });
-    }
 
     return (
         <Container>
@@ -21,15 +17,7 @@ const LoginPage = () => {
                 <ZitationHeader className="mx-auto" />
             </Row>
             {user.email !== "" ? (
-                <div>
-                    <h1>Mi cuenta</h1>
-                    <p>
-                        <span>{user.email}</span>
-                    </p>
-                    <Link to="/login">
-                        <button onClick={logOutHandler}>Log Out</button>
-                    </Link>
-                </div>
+                <Redirect to="/account" />
             ) : (
                 <div>
                     <Row className="justify-content-center">
