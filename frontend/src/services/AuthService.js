@@ -56,7 +56,5 @@ function logout() {
     // TODO: Añadir logica de logout
 }
 
-export {login, logout, signup};
-export default axios.create({
-    baseURL: 'https://stw-zitation.herokuapp.com/'
-});
+const API = 'https://stw-zitation.herokuapp.com/api/'
+export {login, logout, signup, API};

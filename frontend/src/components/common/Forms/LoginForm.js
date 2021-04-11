@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { Alert, Spinner } from "react-bootstrap";
 import { Link } from 'react-router-dom';
-
+import { API} from '../../../services/AuthService'
 
 const LoginForm = () => {
     // Datos del usuario hacer login
@@ -16,22 +16,36 @@ const LoginForm = () => {
     const [formValue, setForm] = useState({
         email: "",
         password: "",
+        check: false,
     });
 
     // Mensaje de error
     const [apiError, setApiError] = useState(false);
 
 
-    const { formState: { errors, touchedFields }, register, setError, handleSubmit } = useForm({ mode: 'onSubmit'});
+    const { formState: { errors, touchedFields }, register, setError, handleSubmit } = useForm({ mode: 'onSubmit' });
 
     const onSubmit = async (data, e) => {
+        let loginUrl = API;
+        if (formValue.check){
+            
+            loginUrl += 'companies/login'
+            console.log("checked", loginUrl, formValue)
+        }
+        else {
+            loginUrl += 'users/login'
+            console.log("unchecked", loginUrl, formValue)
+        }
+
         console.log("handling submit");
         e.preventDefault();
         console.log(data);
         require('axios-debug-log');
         setLoading(true);
         try {
-            const response = await axios.post(`https://stw-zitation.herokuapp.com/api/users/login`, formValue,
+            const response = await axios.post(loginUrl, 
+                {email: formValue.email, 
+                password: formValue.password},
                 {
                     headers: {
                         'Content-Type': 'application/json'
@@ -121,7 +135,7 @@ const LoginForm = () => {
                         placeholder="Password"
                         value={formValue.password}
                         {...register("password", {
-                            required: {value: true, message: "Contraseña necesaria"},
+                            required: { value: true, message: "Contraseña necesaria" },
                         })}
                         onChange={(e) => {
                             setForm({ ...formValue, password: e.target.value })
@@ -132,6 +146,14 @@ const LoginForm = () => {
                         }
                         isInvalid={errors.password && touchedFields.password} />
                     <Form.Control.Feedback type="invalid">Password is required.</Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group controlId="formBasicCheckbox">
+                    <Form.Check 
+                        type="checkbox" 
+                        label="Soy una empresa"
+                        onChange={(e) => {
+                            setForm({...formValue, check: !formValue.check})
+                        }}/>
                 </Form.Group>
                 <Form.Group>
                     <Link to="/registro">
