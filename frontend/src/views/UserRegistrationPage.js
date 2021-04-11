@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { PageDescription, ZitationHeader } from "../components/common/Headers/Header"
-import UserSignUpForm from "../components/common/Forms/UserSignUpForm"
+import UserSUForm from "../components/common/Forms/UserSignUpForm"
+import LoginForm from "../components/common/Forms/LoginForm"
 import { UserContext } from "../UserContext";
 import { logout } from "../services/AuthService";
 import { Container, Row } from "react-bootstrap";
@@ -37,14 +38,14 @@ const UserRegistrationPage = () => {
                         <PageDescription />
                     </Row>
                     <Row className="justify-content-center">
-                        <UserSignUpForm />
+                        <UserSUForm />
                     </Row>
                 </div>
 
             )
             }
         </Container >
-    );
-}
+    )
+};
 
 export default UserRegistrationPage;
