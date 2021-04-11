@@ -121,7 +121,7 @@ paths:
           description: "Error: Unauthorized"
         "404":
           description: "User not found"
-  /companies/get:
+  /companies:
     get:
       operationId: getAllCompanies
       tags:

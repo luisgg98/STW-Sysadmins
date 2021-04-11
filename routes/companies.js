@@ -6,7 +6,7 @@ const passport = require('passport');
 /*
     Get all companies and his location
  */
-router.get("/get", ControllerCompany.get)
+router.get("/", ControllerCompany.get)
 
 /*
     Creates a new company
