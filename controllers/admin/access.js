@@ -1,6 +1,24 @@
 const utils = require('../../services/utils')
 const Admin = require('../../models/admin')
 
+let register = async (req, res) => {
+    try {
+        // Hash password with a salt
+        let password = utils.genPassword(req.body.password)
+        const admin = new Admin({
+            username: req.body.username,
+            password: password.hash,
+            salt: password.salt
+        })
+        await admin.save()
+        res.send(admin)
+
+    } catch {
+        res.status(422)
+        res.send({ error: "Wrong json format, check docs for further info /api-docs" })
+    }
+}
+
 let login = async (req, res) => {
     try {
         const admin = await Admin.findOne({ username: req.body.username })
@@ -19,3 +37,4 @@ let login = async (req, res) => {
 }
 
 exports.login = login
+exports.register = register
