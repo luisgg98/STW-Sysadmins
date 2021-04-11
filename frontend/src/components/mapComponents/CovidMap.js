@@ -22,7 +22,7 @@ L.Marker.prototype.options.icon = DefaultIcon;
 
 const coordenadasZgz = [41.65, -0.87];
 
-const CovidMap = () => {
+const CovidMap = (props) => {
     return (
         <div>
             <MapContainer
@@ -37,7 +37,7 @@ const CovidMap = () => {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 <Commerces/>
-                <HealthZones/>
+                <HealthZones healthZones={props.healthZones} />
             </MapContainer>
         </div>
     );
