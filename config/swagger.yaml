@@ -362,18 +362,16 @@ components:
           format: email
         password:
           type: string
-        location:
-          type: object
-          properties:
-            alt:
-              type: integer
-            long:
-              type: integer
+        alt:
+          type: integer
+        long:
+          type: integer
       required:
         - nif
         - name
         - password
-        - location
+        - alt
+        - long
     Company_registered:
       type: object
       properties:
