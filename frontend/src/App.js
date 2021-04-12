@@ -9,6 +9,7 @@ import { UserContext } from "./UserContext";
 import { Container } from 'react-bootstrap'
 import AdminPage from "./views/AdminPage";
 import AccountPage from "./views/AccountPage";
+import HealthPage from "./views/HealthPage";
 
 
 
@@ -21,6 +22,10 @@ export default function App() {
             <Container fluid="true" className="App">
                 <UserContext.Provider value={{ user, setUser }}>
                     <Switch>
+                        <Route path="/companies/health">
+                            <HealthPage />
+                        </Route>
+
                         <Route path="/login">
                             <LoginPage />
                         </Route>
@@ -42,6 +47,7 @@ export default function App() {
                         <Route path="/">
                             <HomePage />
                         </Route>
+
                     </Switch>
                 </UserContext.Provider>
             </Container>

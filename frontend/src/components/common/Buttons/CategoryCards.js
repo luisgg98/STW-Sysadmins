@@ -6,6 +6,7 @@ import comercio from  "../../../assets/comercio.jpeg";
 import deporte from "../../../assets/deporte.jpeg";
 import ocio from "../../../assets/ocio.jpeg";
 import admin from "../../../assets/admin.png";
+import { Link } from 'react-router-dom';
 
 const CategoryCards = () => {
     // require( salud, comercio, deporte, ocio, admin);
@@ -14,7 +15,9 @@ const CategoryCards = () => {
   <Card>
     <Card.Img variant="top" src={salud} />
     <Card.Body>
-      <Card.Title>Salud y Belleza</Card.Title>
+      <Link to="/companies/health">
+        <Card.Title >Salud y Belleza</Card.Title>
+      </Link>
       <Card.Text>
         This is a wider card with supporting text below as a natural lead-in to
         additional content. This content is a little bit longer.
