@@ -41,7 +41,7 @@ let register = async (req, res) => {
 
 let login = async (req, res) => {
     try {
-        const company = await Company.findOne({ nif: req.body.nif })
+        const company = await Company.findOne({ email: req.body.email })
         if (utils.validPassword(req.body.password, company.password, company.salt)) {
             const tokenObject = utils.issueJWT(company);
             res.send({ success: true, token: tokenObject.token, expiresIn: tokenObject.expires })
