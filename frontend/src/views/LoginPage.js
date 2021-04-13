@@ -17,7 +17,7 @@ const LoginPage = () => {
                 <ZitationHeader className="mx-auto" />
             </Row>
             {user.email !== "" ? (
-                <Redirect to="/account" />
+                <Redirect to="/cuenta" />
             ) : (
                 <div>
                     <Row className="justify-content-center">

@@ -54,6 +54,7 @@ const LoginForm = () => {
             if (response.status === 200) {
                 setUser({
                     email: formValue.email,
+                    name: formValue.name,
                 })
             } else {
                 console.log("error 40x");

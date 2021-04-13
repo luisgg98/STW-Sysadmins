@@ -25,6 +25,7 @@ const CompanySignUpForm = () => {
         email: "",
         password: "",
         repassword: "",
+        categoria: "",
         lat: 0,
         long: 0
     });
@@ -43,6 +44,7 @@ const CompanySignUpForm = () => {
             email: "",
             password: "",
             repassword: "",
+            categoria: "",
             lat: 41.65606,
             long: -0.87734
         }
@@ -73,7 +75,7 @@ const CompanySignUpForm = () => {
 
         // const phonee = formValue.phone;
         // setForm({ ...formValue, phone: Number(phonee) });
-        const dataa = {
+        const company = {
             nif: formValue.nif,
             name: formValue.nombre,
             email: formValue.email,
@@ -83,7 +85,7 @@ const CompanySignUpForm = () => {
         }
         setLoading(true);
         try {
-            const response = await axios.post(`https://stw-zitation.herokuapp.com/api/companies/register`, dataa,
+            const response = await axios.post(`https://stw-zitation.herokuapp.com/api/companies/register`, company,
                 {
                     headers: {
                         'Content-Type': 'application/json'
@@ -274,7 +276,7 @@ const CompanySignUpForm = () => {
                                     maxLength: { value: 50, message: "Máximo superado" }
                                 })}
                                 onChange={(e) => {
-                                    setForm({ ...formValue, lat: parseInt( e.target.value) })
+                                    setForm({ ...formValue, lat: parseInt(e.target.value) })
                                     if (errors.lat) {
                                         setError("lat", { type: "manul", message: errors.lat.message })
                                     }
@@ -304,6 +306,34 @@ const CompanySignUpForm = () => {
                         </Col>
                     </Row>
 
+                </Form.Group>
+
+                <Form.Group controlId="formSUConfPassword">
+                    <Form.Label>Categoria</Form.Label>
+                    <Form.Control
+                        as="select"
+                        defaultValue="Elige tu categoria..."
+                        name="categoria"
+                        value={formValue.categoria}
+                        {...register("categoria", {
+                            required: { value: true, message: "La categoria es obligatorio" },
+                        })}
+                        onChange={(e) => {
+                            setForm({ ...formValue, categoria: e.target.value })
+                            if (errors.categoria) {
+                                setError("categoria", { type: "manul", message: errors.categoria.message })
+                            }
+                        }
+                        }
+                        isInvalid={errors.categoria && touchedFields.categoria}
+                        custom >
+                        <option>Ocio</option>
+                        <option>Salud y Belleza</option>
+                        <option>Deporte</option>
+                        <option>Administración pública</option>
+                        <option>Comercio</option>
+                        </Form.Control>
+                    {errors.categoria && <Form.Control.Feedback type="invalid">{errors.categoria.message}</Form.Control.Feedback>}
                 </Form.Group>
 
                 <Form.Group controlId="formSUlink">
