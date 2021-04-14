@@ -164,7 +164,7 @@ paths:
         - "Company"
       summary: "Retrieve security token of a company"
       requestBody:
-        description: "Company nif and password to retrieve security token"
+        description: "Company email and password to retrieve security token"
         required: true
         content:
           application/json:
@@ -367,7 +367,7 @@ components:
           location:
             type: array
             items:
-              type: integer
+              type: number
             minItems: 2
             maxItems: 2
           name:
@@ -385,9 +385,9 @@ components:
         password:
           type: string
         lat:
-          type: integer
+          type: number
         long:
-          type: integer
+          type: number
       required:
         - nif
         - name
@@ -423,12 +423,12 @@ components:
     Company_login:
       type: object
       properties:
-        nif:
+        email:
           type: string
         password:
           type: string
       required:
-        - nif
+        - email
         - password
     Company_update:
       type: object
