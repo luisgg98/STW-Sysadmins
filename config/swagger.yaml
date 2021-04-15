@@ -126,6 +126,7 @@ paths:
       operationId: getAllCompanies
       tags:
         - "Company"
+      summary: "Get all companies and his location"
       responses:
         "200":
           description: "All companies correctly fetched"
