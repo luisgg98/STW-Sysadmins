@@ -6,6 +6,7 @@ info:
   contact:
     email: "757024@unizar.es"
 servers:
+  - url: "http://localhost:3000/api"
   - url: "https://stw-zitation.herokuapp.com/api"
     description: Production server
 tags:
@@ -99,7 +100,7 @@ paths:
           description: "Error: Unauthorized"
         "404":
           description: "User not found"
-  /users/delete/{email}:
+  /users/delete/:
     delete:
       operationId: deleteUser
       security:
@@ -113,9 +114,10 @@ paths:
           description: "Email address of user to delete"
           required: true
           schema:
-            type: "integer"
+            type: "string"
+            format: "email"
       responses:
-        "200":
+        "204":
           description: "User deleted"
         "401":
           description: "Error: Unauthorized"
