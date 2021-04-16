@@ -342,6 +342,18 @@ components:
     User_retrieved:
       type: object
       properties:
+        user:
+          type: object
+          properties:
+            first_name:
+              type: string
+            last_name:
+              type: string
+            phone:
+              type: integer
+            email:
+              type: string
+              format: email
         success:
           type: boolean
         token:
