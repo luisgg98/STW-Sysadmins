@@ -13,12 +13,12 @@ router.post("/register", ControllerUser.register)
 router.post("/login", ControllerUser.login)
 
 // TODO patch could fail in some browsers
-router.patch("/update/:phone",passport.authenticate('jwt',{session:false}),ControllerUser.update);
+router.patch("/update",passport.authenticate('jwt',{session:false}),ControllerUser.update);
 
 /*
  * Deletes de user with phone number :phone
  */
 // TODO delete could fail in some browsers
-router.delete("/delete/:phone",passport.authenticate('jwt',{session:false}), ControllerUser.delete)
+router.delete("/delete/",passport.authenticate('jwt',{session:false}), ControllerUser.delete)
 
 module.exports = router;

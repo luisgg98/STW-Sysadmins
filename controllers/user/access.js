@@ -48,16 +48,13 @@ let login = async (req, res) => {
 
 let update = async (req, res) => {
     try {
-        const user = await User.findOne({ email: req.params.email })
+        const user = await User.findOne({ email: req.query.email })
 
         if (req.body.first_name) {
             user.first_name = req.body.first_name
         }
         if (req.body.last_name) {
             user.last_name = req.body.last_name
-        }
-        if (req.body.email) {
-            user.email = req.body.email
         }
         if (req.body.password) {
             let password = utils.genPassword(req.body.password)
@@ -75,7 +72,7 @@ let update = async (req, res) => {
 
 let delete_user = async (req, res) => {
     try {
-        await User.deleteOne({ email: req.params.email })
+        await User.deleteOne({ email: req.query.email })
         res.status(204).send()
     } catch {
         res.status(404)

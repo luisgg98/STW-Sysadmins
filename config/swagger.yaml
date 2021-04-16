@@ -65,7 +65,7 @@ paths:
           description: "Incorrect login"
         "404":
           description: "User not found"
-  /users/update/{email}:
+  /users/update:
     patch:
       operationId: updateUser
       security:
@@ -74,7 +74,7 @@ paths:
         - "User"
       summary: "Update user data"
       parameters:
-        - in: "path"
+        - in: query
           name: "email"
           description: "Email address of user to update"
           required: true
@@ -108,7 +108,7 @@ paths:
         - "User"
       summary: "Delete an user"
       parameters:
-        - in: path
+        - in: query
           name: "email"
           description: "Email address of user to delete"
           required: true
@@ -367,9 +367,6 @@ components:
           type: string
         last_name:
           type: string
-        email:
-          type: string
-          format: email
         password:
           type: string
     Get_companies:
