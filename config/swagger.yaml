@@ -389,12 +389,21 @@ components:
           type: number
         long:
           type: number
+        category:
+          type: string
+          enum:
+            - "Ocio"
+            - "Deporte"
+            - "Administración pública"
+            - "Salud y belleza"
+            - "Comercio"
       required:
         - nif
         - name
         - password
         - alt
         - long
+        - category
     Company_registered:
       type: object
       properties:
@@ -415,6 +424,14 @@ components:
               type: integer
             long:
               type: integer
+        category:
+          type: string
+          enum:
+            - "Ocio"
+            - "Deporte"
+            - "Administración pública"
+            - "Salud y belleza"
+            - "Comercio"
       required:
         - nif
         - name

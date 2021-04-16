@@ -1,6 +1,11 @@
 const utils = require('../../services/utils')
-const validate_email = require('../../services/validate_email')
+const validate = require('../../services/validate_email')
 const Company = require('../../models/company')
+
+function validate_category(category) {
+    const categories = ["Ocio","Deporte","Administración pública","Salud y belleza","Comercio"]
+    return categories.includes(category)
+}
 
 let get = async (req, res) => {
     try {
@@ -15,13 +20,18 @@ let get = async (req, res) => {
 let register = async (req, res) => {
     try {
         let password = utils.genPassword(req.body.password)
-        if (validate_email.validateEmail(req.body.email)) {
+        if (!validate.validateCategory(req.body.category)){
+            res.status(422)
+            res.send({error: "Wrong category, check docs for further info /api-doc"})
+        }
+        if (validate.validateEmail(req.body.email)) {
             const company = new Company({
                 name: req.body.name,
                 nif: req.body.nif,
                 email : req.body.email,
                 password: password.hash,
                 salt: password.salt,
+                category: req.body.category,
                 location: {
                     type: "Point",
                     coordinates: [req.body.lat,  req.body.long]
@@ -31,7 +41,7 @@ let register = async (req, res) => {
             res.send(company)
         } else {
             res.status(422)
-            res.send({ error: "Wrong email format" })
+            res.send({ error: "Not an email address" })
         }
     } catch {
         res.status(405)

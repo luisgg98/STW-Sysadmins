@@ -8,4 +8,10 @@ function validateEmail(email) {
     return re.test(email);
 }
 
-exports.validateEmail = validateEmail;
+function validateCategory(category) {
+    const categories = ["Ocio","Deporte","Administración pública","Salud y belleza","Comercio"]
+    return categories.includes(category)
+}
+
+exports.validateEmail = validateEmail
+exports.validateCategory = validateCategory
