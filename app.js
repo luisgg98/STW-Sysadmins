@@ -37,7 +37,6 @@ app.use(cookieParser());
 // Allows our Angular application to make HTTP requests to Express application
 app.use(cors());
 
-const Healthzone = require('./models/healthzone');
 const loadDistrict =require('./scripts/loadDistrict');
 
 //  In order not to duplicate the information about the
@@ -45,7 +44,7 @@ const loadDistrict =require('./scripts/loadDistrict');
 loadDistrict.loadCouncilInfo();
 
 // Schedule tasks to be run on the server.
-// Two in the morning '0 0 2 * * *'
+// Two in the morning '*/25 * * * *'
 // Due to covid most business close at the hour
 cron.schedule('*/25 * * * *', async function() {
   console.log('Running Cron Job');

@@ -172,11 +172,9 @@ function  updateDatabase(date) {
                     if(ZonaSalud != null){
                         let newcases = row.getCell(3).value;
                         // Map the name of the district with a health zone
-                        hz.mapDistrictWithHealthzone(ZonaSalud).then(async function (district) {
+                        hz.updateCovidHealthzone(ZonaSalud, newcases,updateRadius(newcases),date).then(async function (district) {
                             // A District found
-                            if(district !=null){
-                                await hz.updateCovidHealthzone(district, newcases,updateRadius(newcases),date);
-                            }
+                            console.log(ZonaSalud + " health zone updated" );
                         }).catch((e) =>{
                             if(!e.includes('Not found:')){
                                 console.log({ error: "Error updating the data of a district" + e })
