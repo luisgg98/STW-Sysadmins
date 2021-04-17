@@ -11,18 +11,21 @@ router.get("/", ControllerCompany.get)
 /*
     Creates a new company
  */
-router.post("/register", ControllerCompany.register)
+router.post("/", ControllerCompany.register)
 
 /*
     Returns the info about a company
  */
 router.post("/login", ControllerCompany.login)
 
-router.patch("/update/:nif",passport.authenticate('jwt',{session:false}), ControllerCompany.update)
+/**
+ *  Update the data of a company
+ */
+router.patch("/:id",passport.authenticate('jwt',{session:false}), ControllerCompany.update)
 
 /*
 * Deletes the company with nif number :nif
 */
-router.delete("/delete/:nif",passport.authenticate('jwt',{session:false}), ControllerCompany.delete)
+router.delete("/:id",passport.authenticate('jwt',{session:false}), ControllerCompany.delete)
 
 module.exports = router

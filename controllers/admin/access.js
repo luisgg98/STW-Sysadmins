@@ -1,6 +1,12 @@
 const utils = require('../../services/utils')
 const Admin = require('../../models/admin')
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let register = async (req, res) => {
     try {
         // Hash password with a salt
@@ -19,6 +25,12 @@ let register = async (req, res) => {
     }
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let login = async (req, res) => {
     try {
         const admin = await Admin.findOne({ username: req.body.username })

@@ -3,6 +3,12 @@ const validate_email = require('../../services/validate_email')
 const User = require('../../models/user')
 
 // TODO can't be two users with same phone number
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let register = async (req, res) => {
     try {
         // Hash password with a salt
@@ -29,13 +35,19 @@ let register = async (req, res) => {
     }
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let login = async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email })
         if (utils.validPassword(req.body.password, user.password, user.salt)) {
             res.status(200)
             const tokenObject = utils.issueJWT(user);
-            res.send({ user: {"first_name":user.first_name, "last_name":user.last_name,"phone":user.phone,"email":user.email}, success: true, token: tokenObject.token, expiresIn: tokenObject.expires })
+            res.send({ user: {"first_name":user.first_name, "last_name":user.last_name,"phone":user.phone,"email":user.email, "id":user._id}, success: true, token: tokenObject.token, expiresIn: tokenObject.expires })
         } else {
             res.status(401)
             res.send({ error: "Incorrect login"})
@@ -46,9 +58,15 @@ let login = async (req, res) => {
     }
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let update = async (req, res) => {
     try {
-        const user = await User.findOne({ email: req.query.email })
+        const user = await User.findOne({ _id: req.params.id })
 
         if (req.body.first_name) {
             user.first_name = req.body.first_name
@@ -70,9 +88,15 @@ let update = async (req, res) => {
     }
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let delete_user = async (req, res) => {
     try {
-        await User.deleteOne({ email: req.query.email })
+        await User.deleteOne({ _id: req.params.id })
         res.status(204).send()
     } catch {
         res.status(404)

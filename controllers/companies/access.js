@@ -2,11 +2,12 @@ const utils = require('../../services/utils')
 const validate = require('../../services/validate_email')
 const Company = require('../../models/company')
 
-function validate_category(category) {
-    const categories = ["Ocio","Deporte","Administración pública","Salud y belleza","Comercio"]
-    return categories.includes(category)
-}
-
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let get = async (req, res) => {
     try {
         const companies = await Company.find({}, {name: true, location: true})
@@ -17,6 +18,12 @@ let get = async (req, res) => {
     }
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let register = async (req, res) => {
     try {
         let password = utils.genPassword(req.body.password)
@@ -49,12 +56,26 @@ let register = async (req, res) => {
     }
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let login = async (req, res) => {
     try {
         const company = await Company.findOne({ email: req.body.email })
         if (utils.validPassword(req.body.password, company.password, company.salt)) {
             const tokenObject = utils.issueJWT(company);
-            res.send({ success: true, token: tokenObject.token, expiresIn: tokenObject.expires })
+            res.send({
+                    company: {
+                        name:company.name,
+                        email:company.email,
+                        nif:company.nif,
+                        id:company._id,
+                        category:company.category
+                    },
+                    success: true, token: tokenObject.token, expiresIn: tokenObject.expires })
         } else {
             res.status(401)
             res.send({ error: "Incorrect login"})
@@ -65,9 +86,15 @@ let login = async (req, res) => {
     }
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let update = async (req, res) => {
     try {
-        const company = await Company.findOne({ nif: req.params.nif });
+        const company = await Company.findOne({ _id: req.params.id });
 
         if (req.body.name) {
             company.name = req.body.name
@@ -93,9 +120,15 @@ let update = async (req, res) => {
     }
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let delete_company = async (req, res) => {
     try {
-        await Company.deleteOne({ nif: req.params.nif })
+        await Company.deleteOne({ _id: req.params.id })
         res.status(204).send()
     } catch {
         res.status(404)

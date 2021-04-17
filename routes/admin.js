@@ -6,5 +6,8 @@ const router = express.Router()
     Login admin user
  */
 router.post("/login", ControllerUser.login)
-router.post("/register", ControllerUser.register)
+/*
+    Register admin user
+ */
+router.post("/", ControllerUser.register)
 module.exports = router;

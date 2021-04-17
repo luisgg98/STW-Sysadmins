@@ -10,7 +10,11 @@ let YAML=require('yamljs');
 const swaggerDocument = YAML.load('./config/swagger.yaml');
 //Necessary for the use of JWT
 // Authentication
-const passport = require('passport')
+const passport = require('passport');
+const path = require('path');
+// Fav icon, required to avoid an error in terminal
+const favicon = require('serve-favicon');
+
 
 require('./config/database');
 require('./config/passport');
@@ -21,6 +25,9 @@ const cron = require('node-cron');
 const ta=require('./services/transparency_aragon')
 const app = express();
 
+
+// Add  fav icon
+app.use(favicon(path.join(__dirname,'icon','favicon.ico')));
 //Passport is required to authentication
 // This will initialize the passport object on every request
 app.use(passport.initialize());
