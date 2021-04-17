@@ -2,7 +2,7 @@ import axios from "axios";
 
 async function fetchCommerces() {
     try {
-        return await axios.get("https://stw-zitation.herokuapp.com/api/companies/get");
+        return await axios.get("https://stw-zitation.herokuapp.com/api/companies");
     } catch (error) {
         console.log(error)
     }

@@ -1,7 +1,5 @@
-import {fetchHealthZones} from "../../services/CovidStatisticsService";
 import {Circle, Popup} from "react-leaflet";
-import React, {useEffect, useState} from "react";
-import {set} from "react-hook-form";
+import React from "react";
 
 function HealthZones(props) {
 
@@ -21,7 +19,6 @@ function HealthZones(props) {
         let zona = <Circle center={coordinates} radius={healthZone.radius + 400} color={colorArray[index]}>
             <Popup>{healthZone.name}: {healthZone.newcases}</Popup>
         </Circle>
-        console.log(zona);
         zonas.push(zona);
     });
     return zonas;
