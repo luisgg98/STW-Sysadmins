@@ -31,4 +31,5 @@ function genKeyPair() {
 
 // Generate the keypair
 module.exports.genKeyPair = genKeyPair;
+genKeyPair();
 
