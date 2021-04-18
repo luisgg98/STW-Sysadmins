@@ -14,7 +14,7 @@ let get = async (req, res) => {
         if (req.query.name){
             // Fetch just one company
             let namee = req.query.name
-            const company = await Company.find({name: {"$regex": namee, "$options": "i"}}, function(err,docs){}).select('name email category location')
+            const company = await Company.find({name: {"$regex": namee, "$options": "i"}}, function(err,docs){}).select('name nif email category location')
             res.send(company)
         } else {
             // Fetch all companies
