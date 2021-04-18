@@ -14,7 +14,12 @@ router.get("/", ControllerCompany.get)
 router.post("/", ControllerCompany.register)
 
 /*
-    Returns the info about a company
+    Returns **public** info about a company
+ */
+router.get("/:nif", ControllerCompany.fetchCompany)
+
+/*
+    Login a company and returns some info about it
  */
 router.post("/login", ControllerCompany.login)
 

@@ -18,6 +18,17 @@ let get = async (req, res) => {
     }
 }
 
+let fetchCompany = async (req, res) => {
+    try {
+        const company = await Company.findOne({ nif: req.params.nif })
+        res.status(200)
+        res.send({name: company.name, email: company.email, category: company.category, location: company.location})
+    } catch {
+        res.status(404)
+        res.send({error: "Company not found"})
+    }
+}
+
 /**
  *
  * @param req
@@ -141,3 +152,4 @@ exports.register = register
 exports.login = login
 exports.update = update
 exports.delete = delete_company
+exports.fetchCompany = fetchCompany

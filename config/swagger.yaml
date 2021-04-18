@@ -75,13 +75,12 @@ paths:
         - "User"
       summary: "Update user data"
       parameters:
-        - in: query
-          name: "email"
-          description: "Email address of user to update"
+        - in: path
+          name: "id"
+          description: "id of user to update"
           required: true
           schema:
             type: string
-            format: email
       requestBody:
         description: "User data to change"
         required: true
@@ -108,13 +107,12 @@ paths:
         - "User"
       summary: "Delete an user"
       parameters:
-        - in: query
-          name: "email"
-          description: "Email address of user to delete"
+        - in: path
+          name: "id"
+          description: "id of user to delete"
           required: true
           schema:
             type: "string"
-            format: "email"
       responses:
         "204":
           description: "User deleted"
@@ -127,7 +125,7 @@ paths:
       operationId: getAllCompanies
       tags:
         - "Company"
-      summary: "Get all companies and his location"
+      summary: "Get all companies and their location"
       responses:
         "200":
           description: "All companies correctly fetched"
@@ -160,33 +158,27 @@ paths:
           description: "Wrong email format"
         "405":
           description: "Wrong json format, check docs for further info /api-doc"
-  /companies/login:
-    post:
+
+  /companies/{id}:
+    get:
+      operationId: getCompany
       tags:
         - "Company"
-      summary: "Retrieve security token of a company"
-      requestBody:
-        description: "Company email and password to retrieve security token"
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Company_login"
+      summary: "Get all public data of a company"
+      parameters:
+        - in : path
+          name: "nif"
+          description: "Nif of company to retrieve"
+          required: true
+          schema:
+            type: string
       responses:
         "200":
-          description: ""
+          description: "Company correctly retrieved"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Company_retrieved"
-          links:
-            token:
-              operationId: updateCompany, deleteCompany
-        "401":
-          description: "Incorrect login"
-        "404":
-          description: "Company not found"
-  /companies/{id}:
+                $ref: '#/components/schemas/Company_fetched'
     patch:
       operationId: updateCompany
       security:
@@ -195,9 +187,9 @@ paths:
         - "Company"
       summary: "Update company data"
       parameters:
-        - in: "path"
-          name: "nif"
-          description: "Nif number of company to update"
+        - in: path
+          name: "id"
+          description: "id of company to update"
           required: true
           schema:
             type: string
@@ -228,8 +220,8 @@ paths:
       summary: "Delete a company"
       parameters:
         - in: path
-          name: "nif"
-          description: "nif number of company to delete"
+          name: "id"
+          description: "id of company to delete"
           required: true
           schema:
             type: string
@@ -238,6 +230,32 @@ paths:
           description: "Company deleted"
         "401":
           description: "Error: Unauthorized"
+        "404":
+          description: "Company not found"
+  /companies/login:
+    post:
+      tags:
+        - "Company"
+      summary: "Retrieve security token of a company"
+      requestBody:
+        description: "Company email and password to retrieve security token"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Company_login"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Company_retrieved"
+          links:
+            token:
+              operationId: updateCompany, deleteCompany
+        "401":
+          description: "Incorrect login"
         "404":
           description: "Company not found"
   /admin/login:
@@ -410,7 +428,7 @@ components:
         - nif
         - name
         - password
-        - alt
+        - lat
         - long
         - category
     Company_registered:
@@ -447,6 +465,29 @@ components:
         - password
         - location
         - salt
+    Company_fetched:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        category:
+          type: string
+          enum:
+            - "Ocio"
+            - "Deporte"
+            - "Administración pública"
+            - "Salud y belleza"
+            - "Comercio"
+        location:
+          type: object
+          properties:
+            lat:
+              type: integer
+            long:
+              type: integer
     Company_login:
       type: object
       properties:
@@ -471,7 +512,7 @@ components:
         location:
           type: object
           properties:
-            alt:
+            lat:
               type: integer
             long:
               type: integer
@@ -525,7 +566,7 @@ components:
           location:
             type: object
             properties:
-              alt:
+              lat:
                 type: integer
               long:
                 type: integer
