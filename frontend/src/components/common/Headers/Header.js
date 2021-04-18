@@ -9,7 +9,6 @@ const LoginButton = () => {
     const {user,} = useContext(UserContext);
 
     if ( localStorage.getItem("logged") === "true") {
-        console.log("boton ini", localStorage.getItem("logged"));
         return (
             <Link to="/cuenta">
                 <Button>Mi cuenta</Button>

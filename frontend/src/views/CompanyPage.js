@@ -6,7 +6,7 @@ import CompanyCard from "../components/common/Buttons/CompanyCards";
 import axios from 'axios';
 import { Row, Spinner } from "react-bootstrap";
 
-const CompanyPage = (tipo) => {
+const CompanyPage = (props) => {
 
     const [loading, setLoading] = useState(true);
 
@@ -23,7 +23,7 @@ const CompanyPage = (tipo) => {
 
     useEffect(() => {
         console.log('use effect');
-        console.log(tipo)
+        console.log(props)
         // Actualiza el título del documento usando la API del navegador
         // getData();
         let data = {};
@@ -41,7 +41,7 @@ const CompanyPage = (tipo) => {
                             setCompanies({ content: data })
                         }
                         else {
-                            console.log('fetchedk wron', response.status)
+                            console.log('fetched wrong', response.status)
                         }
                         setLoading(false);
                     }
@@ -67,11 +67,13 @@ const CompanyPage = (tipo) => {
     const Contenido = () => {
         if (!loading) {
             return (companies.content.map((company, index) => {
-                console.log("tipo", tipo)
+                console.log("tipo", props.tipo)
                 console.log("cate",  company.category)
-                if (company.category == tipo) {
-                    <CompanyCard key={index} title={company.name} />
+                if (company.category === props.tipo) {
+                    console.log("if");
+                    return <CompanyCard key={index} title={company.name} />
                 }
+                else return null
             }
             ))
         }
