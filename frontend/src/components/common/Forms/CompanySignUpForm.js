@@ -36,7 +36,7 @@ const CompanySignUpForm = () => {
     // Datos del usuario hacer login
     const { user, setUser } = useContext(UserContext);
 
-    const { formState: { errors, touchedFields, isValid }, getValues, register, reset, setError, handleSubmit } = useForm({
+    const { formState: { errors, touchedFields }, getValues, register, reset, setError, handleSubmit } = useForm({
         mode: 'onSubmit', reValidateMode: 'onBlur',
         defaultValues: {
             nif: "",
@@ -81,11 +81,12 @@ const CompanySignUpForm = () => {
             email: formValue.email,
             password: formValue.password,
             lat: formValue.lat,
-            long: formValue.long
+            long: formValue.long,
+            category: formValue.categoria
         }
         setLoading(true);
         try {
-            const response = await axios.post(`https://stw-zitation.herokuapp.com/api/companies/register`, company,
+            const response = await axios.post(`https://stw-zitation.herokuapp.com/api/companies`, company,
                 {
                     headers: {
                         'Content-Type': 'application/json'

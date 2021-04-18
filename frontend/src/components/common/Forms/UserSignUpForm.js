@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { UserContext } from "../../../UserContext";
 import axios from "axios";
 import { useForm } from 'react-hook-form';
-import { Form, Alert, Spinner, Row, Button, Col } from "react-bootstrap";
+import { Form, Alert, Spinner, Row, Button } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 
 
@@ -27,7 +27,7 @@ function UserSUForm() {
     // Datos del usuario hacer login
     const { user, setUser } = useContext(UserContext);
 
-    const { formState: { errors, touchedFields, isValid }, getValues, register, reset, setError, handleSubmit } = useForm({
+    const { formState: { errors, touchedFields }, getValues, register, reset, setError, handleSubmit } = useForm({
         mode: 'onSubmit', reValidateMode: 'onBlur',
         defaultValues: {
             phone: 0,
@@ -72,7 +72,7 @@ function UserSUForm() {
         setForm({...formValue, phone: Number(phonee)});
         setLoading(true);
         try {
-            const response = await axios.post(`https://stw-zitation.herokuapp.com/api/users/register`, formValue,
+            const response = await axios.post(`https://stw-zitation.herokuapp.com/api/users/`, formValue,
                 {
                     headers: {
                         'Content-Type': 'application/json'

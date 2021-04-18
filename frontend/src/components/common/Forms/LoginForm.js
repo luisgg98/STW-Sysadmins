@@ -27,20 +27,14 @@ const LoginForm = () => {
 
     const onSubmit = async (data, e) => {
         let loginUrl = API;
-        if (formValue.check){
-            
+        if (formValue.check)
             loginUrl += 'companies/login'
-            console.log("checked", loginUrl, formValue)
-        }
-        else {
+        else 
             loginUrl += 'users/login'
-            console.log("unchecked", loginUrl, formValue)
-        }
 
         console.log("handling submit");
         e.preventDefault();
         console.log(data);
-        require('axios-debug-log');
         setLoading(true);
         try {
             const response = await axios.post(loginUrl, 
@@ -53,13 +47,15 @@ const LoginForm = () => {
                 })
             if (response.status === 200) {
                 setUser({
-                    email: formValue.email,
-                    name: formValue.name,
+                    email: response.data.user.email,
+                    name: response.data.user.first_name,
+                    lname: response.data.user.last_name,
+                    phone: response.data.user.phone,
                 })
+                localStorage.setItem("token", response.data.token)
             } else {
                 console.log("error 40x");
             }
-            console.log(response.status);
         } catch (e) {
             console.log('catch error');
             setApiError(true)

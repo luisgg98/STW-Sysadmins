@@ -1,15 +1,11 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Card, CardGroup } from 'react-bootstrap';
-import admin from "../../../assets/admin.png";
 import { Link } from 'react-router-dom';
 
-function CompanyCard (props) {
-    // require( salud, comercio, deporte, ocio, admin);
-    console.log('inside company CArd')
-    console.log(props.title)
+function CompanyCard (props) {        
     return (
-        <CardGroup>
+        <CardGroup >
             <Card>
                 <Card.Body>
                     <Link to="/companies/health">

@@ -1,8 +1,6 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
 import LoginForm from "../components/common/Forms/LoginForm";
 import { UserContext } from "../UserContext";
-import { logout } from "../services/AuthService";
 import { Container, Row } from "react-bootstrap";
 import { PageDescription, ZitationHeader } from "../components/common/Headers/Header"
 import {Redirect} from "react-router-dom"

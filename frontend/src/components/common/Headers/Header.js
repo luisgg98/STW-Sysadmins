@@ -67,17 +67,6 @@ const Header = () => {
                 </Row>
             </Card.Header>
             <PageDescription/>
-            {/* <Card.Body>
-        <Card.Text>
-          ¿Tienes un negocio y quieres ofrecer un servicio de cita
-          previa sin complicarte?
-                    <br />
-                    ¿Quieres evitar hacer colas y reservar cita previa en los
-                    locales que frecuentas?
-                    <br />
-                    ¡En ese caso Zitation es tu web!
-                </Card.Text>
-      </Card.Body> */}
             <RegistrarNegocioButton/>
             <div className="pb-3"/>
         </Card>

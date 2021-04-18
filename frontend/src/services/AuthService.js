@@ -1,31 +1,9 @@
-import axios from 'axios';
-
-
 const userDB = {
     phone: "666777888",
     email: "user@user.com",
     password: "user123",
 };
 
-
-function submit_signup(user) {
-
-    require("axios-debug-log");
-    axios
-        .post(
-            `https://stw-zitation.herokuapp.com/api/users/register`,
-            user,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        )
-        .then((res) => {
-            console.log(res);
-            console.log('data', res.data);
-        });
-}
 
 
 function login(details) {

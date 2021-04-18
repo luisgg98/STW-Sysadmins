@@ -21,43 +21,13 @@ const HealthPage = () => {
             return Promise.reject(error);
         });
 
-
-
-    const getData = async () => {
-        console.log('fetching data');
-        let data = {};
-        let response = {};
-        try {
-            response = await axios.get(API + '/companies/',
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-        } catch (e) {
-            console.log('catch error');
-            console.log("error", e)
-
-        }
-        if (response.status === 200) {
-            data = response.data
-            console.log("companies", companies);
-            setCompanies({ data });
-        }
-        else {
-            console.log("error 40x");
-        }
-        setLoading(false);
-    }
-
     useEffect(() => {
         console.log('use effect');
         // Actualiza el título del documento usando la API del navegador
         // getData();
         let data = {};
-        let response = {};
         try {
-            response = axios.get(API + '/companies/',
+            axios.get(API + '/companies/',
                 {
                     headers: {
                         'Content-Type': 'application/json'
@@ -89,15 +59,14 @@ const HealthPage = () => {
             <Row className=" justify-content-center mx-auto pb-3" >
                 <Spinner animation="border" role="status">
                     <span className="sr-only">Loading...</span>
-                </Spinner></Row>)
+                </Spinner>
+            </Row>)
     }
 
     const Contenido = () => {
         if (!loading) {
-            return (companies.content.map((company) => 
-                // return (
-                    <CompanyCard title={company.name} />
-                // );
+            return (companies.content.map((company, index) => 
+                <CompanyCard key={index} title = { company.name } />
             ))
         }
     }
@@ -110,10 +79,6 @@ const HealthPage = () => {
         }
         else {
             console.log(companies);
-            // return (companies.content.map(x => {
-            //     console.log(x);
-            //     <CompanyCard comp={x} />
-            // }))
             return <Contenido />
         }
     }

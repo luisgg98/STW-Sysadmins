@@ -6,7 +6,7 @@ const ZitationHeader = () => {
     return (
         <Row className="justify-content-center mx-auto">
             <Link to="/">
-                <div class="display-4"> Zitation </div>
+                <div className="display-4"> Zitation </div>
             </Link>
         </Row>
     );

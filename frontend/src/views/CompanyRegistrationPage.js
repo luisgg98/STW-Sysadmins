@@ -17,15 +17,6 @@ const RegistrarNegocio = () => {
   }
 
   return (
-    // <div>
-    //   <ZitationHeader />
-    //   <h1>RegistrarNegocio</h1>
-    //   <CompanySignUpForm />
-    // </div>
-
-
-
-
     <Container>
       <Row className="justify-content-center mx-auto">
         <ZitationHeader className="mx-auto" />
