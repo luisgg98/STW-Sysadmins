@@ -91,7 +91,6 @@ describe('Testing Company API', () => {
             .end((err, res) => {
                 if(err) throw err;
                 res.should.have.status(200);
-
                 chai.request(server)
                     .post(url + 'login/')
                     .send({"email": "user@example.com","password": "string"})
@@ -109,8 +108,6 @@ describe('Testing Company API', () => {
                                 res.should.have.status(200);
                                 done();
                             })
-
-
                     })
 
             })
