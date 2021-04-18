@@ -2,7 +2,7 @@ const fs = require('fs');
 const https = require('https');
 const moment = require('moment');
 const Excel  = require("exceljs");
-const hz = require('../services/healthzone');
+const hz = require('./healthzone');
 
 // CONSTANT VARIABLES
 const  filePath ="scripts/covid_data.xlsx";

@@ -93,7 +93,8 @@ let login = async (req, res) => {
                         email:company.email,
                         nif:company.nif,
                         id:company._id,
-                        category:company.category
+                        category:company.category,
+                        location: company.location
                     },
                     token: tokenObject.token, expiresIn: tokenObject.expires })
         } else {
