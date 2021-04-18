@@ -10,8 +10,17 @@ const Company = require('../../models/company')
  */
 let get = async (req, res) => {
     try {
-        const companies = await Company.find({}, {name: true, location: true})
-        res.send(companies)
+        // If the url contains a query, search just for the company of the query
+        if (req.query.name){
+            // Fetch just one company
+            let namee = req.query.name
+            const company = await Company.find({name: {"$regex": namee, "$options": "i"}}, function(err,docs){}).select('name email category location')
+            res.send(company)
+        } else {
+            // Fetch all companies
+            const companies = await Company.find({}, {name: true, location: true})
+            res.send(companies)
+        }
     } catch {
         res.status(500)
         res.send({error: "Internal server error"})

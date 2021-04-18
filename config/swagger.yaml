@@ -158,10 +158,16 @@ paths:
       operationId: getAllCompanies
       tags:
         - "Company"
-      summary: "Get all companies and their location"
+      summary: "Get all companies and their location or filter by name"
+      parameters:
+        - in: path
+          name: "name"
+          description: "name of company to retrieve"
+          schema:
+            type: string
       responses:
         "200":
-          description: "All companies correctly fetched"
+          description: "All right"
           content:
             application/json:
               schema:
