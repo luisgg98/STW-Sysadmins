@@ -18,7 +18,7 @@ let get = async (req, res) => {
             res.send(company)
         } else {
             // Fetch all companies
-            const companies = await Company.find({}, {name: true, location: true})
+            const companies = await Company.find({}, {name: true, nif: true, category: true, location: true})
             res.send(companies)
         }
     } catch {
