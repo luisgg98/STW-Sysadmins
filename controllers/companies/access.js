@@ -86,7 +86,7 @@ let login = async (req, res) => {
                         id:company._id,
                         category:company.category
                     },
-                    success: true, token: tokenObject.token, expiresIn: tokenObject.expires })
+                    token: tokenObject.token, expiresIn: tokenObject.expires })
         } else {
             res.status(401)
             res.send({ error: "Incorrect login"})

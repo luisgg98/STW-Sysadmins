@@ -35,6 +35,18 @@ let register = async (req, res) => {
     }
 }
 
+let fetchUser = async (req, res) => {
+    try {
+        const user = await User.findOne({phone: req.params.phone})
+        res.status(200)
+        // TODO return user's email??
+        res.send({first_name: user.first_name, last_name: user.last_name})
+    } catch {
+        res.status(404)
+        res.send({error: "User not found"})
+    }
+}
+
 /**
  *
  * @param req
@@ -47,7 +59,7 @@ let login = async (req, res) => {
         if (utils.validPassword(req.body.password, user.password, user.salt)) {
             res.status(200)
             const tokenObject = utils.issueJWT(user);
-            res.send({ user: {"first_name":user.first_name, "last_name":user.last_name,"phone":user.phone,"email":user.email, "id":user._id}, success: true, token: tokenObject.token, expiresIn: tokenObject.expires })
+            res.send({ user: {"first_name":user.first_name, "last_name":user.last_name,"phone":user.phone,"email":user.email, "id":user._id}, token: tokenObject.token, expiresIn: tokenObject.expires })
         } else {
             res.status(401)
             res.send({ error: "Incorrect login"})
@@ -104,7 +116,19 @@ let delete_user = async (req, res) => {
     }
 }
 
+let getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find({}, {first_name: true, last_name: true})
+        res.send(users)
+    } catch {
+        res.status(500)
+        res.send({error: "Internal server error"})
+    }
+}
+
 exports.register = register
 exports.login = login
 exports.update = update
 exports.delete = delete_user
+exports.fetchUser = fetchUser
+exports.getAllUsers = getAllUsers

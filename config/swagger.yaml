@@ -17,7 +17,20 @@ tags:
   - name: "HealthZone"
     description: "Operations about health zones from Zaragoza"
 paths:
-  /users/:
+  /users:
+    get:
+      tags:
+        - "User"
+      summary: "Get all users"
+      responses:
+        "200":
+          description: "All users correctly fetched"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Get_users'
+        "500":
+          description: "Internal server error"
     post:
       tags:
         - "User"
@@ -40,32 +53,26 @@ paths:
           description: "Wrong email format"
         "405":
           description: "Wrong json format, check docs for further info /api-docs"
-  /users/login/:
-    post:
+  /users/{phone}:
+    get:
+      operationId: getUser
       tags:
         - "User"
-      summary: "Retrieve security token of an user"
-      requestBody:
-        description: "User email and password to retrieve security token"
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/User_login"
+      summary: "Get all public data of an user"
+      parameters:
+        - in: path
+          name: "phone"
+          description: "Phone number of user to retrieve"
+          required: true
+          schema:
+            type: string
       responses:
         "200":
-          description: ""
+          description: "User correctly retrieved"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User_retrieved"
-          links:
-            token:
-              operationId: updateUser, deleteUser
-        "401":
-          description: "Incorrect login"
-        "404":
-          description: "User not found"
+                $ref: '#/components/schemas/User_fetched'
   /users/{id}:
     patch:
       operationId: updateUser
@@ -120,6 +127,32 @@ paths:
           description: "Error: Unauthorized"
         "404":
           description: "User not found"
+  /users/login/:
+    post:
+      tags:
+        - "User"
+      summary: "Retrieve security token of an user"
+      requestBody:
+        description: "User email and password to retrieve security token"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User_login"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User_retrieved"
+          links:
+            token:
+              operationId: updateUser, deleteUser
+        "401":
+          description: "Incorrect login"
+        "404":
+          description: "User not found"
   /companies:
     get:
       operationId: getAllCompanies
@@ -135,7 +168,6 @@ paths:
                 $ref: '#/components/schemas/Get_companies'
         "500":
           description: "Internal server error"
-  /companies/:
     post:
       tags:
         - "Company"
@@ -158,15 +190,14 @@ paths:
           description: "Wrong email format"
         "405":
           description: "Wrong json format, check docs for further info /api-doc"
-
-  /companies/{id}:
+  /companies/{nif}:
     get:
       operationId: getCompany
       tags:
         - "Company"
       summary: "Get all public data of a company"
       parameters:
-        - in : path
+        - in: path
           name: "nif"
           description: "Nif of company to retrieve"
           required: true
@@ -179,6 +210,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Company_fetched'
+  /companies/{id}:
     patch:
       operationId: updateCompany
       security:
@@ -304,6 +336,13 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    Get_users:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
     User_register:
       type: object
       properties:
@@ -372,8 +411,6 @@ components:
             email:
               type: string
               format: email
-        success:
-          type: boolean
         token:
           type: string
         expiresIn:
@@ -386,6 +423,13 @@ components:
         last_name:
           type: string
         password:
+          type: string
+    User_fetched:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
           type: string
     Get_companies:
       type: array
@@ -539,8 +583,6 @@ components:
                 - "Administración pública"
                 - "Salud y belleza"
                 - "Comercio"
-        success:
-          type: boolean
         token:
           type: string
         expiresIn:

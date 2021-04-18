@@ -3,8 +3,9 @@ const ControllerUser = require('../controllers/user/access')
 const router = express.Router()
 const passport = require('passport');
 
+router.get("/", ControllerUser.getAllUsers)
+
 /*
- *
  */
 router.post("/", ControllerUser.register)
 /*
@@ -12,13 +13,15 @@ router.post("/", ControllerUser.register)
  */
 router.post("/login", ControllerUser.login)
 
-// TODO patch could fail in some browsers
+/*
+ */
+router.get("/:phone", ControllerUser.fetchUser)
+
 router.patch("/:id",passport.authenticate('jwt',{session:false}),ControllerUser.update);
 
 /*
  * Deletes de user with phone number :phone
  */
-// TODO delete could fail in some browsers
 router.delete("/:id",passport.authenticate('jwt',{session:false}), ControllerUser.delete)
 
 module.exports = router;
