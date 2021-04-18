@@ -1,9 +1,10 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import LoginForm from "../components/common/Forms/LoginForm";
 import { UserContext } from "../UserContext";
 import { Container, Row } from "react-bootstrap";
 import { PageDescription, ZitationHeader } from "../components/common/Headers/Header"
 import {Redirect} from "react-router-dom"
+
 
 
 const LoginPage = () => {
@@ -14,7 +15,7 @@ const LoginPage = () => {
             <Row className="justify-content-center mx-auto">
                 <ZitationHeader className="mx-auto" />
             </Row>
-            {user.email !== "" ? (
+            { localStorage.getItem("logged")==="true" ? (
                 <Redirect to="/cuenta" />
             ) : (
                 <div>

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { UserContext } from "../../../UserContext";
-import axios from "axios";
+import {axios} from "../../../services/AuthService";
 import { useForm } from 'react-hook-form';
 import { Form, Alert, Spinner, Row, Button, Col } from "react-bootstrap";
 import { Link } from 'react-router-dom';
@@ -10,15 +10,6 @@ const CompanySignUpForm = () => {
     // Datos del formulario
     const [loading, setLoading] = useState(false);
 
-
-    axios.interceptors.request.use((config) => {
-        console.log(config);
-        return config;
-    },
-        function (error) {
-            return Promise.reject(error);
-        });
-
     const [formValue, setForm] = useState({
         nif: "",
         nombre: "",
@@ -26,8 +17,8 @@ const CompanySignUpForm = () => {
         password: "",
         repassword: "",
         categoria: "",
-        lat: 0,
-        long: 0
+        lat: "",
+        long: ""
     });
 
     // Mensaje de error
@@ -45,19 +36,13 @@ const CompanySignUpForm = () => {
             password: "",
             repassword: "",
             categoria: "",
-            lat: 41.65606,
-            long: -0.87734
+            lat: "",
+            long: "",
         }
     });
 
 
-    axios.interceptors.request.use((config) => {
-        console.log(config);
-        return config;
-    },
-        function (error) {
-            return Promise.reject(error);
-        });
+
 
     // function handleConfirmPassword(event) {
     //     if (event.target.value !== formValue.password) {
@@ -84,7 +69,7 @@ const CompanySignUpForm = () => {
             long: formValue.long,
             category: formValue.categoria
         }
-        setLoading(true);
+        setLoading(true)
         try {
             const response = await axios.post(`https://stw-zitation.herokuapp.com/api/companies`, company,
                 {
@@ -109,7 +94,6 @@ const CompanySignUpForm = () => {
             setUser({
                 email: ''
             })
-
         }
         setLoading(false);
     }
@@ -201,7 +185,7 @@ const CompanySignUpForm = () => {
                         value={formValue.nombre}
                         {...register("nombre", {
                             required: { value: true, message: "Nombre obligatorio" },
-                            maxLength: { value: 20, message: "Máximo superado" }
+                            maxLength: { value: 40, message: "Máximo superado" }
                         })}
                         onChange={(e) => {
                             setForm({ ...formValue, nombre: e.target.value })
@@ -263,13 +247,14 @@ const CompanySignUpForm = () => {
                     {errors.repassword && <Form.Control.Feedback type="invalid">{errors.repassword.message}</Form.Control.Feedback>}
                 </Form.Group>
 
-                <Form.Group controlId="formSULName">
+                <Form.Group >
                     <Row>
                         <Col>
                             <Form.Label>Latitud</Form.Label>
                             <Form.Control
+                                id="lat"
                                 type="text"
-                                placeholder="latitud"
+                                placeholder="Latitud"
                                 name="lat"
                                 value={formValue.lanme}
                                 {...register("lat", {
@@ -277,7 +262,7 @@ const CompanySignUpForm = () => {
                                     maxLength: { value: 50, message: "Máximo superado" }
                                 })}
                                 onChange={(e) => {
-                                    setForm({ ...formValue, lat: parseInt(e.target.value) })
+                                    setForm({ ...formValue, lat: parseFloat(e.target.value) })
                                     if (errors.lat) {
                                         setError("lat", { type: "manul", message: errors.lat.message })
                                     }
@@ -288,6 +273,7 @@ const CompanySignUpForm = () => {
                         <Col>
                             <Form.Label>Longuitud</Form.Label>
                             <Form.Control
+                                id="long"
                                 type="text"
                                 placeholder="Longuitud"
                                 name="long"
@@ -297,7 +283,7 @@ const CompanySignUpForm = () => {
                                     maxLength: { value: 50, message: "Máximo superado" }
                                 })}
                                 onChange={(e) => {
-                                    setForm({ ...formValue, long: parseInt(e.target.value) })
+                                    setForm({ ...formValue, long: parseFloat(e.target.value) })
                                     if (errors.long) {
                                         setError("long", { type: "manul", message: errors.long.message })
                                     }
@@ -309,11 +295,10 @@ const CompanySignUpForm = () => {
 
                 </Form.Group>
 
-                <Form.Group controlId="formSUConfPassword">
+                <Form.Group controlId="formSUCat">
                     <Form.Label>Categoria</Form.Label>
                     <Form.Control
                         as="select"
-                        defaultValue="Elige tu categoria..."
                         name="categoria"
                         value={formValue.categoria}
                         {...register("categoria", {

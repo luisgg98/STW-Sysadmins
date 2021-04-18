@@ -63,8 +63,12 @@ function AccountPage() {
 
 
     function logOutHandler() {
-        logout();
+        
+        localStorage.setItem("user", { });
+        localStorage.setItem("token", "");
+        localStorage.setItem("logged", false);
         setUser({ email: "" });
+        logout();
     }
 
     const ProfileData = () => {
@@ -113,8 +117,8 @@ function AccountPage() {
     const Reservas = () => {
         if (!loading) {
             return (
-                reservas.map((res) =>
-                    <CardReserva reserva={res} />
+                reservas.map((res, index) =>
+                    <CardReserva reserva={res}  key={index}/>
                 )
             )
         }
@@ -122,7 +126,7 @@ function AccountPage() {
 
     return (
         <div>
-            {user.email !== "" ? (
+            { localStorage.getItem("logged")=== "true" ? (
                 <div>
                     <ZitationHeader />
                     <Row fluid="md">

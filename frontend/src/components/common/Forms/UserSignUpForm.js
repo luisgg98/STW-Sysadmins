@@ -61,13 +61,6 @@ function UserSUForm() {
         console.log(e);
         console.log(data);
         reset();
-        // setUser({
-        //     phone: formValue.phone,
-        //     email: formValue.email,
-        //     first_name: formValue.first_name,
-        //     last_name: formValue.last_name,
-        //     password: formValue.password,
-        // });
         const phonee = formValue.phone;
         setForm({...formValue, phone: Number(phonee)});
         setLoading(true);

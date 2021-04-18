@@ -1,3 +1,15 @@
+import axios from  "axios";
+
+
+axios.interceptors.request.use((config) => {
+    console.log(config);
+    return config;
+},
+    function (error) {
+        return Promise.reject(error);
+});
+
+
 const userDB = {
     phone: "666777888",
     email: "user@user.com",
@@ -35,4 +47,4 @@ function logout() {
 }
 
 const API = 'https://stw-zitation.herokuapp.com/api/'
-export {login, logout, signup, API};
+export {login, logout, signup, API, axios};

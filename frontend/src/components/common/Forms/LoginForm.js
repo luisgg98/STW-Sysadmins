@@ -1,15 +1,17 @@
 import React, { useState, useContext } from "react";
-import { Button, Form, Row } from "react-bootstrap";
+import { Button, Form, ResponsiveEmbed, Row } from "react-bootstrap";
 import { UserContext } from "../../../UserContext"
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { Alert, Spinner } from "react-bootstrap";
-import { Link } from 'react-router-dom';
-import { API} from '../../../services/AuthService'
+import { Link, Redirect, useHistory } from 'react-router-dom';
+import { API } from '../../../services/AuthService'
 
 const LoginForm = () => {
     // Datos del usuario hacer login
     const { user, setUser } = useContext(UserContext);
+
+    const history = useHistory();
 
     // Datos del formulario
     const [loading, setLoading] = useState(false);
@@ -25,49 +27,63 @@ const LoginForm = () => {
 
     const { formState: { errors, touchedFields }, register, setError, handleSubmit } = useForm({ mode: 'onSubmit' });
 
-    const onSubmit = async (data, e) => {
+    function saveUserInfo(response) {
+        localStorage.setItem("token", response.token);
+        if (formValue.check)
+            setUser({
+                name: response.company.name,
+                email: response.company.email,
+                id: response.company.id,
+            })
+        else
+            setUser({
+                first_name: response.user.first_name,
+                email: response.user.email,
+                id: response.user.id,
+                last_name: response.user.last_name,
+                phone: response.user.last_name,
+            })
+        localStorage.setItem("user", user);
+        localStorage.setItem("logged", true);
+    }
+
+    const onSubmit = (data, e) => {
         let loginUrl = API;
         if (formValue.check)
             loginUrl += 'companies/login'
-        else 
+        else
             loginUrl += 'users/login'
 
         console.log("handling submit");
         e.preventDefault();
         console.log(data);
         setLoading(true);
-        try {
-            const response = await axios.post(loginUrl, 
-                {email: formValue.email, 
-                password: formValue.password},
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+        axios.post(loginUrl,
+            {
+                email: formValue.email,
+                password: formValue.password
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then((response) => {
+                if (response.status === 200) {
+                    console.log("repsonse ", response.data)
+                    saveUserInfo(response.data)
+                }
+                history.push('/home')
+            }).catch((error) => {
+                setApiError(true);
+                console.log("erorr catch", error);
+                setForm({
+                    email: '',
+                    password: ''
                 })
-            if (response.status === 200) {
                 setUser({
-                    email: response.data.user.email,
-                    name: response.data.user.first_name,
-                    lname: response.data.user.last_name,
-                    phone: response.data.user.phone,
+                    email: ''
                 })
-                localStorage.setItem("token", response.data.token)
-            } else {
-                console.log("error 40x");
-            }
-        } catch (e) {
-            console.log('catch error');
-            setApiError(true)
-            setForm({
-                email: '',
-                password: ''
             })
-            setUser({
-                email: ''
-            })
-
-        }
         setLoading(false);
     }
 
@@ -145,12 +161,12 @@ const LoginForm = () => {
                     <Form.Control.Feedback type="invalid">Password is required.</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group controlId="formBasicCheckbox">
-                    <Form.Check 
-                        type="checkbox" 
+                    <Form.Check
+                        type="checkbox"
                         label="Soy una empresa"
                         onChange={(e) => {
-                            setForm({...formValue, check: !formValue.check})
-                        }}/>
+                            setForm({ ...formValue, check: !formValue.check })
+                        }} />
                 </Form.Group>
                 <Form.Group>
                     <Link to="/registro">
@@ -159,7 +175,7 @@ const LoginForm = () => {
                 </Form.Group>
                 <LoadingSpinner />
                 <Row className="justify-content-center mx-auto ">
-                    <Button variant="primary" type="submit">Log In</Button>
+                    <Button variant="primary" type="submit" >Log In</Button>
                 </Row>
                 <Row className="justify-content-center mx-auto pt-2">
                     <AlertMessage />

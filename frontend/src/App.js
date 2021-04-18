@@ -3,27 +3,31 @@ import LoginPage from "./views/LoginPage";
 import RegistrarNegocio from "./views/CompanyRegistrationPage";
 import UserRegistrationPage from "./views/UserRegistrationPage";
 import MapPage from "./views/MapPage"
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, useHistory } from "react-router-dom";
 import { useState } from "react";
 import { UserContext } from "./UserContext";
 import { Container } from 'react-bootstrap'
 import AdminPage from "./views/AdminPage";
 import AccountPage from "./views/AccountPage";
-import HealthPage from "./views/HealthPage";
+import CompanyPage from "./views/CompanyPage";
 
 
 
 export default function App() {
     const [user, setUser] = useState({ name: "", email: "" });
-
+    const history = useHistory();
 
     return (
-        <Router>
+        <Router history={history} >
             <Container fluid="true" className="App">
                 <UserContext.Provider value={{ user, setUser }}>
                     <Switch>
                         <Route path="/companies/health">
-                            <HealthPage />
+                            <CompanyPage tipo="Salud y Belleza" />
+                        </Route>
+
+                        <Route path="/companies/comercio">
+                            <CompanyPage tipo="Comercio"  />
                         </Route>
 
                         <Route path="/login">

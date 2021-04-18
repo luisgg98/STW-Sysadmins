@@ -6,7 +6,7 @@ import CompanyCard from "../components/common/Buttons/CompanyCards";
 import axios from 'axios';
 import { Row, Spinner } from "react-bootstrap";
 
-const HealthPage = () => {
+const CompanyPage = (tipo) => {
 
     const [loading, setLoading] = useState(true);
 
@@ -23,6 +23,7 @@ const HealthPage = () => {
 
     useEffect(() => {
         console.log('use effect');
+        console.log(tipo)
         // Actualiza el título del documento usando la API del navegador
         // getData();
         let data = {};
@@ -65,8 +66,13 @@ const HealthPage = () => {
 
     const Contenido = () => {
         if (!loading) {
-            return (companies.content.map((company, index) => 
-                <CompanyCard key={index} title = { company.name } />
+            return (companies.content.map((company, index) => {
+                console.log("tipo", tipo)
+                console.log("cate",  company.category)
+                if (company.category == tipo) {
+                    <CompanyCard key={index} title={company.name} />
+                }
+            }
             ))
         }
     }
@@ -93,4 +99,4 @@ const HealthPage = () => {
     );
 };
 
-export default HealthPage;
+export default CompanyPage;
