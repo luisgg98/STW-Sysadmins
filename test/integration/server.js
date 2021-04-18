@@ -2,10 +2,9 @@
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../../app');
-let should = chai.should();
-const Company = require('../../models/company')
 chai.use(chaiHttp);
-describe('Company model tests',function () {
+
+describe('Integration test',function () {
     it('Testing application endpoint', (done) => {
         chai.request(server)
             .get('/')
