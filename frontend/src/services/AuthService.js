@@ -1,50 +1,31 @@
-import axios from  "axios";
+import axios from 'axios'
+
+const API = 'https://stw-zitation.herokuapp.com/api/'
 
 
-axios.interceptors.request.use((config) => {
-    console.log(config);
-    return config;
-},
+// Create instance called instance
+axios.interceptors.request.use(
+    function (config) {
+      // Do something before request is sent
+      // OR config.headers.common['Authorization'] = `Bearer ${your_token}`;
+      console.log(config);
+      config.baseURL = API;
+  
+      return config;
+    },
     function (error) {
-        return Promise.reject(error);
-});
-
-
-const userDB = {
-    phone: "666777888",
-    email: "user@user.com",
-    password: "user123",
-};
-
-
-
-function login(details) {
-    console.log(details);
-
-    if (
-        details.email === userDB.email &&
-        details.password === userDB.password
-    ) {
-        return true;
-    } else {
-        return false;
+      // Do something with request error
+      return Promise.reject(error);
     }
-}
-
-function signup(details) {
-    console.log(details);
-
-    if (details.phone === userDB.phone &&
-        details.email === userDB.email &&
-        details.password === userDB.password) {
-        return true;
-    } else return false;
-}
+  );
 
 function logout() {
     console.log("Logout");
     // TODO: Añadir logica de logout
 }
 
-const API = 'https://stw-zitation.herokuapp.com/api/'
-export {login, logout, signup, API, axios};
+export default {
+    axios: axios,
+    logout: logout,
+    API: API
+}

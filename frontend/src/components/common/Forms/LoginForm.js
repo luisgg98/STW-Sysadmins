@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { Alert, Spinner } from "react-bootstrap";
 import { Link, Redirect, useHistory } from 'react-router-dom';
-import { API } from '../../../services/AuthService'
+import api from '../../../services/AuthService'
 
 const LoginForm = () => {
     // Datos del usuario hacer login
@@ -48,7 +48,7 @@ const LoginForm = () => {
     }
 
     const onSubmit = (data, e) => {
-        let loginUrl = API;
+        let loginUrl = api.API;
         if (formValue.check)
             loginUrl += 'companies/login'
         else

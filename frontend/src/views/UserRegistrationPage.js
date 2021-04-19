@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { PageDescription, ZitationHeader } from "../components/common/Headers/Header"
 import UserSUForm from "../components/common/Forms/UserSignUpForm"
 import { UserContext } from "../UserContext";
-import { logout } from "../services/AuthService";
+import api from "../services/AuthService";
 import { Container, Row } from "react-bootstrap";
 
 const UserRegistrationPage = () => {
@@ -11,7 +11,7 @@ const UserRegistrationPage = () => {
     const { user, setUser } = useContext(UserContext);
 
     function logOutHandler() {
-        logout();
+        api.logout();
         setUser({ email: "" });
     }
 

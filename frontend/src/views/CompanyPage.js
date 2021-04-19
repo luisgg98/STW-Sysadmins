@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import ZitationHeader from "../components/common/Headers/Header";
 import SearchBar from "../components/common/Bars/SearchBar";
-import { API } from "../services/AuthService"
+import api from "../services/AuthService"
 import CompanyCard from "../components/common/Buttons/CompanyCards";
-import axios from 'axios';
+import axios from "axios";
 import { Row, Spinner } from "react-bootstrap";
 
 const CompanyPage = (props) => {
@@ -13,44 +13,44 @@ const CompanyPage = (props) => {
     // const [companies, setCompanies] = useState({});
     const [companies, setCompanies] = useState();
 
-    axios.interceptors.request.use((config) => {
-        // console.log(config);
-        return config;
-    },
-        function (error) {
-            return Promise.reject(error);
-        });
 
     useEffect(() => {
         console.log('use effect');
         console.log(props)
         // Actualiza el título del documento usando la API del navegador
         // getData();
-        let data = {};
-        try {
-            axios.get(API + '/companies/',
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).then(
-                    response => {
-                        if (response.status === 200) {
-                            console.log('fetched correctly');
-                            data = response.data;
-                            setCompanies({ content: data })
+        if (props.search.length ===0) {
+            console.log("search if" , props.search)
+            let data = {};
+            try {
+                api.axios.get('/companies/',
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
                         }
-                        else {
-                            console.log('fetched wrong', response.status)
+                    }).then(
+                        response => {
+                            if (response.status === 200) {
+                                console.log('fetched correctly');
+                                data = response.data;
+                                setCompanies({ content: data })
+                            }
+                            else {
+                                console.log('fetched wrong', response.status)
+                            }
+                            setLoading(false);
                         }
-                        setLoading(false);
-                    }
 
-                )
-        } catch (e) {
-            console.log('catch error');
-            console.log("error", e)
+                    )
+            } catch (e) {
+                console.log('catch error');
+                console.log("error", e)
 
+            }
+        }
+        else {
+            console.log("search else" , props.search)
+            setCompanies(props.search)
         }
     }, []);
 
@@ -65,18 +65,29 @@ const CompanyPage = (props) => {
     }
 
     const Contenido = () => {
+        let existe = companies.content.some(item => item.category === props.tipo)
         if (!loading) {
-            return (companies.content.map((company, index) => {
-                console.log("tipo", props.tipo)
-                console.log("cate",  company.category)
-                if (company.category === props.tipo) {
-                    console.log("if");
-                    return <CompanyCard key={index} title={company.name} />
+            if (existe)
+                return (companies.content.map((company, index) => {
+                    console.log("tipo", props.tipo)
+                    console.log("cate", company.category)
+                    if (company.category === props.tipo) {
+                        console.log("if");
+                        return <CompanyCard key={index} title={company.name} />
+                    }
+                    else return null
                 }
-                else return null
-            }
-            ))
+                ))
+            else return <Row className="justify-content-center mx-auto display-4"> Todavía no disponemos empresas en esta categoria</Row>
         }
+    }
+
+    const AllContenido = () => {
+        if (!loading)
+                return (companies.content.map((company, index) => {
+                        return <CompanyCard key={index} title={company.name} />
+                    }
+                ))
     }
 
     const Content = () => {
@@ -86,8 +97,12 @@ const CompanyPage = (props) => {
             )
         }
         else {
-            console.log(companies);
-            return <Contenido />
+            if (props.tipo !== ""){
+                return <Contenido />
+            }
+            else 
+                return <AllContenido />
+            
         }
     }
 

@@ -27,7 +27,9 @@ const CategoryCards = () => {
       <Card>
         <Card.Img variant="top" src={deporte} />
         <Card.Body>
+        <Link to="/companies/deporte">
           <Card.Title>Deporte</Card.Title>
+          </Link>
           <Card.Text>
             This cardd has supporting text below as a natural lead-in to additional
         content.{' '}
@@ -37,7 +39,9 @@ const CategoryCards = () => {
       <Card>
         <Card.Img variant="top" src={ocio} />
         <Card.Body>
+        <Link to="/companies/ocio">
           <Card.Title>Ocio</Card.Title>
+          </Link>
           <Card.Text>
             This is a wider card with supporting text below as a natural lead-in to
             additional content. This card has even longer content than the first to
@@ -50,7 +54,9 @@ const CategoryCards = () => {
       <Card>
         <Card.Img variant="top" src={admin} />
         <Card.Body>
+        <Link to="/companies/adminPublica">
           <Card.Title>Administración Pública</Card.Title>
+          </Link>
           <Card.Text>
             This card has supporting text below as a natural lead-in to additional
         content.{' '}

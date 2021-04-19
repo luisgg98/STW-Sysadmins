@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { UserContext } from "../../../UserContext";
-import {axios} from "../../../services/AuthService";
+import axios from "axios";
 import { useForm } from 'react-hook-form';
 import { Form, Alert, Spinner, Row, Button, Col } from "react-bootstrap";
 import { Link } from 'react-router-dom';

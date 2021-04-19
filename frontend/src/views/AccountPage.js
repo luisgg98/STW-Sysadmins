@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { UserContext } from "../UserContext";
-import { logout } from "../services/AuthService";
+import api from "../services/AuthService";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { Link, Redirect } from "react-router-dom";
 import { ZitationHeader } from "../components/common/Headers/Header";
@@ -68,7 +68,7 @@ function AccountPage() {
         localStorage.setItem("token", "");
         localStorage.setItem("logged", false);
         setUser({ email: "" });
-        logout();
+        api.logout();
     }
 
     const ProfileData = () => {

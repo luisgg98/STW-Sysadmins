@@ -23,11 +23,27 @@ export default function App() {
                 <UserContext.Provider value={{ user, setUser }}>
                     <Switch>
                         <Route path="/companies/health">
-                            <CompanyPage tipo="Salud y Belleza" />
+                            <CompanyPage tipo="Salud y Belleza" search={[]} />
                         </Route>
 
                         <Route path="/companies/comercio">
-                            <CompanyPage tipo="Comercio"  />
+                            <CompanyPage tipo="Comercio" search={[]}  />
+                        </Route>
+
+                        <Route path="/companies/ocio">
+                            <CompanyPage tipo="Ocio"  search={[]}/>
+                        </Route>
+
+                        <Route path="/companies/adminPublica">
+                            <CompanyPage tipo="Administración pública" search={[]} />
+                        </Route>
+
+                        <Route path="/companies/deporte">
+                            <CompanyPage tipo="Deporte" search={[]} />
+                        </Route>
+
+                        <Route path="/companies/searchResults">
+                            <CompanyPage tipo="" />
                         </Route>
 
                         <Route path="/login">

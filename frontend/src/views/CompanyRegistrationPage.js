@@ -4,7 +4,7 @@ import { UserContext } from "../UserContext";
 import React, { useContext } from "react";
 import { Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { logout } from "../services/AuthService";
+import api from "../services/AuthService";
 
 const RegistrarNegocio = () => {
 
@@ -12,7 +12,7 @@ const RegistrarNegocio = () => {
 
 
   function logOutHandler() {
-    logout();
+    api.logout();
     setUser({ email: "" });
   }
 
