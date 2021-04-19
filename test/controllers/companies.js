@@ -10,6 +10,7 @@ let company = {  "nif": "string",
     "name": "string",
     "email": "user@example.com",
     "password": "string",
+    "address": "Avenida Gomez de Avellaneda 53",
     "lat": 0,
     "long": 0,
     "category": "Ocio"};

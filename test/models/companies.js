@@ -2,9 +2,9 @@ const assert = require('chai').assert;
 const Company = require('../../models/company');
 require('../../config/database')
 let companiesArray = [
-    {name:'El Limonero Bar', nif:'1',email:'ho@hol.com',password:'aaa',salt:'salty',category:'Testing'},
-    {name:'Multiverso Bar',nif:'2',email:'ho@hol.com',password:'aaa',salt:'salty',category:'Testing'},
-    {name:'Carniceria Maza', nif:'3',email:'ho@hol.com',password:'aaa',salt:'salty',category:'Testing'}];
+    {name:'El Limonero Bar', nif:'1',email:'ho@hol.com',password:'aaa',address: 'Avenida Nose 53',salt:'salty',category:'Testing'},
+    {name:'Multiverso Bar',nif:'2',email:'ho@hol.com',password:'aaa',address: 'Avenida Nose 53',salt:'salty',category:'Testing'},
+    {name:'Carniceria Maza', nif:'3',email:'ho@hol.com',password:'aaa',address: 'Avenida Nose 53',salt:'salty',category:'Testing'}];
 const newname ='Desatranques Jaen';
 
 
