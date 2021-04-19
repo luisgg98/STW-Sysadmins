@@ -7,6 +7,7 @@ const company = new mongoose.Schema({
     password : { type : String, required: true},
     salt : { type : String, required: true},
     category: { type: String, required: true},
+    address: { type: String, required: true},
     location: {
         type: { type: String },
         coordinates: [Number]

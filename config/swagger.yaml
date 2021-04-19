@@ -442,13 +442,28 @@ components:
       items:
         type: object
         properties:
+          name:
+            type: string
           location:
             type: array
             items:
               type: number
             minItems: 2
             maxItems: 2
-          name:
+          nif:
+            type: string
+          email:
+            type: string
+            format: email
+          category:
+            type: string
+            enum:
+              - "Ocio"
+              - "Deporte"
+              - "Administración pública"
+              - "Salud y belleza"
+              - "Comercio"
+          address:
             type: string
     Company_register:
       type: object
@@ -466,6 +481,8 @@ components:
           type: number
         long:
           type: number
+        address:
+          type: string
         category:
           type: string
           enum:
@@ -480,6 +497,7 @@ components:
         - password
         - lat
         - long
+        - address
         - category
     Company_registered:
       type: object
@@ -493,6 +511,8 @@ components:
         password:
           type: string
         salt:
+          type: string
+        address:
           type: string
         location:
           type: object
@@ -515,6 +535,7 @@ components:
         - password
         - location
         - salt
+        - address
     Company_fetched:
       type: object
       properties:
@@ -523,6 +544,8 @@ components:
         email:
           type: string
           format: email
+        address:
+          type: string
         category:
           type: string
           enum:
@@ -559,6 +582,8 @@ components:
           type: string
         salt:
           type: string
+        address:
+          type: string
         location:
           type: object
           properties:
@@ -581,6 +606,8 @@ components:
             email:
               type: string
               format: email
+            address:
+              type: string
             category:
               type: string
               enum:

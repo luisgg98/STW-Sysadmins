@@ -14,11 +14,11 @@ let get = async (req, res) => {
         if (req.query.name){
             // Fetch just one company
             let namee = req.query.name
-            const company = await Company.find({name: {"$regex": namee, "$options": "i"}}, function(err,docs){}).select('name nif email category location')
+            const company = await Company.find({name: {"$regex": namee, "$options": "i"}}, function(err,docs){}).select('name nif email category address location')
             res.send(company)
         } else {
             // Fetch all companies
-            const companies = await Company.find({}, {name: true, nif: true, category: true, location: true})
+            const companies = await Company.find({}, {name: true, nif: true, email: true, category: true, address: true, location: true})
             res.send(companies)
         }
     } catch {
@@ -31,7 +31,7 @@ let fetchCompany = async (req, res) => {
     try {
         const company = await Company.findOne({ nif: req.params.nif })
         res.status(200)
-        res.send({name: company.name, email: company.email, category: company.category, location: company.location})
+        res.send({name: company.name, email: company.email, category: company.category, address: company.address, location: company.location})
     } catch {
         res.status(404)
         res.send({error: "Company not found"})
@@ -59,6 +59,7 @@ let register = async (req, res) => {
                 password: password.hash,
                 salt: password.salt,
                 category: req.body.category,
+                address: req.body.address,
                 location: {
                     type: "Point",
                     coordinates: [req.body.lat,  req.body.long]
@@ -94,6 +95,7 @@ let login = async (req, res) => {
                         nif:company.nif,
                         id:company._id,
                         category:company.category,
+                        address: company.address,
                         location: company.location
                     },
                     token: tokenObject.token, expiresIn: tokenObject.expires })
@@ -131,6 +133,9 @@ let update = async (req, res) => {
         }
         if (req.body.long) {
             company.long = req.body.long
+        }
+        if (req.body.address) {
+            company.address = req.body.address
         }
 
         await company.save()
