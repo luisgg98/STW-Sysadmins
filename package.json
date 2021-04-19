@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node config/settings",
-    "test": "mocha test --recursive --exit"
+    "test": "nyc mocha test --recursive --exit"
   },
   "engines": {
     "node": ">=14.15.5",
@@ -27,6 +27,7 @@
     "morgan": "~1.9.1",
     "node-cron": "^3.0.0",
     "nodemon": "^2.0.7",
+    "nyc": "^15.1.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "pug": "^3.0.2",
