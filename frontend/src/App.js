@@ -41,11 +41,7 @@ export default function App() {
                         <Route path="/companies/deporte">
                             <CompanyPage tipo="Deporte" search={[]} />
                         </Route>
-
-                        <Route path="/companies/searchResults">
-                            <CompanyPage tipo="" />
-                        </Route>
-
+                        
                         <Route path="/login">
                             <LoginPage />
                         </Route>

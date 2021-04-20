@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import Header from "../components/common/Headers/Header";
 import SearchBar from "../components/common/Bars/SearchBar";
-import CategoryCards from "../components/common/Buttons/CategoryCards";
-import MapButton from "../components/common/Buttons/MapButton"
+import CategoryCards from "../components/common/Widgets/CategoryCards";
+import MapButton from "../components/common/Widgets/MapButton"
 import api from "../services/AuthService"
 import { Row } from "react-bootstrap";
-import CompanyCard from "../components/common/Buttons/CompanyCards";
+import CompanyCard from "../components/common/Widgets/CompanyCards";
 
 const HomePage = () => {
 

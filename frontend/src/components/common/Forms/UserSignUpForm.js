@@ -4,6 +4,8 @@ import axios from "axios";
 import { useForm } from 'react-hook-form';
 import { Form, Alert, Spinner, Row, Button } from "react-bootstrap";
 import { Link } from 'react-router-dom';
+import LoadingSpinner from "../Widgets/LoadingSpinner";
+import CredentialErrorAlert from "../Widgets/CredentialErrorAlert";
 
 
 function UserSUForm() {
@@ -48,12 +50,6 @@ function UserSUForm() {
         return Promise.reject(error);
     });
 
-    // function handleConfirmPassword(event) {
-    //     if (event.target.value !== formValue.password) {
-    //         console.log("error");
-    //         setForm({ ...formValue, confirmPassword: event.target.value });
-    //     } else setForm({ ...formValue, confirmPassword: event.target.value });
-    // }
 
     const onSubmit = async (data, e) => {
         console.log("handling submit");
@@ -91,26 +87,6 @@ function UserSUForm() {
 
         }
         setLoading(false);
-    }
-
-
-    const LoadingSpinner = () => {
-        if (loading) {
-            return (
-                <Row className=" justify-content-center mx-auto pb-3" >
-                    <Spinner animation="border" role="status">
-                        <span className="sr-only">Loading...</span>
-                    </Spinner></Row>)
-        }
-        else return null
-    }
-
-    const AlertMessage = () => {
-        if (apiError) {
-            return (<Alert variant="danger">
-                Credenciales incorrectas
-            </Alert>)
-        } else return null
     }
 
 
@@ -267,12 +243,12 @@ function UserSUForm() {
                         ¿Ya tienes una cuenta? Inicia sesión ahora!
                     </Link>
                 </Form.Group>
-                <LoadingSpinner />
+                <LoadingSpinner loading={loading} />
                 <Row className="justify-content-center mx-auto ">
                     <Button variant="primary" type="submit" onSubmit={handleSubmit(onSubmit)}>Sign Up</Button>
                 </Row>
                 <Row className="justify-content-center mx-auto pt-2">
-                    <AlertMessage />
+                    <CredentialErrorAlert apiError={apiError} />
                 </Row>
             </Form>
         </div >

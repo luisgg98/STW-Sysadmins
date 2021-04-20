@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form';
 import { Alert, Spinner } from "react-bootstrap";
 import { Link, Redirect, useHistory } from 'react-router-dom';
 import api from '../../../services/AuthService'
+import CredentialErrorAlert from "../Widgets/CredentialErrorAlert";
+import LoadingSpinner from "../Widgets/LoadingSpinner";
 
 const LoginForm = () => {
     // Datos del usuario hacer login
@@ -25,29 +27,58 @@ const LoginForm = () => {
     const [apiError, setApiError] = useState(false);
 
 
-    const { formState: { errors, touchedFields }, register, setError, handleSubmit } = useForm({ mode: 'onSubmit' });
+    const { formState: { errors, touchedFields }, register, setError, handleSubmit } = useForm({
+        mode: 'onSubmit',
+        reValidateMode: 'onBlur',
+        defaultValues: {
+            emial: "",
+            password: ""
+        }
+    });
 
     function saveUserInfo(response) {
         localStorage.setItem("token", response.token);
-        if (formValue.check)
-            setUser({
-                name: response.company.name,
+        if (formValue.check) {
+            // setUser({
+            //     name: response.company.name,
+            //     email: response.company.email,
+            //     id: response.company.id,
+            // })
+            let company = {
+                company: true,
+                first_name: response.company.first_name,
                 email: response.company.email,
-                id: response.company.id,
-            })
-        else
-            setUser({
-                first_name: response.user.first_name,
-                email: response.user.email,
-                id: response.user.id,
+                id: response.company.id
+            }
+            localStorage.setItem("user", JSON.stringify(company))
+            // localStorage.setItem("company", true);
+            // localStorage.setItem("first_name", response.company.first_name);
+            // localStorage.setItem("email", response.company.email);
+            // localStorage.setItem("id", response.company.id);
+        }
+
+        else {
+            let user = {
+                company: false,
+                first_name: response.user.first_name ,
+                email: response.user.email ,
+                id: response.user.id ,
                 last_name: response.user.last_name,
-                phone: response.user.last_name,
-            })
-        localStorage.setItem("user", user);
+                phone: response.user.phone,
+            }
+            localStorage.setItem("user", JSON.stringify(user))
+            // localStorage.setItem("company", false);
+            // localStorage.setItem("first_name", response.user.first_name)
+            // localStorage.setItem("email", response.user.email)
+            // localStorage.setItem("id", response.user.id)
+            // localStorage.setItem("last_name", response.user.last_name)
+            // localStorage.setItem("phone", response.user.phone)
+        }
         localStorage.setItem("logged", true);
     }
 
     const onSubmit = (data, e) => {
+        setLoading(true);
         let loginUrl = api.API;
         if (formValue.check)
             loginUrl += 'companies/login'
@@ -57,7 +88,6 @@ const LoginForm = () => {
         console.log("handling submit");
         e.preventDefault();
         console.log(data);
-        setLoading(true);
         axios.post(loginUrl,
             {
                 email: formValue.email,
@@ -73,6 +103,7 @@ const LoginForm = () => {
                     saveUserInfo(response.data)
                 }
                 history.push('/home')
+                setLoading(false);
             }).catch((error) => {
                 setApiError(true);
                 console.log("erorr catch", error);
@@ -83,27 +114,8 @@ const LoginForm = () => {
                 setUser({
                     email: ''
                 })
+                setLoading(false);
             })
-        setLoading(false);
-    }
-
-    const LoadingSpinner = () => {
-        if (loading) {
-            return (
-                <Row className=" justify-content-center mx-auto pb-3" >
-                    <Spinner animation="border" role="status">
-                        <span className="sr-only">Loading...</span>
-                    </Spinner></Row>)
-        }
-        else return null
-    }
-
-    const AlertMessage = () => {
-        if (apiError) {
-            return (<Alert variant="danger">
-                Credenciales incorrectas
-            </Alert>)
-        } else return null
     }
 
 
@@ -127,15 +139,13 @@ const LoginForm = () => {
                         onChange={(e) => {
                             setForm({ ...formValue, email: e.target.value })
                             if (errors.email) {
-                                setError(errors.email.message)
+                                setError("mail", { typoe: "manual", message: errors.email.message })
                             }
                         }
                         }
                         isInvalid={errors.email && touchedFields.email}
                     />
-                    <Form.Control.Feedback type="invalid">
-                        Invalid email
-                    </Form.Control.Feedback>
+                    {errors.email && <Form.Control.Feedback type="invalid">{errors.email.message}</Form.Control.Feedback>}
                     <Form.Text className="text-muted">
                         We'll never share your email with anyone else.
                     </Form.Text>
@@ -148,17 +158,17 @@ const LoginForm = () => {
                         placeholder="Password"
                         value={formValue.password}
                         {...register("password", {
-                            required: { value: true, message: "Contraseña necesaria" },
+                            required: { value: true, message: "la contraseña es obligatorio" },
                         })}
                         onChange={(e) => {
                             setForm({ ...formValue, password: e.target.value })
                             if (errors.password) {
-                                setError(errors.password.message)
+                                setError("password", { type: "manul", message: errors.password.message })
                             }
                         }
                         }
                         isInvalid={errors.password && touchedFields.password} />
-                    <Form.Control.Feedback type="invalid">Password is required.</Form.Control.Feedback>
+                    {errors.password && <Form.Control.Feedback type="invalid">{errors.password.message}</Form.Control.Feedback>}
                 </Form.Group>
                 <Form.Group controlId="formBasicCheckbox">
                     <Form.Check
@@ -173,12 +183,12 @@ const LoginForm = () => {
                         ¿No tienes una cuenta? Registrate ahora!
                     </Link>
                 </Form.Group>
-                <LoadingSpinner />
+                <LoadingSpinner loading={loading} />
                 <Row className="justify-content-center mx-auto ">
                     <Button variant="primary" type="submit" >Log In</Button>
                 </Row>
                 <Row className="justify-content-center mx-auto pt-2">
-                    <AlertMessage />
+                    <CredentialErrorAlert apiError={apiError} />
                 </Row>
             </Form>
         </div>

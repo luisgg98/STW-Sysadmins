@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ZitationHeader from "../components/common/Headers/Header";
 import SearchBar from "../components/common/Bars/SearchBar";
 import api from "../services/AuthService"
-import CompanyCard from "../components/common/Buttons/CompanyCards";
+import CompanyCard from "../components/common/Widgets/CompanyCards";
 import axios from "axios";
 import { Row, Spinner } from "react-bootstrap";
 

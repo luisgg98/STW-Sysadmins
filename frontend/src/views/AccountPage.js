@@ -1,14 +1,16 @@
 import React, { useContext, useState } from 'react';
 import { UserContext } from "../UserContext";
-import api from "../services/AuthService";
-import { Button, Card, Col, Row } from "react-bootstrap";
-import { Link, Redirect } from "react-router-dom";
+import {  Button, Card, Col, Row } from "react-bootstrap";
+import { Redirect } from "react-router-dom";
 import { ZitationHeader } from "../components/common/Headers/Header";
-import profile from "../assets/profile.png";
+import ProfileData from "../components/common/Widgets/ProfileData"; 
+import EditUserInfo from '../components/common/Forms/EditUserInfo';
 
-function AccountPage() {
+
+const  AccountPage = () => {
     const { user, setUser } = useContext(UserContext);
     const [loading, setLoading] = useState(false);
+
 
     let reservas = [
         {
@@ -62,57 +64,33 @@ function AccountPage() {
     ];
 
 
-    function logOutHandler() {
-        
-        localStorage.setItem("user", { });
-        localStorage.setItem("token", "");
-        localStorage.setItem("logged", false);
-        setUser({ email: "" });
-        api.logout();
-    }
-
-    const ProfileData = () => {
-        return (
-            <div>
-                <Card style={{ width: '18rem' }} border="white" className="text-center ml-5 mt-5">
-                    <Card.Img variant="top" src={profile} />
-                    <Card.Body >
-                        <Card.Title>{user.name}</Card.Title>
-                        <Card.Subtitle>{user.email}</Card.Subtitle>
-                        <Card.Text>Hola {user.name !== "" ? (user.name) : ("Nombre generado")}, nos alegra verte de nuevo</Card.Text>
-                        <Link to="/home">
-                            <Row className="justify-content-center mx-auto">
-                                <Button type="button" onClick={logOutHandler}>Cerrar sesión</Button>
-                            </Row>
-                        </Link>
-                    </Card.Body>
-                </Card>
-            </div>
-        )
-    }
-
 
     const CardReserva = (props) => {
-        const fecha = props.reserva.fecha
-        if (!loading) {
-            return (
-                <div>
-                    <Card style={{ width: '18rem' }} border="white" className="ml-5 mt-5">
-                        <Row className="align-items-center">
-                            <Col xs={3} sm={3} md={3} lg={3}> <Card.Img variant="top" src={profile} /> </Col>
-                            <Col xs={9} sm={9} md={9} lg={9}><Card.Body >
-                                <Row> <Card.Title>{props.reserva.servicio}</Card.Title> </Row>
-                                <Row> <Card.Subtitle>{props.reserva.lugar}</Card.Subtitle> </Row>
-                                <Row> <Card.Subtitle>{props.reserva.empresa}</Card.Subtitle> </Row>
-                                <Row> <Card.Text>{fecha.getFullYear() + '-' + (fecha.getMonth() + 1) + '-' + fecha.getDate() + fecha.getHours() + ":" + fecha.getMinutes()} </Card.Text> </Row>
-                            </Card.Body></Col>
-                        </Row>
-                    </Card>
-                </div>
-            )
-        }
-        else return <div>Pene</div>;
+        return null
     }
+
+
+    // const CardReserva = (props) => {
+    //     const fecha = props.reserva.fecha
+    //     if (!loading) {
+    //         return (
+    //             <div>
+    //                 <Card style={{ width: '18rem' }} border="white" className="ml-5 mt-5">
+    //                     <Row className="align-items-center">
+    //                         <Col xs={3} sm={3} md={3} lg={3}> <Card.Img variant="top" src={profile} /> </Col>
+    //                         <Col xs={9} sm={9} md={9} lg={9}><Card.Body >
+    //                             <Row> <Card.Title>{props.reserva.servicio}</Card.Title> </Row>
+    //                             <Row> <Card.Subtitle>{props.reserva.lugar}</Card.Subtitle> </Row>
+    //                             <Row> <Card.Subtitle>{props.reserva.empresa}</Card.Subtitle> </Row>
+    //                             <Row> <Card.Text>{fecha.getFullYear() + '-' + (fecha.getMonth() + 1) + '-' + fecha.getDate() + fecha.getHours() + ":" + fecha.getMinutes()} </Card.Text> </Row>
+    //                         </Card.Body></Col>
+    //                     </Row>
+    //                 </Card>
+    //             </div>
+    //         )
+    //     }
+    //     else return <div>Pene</div>;
+    // }
 
     const Reservas = () => {
         if (!loading) {
@@ -123,6 +101,7 @@ function AccountPage() {
             )
         }
     }
+
 
     return (
         <div>
@@ -137,10 +116,6 @@ function AccountPage() {
                             <Reservas className="justify-content-center mx-auto" />
                         </Col>
                     </Row>
-                    {/* <ul>
-                    <li>Nombre: {user.name}</li>
-                    <li>Email: {user.email}</li>
-                </ul> */}
                 </div>
 
 
