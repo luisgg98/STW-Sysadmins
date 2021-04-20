@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Form, Row, Alert, Button } from "react-bootstrap";
 import { useForm } from 'react-hook-form';
-import api from "../../../services/AuthService"
+import axios from '../../../services/AuthService'
 import GenericAlert from "../Widgets/GenericAlert";
 import SuccesAlert from "../Widgets/SuccesAlert";
+import { updateUserData } from "../../../services/EditUserData"
+import { useHistory } from "react-router";
 
 const EditUserInfo = (props) => {
 
@@ -27,17 +29,11 @@ const EditUserInfo = (props) => {
         }
     });
 
-    api.axios.interceptors.request.use((config) => {
-        console.log(config);
-        return config;
-    },
-        function (error) {
-            return Promise.reject(error);
-        });
+
+    const history = useHistory();
 
 
-
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         let modifica = false;
         console.log("form", formValue)
         console.log("id", props.id)
@@ -60,30 +56,15 @@ const EditUserInfo = (props) => {
         }
         console.log("new data", newData)
         if (modifica) {
-            console.log("ha modificado if")
-            api.axios.patch('users/' + props.id, newData,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': localStorage.getItem("token")
-                    }
-                }).then(response => {
-                    if (response.status === 200) {
-                        setUpdate(true)
-                        console.log("datos actualizados")
-                    } else {
-                        console.log("error 40x");
-                        setErrorr(true)
-                    }
-                    console.log(response.status);
-                    // reset()
-                }).catch((e) => {
-                    setErrorr(true)
-                    console.log('catch error');
-                    console.log(e)
-                })
+            const devuelto = await updateUserData(props.id, newData)
+            console.log(devuelto)
+            setUpdate(devuelto.update)
+            setErrorr(devuelto.error)
         }
-        else console.log(modifica)
+        localStorage.setItem("user", {})
+        localStorage.setItem("logged", false)
+        localStorage.setItem("token", "")
+        history.push('/login')
     }
 
     return (
@@ -151,11 +132,11 @@ const EditUserInfo = (props) => {
                         isInvalid={errors.password && touchedFields.password} />
                     {errors.password && <Form.Control.Feedback type="invalid">{errors.password.message}</Form.Control.Feedback>}
                 </Form.Group>
-                <div> 
-                {!error && update && <GenericAlert  className="py-5 my-5" mensaje="Operación Exitosa" tipo="success" />}
+                <div>
+                    {!error && update && <GenericAlert className="py-5 my-5" mensaje="Operación Exitosa" tipo="success" />}
                 </div>
                 {error && isSubmitted && !update && <GenericAlert className="py-5 my-5" mensaje="Error actualizando datos" tipo="danger" />}
-                {isSubmitted && !isValid && <GenericAlert className="py-5 my-5" mensaje="Rellene el formulario" tipo="danger" />}
+                {isSubmitted && !touchedFields.first_name && !touchedFields.last_name && !touchedFields.password && <GenericAlert className="py-5 my-5" mensaje="Rellene el formulario" tipo="danger" />}
                 <Row></Row>
                 <Row className="justify-content-center mx-auto ">
                     <Button variant="primary" type="submit" onSubmit={handleSubmit(onSubmit)}>Confirmar</Button>

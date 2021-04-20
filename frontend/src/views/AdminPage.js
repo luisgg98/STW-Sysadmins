@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Container, Col, Row, Card} from "react-bootstrap";
+import { Container, Col, Row, Card } from "react-bootstrap";
 import UsersTable from "../components/adminComponents/UsersTable";
 import TopCompaniesBar from "../components/adminComponents/TopCompaniesBar";
 import TopTimeZoneBar from "../components/adminComponents/TopTimeZoneBar";
@@ -12,18 +12,18 @@ function AdminPage() {
             <Row>
                 <Col>
                     <Card bg="Light">
-                        <UsersTable/>
+                        <UsersTable />
                     </Card>
                     <Card bg="Light">
-                        <TopCompaniesBar/>
+                        <TopCompaniesBar />
                     </Card>
                 </Col>
                 <Col>
                     <Card bg="Light">
-                        <TopTimeZoneBar/>
+                        <TopTimeZoneBar />
                     </Card>
                     <Card bg="Light">
-                        <BookingsBycategoriePie/>
+                        <BookingsBycategoriePie />
                     </Card>
                 </Col>
             </Row>

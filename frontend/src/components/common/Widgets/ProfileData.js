@@ -18,7 +18,7 @@ const ProfileData = (props) => {
         localStorage.setItem("token", "");
         localStorage.setItem("logged", false);
         setUser({ email: "" });
-        api.logout();
+        // api.logout();
     }
 
     useEffect(() => {

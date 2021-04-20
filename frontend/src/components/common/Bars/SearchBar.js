@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { InputGroup, Row, Form, FormControl, Container } from 'react-bootstrap';
-import axios from 'axios'
 
 const SearchBar = (props) => {
 

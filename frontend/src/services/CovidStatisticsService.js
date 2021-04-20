@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from './AuthService'
 
 async function fetchHealthZones() {
     try {

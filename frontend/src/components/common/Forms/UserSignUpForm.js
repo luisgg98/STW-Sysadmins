@@ -1,12 +1,13 @@
 import React, { useState, useContext } from "react";
 import { UserContext } from "../../../UserContext";
-import axios from "axios";
+import axios from '../../../services/AuthService'
 import { useForm } from 'react-hook-form';
 import { Form, Alert, Spinner, Row, Button } from "react-bootstrap";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import LoadingSpinner from "../Widgets/LoadingSpinner";
 import CredentialErrorAlert from "../Widgets/CredentialErrorAlert";
-
+import {signUpUser} from "../../../services/SignUpUser"
+import GenericAlert from "../Widgets/GenericAlert";
 
 function UserSUForm() {
 
@@ -42,51 +43,27 @@ function UserSUForm() {
     });
 
 
-    axios.interceptors.request.use((config) => {
-        console.log(config);
-        return config;
-    },
-    function(error) {
-        return Promise.reject(error);
-    });
-
+    const history = useHistory()
 
     const onSubmit = async (data, e) => {
         console.log("handling submit");
-        e.preventDefault();
-        console.log(e);
-        console.log(data);
-        reset();
+        setLoading(true)
+        setApiError(false)
+
         const phonee = formValue.phone;
         setForm({...formValue, phone: Number(phonee)});
-        setLoading(true);
-        try {
-            const response = await axios.post(`https://stw-zitation.herokuapp.com/api/users/`, formValue,
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-            if (response.status === 200) {
-                setUser({
-                    email: formValue.email,
-                })
-            } else {
-                console.log("error 40x");
-            }
-            console.log(response.status);
-        } catch (e) {
-            console.log('catch error');
-            setApiError(true)
-            setForm({
-                email: '',
-            })
-            setUser({
-                email: ''
-            })
 
-        }
+        console.log("antes de consulta", formValue)
+        const resp = await signUpUser (formValue)
+        reset();
         setLoading(false);
+        if (!resp){
+            setApiError(true)
+        }
+        else {
+            history.push('/login')
+        }
+        
     }
 
 
@@ -243,12 +220,12 @@ function UserSUForm() {
                         ¿Ya tienes una cuenta? Inicia sesión ahora!
                     </Link>
                 </Form.Group>
-                <LoadingSpinner loading={loading} />
+                {loading && <LoadingSpinner loading={true} />}
                 <Row className="justify-content-center mx-auto ">
                     <Button variant="primary" type="submit" onSubmit={handleSubmit(onSubmit)}>Sign Up</Button>
                 </Row>
                 <Row className="justify-content-center mx-auto pt-2">
-                    <CredentialErrorAlert apiError={apiError} />
+                    {apiError && <GenericAlert message="Error en el registro" tipo="danger" />}
                 </Row>
             </Form>
         </div >

@@ -3,8 +3,9 @@ import ZitationHeader from "../components/common/Headers/Header";
 import SearchBar from "../components/common/Bars/SearchBar";
 import api from "../services/AuthService"
 import CompanyCard from "../components/common/Widgets/CompanyCards";
-import axios from "axios";
+import axios from '../services/AuthService'
 import { Row, Spinner } from "react-bootstrap";
+import LoadingSpinner from "../components/common/Widgets/LoadingSpinner"
 
 const CompanyPage = (props) => {
 
@@ -23,7 +24,7 @@ const CompanyPage = (props) => {
             console.log("search if" , props.search)
             let data = {};
             try {
-                api.axios.get('/companies/',
+                axios.get('/companies/',
                     {
                         headers: {
                             'Content-Type': 'application/json'
@@ -55,14 +56,14 @@ const CompanyPage = (props) => {
     }, []);
 
 
-    const LoadingSpinner = () => {
-        return (
-            <Row className=" justify-content-center mx-auto pb-3" >
-                <Spinner animation="border" role="status">
-                    <span className="sr-only">Loading...</span>
-                </Spinner>
-            </Row>)
-    }
+    // const LoadingSpinner = () => {
+    //     return (
+    //         <Row className=" justify-content-center mx-auto pb-3" >
+    //             <Spinner animation="border" role="status">
+    //                 <span className="sr-only">Loading...</span>
+    //             </Spinner>
+    //         </Row>)
+    // }
 
     const Contenido = () => {
         let existe = companies.content.some(item => item.category === props.tipo)

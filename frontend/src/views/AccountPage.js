@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from "../UserContext";
 import {  Button, Card, Col, Row } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 import { ZitationHeader } from "../components/common/Headers/Header";
 import ProfileData from "../components/common/Widgets/ProfileData"; 
 import EditUserInfo from '../components/common/Forms/EditUserInfo';
-
+import {loginUser} from "../services/LoginUser"
 
 const  AccountPage = () => {
     const { user, setUser } = useContext(UserContext);
@@ -91,6 +91,8 @@ const  AccountPage = () => {
     //     }
     //     else return <div>Pene</div>;
     // }
+
+    
 
     const Reservas = () => {
         if (!loading) {

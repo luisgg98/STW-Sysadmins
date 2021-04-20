@@ -1,13 +1,13 @@
 import React, { useState, useContext } from "react";
 import { Button, Form, ResponsiveEmbed, Row } from "react-bootstrap";
 import { UserContext } from "../../../UserContext"
-import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { Alert, Spinner } from "react-bootstrap";
 import { Link, Redirect, useHistory } from 'react-router-dom';
-import api from '../../../services/AuthService'
+import axios from '../../../services/AuthService'
 import CredentialErrorAlert from "../Widgets/CredentialErrorAlert";
 import LoadingSpinner from "../Widgets/LoadingSpinner";
+import {loginUser} from "../../../services/LoginUser"
 
 const LoginForm = () => {
     // Datos del usuario hacer login
@@ -36,50 +36,9 @@ const LoginForm = () => {
         }
     });
 
-    function saveUserInfo(response) {
-        localStorage.setItem("token", response.token);
-        if (formValue.check) {
-            // setUser({
-            //     name: response.company.name,
-            //     email: response.company.email,
-            //     id: response.company.id,
-            // })
-            let company = {
-                company: true,
-                first_name: response.company.first_name,
-                email: response.company.email,
-                id: response.company.id
-            }
-            localStorage.setItem("user", JSON.stringify(company))
-            // localStorage.setItem("company", true);
-            // localStorage.setItem("first_name", response.company.first_name);
-            // localStorage.setItem("email", response.company.email);
-            // localStorage.setItem("id", response.company.id);
-        }
-
-        else {
-            let user = {
-                company: false,
-                first_name: response.user.first_name ,
-                email: response.user.email ,
-                id: response.user.id ,
-                last_name: response.user.last_name,
-                phone: response.user.phone,
-            }
-            localStorage.setItem("user", JSON.stringify(user))
-            // localStorage.setItem("company", false);
-            // localStorage.setItem("first_name", response.user.first_name)
-            // localStorage.setItem("email", response.user.email)
-            // localStorage.setItem("id", response.user.id)
-            // localStorage.setItem("last_name", response.user.last_name)
-            // localStorage.setItem("phone", response.user.phone)
-        }
-        localStorage.setItem("logged", true);
-    }
-
-    const onSubmit = (data, e) => {
+    const onSubmit = async (data, e) => {
         setLoading(true);
-        let loginUrl = api.API;
+        let loginUrl = "";
         if (formValue.check)
             loginUrl += 'companies/login'
         else
@@ -88,34 +47,26 @@ const LoginForm = () => {
         console.log("handling submit");
         e.preventDefault();
         console.log(data);
-        axios.post(loginUrl,
+        const response = await loginUser(loginUrl, 
             {
                 email: formValue.email,
                 password: formValue.password
             },
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then((response) => {
-                if (response.status === 200) {
-                    console.log("repsonse ", response.data)
-                    saveUserInfo(response.data)
-                }
-                history.push('/home')
-                setLoading(false);
-            }).catch((error) => {
-                setApiError(true);
-                console.log("erorr catch", error);
-                setForm({
-                    email: '',
-                    password: ''
-                })
-                setUser({
-                    email: ''
-                })
-                setLoading(false);
+            formValue.check
+        )
+        if (response){
+            setLoading(false)
+            history.push('/home')
+        }
+        else {
+            setApiError(true)
+            setLoading(false)
+            setForm({
+                email: '',
+                password: ''
             })
+        }
+    
     }
 
 

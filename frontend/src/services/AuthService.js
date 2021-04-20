@@ -3,6 +3,7 @@ import axios from 'axios'
 const API = 'https://stw-zitation.herokuapp.com/api/'
 
 
+
 // Create instance called instance
 axios.interceptors.request.use(
     function (config) {
@@ -19,13 +20,11 @@ axios.interceptors.request.use(
     }
   );
 
-function logout() {
-    console.log("Logout");
-    // TODO: Añadir logica de logout
-}
 
-export default {
-    axios: axios,
-    logout: logout,
-    API: API
-}
+  export default {
+    get: axios.get,
+    post: axios.post,
+    put: axios.put,
+    delete: axios.delete,
+    patch: axios.patch
+  };

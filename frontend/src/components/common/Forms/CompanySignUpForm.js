@@ -1,14 +1,19 @@
 import React, { useState, useContext } from "react";
 import { UserContext } from "../../../UserContext";
-import axios from "axios";
+import axios from '../../../services/AuthService'
 import { useForm } from 'react-hook-form';
 import { Form, Alert, Spinner, Row, Button, Col } from "react-bootstrap";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import LoadingSpinner from "../Widgets/LoadingSpinner"
+import GenericAlert from "../Widgets/GenericAlert";
+import { signUpCompany, saveCompany } from "../../../services/SignUpCompany"
+
 
 const CompanySignUpForm = () => {
 
     // Datos del formulario
     const [loading, setLoading] = useState(false);
+    const [apiError, setApiError] = useState(false);
 
     const [formValue, setForm] = useState({
         nif: "",
@@ -21,8 +26,6 @@ const CompanySignUpForm = () => {
         long: ""
     });
 
-    // Mensaje de error
-    const [apiError, setApiError] = useState(false);
 
     // Datos del usuario hacer login
     const { user, setUser } = useContext(UserContext);
@@ -43,79 +46,32 @@ const CompanySignUpForm = () => {
 
 
 
-
-    // function handleConfirmPassword(event) {
-    //     if (event.target.value !== formValue.password) {
-    //         console.log("error");
-    //         setForm({ ...formValue, confirmPassword: event.target.value });
-    //     } else setForm({ ...formValue, confirmPassword: event.target.value });
-    // }
+    const history = useHistory()
 
     const onSubmit = async (data, e) => {
-        console.log("handling submit");
-        e.preventDefault();
-        console.log(e);
-        console.log(data);
-        reset();
-
-        // const phonee = formValue.phone;
-        // setForm({ ...formValue, phone: Number(phonee) });
-        const company = {
+        setLoading(true)
+        setApiError(false);
+        const resp = await signUpCompany({
             nif: formValue.nif,
             name: formValue.nombre,
             email: formValue.email,
             password: formValue.password,
             lat: formValue.lat,
             long: formValue.long,
+            address: "address",
             category: formValue.categoria
-        }
-        setLoading(true)
-        try {
-            const response = await axios.post(`https://stw-zitation.herokuapp.com/api/companies`, company,
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-            if (response.status === 200) {
-                setUser({
-                    email: formValue.email,
-                })
-            } else {
-                console.log("error 40x");
-            }
-            console.log(response.status);
-        } catch (e) {
-            console.log('catch error');
+        })
+        setLoading(false)
+        reset()
+        if (!resp) {
+            console.log("error")
             setApiError(true)
-            setForm({
-                email: '',
-            })
-            setUser({
-                email: ''
-            })
         }
-        setLoading(false);
-    }
-
-
-    const LoadingSpinner = () => {
-        if (loading) {
-            return (
-                <Row className=" justify-content-center mx-auto pb-3" >
-                    <Spinner animation="border" role="status">
-                        <span className="sr-only">Loading...</span>
-                    </Spinner></Row>)
+        else {
+            console.log("exito from compnaysingun")
+            saveCompany(formValue)
+            history.push('/login')
         }
-        else return null
-    }
-
-    const AlertMessage = () => {
-        if (apiError) {
-            return (<Alert variant="danger">
-                Credenciales incorrectas
-            </Alert>)
-        } else return null
     }
 
 
@@ -318,7 +274,7 @@ const CompanySignUpForm = () => {
                         <option>Deporte</option>
                         <option>Administración pública</option>
                         <option>Comercio</option>
-                        </Form.Control>
+                    </Form.Control>
                     {errors.categoria && <Form.Control.Feedback type="invalid">{errors.categoria.message}</Form.Control.Feedback>}
                 </Form.Group>
 
@@ -327,12 +283,12 @@ const CompanySignUpForm = () => {
                         ¿Ya tienes una cuenta? Inicia sesión ahora!
                     </Link>
                 </Form.Group>
-                <LoadingSpinner />
+                {loading && <LoadingSpinner loading={true}/>}
                 <Row className="justify-content-center mx-auto ">
                     <Button variant="primary" type="submit" onSubmit={handleSubmit(onSubmit)}>Sign Up</Button>
                 </Row>
                 <Row className="justify-content-center mx-auto pt-2">
-                    <AlertMessage />
+                    {apiError && <GenericAlert message="Error en el registro" tipo="danger" />}
                 </Row>
             </Form>
         </div >
