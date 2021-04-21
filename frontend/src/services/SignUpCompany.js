@@ -1,4 +1,4 @@
-import axios from "./AuthService"
+import axios from "./APICall"
 
 export function saveCompany(response) {
     localStorage.setItem("token", response.token);

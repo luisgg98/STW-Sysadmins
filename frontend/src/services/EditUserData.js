@@ -1,4 +1,4 @@
-import axios from "./AuthService"
+import axios from "./APICall"
 
 
 export const updateUserData = (id, newData) => {

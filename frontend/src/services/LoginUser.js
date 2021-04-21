@@ -1,11 +1,10 @@
-import axios from "./AuthService"
-import { useContext } from "react";
+import axios from "./APICall"
 
 
-function saveUserInfo(response, check) {
+function saveUserInfo(response, isCompany) {
     localStorage.setItem("token", response.token);
     localStorage.setItem("logged", true)
-    if (check) {
+    if (isCompany) {
         // setUser({
         //     first_name: response.company.name,
         //     email: response.company.email,
@@ -52,10 +51,10 @@ export const loginUser = (url, user, check) => {
             if (response.status === 200) {
                 console.log("repsonse ", response.data)
                 saveUserInfo(response.data, check)
-            }
+                return true
+            }else return false
             // history.push('/home')
             // setLoading(false);
-            return true
         }).catch((error) => {
             // setApiError(true);
             console.log("erorr catch", error);

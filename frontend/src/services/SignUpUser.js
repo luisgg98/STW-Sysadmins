@@ -1,4 +1,4 @@
-import axios from "./AuthService"
+import axios from "./APICall"
 
 export const signUpUser = async (data) => {
     console.log("handling petition to signup ");

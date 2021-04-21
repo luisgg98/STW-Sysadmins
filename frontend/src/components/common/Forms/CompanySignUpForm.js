@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { UserContext } from "../../../UserContext";
-import axios from '../../../services/AuthService'
+import axios from '../../../services/APICall'
 import { useForm } from 'react-hook-form';
 import { Form, Alert, Spinner, Row, Button, Col } from "react-bootstrap";
 import { Link, useHistory } from 'react-router-dom';
@@ -69,7 +69,6 @@ const CompanySignUpForm = () => {
         }
         else {
             console.log("exito from compnaysingun")
-            saveCompany(formValue)
             history.push('/login')
         }
     }

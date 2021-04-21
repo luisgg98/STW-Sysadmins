@@ -4,7 +4,7 @@ import { UserContext } from "../../../UserContext"
 import { useForm } from 'react-hook-form';
 import { Alert, Spinner } from "react-bootstrap";
 import { Link, Redirect, useHistory } from 'react-router-dom';
-import axios from '../../../services/AuthService'
+import axios from '../../../services/APICall'
 import CredentialErrorAlert from "../Widgets/CredentialErrorAlert";
 import LoadingSpinner from "../Widgets/LoadingSpinner";
 import {loginUser} from "../../../services/LoginUser"
@@ -66,7 +66,6 @@ const LoginForm = () => {
                 password: ''
             })
         }
-    
     }
 
 
@@ -134,7 +133,7 @@ const LoginForm = () => {
                         ¿No tienes una cuenta? Registrate ahora!
                     </Link>
                 </Form.Group>
-                <LoadingSpinner loading={loading} />
+                {loading && <LoadingSpinner loading={true} />}
                 <Row className="justify-content-center mx-auto ">
                     <Button variant="primary" type="submit" >Log In</Button>
                 </Row>

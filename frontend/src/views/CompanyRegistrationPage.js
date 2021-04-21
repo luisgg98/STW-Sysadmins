@@ -4,7 +4,7 @@ import { UserContext } from "../UserContext";
 import React, { useContext } from "react";
 import { Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import api from "../services/AuthService";
+import api from "../services/APICall";
 
 const RegistrarNegocio = () => {
 

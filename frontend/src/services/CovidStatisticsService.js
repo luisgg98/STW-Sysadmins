@@ -1,4 +1,4 @@
-import axios from './AuthService'
+import axios from './APICall'
 
 async function fetchHealthZones() {
     try {

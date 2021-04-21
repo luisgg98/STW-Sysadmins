@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, Row, Alert, Button } from "react-bootstrap";
 import { useForm } from 'react-hook-form';
-import axios from '../../../services/AuthService'
+import axios from '../../../services/APICall'
 import GenericAlert from "../Widgets/GenericAlert";
 import SuccesAlert from "../Widgets/SuccesAlert";
 import { updateUserData } from "../../../services/EditUserData"

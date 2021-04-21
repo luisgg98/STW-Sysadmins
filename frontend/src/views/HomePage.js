@@ -3,7 +3,7 @@ import Header from "../components/common/Headers/Header";
 import SearchBar from "../components/common/Bars/SearchBar";
 import CategoryCards from "../components/common/Widgets/CategoryCards";
 import MapButton from "../components/common/Widgets/MapButton"
-import axios from '../services/AuthService'
+import axios from '../services/APICall'
 import { Row } from "react-bootstrap";
 import CompanyCard from "../components/common/Widgets/CompanyCards";
 import {getCompanies} from "../services/GetCompanies"
