@@ -455,6 +455,10 @@ components:
           email:
             type: string
             format: email
+          description:
+            type: string
+          service_duration:
+            type: string
           category:
             type: string
             enum:
@@ -554,6 +558,10 @@ components:
             - "Administración pública"
             - "Salud y belleza"
             - "Comercio"
+        description:
+          type: string
+        service_duration:
+          type: string
         location:
           type: object
           properties:
@@ -584,6 +592,10 @@ components:
           type: string
         address:
           type: string
+        description:
+          type: string
+        service_duration:
+          type: string
         location:
           type: object
           properties:
@@ -607,6 +619,10 @@ components:
               type: string
               format: email
             address:
+              type: string
+            description:
+              type: string
+            service_duration:
               type: string
             category:
               type: string
