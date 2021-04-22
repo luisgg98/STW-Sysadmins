@@ -8,6 +8,11 @@ function validateEmail(email) {
     return re.test(email);
 }
 
+/**
+ *
+ * @param category
+ * @returns {boolean}
+ */
 function validateCategory(category) {
     const categories = ["Ocio","Deporte","Administración pública","Salud y belleza","Comercio"]
     return categories.includes(category)

@@ -6,13 +6,14 @@ let should = chai.should();
 const Company = require('../../models/company')
 chai.use(chaiHttp);
 
+
 let company = {  "nif": "string",
-    "name": "string",
+    "name": "Cafetería Lamarula",
     "email": "user@example.com",
     "password": "string",
-    "address": "Avenida Gomez de Avellaneda 53",
-    "lat": 0,
-    "long": 0,
+    "street":"Calle Francisco de Vitoria",
+    "streetnumber":30,
+    "zipcode":50008,
     "category": "Ocio"};
 
 const url = '/api/companies/'

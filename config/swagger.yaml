@@ -597,6 +597,12 @@ components:
             format: email
           description:
             type: string
+          street:
+            type: string
+          streetnumber:
+            type: number
+          zipcode:
+            type: number
           service_duration:
             type: string
           schedule:
@@ -659,8 +665,6 @@ components:
               - "Administración pública"
               - "Salud y belleza"
               - "Comercio"
-          address:
-            type: string
     Company_register:
       type: object
       properties:
@@ -673,12 +677,12 @@ components:
           format: email
         password:
           type: string
-        lat:
-          type: number
-        long:
-          type: number
-        address:
+        street:
           type: string
+        streetnumber:
+          type: number
+        zipcode:
+          type: number
         category:
           type: string
           enum:
@@ -693,8 +697,10 @@ components:
         - password
         - lat
         - long
-        - address
         - category
+        - street
+        - streetnumber
+        - zipcode
     Company_registered:
       type: object
       properties:
@@ -708,8 +714,12 @@ components:
           type: string
         salt:
           type: string
-        address:
+        street:
           type: string
+        streetnumber:
+          type: number
+        zipcode:
+          type: number
         schedule:
           type: object
           properties:
@@ -769,7 +779,9 @@ components:
         - password
         - location
         - salt
-        - address
+        - street
+        - streetnumber
+        - zipcode
         - schedule
     Company_fetched:
       type: object
@@ -779,8 +791,12 @@ components:
         email:
           type: string
           format: email
-        address:
+        street:
           type: string
+        streetnumber:
+          type: number
+        zipcode:
+          type: number
         category:
           type: string
           enum:
@@ -873,8 +889,12 @@ components:
           type: string
         salt:
           type: string
-        address:
+        street:
           type: string
+        streetnumber:
+          type: number
+        zipcode:
+          type: number
         description:
           type: string
         service_duration:
@@ -953,8 +973,12 @@ components:
             email:
               type: string
               format: email
-            address:
+            street:
               type: string
+            streetnumber:
+              type: number
+            zipcode:
+              type: number
             description:
               type: string
             service_duration:

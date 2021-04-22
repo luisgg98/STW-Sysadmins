@@ -11,6 +11,7 @@
     "npm": ">=7.5.4"
   },
   "dependencies": {
+    "@owsas/nominatim-js": "^1.0.1",
     "chai": "^4.3.4",
     "chai-http": "^4.3.0",
     "cookie-parser": "~1.4.4",
@@ -26,7 +27,9 @@
     "mongoose": "^5.12.0",
     "morgan": "~1.9.1",
     "node-cron": "^3.0.0",
+    "node-geocoder": "^3.27.0",
     "nodemon": "^2.0.7",
+    "nominatim-js": "^1.0.9",
     "nyc": "^15.1.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
@@ -36,5 +39,8 @@
     "swagger-ui-express": "^4.1.6",
     "xlsx": "^0.16.9",
     "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "cross-fetch": "^3.1.4"
   }
 }

@@ -7,7 +7,9 @@ const company = new mongoose.Schema({
     password : { type : String, required: true},
     salt : { type : String, required: true},
     category: { type: String, required: true},
-    address: { type: String, required: true},
+    streetnumber:{ type: Number, required: true},
+    street:{ type: String, required: true},
+    zipcode:{ type: Number, required: true},
     description: { type: String, required: true},
     // Duration needs to be in **minutes**
     service_duration: { type: Number, required: true},
@@ -43,7 +45,7 @@ const company = new mongoose.Schema({
         }
     },
     location: {
-        type: { type: String, required: true},
+        type: { type: String, required: false},
         coordinates: [Number]
     }
 });

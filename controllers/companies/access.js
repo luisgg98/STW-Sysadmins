@@ -2,6 +2,7 @@ const utils = require('../../services/utils')
 const validate = require('../../services/validate_email')
 const Company = require('../../models/company')
 const Service = require('../../models/service')
+const geolo = require('../../services/geocoding')
 
 /**
  *
@@ -14,8 +15,8 @@ let get = async (req, res) => {
         // If the url contains a query, search just for the company of the query
         if (req.query.name){
             // Fetch just one company
-            let namee = req.query.name
-            const company = await Company.find({name: {"$regex": namee, "$options": "i"}}, function(err,docs){}).select('name nif email category description service_duration address location')
+            let name = req.query.name
+            const company = await Company.find({name: {"$regex": name, "$options": "i"}}, function(err,docs){}).select('name nif email category description service_duration address location')
             res.send(company)
         } else {
             // Fetch all companies
@@ -53,34 +54,56 @@ let register = async (req, res) => {
             res.send({error: "Wrong category, check docs for further info /api-doc"})
         }
         if (validate.validateEmail(req.body.email)) {
-            const company = new Company({
-                name: req.body.name,
-                nif: req.body.nif,
-                email : req.body.email,
-                password: password.hash,
-                salt: password.salt,
-                category: req.body.category,
-                address: req.body.address,
-                // TODO calculate coords
-                location: {
-                    type: "Point",
-                    coordinates: [req.body.lat,  req.body.long]
-                },
-                // Default description and service duration
-                description: "null",
-                service_duration: 0,
-                schedule: {
-                    monday: {schedule_1:"null"},
-                    tuesday: {schedule_1:"null"},
-                    wednesday: {schedule_1:"null"},
-                    thursday: {schedule_1:"null"},
-                    friday: {schedule_1:"null"},
-                    saturday: {schedule_1:"null"},
-                    sunday: {schedule_1:"null"}
+            geolo.findCoordenates(req.body.name,req.body.streetnumber,req.body.street,req.body.zipcode)
+                .then( async (coordinates) =>{
+
+                    const company = new Company({
+                        name: req.body.name,
+                        nif: req.body.nif,
+                        email : req.body.email,
+                        password: password.hash,
+                        salt: password.salt,
+                        category: req.body.category,
+                        streetnumber:req.body.streetnumber,
+                        street:req.body.street,
+                        zipcode:req.body.zipcode,
+                        location: {
+                            type: "Point",
+                            coordinates: [coordinates.latitude,  coordinates.longitude]
+                        },
+                        // Default description and service duration
+                        description: "null",
+                        service_duration: 0,
+                        schedule: {
+                            monday: {schedule_1:"null"},
+                            tuesday: {schedule_1:"null"},
+                            wednesday: {schedule_1:"null"},
+                            thursday: {schedule_1:"null"},
+                            friday: {schedule_1:"null"},
+                            saturday: {schedule_1:"null"},
+                            sunday: {schedule_1:"null"}
+                        }
+                    })
+                    await company.save()
+                    res.send(company)
+
                 }
-            })
-            await company.save()
-            res.send(company)
+
+                )
+                .catch(
+                    (e)=>{
+                        console.error(req.body.name);
+                        console.error(req.body.streetnumber);
+                            console.error(req.body.street);
+                                console.error(req.body.zipcode);
+                        res.status(412)
+                        res.send({ error: "Your company was not found in Open Street Map" })
+                        console.error(e)
+                    }
+
+                )
+
+
         } else {
             res.status(422)
             res.send({ error: "Not an email address" })
@@ -111,7 +134,9 @@ let login = async (req, res) => {
                         category:company.category,
                         description: company.description,
                         service_duration: company.service_duration,
-                        address: company.address,
+                        streetnumber:company.streetnumber,
+                        street:company.street,
+                        zipcode:company.zipcode,
                         schedule: company.schedule,
                         location: company.location
                     },
@@ -145,15 +170,21 @@ let update = async (req, res) => {
         if (req.body.email) {
             company.email = req.body.email
         }
-        if (req.body.lat) {
-            company.lat = req.body.lat
-        }
-        if (req.body.long) {
-            company.long = req.body.long
-        }
+
         if (req.body.address) {
             company.address = req.body.address
         }
+        if(req.body.streetnumber){
+            company.streetnumber= req.body.streetnumber
+        }
+        if(req.body.street){
+            company.street = req.body.street
+        }
+        if(req.body.zipcode){
+            company.zipcode = req.body.zipcode
+        }
+
+
         if (req.body.description) {
             company.description = req.body.description
         }
@@ -163,9 +194,26 @@ let update = async (req, res) => {
         if (req.body.schedule) {
             company.schedule = req.body.schedule
         }
+        geolo.findCoordenates(company.name,company.streetnumber,company.street,company.zipcode)
+            .then(
+                async (coordinates) =>{
+                    company.lat = coordinates.latitude
+                    company.long = coordinates.long
+                    await company.save()
+                    res.send(company)
+                }
 
-        await company.save()
-        res.send(company)
+        )
+            .catch(
+                (e)=>{
+                    console.error(e)
+                    res.status(404)
+                    res.send({ error: "Company not found" })
+                }
+
+            )
+
+
     } catch {
         res.status(404)
         res.send({ error: "Company not found" })
