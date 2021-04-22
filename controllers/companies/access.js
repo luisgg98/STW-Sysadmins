@@ -79,7 +79,6 @@ let register = async (req, res) => {
                 }
             })
             await company.save()
-            console.log("asdfasdfasdf")
             res.send(company)
         } else {
             res.status(422)
