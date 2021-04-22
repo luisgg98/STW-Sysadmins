@@ -14,12 +14,12 @@ describe('Service model tests',function () {
     before(function (done) {
         let numServiceCreated = 0
         ServicesArray.forEach(function (ServiceData) {
-            let Service = new Service(ServiceData);
-            Service.save(function (error,Service) {
+            let service = new Service(ServiceData);
+            service.save(function (error,Service) {
                 if (error) throw  error;
-                ServicesID.push(Service._id);
+                servicesID.push(service._id);
                 numServiceCreated++;
-                if (numServiceCreated == ServicesArray.length){
+                if (numServiceCreated == servicesArray.length){
                     done();
                 }
             })
