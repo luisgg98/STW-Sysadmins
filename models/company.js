@@ -47,6 +47,6 @@ const company = new mongoose.Schema({
         coordinates: [Number]
     }
 });
-company.index({location: '2dsphere'})
+company.index({coordinates: '2dsphere'})
 
 module.exports = mongoose.model("company", company)
