@@ -232,7 +232,7 @@ paths:
           schema:
             type: string
       requestBody:
-        description: "Company data to change"
+        description: "Company data to change (service_duration in minutes)"
         required: true
         content:
           application/json:
@@ -459,6 +459,58 @@ components:
             type: string
           service_duration:
             type: string
+          schedule:
+            type: object
+            properties:
+              monday:
+                type: object
+                properties:
+                  schedule_1:
+                    type: string
+                  schedule_2:
+                    type: string
+              tuesday:
+                type: object
+                properties:
+                  schedule_1:
+                    type: string
+                  schedule_2:
+                    type: string
+              wednesday:
+                type: object
+                properties:
+                  schedule_1:
+                    type: string
+                  schedule_2:
+                    type: string
+              thursday:
+                type: object
+                properties:
+                  schedule_1:
+                    type: string
+                  schedule_2:
+                    type: string
+              friday:
+                type: object
+                properties:
+                  schedule_1:
+                    type: string
+                  schedule_2:
+                    type: string
+              saturday:
+                type: object
+                properties:
+                  schedule_1:
+                    type: string
+                  schedule_2:
+                    type: string
+              sunday:
+                type: object
+                properties:
+                  schedule_1:
+                    type: string
+                  schedule_2:
+                    type: string
           category:
             type: string
             enum:
@@ -518,6 +570,44 @@ components:
           type: string
         address:
           type: string
+        schedule:
+          type: object
+          properties:
+            monday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+            tuesday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+            wednesday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+            thursday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+            friday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+            saturday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+            sunday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
         location:
           type: object
           properties:
@@ -540,6 +630,7 @@ components:
         - location
         - salt
         - address
+        - schedule
     Company_fetched:
       type: object
       properties:
@@ -562,6 +653,58 @@ components:
           type: string
         service_duration:
           type: string
+        schedule:
+          type: object
+          properties:
+            monday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+                schedule_2:
+                  type: string
+            tuesday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+                schedule_2:
+                  type: string
+            wednesday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+                schedule_2:
+                  type: string
+            thursday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+                schedule_2:
+                  type: string
+            friday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+                schedule_2:
+                  type: string
+            saturday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+                schedule_2:
+                  type: string
+            sunday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+                schedule_2:
+                  type: string
         location:
           type: object
           properties:
@@ -596,6 +739,58 @@ components:
           type: string
         service_duration:
           type: string
+        schedule:
+          type: object
+          properties:
+            monday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+                schedule_2:
+                  type: string
+            tuesday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+                schedule_2:
+                  type: string
+            wednesday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+                schedule_2:
+                  type: string
+            thursday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+                schedule_2:
+                  type: string
+            friday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+                schedule_2:
+                  type: string
+            saturday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+                schedule_2:
+                  type: string
+            sunday:
+              type: object
+              properties:
+                schedule_1:
+                  type: string
+                schedule_2:
+                  type: string
         location:
           type: object
           properties:
@@ -624,6 +819,58 @@ components:
               type: string
             service_duration:
               type: string
+            schedule:
+              type: object
+              properties:
+                monday:
+                  type: object
+                  properties:
+                    schedule_1:
+                      type: string
+                    schedule_2:
+                      type: string
+                tuesday:
+                  type: object
+                  properties:
+                    schedule_1:
+                      type: string
+                    schedule_2:
+                      type: string
+                wednesday:
+                  type: object
+                  properties:
+                    schedule_1:
+                      type: string
+                    schedule_2:
+                      type: string
+                thursday:
+                  type: object
+                  properties:
+                    schedule_1:
+                      type: string
+                    schedule_2:
+                      type: string
+                friday:
+                  type: object
+                  properties:
+                    schedule_1:
+                      type: string
+                    schedule_2:
+                      type: string
+                saturday:
+                  type: object
+                  properties:
+                    schedule_1:
+                      type: string
+                    schedule_2:
+                      type: string
+                sunday:
+                  type: object
+                  properties:
+                    schedule_1:
+                      type: string
+                    schedule_2:
+                      type: string
             category:
               type: string
               enum:

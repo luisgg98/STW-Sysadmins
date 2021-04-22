@@ -60,16 +60,26 @@ let register = async (req, res) => {
                 salt: password.salt,
                 category: req.body.category,
                 address: req.body.address,
-                // Default description and service duration
-                description: '',
-                service_duration: 0,
                 // TODO calculate coords
                 location: {
                     type: "Point",
                     coordinates: [req.body.lat,  req.body.long]
+                },
+                // Default description and service duration
+                description: "null",
+                service_duration: 0,
+                schedule: {
+                    monday: {schedule_1:"null"},
+                    tuesday: {schedule_1:"null"},
+                    wednesday: {schedule_1:"null"},
+                    thursday: {schedule_1:"null"},
+                    friday: {schedule_1:"null"},
+                    saturday: {schedule_1:"null"},
+                    sunday: {schedule_1:"null"}
                 }
             })
             await company.save()
+            console.log("asdfasdfasdf")
             res.send(company)
         } else {
             res.status(422)
@@ -102,6 +112,7 @@ let login = async (req, res) => {
                         description: company.description,
                         service_duration: company.service_duration,
                         address: company.address,
+                        schedule: company.schedule,
                         location: company.location
                     },
                     token: tokenObject.token, expiresIn: tokenObject.expires })
@@ -148,6 +159,9 @@ let update = async (req, res) => {
         }
         if (req.body.duration) {
             company.service_duration = req.body.duration
+        }
+        if (req.body.schedule) {
+            company.schedule = req.body.schedule
         }
 
         await company.save()
