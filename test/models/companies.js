@@ -2,9 +2,9 @@ const assert = require('chai').assert;
 const Company = require('../../models/company');
 require('../../config/database')
 let companiesArray = [
-    {name:'El Limonero Bar', nif:'1',email:'ho@hol.com',password:'aaa',address: 'Avenida Nose 53',salt:'salty',category:'Testing'},
-    {name:'Multiverso Bar',nif:'2',email:'ho@hol.com',password:'aaa',address: 'Avenida Nose 53',salt:'salty',category:'Testing'},
-    {name:'Carniceria Maza', nif:'3',email:'ho@hol.com',password:'aaa',address: 'Avenida Nose 53',salt:'salty',category:'Testing'}];
+    {name:'El Limonero Bar', nif:'1',email:'ho@hol.com',password:'aaa',address: 'Avenida Nose 53',salt:'salty',category:'Testing', description: 'desc', service_duration: 0, schedule: {monday:"0",tuesday:")",wednesday:"a",thursday:"a",friday:"a",saturday:"a",sunday:"a"}},
+    {name:'Multiverso Bar',nif:'2',email:'ho@hol.com',password:'aaa',address: 'Avenida Nose 53',salt:'salty',category:'Testing', description: 'desc', service_duration: 0, schedule: {monday:"0",tuesday:")",wednesday:"a",thursday:"a",friday:"a",saturday:"a",sunday:"a"}},
+    {name:'Carniceria Maza', nif:'3',email:'ho@hol.com',password:'aaa',address: 'Avenida Nose 53',salt:'salty',category:'Testing', description: 'desc', service_duration: 0, schedule: {monday:"0",tuesday:")",wednesday:"a",thursday:"a",friday:"a",saturday:"a",sunday:"a"}}];
 const newname ='Desatranques Jaen';
 
 
@@ -23,11 +23,8 @@ describe('Company model tests',function () {
                 if (numCompanyCreated == companiesArray.length){
                     done();
                 }
-
             })
-
         })
-
 
     })
     after(function (done) {
@@ -39,22 +36,15 @@ describe('Company model tests',function () {
                 if (numCompanyRemoved == (companiesArray.length-1)){
                     done();
                 }
-                
             })
-            
         })
-        
-
     })
 
     it('Should find all company without error',function (done) {
         Company.find(function (error, companies) {
             assert.isAtLeast(companies.length,3)
             done();
-
         })
-
-
     })
 
     it('Should find a company by name',function (done) {
@@ -62,7 +52,6 @@ describe('Company model tests',function () {
             if (err) throw  err;
             assert.isNotNull(doc)
             done();
-
         })
     })
 
