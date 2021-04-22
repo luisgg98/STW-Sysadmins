@@ -13,7 +13,7 @@ describe('Service model tests',function () {
     let servicesID =[]
     before(function (done) {
         let numServiceCreated = 0
-        ServicesArray.forEach(function (ServiceData) {
+        servicesArray.forEach(function (ServiceData) {
             let service = new Service(ServiceData);
             service.save(function (error,Service) {
                 if (error) throw  error;
@@ -32,7 +32,7 @@ describe('Service model tests',function () {
             Service.findOneAndRemove({description: serviceData.description},{},function (err, doc) {
                 if (err) throw err;
                 numServiceRemoved++;
-                if (numServiceRemoved == (ServicesArray.length-1)){
+                if (numServiceRemoved == (servicesArray.length-1)){
                     done();
                 }
             })
