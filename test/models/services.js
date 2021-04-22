@@ -10,7 +10,7 @@ const ServicesArray = [
     ]
 
 describe('Service model tests',function () {
-    let ServicesID =[]
+    let servicesID =[]
     before(function (done) {
         let numServiceCreated = 0
         ServicesArray.forEach(function (ServiceData) {
