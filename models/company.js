@@ -43,7 +43,6 @@ const company = new mongoose.Schema({
         }
     },
     location: {
-        type: { type: String, required: true},
         coordinates: [Number]
     }
 });
