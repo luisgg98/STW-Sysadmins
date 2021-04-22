@@ -15,7 +15,7 @@ export async function searchCompanies(texto) {
         return await axios.get('companies/',
             {
                 params:
-                    {name: texto}
+                    { name: texto }
             }
         ).then(response => {
             // setResults(response.data)
@@ -29,15 +29,16 @@ export async function searchCompanies(texto) {
 export function saveCompany(response) {
     localStorage.setItem("token", response.token);
     localStorage.setItem("logged", true)
-    let company = {
-        company: true,
-        first_name: response.name,
-        email: response.email,
-        id: response.id,
-        address: response.address,
-        categor: response.category
-    }
-    localStorage.setItem("user", JSON.stringify(company))
+    // let company = {
+    //     company: true,
+    //     first_name: response.name,
+    //     email: response.email,
+    //     id: response.id,
+    //     address: response.address,
+    //     categor: response.category
+    // }
+    localStorage.setItem("flag", "desde companies services")
+    localStorage.setItem("company", JSON.stringify(response))
 }
 
 export const signUpCompany = async (company) => {
@@ -48,19 +49,39 @@ export const signUpCompany = async (company) => {
                 'Content-Type': 'application/json'
             }
         }).then(response => {
-        if (response.status === 200) {
-            // setUser({
-            //     email: formValue.email,
-            // })c
-            console.log("exito")
-            return true
-        } else {
-            console.log("error 40x");
+            if (response.status === 200) {
+                // setUser({
+                //     email: formValue.email,
+                // })c
+                console.log("exito")
+                return true
+            } else {
+                console.log("error 40x");
+                return false
+            }
+        }).catch(e => {
+            console.log('catch error');
+            // setApiError(true)
             return false
+        })
+}
+
+
+export const updateCompanyInfo = async (companyName) => {
+    console.log("updating company data", companyName)
+    return await axios.get('companies/',
+        {
+            params:
+                { name: companyName }
         }
-    }).catch(e => {
-        console.log('catch error');
-        // setApiError(true)
+    ).then(response => {
+        // setResults(response.data)
+        console.log("datos", response.data)
+        console.log(response.status)
+        saveCompany(response.data[0])
+        return true
+    }).catch( error => {
+        console.log(error)
         return false
     })
 }

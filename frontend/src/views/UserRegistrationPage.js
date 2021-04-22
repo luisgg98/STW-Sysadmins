@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import {PageDescription} from "../components/common/Headers/Header"
 import UserSUForm from "../components/common/Forms/UserSignUpForm"
 import {UserContext} from "../UserContext";
@@ -11,27 +11,24 @@ const UserRegistrationPage = () => {
 
     const { user, setUser } = useContext(UserContext);
 
-    function logOutHandler() {
-        api.logout();
-        setUser({ email: "" });
-    }
 
     return (
         <Container>
             <Row className="justify-content-center mx-auto">
                 <ZitationHeader className="mx-auto" />
             </Row>
-            { user.email !== "" ? (
-                <div className="Perfil">
-                    <h1>Mi cuenta registrada</h1>
-                    <p>
-                        <span>{user.email}</span>
-                        <span>{user.phone}</span>
-                    </p>
-                    <Link to="/">
-                        <button onClick={logOutHandler}>LogOut</button>
-                    </Link>
-                </div>
+            { localStorage.getItem("logged")==="true" ? (
+                // <div className="Perfil">
+                //     <h1>Mi cuenta registrada</h1>
+                //     <p>
+                //         <span>{user.email}</span>
+                //         <span>{user.phone}</span>
+                //     </p>
+                //     <Link to="/">
+                //         <button onClick={logOut}>LogOut</button>
+                //     </Link>
+                // </div>
+                <Redirect to="/cuenta" />
             ) : (
                 <div >
                     <Row className="justify-content-center">

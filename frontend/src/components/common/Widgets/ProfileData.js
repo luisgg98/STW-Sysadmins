@@ -1,34 +1,45 @@
-import React, {useContext, useEffect, useState} from "react"
-import {Button, Card, Row} from "react-bootstrap"
-import {Link} from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react"
+import { Button, Card, Row } from "react-bootstrap"
+import { Link, Redirect } from "react-router-dom";
 import profile from "../../../assets/profile.png";
-import {UserContext} from "../../../UserContext"
+import { logOut } from "../../../services/UsersService";
+import { UserContext } from "../../../UserContext"
 import EditUserInfo from "../Forms/EditUserInfo";
 
 
 const ProfileData = (props) => {
     const { user, setUser } = useContext(UserContext);
     const [editInfo, setEditInfo] = useState(false);
-
-    function logOutHandler() {
-
-        localStorage.setItem("user", JSON.stringify({}));
-        localStorage.setItem("token", "");
-        localStorage.setItem("logged", false);
-        setUser({ email: "" });
-        // api.logout();
-    }
+    const [isCompany, setCompany] = useState(false);
+    let str = "";
 
     useEffect(() => {
-        let localUser = JSON.parse(localStorage.getItem("user"))
+        console.log(localStorage.getItem("user"))
+        if (localStorage.getItem("user") === "{}") {
+            console.log("es company")
+            str = "company"
+            setCompany(true)
+        }
+        else if (localStorage.getItem("company") === "{}") {
+            console.log("es user")
+            str = "user"
+        }
+
+        let localUser = JSON.parse(localStorage.getItem(str))
         console.log("local user", localUser)
-        console.log("username", localUser.name)
-        setUser({
-            fname: localUser.first_name,
-            lname: localUser.last_name,
-            email: localUser.email,
-            id: localUser.id,
-        })
+        if (str === "company")
+            setUser({
+                name: localUser.name,
+                id: localUser.id
+            })
+
+        else if (str === "user")
+            setUser({
+                fname: localUser.first_name,
+                lname: localUser.last_name,
+                email: localUser.email,
+                id: localUser.id,
+            })
     }, [])
 
     return (
@@ -40,9 +51,14 @@ const ProfileData = (props) => {
                         <Card.Title>{user.name}</Card.Title>
                         <Card.Subtitle>{user.email}</Card.Subtitle>
                         <Card.Text>Hola {user.name !== "" ? (user.fname + " " + user.lname) : ("Nombre generado")}, nos alegra verte de nuevo</Card.Text>
+
+                        <Row className="justify-content-center mx-auto py-2">
+                            {isCompany && <Link to="/services"> <Button type="button">To services</Button>  </Link>}
+                        </Row>
+
                         <Link to="/home">
                             <Row className="justify-content-center mx-auto">
-                                <Button type="button" onClick={logOutHandler}>Cerrar sesión</Button>
+                                <Button type="button" onClick={logOut}>Cerrar sesión</Button>
                             </Row>
                         </Link>
                         <Row className="justify-content-center mx-auto pt-1">

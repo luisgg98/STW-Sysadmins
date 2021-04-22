@@ -3,34 +3,72 @@ import LoginPage from "./views/LoginPage";
 import RegistrarNegocio from "./views/CompanyRegistrationPage";
 import UserRegistrationPage from "./views/UserRegistrationPage";
 import MapPage from "./views/MapPage"
-import {BrowserRouter as Router, Route, Switch, useHistory} from "react-router-dom";
-import {useState} from "react";
-import {UserContext} from "./UserContext";
-import {Container} from 'react-bootstrap'
+import { BrowserRouter as Router, Redirect, Route, Switch, useHistory } from "react-router-dom";
+import { useState } from "react";
+import { UserContext } from "./UserContext";
+import { Container } from 'react-bootstrap'
 import AdminPage from "./views/AdminPage";
 import AccountPage from "./views/AccountPage";
 import CompanyPage from "./views/CompanyPage";
+import ServiceCreation from "./views/ServiceCreation";
 
 
 export default function App() {
     const [user, setUser] = useState({ name: "", email: "" });
     const history = useHistory();
 
+    const ProtectedRouteCompany = ({
+        component: Component,
+        isCompany: isCompany,
+        ...rest
+    }) => {
+        return (
+            <Route
+                {...rest}
+                render={(props) => (
+                    (localStorage.getItem("logged")==="true" && localStorage.getItem("user")==="{}")
+                    ? <Component {...props}/>
+                    : <Redirect to="/login" />
+                )} 
+            />
+        )
+    }
+
+    const ProtectedRouteUser = ({
+        component: Component,
+        isCompany: isCompany,
+        ...rest
+    }) => {
+        return (
+            <Route
+                {...rest}
+                render={(props) => (
+                    (localStorage.getItem("logged")==="true" && localStorage.getItem("company")==="{}")
+                    ? <Component {...props}/>
+                    : <Redirect to="/login" />
+                )} 
+            />
+        )
+    }
+
+
     return (
         <Router history={history} >
             <Container fluid="true" className="App">
                 <UserContext.Provider value={{ user, setUser }}>
                     <Switch>
+                        <ProtectedRouteCompany path="/services" component={ServiceCreation}  isCompany={true} />
+
                         <Route path="/companies/health">
                             <CompanyPage tipo="Salud y Belleza" search={[]} />
                         </Route>
 
                         <Route path="/companies/comercio">
-                            <CompanyPage tipo="Comercio" search={[]}  />
+                            <CompanyPage tipo="Comercio" search={[]} />
                         </Route>
 
                         <Route path="/companies/ocio">
-                            <CompanyPage tipo="Ocio"  search={[]}/>
+                            <CompanyPage tipo="Ocio" search={[]} />
                         </Route>
 
                         <Route path="/companies/adminPublica">
@@ -40,7 +78,7 @@ export default function App() {
                         <Route path="/companies/deporte">
                             <CompanyPage tipo="Deporte" search={[]} />
                         </Route>
-                        
+
                         <Route path="/login">
                             <LoginPage />
                         </Route>
@@ -50,6 +88,7 @@ export default function App() {
                         <Route path="/registrarNegocio">
                             <RegistrarNegocio />
                         </Route>
+
                         <Route path="/mapa">
                             <MapPage />
                         </Route>
