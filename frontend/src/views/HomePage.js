@@ -5,7 +5,7 @@ import CategoryCards from "../components/common/Widgets/CategoryCards";
 import MapButton from "../components/common/Widgets/MapButton"
 import {Row} from "react-bootstrap";
 import CompanyCard from "../components/common/Widgets/CompanyCards";
-import {getCompanies} from "../services/GetCompanies"
+import {searchCompanies} from "../services/CompaniesService"
 
 const HomePage = () => {
 
@@ -14,7 +14,7 @@ const HomePage = () => {
     const buscar = async (texto, e) => {
         console.log("buscar ", texto)
         try {
-            const result = await getCompanies(texto)
+            const result = await searchCompanies(texto)
             setResults(result)
             console.log("result buscar", result)
         } catch (error){

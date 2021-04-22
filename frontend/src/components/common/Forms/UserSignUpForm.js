@@ -4,7 +4,7 @@ import {useForm} from 'react-hook-form';
 import {Button, Form, Row} from "react-bootstrap";
 import {Link, useHistory} from 'react-router-dom';
 import LoadingSpinner from "../Widgets/LoadingSpinner";
-import {signUpUser} from "../../../services/SignUpUser"
+import {signUpUser} from "../../../services/UsersService"
 import GenericAlert from "../Widgets/GenericAlert";
 
 function UserSUForm() {

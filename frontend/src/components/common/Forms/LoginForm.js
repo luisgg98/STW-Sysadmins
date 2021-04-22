@@ -5,7 +5,7 @@ import {useForm} from 'react-hook-form';
 import {Link, useHistory} from 'react-router-dom';
 import CredentialErrorAlert from "../Widgets/CredentialErrorAlert";
 import LoadingSpinner from "../Widgets/LoadingSpinner";
-import {loginUser} from "../../../services/LoginUser"
+import {loginUser} from "../../../services/UsersService"
 
 const LoginForm = () => {
     // Datos del usuario hacer login

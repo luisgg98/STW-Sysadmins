@@ -2,8 +2,8 @@ import React, {useContext, useState} from 'react';
 import {UserContext} from "../UserContext";
 import {Col, Row} from "react-bootstrap";
 import {Redirect} from "react-router-dom";
-import {ZitationHeader} from "../components/common/Headers/Header";
 import ProfileData from "../components/common/Widgets/ProfileData";
+import ZitationHeader from "../components/common/Headers/ZitationHeader";
 
 const  AccountPage = () => {
     const { user, setUser } = useContext(UserContext);

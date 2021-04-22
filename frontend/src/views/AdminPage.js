@@ -1,35 +1,41 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 
-import {Card, Col, Container, Row} from "react-bootstrap";
+import {Col, Container, Row, Tab, Tabs} from "react-bootstrap";
 import UsersTable from "../components/adminComponents/UsersTable";
 import TopCompaniesBar from "../components/adminComponents/TopCompaniesBar";
 import TopTimeZoneBar from "../components/adminComponents/TopTimeZoneBar";
 import BookingsBycategoriePie from "../components/adminComponents/BookingsByCategoryPie";
+import CompaniesTable from "../components/adminComponents/CompaniesTable";
+import ZitationHeader from "../components/common/Headers/ZitationHeader";
 
 function AdminPage() {
 
 
-
     return (
-        <Container >
-            <Row>
-                <Col>
-                    <Card bg="Light">
-                        <UsersTable />
-                    </Card>
-                    <Card bg="Light">
-                        <TopCompaniesBar />
-                    </Card>
-                </Col>
-                <Col>
-                    <Card bg="Light">
-                        <TopTimeZoneBar />
-                    </Card>
-                    <Card bg="Light">
-                        <BookingsBycategoriePie />
-                    </Card>
-                </Col>
-            </Row>
+        <Container>
+            <ZitationHeader/>
+            <h1>Dashboard</h1>
+            <Tabs defaultActiveKey="estadisticas">
+                <Tab eventKey="estadisticas" title="Estadisticas">
+                    <Row>
+                        <Col>
+                            <TopCompaniesBar/>
+                        </Col>
+                        <Col>
+                            <TopTimeZoneBar/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <BookingsBycategoriePie/>
+                    </Row>
+                </Tab>
+                <Tab eventKey="usuarios" title="Usuarios">
+                    <UsersTable/>
+                </Tab>
+                <Tab eventKey="companias" title="Compañias">
+                    <CompaniesTable/>
+                </Tab>
+            </Tabs>
         </Container>
     );
 }

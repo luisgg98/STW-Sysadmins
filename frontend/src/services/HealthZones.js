@@ -1,6 +1,6 @@
 import axios from './APICall'
 
-async function fetchHealthZones() {
+async function getHealthZones() {
     try {
         return await axios.get("https://stw-zitation.herokuapp.com/api/healthzone");
     } catch (error) {
@@ -8,4 +8,4 @@ async function fetchHealthZones() {
     }
 }
 
-export {fetchHealthZones}
+export {getHealthZones}

@@ -1,5 +1,6 @@
 import {Circle, Popup} from "react-leaflet";
-import React from "react";
+import React, {useEffect, useState} from "react";
+import {getHealthZones} from "../../services/HealthZones";
 
 function selectColor(newCases) {
     let color;
@@ -11,10 +12,18 @@ function selectColor(newCases) {
     return color
 }
 
-function HealthZones(props) {
+function HealthZones() {
+
+    const [healthZones, setHealthZones] = useState([]);
+
+    useEffect(() => {
+        getHealthZones().then((response) => {
+            setHealthZones(response.data)
+        })
+    })
 
     let zonas = []
-    props.healthZones.forEach(function (healthZone, index) {
+    healthZones.forEach(function (healthZone, index) {
 
         let zona = <Circle center={healthZone.location.coordinates} radius={healthZone.radius + 400}
                            color={selectColor(healthZone.newcases)}>

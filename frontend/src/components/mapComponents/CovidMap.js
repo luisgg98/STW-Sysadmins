@@ -6,8 +6,9 @@ import "leaflet/dist/leaflet.css";
 // ****** This code fixes css problems with leaflet ******
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
-import Commerces from "./Commerces";
+import Companies from "./Companies";
 import HealthZones from "./HealthZones";
+import {Container} from "react-bootstrap";
 
 let DefaultIcon = L.icon({
     iconUrl: icon,
@@ -17,26 +18,27 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 // ****** End of fixing code ******
 
-const coordenadasZgz = [41.65, -0.87];
 
-const CovidMap = (props) => {
+const CovidMap = () => {
+    const coordenadasZgz = [41.65, -0.87];
+
     return (
-        <div>
+        <Container fluid>
             <MapContainer
                 center={coordenadasZgz}
                 zoom={14}
                 scrollWheelZoom={false}
-                style={{width: "100%", height: "900px"}}
+                style={{width: "100%", height: "80vh"}}
 
             >
                 <TileLayer
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <Commerces commerces={props.commerces}/>
-                <HealthZones healthZones={props.healthZones} />
+                <Companies/>
+                <HealthZones/>
             </MapContainer>
-        </div>
+        </Container>
     );
 };
 

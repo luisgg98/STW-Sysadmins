@@ -5,7 +5,7 @@ import {Button, Col, Form, Row} from "react-bootstrap";
 import {Link, useHistory} from 'react-router-dom';
 import LoadingSpinner from "../Widgets/LoadingSpinner"
 import GenericAlert from "../Widgets/GenericAlert";
-import {signUpCompany} from "../../../services/SignUpCompany"
+import {signUpCompany} from "../../../services/CompaniesService"
 
 
 const CompanySignUpForm = () => {

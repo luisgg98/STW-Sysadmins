@@ -1,39 +1,42 @@
 import {Button, Table} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
-import {getUsers} from "../../services/UsersService";
+import {getCompanies} from "../../services/CompaniesService";
 
-function UsersTable() {
+function CompaniesTable() {
 
-    const [users, setUsers] = useState([]);
+    const [companies, setCompanies] = useState([]);
 
     useEffect(() => {
-        getUsers().then((response) => {
-            setUsers(response.data)
+        getCompanies().then((response) => {
+            setCompanies(response.data)
         })
     }, []);
 
 
     function handleClick() {
         //TODO implementar borrado
-        console.log("Cuando este implementado borrare el usuario")
+        console.log("Cuando este implementado borrare la compañia")
     }
 
     return (
-
         <Table responsive striped bordered hover>
             <thead>
             <tr>
                 <th>Nombre</th>
-                <th>Apellidos</th>
+                <th>Email</th>
+                <th>Categoría</th>
+                <th>Localización</th>
                 <th>Opciones</th>
             </tr>
             </thead>
             <tbody>
             {
-                users.map((user, index) => (
+                companies.map((company, index) => (
                     <tr key={index}>
-                        <td>{user.first_name}</td>
-                        <td>{user.last_name}</td>
+                        <td>{company.name}</td>
+                        <td>{company.email}</td>
+                        <td>{company.category}</td>
+                        <td>{company.location.coordinates}</td>
                         <td>
                             <Button variant="outline-danger" onClick={handleClick}>Borrar</Button>
                         </td>
@@ -44,4 +47,4 @@ function UsersTable() {
     )
 }
 
-export default UsersTable
+export default CompaniesTable

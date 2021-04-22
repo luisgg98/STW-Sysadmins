@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {Button, Form, Row} from "react-bootstrap";
 import {useForm} from 'react-hook-form';
 import GenericAlert from "../Widgets/GenericAlert";
-import {updateUserData} from "../../../services/EditUserData"
+import {updateUserData} from "../../../services/UsersService"
 import {useHistory} from "react-router";
 
 const EditUserInfo = (props) => {

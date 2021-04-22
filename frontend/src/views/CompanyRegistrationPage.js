@@ -1,10 +1,11 @@
-import {PageDescription, ZitationHeader} from "../components/common/Headers/Header"
+import {PageDescription} from "../components/common/Headers/Header"
 import CompanySignUpForm from "../components/common/Forms/CompanySignUpForm"
 import {UserContext} from "../UserContext";
 import React, {useContext} from "react";
 import {Container, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import api from "../services/APICall";
+import ZitationHeader from "../components/common/Headers/ZitationHeader";
 
 const RegistrarNegocio = () => {
 

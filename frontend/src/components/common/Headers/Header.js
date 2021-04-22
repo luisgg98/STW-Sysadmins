@@ -74,4 +74,4 @@ const Header = () => {
 };
 
 export default Header;
-export {Header, ZitationHeader, PageDescription, LoginButton};
+export {Header, PageDescription, LoginButton};
