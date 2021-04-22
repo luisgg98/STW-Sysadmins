@@ -24,11 +24,8 @@ describe('User model tests',function () {
                 if (numUserCreated == usersArray.length){
                     done();
                 }
-
             })
-
         })
-
 
     })
     after(function (done) {
@@ -40,22 +37,15 @@ describe('User model tests',function () {
                 if (numUserRemoved == (usersArray.length-1)){
                     done();
                 }
-                
             })
-            
         })
-        
-
     })
 
     it('Should find all users without error',function (done) {
         User.find(function (error, users) {
             assert.isAtLeast(users.length,3)
             done();
-
         })
-
-
     })
 
     it('Should find a user by name',function (done) {
@@ -63,7 +53,6 @@ describe('User model tests',function () {
             if (err) throw  err;
             assert.isNotNull(doc)
             done();
-
         })
     })
 
@@ -79,7 +68,6 @@ describe('User model tests',function () {
             })
     })
 
-
     it('Should delete a user by name',function (done) {
         User.findOneAndRemove({name: usersArray[0].name},{},function (err, doc) {
             if (err) throw err;
@@ -87,5 +75,4 @@ describe('User model tests',function () {
             done();
         })
     })
-    
 })

@@ -1,6 +1,7 @@
 const utils = require('../../services/utils')
 const validate = require('../../services/validate_email')
 const Company = require('../../models/company')
+const Service = require('../../models/service')
 
 /**
  *
@@ -187,9 +188,80 @@ let delete_company = async (req, res) => {
     }
 }
 
+let create_service = async (req,res) => {
+    try {
+        const service = new Service({
+            company: req.params.nif,
+            description: req.body.description,
+            capacity: req.body.capacity,
+            price: req.body.price
+        })
+        await service.save()
+        res.send(service)
+    } catch {
+        res.status(405)
+        res.send({ error: "Wrong json format, check docs for further info /api-doc" })
+    }
+}
+
+let get_services = async (req, res) => {
+    try{
+        if (req.query.id){
+            // Fetch just one service
+            let id = req.query.id
+            const service = await Service.find({_id:id})
+            res.send(service)
+        } else {
+            // Fetch all services from a company
+            const services = await Service.find({company: req.params.nif})
+            res.send(services)
+        }
+    }
+    catch {
+        res.status(500)
+        res.send({error: "Internal server error"})
+    }
+}
+
+let update_service = async (req, res) => {
+    try {
+        const service = await Service.findOne({ _id: req.params.id });
+
+        if (req.body.description) {
+            service.description = req.body.description
+        }
+        if (req.body.capacity){
+            service.capacity = req.body.capacity
+        }
+        if (req.body.price){
+            service.price = req.body.price
+        }
+
+        await service.save()
+        res.send(service)
+    } catch {
+        res.status(404)
+        res.send({ error: "Company not found" })
+    }
+}
+
+let delete_service = async (req, res) => {
+    try {
+        await Service.deleteOne({ _id: req.params.id })
+        res.status(204).send()
+    } catch {
+        res.status(404)
+        res.send({ error: "Service not found" })
+    }
+}
+
 exports.get = get
 exports.register = register
 exports.login = login
 exports.update = update
 exports.delete = delete_company
 exports.fetchCompany = fetchCompany
+exports.create_service = create_service
+exports.get_services = get_services
+exports.update_service = update_service
+exports.delete_service = delete_service

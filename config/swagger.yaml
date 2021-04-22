@@ -16,6 +16,8 @@ tags:
     description: "Operations about companies"
   - name: "HealthZone"
     description: "Operations about health zones from Zaragoza"
+  - name: "Services"
+    description: "Operations about services from a company"
 paths:
   /users:
     get:
@@ -296,6 +298,108 @@ paths:
           description: "Incorrect login"
         "404":
           description: "Company not found"
+  /companies/{nif}/services:
+    get:
+      tags:
+        - "Services"
+      summary: "Get all services from a company or filter by id"
+      parameters:
+        - in: path
+          name: "nif"
+          description: "nif of service company to retrieve"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "All right"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Get_services'
+        "500":
+          description: "Internal server error"
+    post:
+      tags:
+        - "Services"
+      summary: "Add a new service to the database"
+      parameters:
+        - in: path
+          name: "nif"
+          description: "nif of service company to retrieve"
+          schema:
+            type: string
+      requestBody:
+        description: "Service object to be added to the database"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Service_register"
+      responses:
+        "200":
+          description: "Company created"
+          content:
+            application/json:
+               schema:
+                $ref: '#/components/schemas/Service_register'
+        "422":
+          description: "Wrong email format"
+        "405":
+          description: "Wrong json format, check docs for further info /api-doc"
+  /companies/{nif}/services/{id}:
+    patch:
+      operationId: updateService
+      tags:
+        - "Services"
+      summary: "Update service data"
+      parameters:
+        - in: path
+          name: "nif"
+          description: "nif of service company to update"
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: "id"
+          description: "id of service to update"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: "Company data to change (service_duration in minutes)"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Service_update"
+      responses:
+        "200":
+          description: "Company updated"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Get_services'
+        "401":
+          description: "Error: Unauthorized"
+        "404":
+          description: "Company not found"
+    delete:
+      operationId: deleteService
+      tags:
+        - "Services"
+      summary: "Delete a service"
+      parameters:
+        - in: path
+          name: "id"
+          description: "id of service to delete"
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: "Service deleted"
+        "404":
+            description: "Service not found"
   /admin/login:
     post:
       operationId: loginAdmin
@@ -342,6 +446,42 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    Get_services:
+      type: object
+      properties:
+        company:
+          type: string
+        description:
+          type: string
+        capacity:
+          type: integer
+        price:
+          type: integer
+    Service_register:
+      type: object
+      properties:
+        company:
+          type: string
+        description:
+          type: string
+        capacity:
+          type: integer
+        price:
+          type: integer
+      required:
+        - company
+        - description
+        - capacity
+        - price
+    Service_update:
+      type: object
+      properties:
+        description:
+          type: string
+        capacity:
+          type: integer
+        price:
+          type: integer
     Get_users:
       type: object
       properties:

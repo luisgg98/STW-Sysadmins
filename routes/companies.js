@@ -33,4 +33,12 @@ router.patch("/:id",passport.authenticate('jwt',{session:false}), ControllerComp
 */
 router.delete("/:id",passport.authenticate('jwt',{session:false}), ControllerCompany.delete)
 
+//==============================
+//      SERVICES
+//==============================
+router.get("/:nif/services", ControllerCompany.get_services)
+router.post("/:nif/services", ControllerCompany.create_service)
+router.patch("/:nif/services/:id", ControllerCompany.update_service)
+router.delete("/:nif/services/:id", ControllerCompany.delete_service)
+
 module.exports = router
