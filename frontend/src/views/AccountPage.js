@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { UserContext } from "../UserContext";
-import {  Button, Card, Col, Row } from "react-bootstrap";
-import { Redirect } from "react-router-dom";
-import { ZitationHeader } from "../components/common/Headers/Header";
-import ProfileData from "../components/common/Widgets/ProfileData"; 
-import EditUserInfo from '../components/common/Forms/EditUserInfo';
-import {loginUser} from "../services/LoginUser"
+import React, {useContext, useState} from 'react';
+import {UserContext} from "../UserContext";
+import {Col, Row} from "react-bootstrap";
+import {Redirect} from "react-router-dom";
+import {ZitationHeader} from "../components/common/Headers/Header";
+import ProfileData from "../components/common/Widgets/ProfileData";
 
 const  AccountPage = () => {
     const { user, setUser } = useContext(UserContext);

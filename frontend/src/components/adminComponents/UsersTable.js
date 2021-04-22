@@ -1,26 +1,36 @@
 import {Table} from "react-bootstrap";
-import React from "react";
+import React, {useEffect, useState} from "react";
+import {getUsers} from "../../services/UsersService";
 
 function UsersTable() {
 
-    let users = [
-        {
-            name: "Alberto",
-            email: "760739@unizar.es"
-        },
-        {
-            name: "Hayk",
-            email: "hayk@unizar.es"
-        },
-        {
-            name: "Luis",
-            email: "luis@unizar.es"
-        },
-        {
-            name: "Germán",
-            email: "german@unizar.es"
-        },
-    ]
+    const [users, setUsers] = useState([]);
+
+    // let users = [
+    //     {
+    //         name: "Alberto",
+    //         email: "760739@unizar.es"
+    //     },
+    //     {
+    //         name: "Hayk",
+    //         email: "hayk@unizar.es"
+    //     },
+    //     {
+    //         name: "Luis",
+    //         email: "luis@unizar.es"
+    //     },
+    //     {
+    //         name: "Germán",
+    //         email: "german@unizar.es"
+    //     },
+    // ]
+
+    useEffect(() => {
+        getUsers().then((response) => {
+            setUsers(response.data)
+        })
+    }, []);
+
 
     return (
 
@@ -35,9 +45,8 @@ function UsersTable() {
             {
                 users.map((user, index) => (
                     <tr key={index}>
-                        {Object.entries(user).map((pair, index) => (
-                            <td key={index}>{pair[1]}</td>
-                        ))}
+                        <td>{user.first_name}</td>
+                        <td>{user.last_name}</td>
                     </tr>)
                 )}
             </tbody>

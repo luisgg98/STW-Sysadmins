@@ -1,11 +1,9 @@
-import React, { useState } from "react";
-import { Form, Row, Alert, Button } from "react-bootstrap";
-import { useForm } from 'react-hook-form';
-import axios from '../../../services/APICall'
+import React, {useState} from "react";
+import {Button, Form, Row} from "react-bootstrap";
+import {useForm} from 'react-hook-form';
 import GenericAlert from "../Widgets/GenericAlert";
-import SuccesAlert from "../Widgets/SuccesAlert";
-import { updateUserData } from "../../../services/EditUserData"
-import { useHistory } from "react-router";
+import {updateUserData} from "../../../services/EditUserData"
+import {useHistory} from "react-router";
 
 const EditUserInfo = (props) => {
 

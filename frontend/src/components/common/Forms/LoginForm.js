@@ -1,10 +1,8 @@
-import React, { useState, useContext } from "react";
-import { Button, Form, ResponsiveEmbed, Row } from "react-bootstrap";
-import { UserContext } from "../../../UserContext"
-import { useForm } from 'react-hook-form';
-import { Alert, Spinner } from "react-bootstrap";
-import { Link, Redirect, useHistory } from 'react-router-dom';
-import axios from '../../../services/APICall'
+import React, {useContext, useState} from "react";
+import {Button, Form, Row} from "react-bootstrap";
+import {UserContext} from "../../../UserContext"
+import {useForm} from 'react-hook-form';
+import {Link, useHistory} from 'react-router-dom';
 import CredentialErrorAlert from "../Widgets/CredentialErrorAlert";
 import LoadingSpinner from "../Widgets/LoadingSpinner";
 import {loginUser} from "../../../services/LoginUser"

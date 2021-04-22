@@ -1,4 +1,4 @@
-import { Row, Spinner } from "react-bootstrap"
+import {Row, Spinner} from "react-bootstrap"
 
 
 const LoadingSpinner = (props) => {

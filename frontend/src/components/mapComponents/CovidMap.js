@@ -1,9 +1,6 @@
 import React from "react";
 import L from "leaflet";
-import {
-    MapContainer,
-    TileLayer,
-} from "react-leaflet";
+import {MapContainer, TileLayer,} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 // ****** This code fixes css problems with leaflet ******

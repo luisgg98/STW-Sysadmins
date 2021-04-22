@@ -1,10 +1,9 @@
-import { useContext, useEffect } from "react";
+import {useContext} from "react";
 import LoginForm from "../components/common/Forms/LoginForm";
-import { UserContext } from "../UserContext";
-import { Container, Row } from "react-bootstrap";
-import { PageDescription, ZitationHeader } from "../components/common/Headers/Header"
+import {UserContext} from "../UserContext";
+import {Container, Row} from "react-bootstrap";
+import {PageDescription, ZitationHeader} from "../components/common/Headers/Header"
 import {Redirect} from "react-router-dom"
-
 
 
 const LoginPage = () => {

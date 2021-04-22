@@ -1,14 +1,13 @@
 import axios from "../services/APICall"
 
 
-
-export const  getCompanies = async (texto) => {
+export const getCompanies = async (texto) => {
     console.log("buscar ", texto)
-    if (texto ) {
+    if (texto) {
         return await axios.get('companies/',
             {
                 params:
-                    { name: texto }
+                    {name: texto}
             }
         ).then(response => {
             // setResults(response.data)
@@ -16,5 +15,5 @@ export const  getCompanies = async (texto) => {
             console.log(response.status)
             return response.data
         })
-    }else return []
+    } else return []
 }

@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
-import { Container, Col, Row, Card } from "react-bootstrap";
+import {Card, Col, Container, Row} from "react-bootstrap";
 import UsersTable from "../components/adminComponents/UsersTable";
 import TopCompaniesBar from "../components/adminComponents/TopCompaniesBar";
 import TopTimeZoneBar from "../components/adminComponents/TopTimeZoneBar";
 import BookingsBycategoriePie from "../components/adminComponents/BookingsByCategoryPie";
 
 function AdminPage() {
+
+
+
     return (
         <Container >
             <Row>

@@ -1,7 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Card, CardGroup } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import {Card, CardGroup} from 'react-bootstrap';
 
 function CompanyCard(props) {
     return (

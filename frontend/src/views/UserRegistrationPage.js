@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
-import { PageDescription, ZitationHeader } from "../components/common/Headers/Header"
+import React, {useContext} from "react";
+import {Link} from "react-router-dom";
+import {PageDescription, ZitationHeader} from "../components/common/Headers/Header"
 import UserSUForm from "../components/common/Forms/UserSignUpForm"
-import { UserContext } from "../UserContext";
+import {UserContext} from "../UserContext";
 import api from "../services/APICall";
-import { Container, Row } from "react-bootstrap";
+import {Container, Row} from "react-bootstrap";
 
 const UserRegistrationPage = () => {
 

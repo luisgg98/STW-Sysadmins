@@ -1,12 +1,12 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Card, CardGroup } from 'react-bootstrap';
+import {Card, CardGroup} from 'react-bootstrap';
 import salud from "../../../assets/salud.jpeg";
 import comercio from "../../../assets/comercio.jpeg";
 import deporte from "../../../assets/deporte.jpeg";
 import ocio from "../../../assets/ocio.jpeg";
 import admin from "../../../assets/admin.png";
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 const CategoryCards = () => {
   // require( salud, comercio, deporte, ocio, admin);

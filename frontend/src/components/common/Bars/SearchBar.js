@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { InputGroup, Row, Form, FormControl, Container } from 'react-bootstrap';
+import React, {useState} from 'react';
+import {Container, Form, FormControl, InputGroup} from 'react-bootstrap';
 
 const SearchBar = (props) => {
 

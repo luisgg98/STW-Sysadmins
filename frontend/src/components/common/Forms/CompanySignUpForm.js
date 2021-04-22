@@ -1,12 +1,11 @@
-import React, { useState, useContext } from "react";
-import { UserContext } from "../../../UserContext";
-import axios from '../../../services/APICall'
-import { useForm } from 'react-hook-form';
-import { Form, Alert, Spinner, Row, Button, Col } from "react-bootstrap";
-import { Link, useHistory } from 'react-router-dom';
+import React, {useContext, useState} from "react";
+import {UserContext} from "../../../UserContext";
+import {useForm} from 'react-hook-form';
+import {Button, Col, Form, Row} from "react-bootstrap";
+import {Link, useHistory} from 'react-router-dom';
 import LoadingSpinner from "../Widgets/LoadingSpinner"
 import GenericAlert from "../Widgets/GenericAlert";
-import { signUpCompany, saveCompany } from "../../../services/SignUpCompany"
+import {signUpCompany} from "../../../services/SignUpCompany"
 
 
 const CompanySignUpForm = () => {

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import ZitationHeader from "../components/common/Headers/Header";
 import SearchBar from "../components/common/Bars/SearchBar";
 import CompanyCard from "../components/common/Widgets/CompanyCards";
 import axios from '../services/APICall'
-import { Row, Spinner } from "react-bootstrap";
+import {Row} from "react-bootstrap";
 import LoadingSpinner from "../components/common/Widgets/LoadingSpinner"
 
 const CompanyPage = (props) => {

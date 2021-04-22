@@ -3,14 +3,13 @@ import LoginPage from "./views/LoginPage";
 import RegistrarNegocio from "./views/CompanyRegistrationPage";
 import UserRegistrationPage from "./views/UserRegistrationPage";
 import MapPage from "./views/MapPage"
-import { BrowserRouter as Router, Switch, Route, useHistory } from "react-router-dom";
-import { useState } from "react";
-import { UserContext } from "./UserContext";
-import { Container } from 'react-bootstrap'
+import {BrowserRouter as Router, Route, Switch, useHistory} from "react-router-dom";
+import {useState} from "react";
+import {UserContext} from "./UserContext";
+import {Container} from 'react-bootstrap'
 import AdminPage from "./views/AdminPage";
 import AccountPage from "./views/AccountPage";
 import CompanyPage from "./views/CompanyPage";
-
 
 
 export default function App() {

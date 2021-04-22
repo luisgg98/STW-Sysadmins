@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from "react"
-import { Card, Row, Button } from "react-bootstrap"
-import { Link } from "react-router-dom";
+import React, {useContext, useEffect, useState} from "react"
+import {Button, Card, Row} from "react-bootstrap"
+import {Link} from "react-router-dom";
 import profile from "../../../assets/profile.png";
-import { UserContext } from "../../../UserContext"
-import api from "../../../services/APICall"
+import {UserContext} from "../../../UserContext"
 import EditUserInfo from "../Forms/EditUserInfo";
-
 
 
 const ProfileData = (props) => {
