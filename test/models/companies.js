@@ -2,9 +2,9 @@ const assert = require('chai').assert;
 const Company = require('../../models/company');
 require('../../config/database')
 let companiesArray = [
-    {name:'El Limonero Bar', nif:'1',email:'ho@hol.com',password:'aaa',address: 'Avenida Nose 53',salt:'salty',category:'Testing', description: 'desc', service_duration: 0, schedule: {monday:{schedule_1:"0"},tuesday:{schedule_1:"0"},wednesday:{schedule_1:"0"},thursday:{schedule_1:"0"},friday:{schedule_1:"0"},saturday:{schedule_1:"0"},sunday:{schedule_1:"0"}}, location: [4,5]},
-    {name:'Multiverso Bar',nif:'2',email:'ho@hol.com',password:'aaa',address: 'Avenida Nose 53',salt:'salty',category:'Testing', description: 'desc', service_duration: 0, schedule: {monday:{schedule_1:"0"},tuesday:{schedule_1:"0"},wednesday:{schedule_1:"0"},thursday:{schedule_1:"0"},friday:{schedule_1:"0"},saturday:{schedule_1:"0"},sunday:{schedule_1:"0"}}, location: [4,5]},
-    {name:'Carniceria Maza', nif:'3',email:'ho@hol.com',password:'aaa',address: 'Avenida Nose 53',salt:'salty',category:'Testing', description: 'desc', service_duration: 0, schedule: {monday:{schedule_1:"0"},tuesday:{schedule_1:"0"},wednesday:{schedule_1:"0"},thursday:{schedule_1:"0"},friday:{schedule_1:"0"},saturday:{schedule_1:"0"},sunday:{schedule_1:"0"}}, location: [4,5]}];
+    {name:'El Limonero Bar', nif:'1',type: "a", email:'ho@hol.com',password:'aaa',address: 'Avenida Nose 53',salt:'salty',category:'Testing', description: 'desc', service_duration: 0, schedule: {monday:{schedule_1:"0"},tuesday:{schedule_1:"0"},wednesday:{schedule_1:"0"},thursday:{schedule_1:"0"},friday:{schedule_1:"0"},saturday:{schedule_1:"0"},sunday:{schedule_1:"0"}}, location: [4,5]},
+    {name:'Multiverso Bar',nif:'2',type: "a",email:'ho@hol.com',password:'aaa',address: 'Avenida Nose 53',salt:'salty',category:'Testing', description: 'desc', service_duration: 0, schedule: {monday:{schedule_1:"0"},tuesday:{schedule_1:"0"},wednesday:{schedule_1:"0"},thursday:{schedule_1:"0"},friday:{schedule_1:"0"},saturday:{schedule_1:"0"},sunday:{schedule_1:"0"}}, location: [4,5]},
+    {name:'Carniceria Maza', nif:'3',type: "a",email:'ho@hol.com',password:'aaa',address: 'Avenida Nose 53',salt:'salty',category:'Testing', description: 'desc', service_duration: 0, schedule: {monday:{schedule_1:"0"},tuesday:{schedule_1:"0"},wednesday:{schedule_1:"0"},thursday:{schedule_1:"0"},friday:{schedule_1:"0"},saturday:{schedule_1:"0"},sunday:{schedule_1:"0"}}, location: [4,5]}];
 const newname ='Desatranques Jaen';
 
 
