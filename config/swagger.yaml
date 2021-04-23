@@ -162,7 +162,7 @@ paths:
         - "Company"
       summary: "Get all companies and their location or filter by name"
       parameters:
-        - in: path
+        - in: query
           name: "name"
           description: "name of company to retrieve"
           schema:
