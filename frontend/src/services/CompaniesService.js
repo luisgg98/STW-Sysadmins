@@ -85,3 +85,29 @@ export const updateCompanyInfo = async (companyName) => {
         return false
     })
 }
+
+export const postService = async  (service, id) => {
+    console.log("registrando nuevo servicio para ", id, " con servicio ", service)
+    let url = "companies/"+id+"/services"
+    return await axios.post(url, service, 
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    ).then( response => {
+        if (response.status === 200){
+            console.log("exito registro servicio")
+
+            console.log("respuesta tras post sercicio",response.data)
+            return true
+        }
+        else {
+            console.log("400x posteando servicio")
+            return false
+        }
+    }).catch ( error => {
+        console.log ("error posteando nuevo servicio", error)
+        return false
+    })
+}

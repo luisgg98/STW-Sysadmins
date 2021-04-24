@@ -90,7 +90,7 @@ function UserSUForm() {
                             }
 
                         }}
-                        isInvalid={errors.phone}
+                        isInvalid={errors.phone && touchedFields.phone}
 
                     />
                     {errors.phone && <Form.Control.Feedback type="invalid">{errors.phone.message}</Form.Control.Feedback>}

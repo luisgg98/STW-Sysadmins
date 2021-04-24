@@ -29,7 +29,7 @@ const LoginForm = () => {
         mode: 'onSubmit',
         reValidateMode: 'onBlur',
         defaultValues: {
-            emial: "",
+            email: "",
             password: ""
         }
     });

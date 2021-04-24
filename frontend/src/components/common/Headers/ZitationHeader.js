@@ -1,13 +1,13 @@
 import React from "react";
-import {Row} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import { Col, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const ZitationHeader = () => {
     return (
         <Row className="justify-content-center mx-auto">
-            <Link to="/">
-                <div className="display-4"> Zitation </div>
-            </Link>
+                <Link to="/">
+                    <div className="display-4"> Zitation </div>
+                </Link>
         </Row>
     );
 };

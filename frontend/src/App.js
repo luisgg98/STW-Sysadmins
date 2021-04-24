@@ -11,6 +11,7 @@ import AdminPage from "./views/AdminPage";
 import AccountPage from "./views/AccountPage";
 import CompanyPage from "./views/CompanyPage";
 import ServiceCreation from "./views/ServiceCreation";
+import AddService from "./views/AddService";
 
 
 export default function App() {
@@ -57,7 +58,11 @@ export default function App() {
             <Container fluid="true" className="App">
                 <UserContext.Provider value={{ user, setUser }}>
                     <Switch>
+                        <ProtectedRouteCompany path="/services/add" component={AddService}  isCompany={true} />
+
+                        
                         <ProtectedRouteCompany path="/services" component={ServiceCreation}  isCompany={true} />
+
 
                         <Route path="/companies/health">
                             <CompanyPage tipo="Salud y Belleza" search={[]} />

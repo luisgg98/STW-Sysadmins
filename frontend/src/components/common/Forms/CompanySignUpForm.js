@@ -21,8 +21,9 @@ const CompanySignUpForm = () => {
         password: "",
         repassword: "",
         categoria: "",
-        lat: "",
-        long: ""
+        street: "",
+        streetnumber: 0,
+        zipcode: 0
     });
 
 
@@ -38,8 +39,9 @@ const CompanySignUpForm = () => {
             password: "",
             repassword: "",
             categoria: "",
-            lat: "",
-            long: "",
+            street: "",
+            streetnumber: 0,
+            zipcode: 0
         }
     });
 
@@ -55,9 +57,9 @@ const CompanySignUpForm = () => {
             name: formValue.nombre,
             email: formValue.email,
             password: formValue.password,
-            lat: formValue.lat,
-            long: formValue.long,
-            address: "address",
+            street: formValue.street,
+            streetnumber: formValue.streetnumber,
+            zipcode: formValue.zipcode,
             category: formValue.categoria
         })
         setLoading(false)
@@ -160,9 +162,9 @@ const CompanySignUpForm = () => {
                         name="password"
                         value={formValue.password}
                         {...register("password", {
-                            required: { value: true, message: "la contraseña es obligatorio" },
-                            minLength: { value: 8, message: "minimo 8 carácteres" },
-                            pattern: { value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/, message: "Debe contener mayus, números y simbolos" }
+                            required: { value: true, message: "La contraseña es obligatorio" },
+                            minLength: { value: 8, message: "Mínimo 8 carácteres" },
+                            pattern: { value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/, message: "Debe contener mayúsculas, minúsculas y números" }
                         })}
                         onChange={(e) => {
                             setForm({ ...formValue, password: e.target.value })
@@ -201,49 +203,67 @@ const CompanySignUpForm = () => {
                     {errors.repassword && <Form.Control.Feedback type="invalid">{errors.repassword.message}</Form.Control.Feedback>}
                 </Form.Group>
 
+                <Form.Group controlId="formSUCalle">
+                    <Form.Label>Dirección</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="street"
+                        placeholder="streetección"
+                        value={formValue.street}
+                        {...register("street", {
+                            required: { value: true, message: "La streetección es obligatorio" },
+                        })}
+                        onChange={(e) => {
+                            setForm({ ...formValue, street: e.target.value })
+                            if (errors.street) {
+                                setError("street", { type: "manual", message: errors.street.message })
+                            }
+                        }}
+                        isInvalid={errors.street && touchedFields.street} />
+                    {errors.street && <Form.Control.Feedback type="invalid">{errors.street.message}</Form.Control.Feedback>}
+                </Form.Group>
+
                 <Form.Group >
                     <Row>
                         <Col>
-                            <Form.Label>Latitud</Form.Label>
+                            <Form.Label>Número de la calle</Form.Label>
                             <Form.Control
-                                id="lat"
+                                id="streetnumber"
                                 type="text"
-                                placeholder="Latitud"
-                                name="lat"
-                                value={formValue.lanme}
-                                {...register("lat", {
-                                    required: { value: true, message: "Apellido obligatorio" },
-                                    maxLength: { value: 50, message: "Máximo superado" }
+                                placeholder="12"
+                                name="streetnumber"
+                                value={formValue.streetnumberber}
+                                {...register("streetnumberber", {
+                                    required: { value: true, message: "Número de la calle obligatorio" },
                                 })}
                                 onChange={(e) => {
-                                    setForm({ ...formValue, lat: parseFloat(e.target.value) })
-                                    if (errors.lat) {
-                                        setError("lat", { type: "manul", message: errors.lat.message })
+                                    setForm({ ...formValue, streetnumber: Number(e.target.value) })
+                                    if (errors.streetnumber) {
+                                        setError("streetnumber", { type: "manual", message: errors.streetnumber.message })
                                     }
                                 }}
-                                isInvalid={errors.lat && touchedFields.lat} />
-                            {errors.lat && <Form.Control.Feedback type="invalid">{errors.lat.message}</Form.Control.Feedback>}
+                                isInvalid={errors.streetnumber && touchedFields.streetnumber} />
+                            {errors.streetnumber && <Form.Control.Feedback type="invalid">{errors.streetnumber.message}</Form.Control.Feedback>}
                         </Col>
                         <Col>
-                            <Form.Label>Longuitud</Form.Label>
+                            <Form.Label>Código postal</Form.Label>
                             <Form.Control
-                                id="long"
+                                id="zipcode"
                                 type="text"
-                                placeholder="Longuitud"
-                                name="long"
+                                placeholder="50011"
+                                name="zipcode"
                                 value={formValue.lanme}
-                                {...register("long", {
-                                    required: { value: true, message: "Apellido obligatorio" },
-                                    maxLength: { value: 50, message: "Máximo superado" }
+                                {...register("zipcode", {
+                                    required: { value: true, message: "Código postal obligatorio" },
                                 })}
                                 onChange={(e) => {
-                                    setForm({ ...formValue, long: parseFloat(e.target.value) })
-                                    if (errors.long) {
-                                        setError("long", { type: "manul", message: errors.long.message })
+                                    setForm({ ...formValue, zipcode: Number(e.target.value) })
+                                    if (errors.zipcode) {
+                                        setError("zipcode", { type: "manul", message: errors.zipcode.message })
                                     }
                                 }}
-                                isInvalid={errors.long && touchedFields.long} />
-                            {errors.long && <Form.Control.Feedback type="invalid">{errors.long.message}</Form.Control.Feedback>}
+                                isInvalid={errors.zipcode && touchedFields.zipcode} />
+                            {errors.zipcode && <Form.Control.Feedback type="invalid">{errors.zipcode.message}</Form.Control.Feedback>}
                         </Col>
                     </Row>
 
