@@ -4,25 +4,36 @@ import { Row, Button, Container, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ZitationHeader from "../components/common/Headers/ZitationHeader";
 import LoadingSpinner from "../components/common/Widgets/LoadingSpinner";
-import { updateCompanyInfo } from "../services/CompaniesService";
+import ServicesCard from "../components/common/Widgets/ServiceCard";
+import { getServices, updateCompanyInfo } from "../services/CompaniesService";
 
 
 const ServiceCreation = () => {
     const [loading, setLoading] = useState(true)
-    const [servicios, setServicios] = useState(false)
+    const [hayServicios, setHayServicios] = useState(false)
+    const [servicios, setServicios] = useState([])
+    const [comp, setComp] = useState()
 
     useEffect(() => {
+
         setLoading(true)
         const company = JSON.parse(localStorage.getItem("company"))
         console.log("useeffect", company)
         if (updateCompanyInfo(company.name)) {
             console.log("update done")
-            setLoading(false)
+            setComp(company)
         }
-        if (company.hasOwnProperty("schedule")) {
-            setServicios(true)
-            console.log("iene service duration")
-        }
+        getServices(company.nif).then(
+            resp => {
+                console.log(".then services", resp)
+                setServicios(resp)
+                if (resp.length > 0) {
+                    setHayServicios(true)
+                    console.log("long mayor que 0")
+                }
+                setLoading(false)
+            }
+        )
     }, [])
 
     return (
@@ -36,8 +47,25 @@ const ServiceCreation = () => {
             </Row>}
             <Row className=" justify-content-center my-5 align-item-scenter" >
 
+                {hayServicios && <div className="display-4">Servicio de {comp.name}</div>}
+                {hayServicios && servicios.map((serv, index) => {
+                    console.timeLog("en el map de servicios")
+                    return <ServicesCard key={index} serv={serv} comp={comp} />
+                })}
+
                 <Link to="/services/add">
-                    {!servicios && <Button  style={{ fontSize: 50, width: 1000, height: 150 }} > Añade tu primer servicio</Button>}
+                    {hayServicios
+                        ? (
+                            <Button style={{ fontSize: 20, width: 500, height: 50 }} >
+                                Añade otro servicio
+                            </Button>
+                        )
+                        : (
+                            <Button style={{ fontSize: 50, width: 1000, height: 150 }} >
+                                Añade tu primer servicio
+                            </Button>
+                        )
+                    }
                 </Link>
             </Row>
 

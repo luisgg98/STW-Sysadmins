@@ -111,3 +111,30 @@ export const postService = async  (service, id) => {
         return false
     })
 }
+
+
+export const getServices = async  (id) => {
+    console.log("cogreidno servicios para ", id)
+    let url = "companies/"+id+"/services"
+    return await axios.get(url, 
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    ).then( response => {
+        if (response.status === 200){
+            console.log("exito get servicio")
+
+            console.log("respuesta tras get sercicio",response.data)
+            return response.data
+        }
+        else {
+            console.log("400x get servicio")
+            return []
+        }
+    }).catch ( error => {
+        console.log ("error get servicios de",id, " error: " , error)
+        return []
+    })
+}
