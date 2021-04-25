@@ -35,6 +35,12 @@ let register = async (req, res) => {
     }
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let fetchUser = async (req, res) => {
     try {
         const user = await User.findOne({phone: req.params.phone})
@@ -78,22 +84,29 @@ let login = async (req, res) => {
  */
 let update = async (req, res) => {
     try {
-        const user = await User.findOne({ _id: req.params.id })
+        if(req._id != req.params.id){
+            res.status(401)
+            res.send({ error: "Wrong User Access denied"})
+        }
+        else{
+            const user = await User.findOne({ _id: req.params.id })
 
-        if (req.body.first_name) {
-            user.first_name = req.body.first_name
-        }
-        if (req.body.last_name) {
-            user.last_name = req.body.last_name
-        }
-        if (req.body.password) {
-            let password = utils.genPassword(req.body.password)
-            user.password = password.hash
-            user.salt = password.salt
+            if (req.body.first_name) {
+                user.first_name = req.body.first_name
+            }
+            if (req.body.last_name) {
+                user.last_name = req.body.last_name
+            }
+            if (req.body.password) {
+                let password = utils.genPassword(req.body.password)
+                user.password = password.hash
+                user.salt = password.salt
+            }
+
+            await user.save()
+            res.send(user)
         }
 
-        await user.save()
-        res.send(user)
     } catch {
         res.status(404)
         res.send({ error: "User not found" })
@@ -108,14 +121,27 @@ let update = async (req, res) => {
  */
 let delete_user = async (req, res) => {
     try {
-        await User.deleteOne({ _id: req.params.id })
-        res.status(204).send()
+        if(req._id != req.params.id){
+            res.status(401)
+            res.send({ error: "Wrong User Access denied"})
+        }
+        else{
+            await User.deleteOne({ _id: req.params.id })
+            res.status(204).send()
+        }
+
     } catch {
         res.status(404)
         res.send({ error: "User not found" })
     }
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let getAllUsers = async (req, res) => {
     try {
         const users = await User.find({}, {first_name: true, last_name: true})

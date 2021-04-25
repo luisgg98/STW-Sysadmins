@@ -3,6 +3,7 @@ const validate = require('../../services/validate_email')
 const Company = require('../../models/company')
 const Service = require('../../models/service')
 const geolo = require('../../services/geocoding')
+const passport = require("passport");
 
 /**
  *
@@ -10,7 +11,7 @@ const geolo = require('../../services/geocoding')
  * @param res
  * @returns {Promise<void>}
  */
-let get = async (req, res) => {
+let get = async (req, res, next)=> {
     try {
         // If the url contains a query, search just for the company of the query
         if (req.query.name){
@@ -29,6 +30,12 @@ let get = async (req, res) => {
     }
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let fetchCompany = async (req, res) => {
     try {
         const company = await Company.findOne({ nif: req.params.nif })
@@ -46,7 +53,7 @@ let fetchCompany = async (req, res) => {
  * @param res
  * @returns {Promise<void>}
  */
-let register = async (req, res) => {
+let register = async (req, res, next)=>{
     try {
         let password = utils.genPassword(req.body.password)
         if (!validate.validateCategory(req.body.category)){
@@ -85,7 +92,11 @@ let register = async (req, res) => {
                         }
                     })
                     await company.save()
-                    res.send(company)
+                        .then(()=>{
+                            res.send(company)
+                        }
+                    )
+
 
                 }
 
@@ -120,7 +131,7 @@ let register = async (req, res) => {
  * @param res
  * @returns {Promise<void>}
  */
-let login = async (req, res) => {
+let login = async (req, res, next)=>{
     try {
         const company = await Company.findOne({ email: req.body.email })
         if (utils.validPassword(req.body.password, company.password, company.salt)) {
@@ -157,63 +168,87 @@ let login = async (req, res) => {
  * @param res
  * @returns {Promise<void>}
  */
-let update = async (req, res) => {
+let update = async (req, res, next)=> {
     try {
-        const company = await Company.findOne({ _id: req.params.id });
+        if(req._id != req.params.id){
+            res.status(401)
+            res.send({ error: "Wrong User Access denied"})
+        }
+        else{
+            const company = await Company.findOne({ _id: req.params.id });
+            if (req.body.name) {
+                company.name = req.body.name
+            }
+            //TODO it must be changed
+            if (req.body.password) {
+                company.password = req.body.password
+            }
+            if (req.body.email) {
+                company.email = req.body.email
+            }
+            if(req.body.streetnumber){
+                company.streetnumber= req.body.streetnumber
+            }
+            if(req.body.street){
+                company.street = req.body.street
+            }
+            if(req.body.zipcode){
+                company.zipcode = req.body.zipcode
+            }
+            if (req.body.description) {
+                company.description = req.body.description
+            }
+            if (req.body.duration) {
+                company.service_duration = req.body.duration
+            }
+            if (req.body.schedule) {
+                company.schedule = req.body.schedule
+            }
+            if(req.body.category){
+                company.category = req.body.category;
+            }
+            geolo.findCoordenates(company.name,company.streetnumber,company.street,company.zipcode)
+                .then(
+                    async (coordinates) =>{
+                        company.lat = coordinates.latitude
+                        company.long = coordinates.long
+                        await company.save()
+                        res.send(company)
+                    }
 
-        if (req.body.name) {
-            company.name = req.body.name
-        }
-        if (req.body.password) {
-            company.password = req.body.password
-        }
-        if (req.body.email) {
-            company.email = req.body.email
-        }
+                )
+                .catch(
+                    (e)=>{
+                        console.error(e)
+                        res.status(404)
+                        res.send({ error: "Company not found" })
+                    })
 
-        if (req.body.address) {
-            company.address = req.body.address
         }
-        if(req.body.streetnumber){
-            company.streetnumber= req.body.streetnumber
-        }
-        if(req.body.street){
-            company.street = req.body.street
-        }
-        if(req.body.zipcode){
-            company.zipcode = req.body.zipcode
-        }
+    }
+    catch {
+        res.status(404)
+        res.send({ error: "Company not found" })
+    }
 
+}
 
-        if (req.body.description) {
-            company.description = req.body.description
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
+let delete_company = async (req, res, next)=>{
+    try {
+        if(req._id != req.params.id){
+            res.status(401)
+            res.send({ error: "Wrong User Access denied"})
         }
-        if (req.body.duration) {
-            company.service_duration = req.body.duration
+        else{
+            await Company.deleteOne({ _id: req.params.id })
+            res.status(204).send()
         }
-        if (req.body.schedule) {
-            company.schedule = req.body.schedule
-        }
-        geolo.findCoordenates(company.name,company.streetnumber,company.street,company.zipcode)
-            .then(
-                async (coordinates) =>{
-                    company.lat = coordinates.latitude
-                    company.long = coordinates.long
-                    await company.save()
-                    res.send(company)
-                }
-
-        )
-            .catch(
-                (e)=>{
-                    console.error(e)
-                    res.status(404)
-                    res.send({ error: "Company not found" })
-                }
-
-            )
-
-
     } catch {
         res.status(404)
         res.send({ error: "Company not found" })
@@ -224,19 +259,10 @@ let update = async (req, res) => {
  *
  * @param req
  * @param res
+ * @param next
  * @returns {Promise<void>}
  */
-let delete_company = async (req, res) => {
-    try {
-        await Company.deleteOne({ _id: req.params.id })
-        res.status(204).send()
-    } catch {
-        res.status(404)
-        res.send({ error: "Company not found" })
-    }
-}
-
-let create_service = async (req,res) => {
+let create_service = async (req, res, next)=> {
     try {
         const service = new Service({
             company: req.params.nif,
@@ -252,7 +278,14 @@ let create_service = async (req,res) => {
     }
 }
 
-let get_services = async (req, res) => {
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void>}
+ */
+let get_services = async (req, res, next)=>{
     try{
         if (req.query.id){
             // Fetch just one service
@@ -271,7 +304,14 @@ let get_services = async (req, res) => {
     }
 }
 
-let update_service = async (req, res) => {
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void>}
+ */
+let update_service = async (req, res, next)=>{
     try {
         const service = await Service.findOne({ _id: req.params.id });
 
@@ -293,7 +333,14 @@ let update_service = async (req, res) => {
     }
 }
 
-let delete_service = async (req, res) => {
+/**
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void>}
+ */
+let delete_service = async (req, res, next)=>{
     try {
         await Service.deleteOne({ _id: req.params.id })
         res.status(204).send()

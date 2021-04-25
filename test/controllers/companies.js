@@ -99,17 +99,24 @@ describe('Testing Company API', () => {
                     .end((err,res)=>{
                         if(err) throw err;
                         res.should.have.status(200);
+
                         let bearer = res.body.token;
                         let id = res.body.company.id;
                         chai.request(server)
                             .patch(url + id )
                             .send({"name": "This is a test"})
-                            .set({ "Authorization": `${bearer}` })
+                            .set({ "Authorization": `${bearer}`})
                             .end((err,res)=>{
                                 if(err) throw err;
                                 res.should.have.status(200);
                                 done();
                             })
+                            .catch(
+                                (e)=>{
+                                    console.log(e.message);
+                                    done();
+                                }
+                            )
                     })
 
             })

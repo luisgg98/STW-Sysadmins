@@ -6,6 +6,7 @@ const passport = require('passport')
 // TODO MUST BE CHANGED according to our database
 const User = require('mongoose').model('user');
 const Company = require('mongoose').model('company');
+const Admin = require('../models/admin')
 
 // The idea is to have a file where the public key and the private
 // key are stored
@@ -25,33 +26,78 @@ const options = {
     algorithms: ['RS256']
 };
 
+
+let strategy = new JwtStrategy(options, function(jwt_payload, done) {
+    //Shown on the console the payload of the token
+    // We will assign the `sub` property on the JWT to the database ID of user
+    //TODO WHAT IS AN ID IN MONGODB
+    User.findOne({_id: jwt_payload.sub}, function(err, user) {
+        if(user){
+            return done(null, user);
+        }
+        else{
+            Company.findOne({_id: jwt_payload.sub},function (err,company) {
+                if (err) {
+                    return done(err, false);
+                }
+                if (company) {
+                    return done(null, company);
+                }
+                //Check if it is the admin
+                else{
+                    Admin.findOne({_id: jwt_payload.sub},function (err,admin) {
+                        if (err) {
+                            return done(err, false);
+                        }
+                        if(admin){
+                            return done(null,admin);
+
+                        }
+                        else {
+                            return done(null, false);
+                        }
+
+                    });
+                }
+            });
+        }
+    });
+})
+
 //We pass the options and what we want to verify
 //We have said that the want to verify using the public key and
 // check if there is a token in the header
 // app.js will pass the global passport object here, and this function will configure it
 // The JWT payload is passed into the verify callback
-passport.use(new JwtStrategy(options, function(jwt_payload, done) {
-       //Shown on the console the payload of the token
-       console.log(jwt_payload);
-        // We will assign the `sub` property on the JWT to the database ID of user
-        //TODO WHAT IS AN ID IN MONGODB
-       User.findOne({_id: jwt_payload.sub}, function(err, user) {
-           console.log(user);
-           if(user){
-               return done(null, user);
-           }
-           else{
-               Company.findOne({_id: jwt_payload.sub},function (err,company) {
-                   if (err) {
-                       console.log(err);
-                       return done(err, false);
-                   }
-                   if (company) {
-                       return done(null, company);
-                   } else {
-                       return done(null, false);
-                   }
-               });
-           }
-       });
-}));
+passport.use(strategy);
+
+module.exports = {
+    authenticate: function (req, res, next) {
+        return passport.authenticate("jwt", {
+            session: false
+        }, (err, result, info) => {
+            if (err) {
+
+                res.status(err.status || 500);
+                res.json({
+                    message: err.message,
+                    error: err,
+                });
+                return;
+            }
+            else{
+                if(info){
+                    res.status(info.status || 401);
+                    res.json({
+                        error: info.message,
+                    });
+                    return;
+                }
+                else{
+                    req._id = result._id;
+                    next();
+                }
+            }
+        })(req, res, next);
+    }
+};

@@ -1,7 +1,7 @@
 const express = require('express')
 const ControllerCompany = require('../controllers/companies/access')
 const router = express.Router()
-const passport = require('passport');
+const jwt_login_strategy= require('../config/passport');
 
 /*
     Get all companies and his location
@@ -26,12 +26,13 @@ router.post("/login", ControllerCompany.login)
 /**
  *  Update the data of a company
  */
-router.patch("/:id",passport.authenticate('jwt',{session:false}), ControllerCompany.update)
+router.patch("/:id",jwt_login_strategy.authenticate,ControllerCompany.update)
 
 /*
 * Deletes the company with nif number :nif
 */
-router.delete("/:id",passport.authenticate('jwt',{session:false}), ControllerCompany.delete)
+router.delete("/:id",jwt_login_strategy.authenticate, ControllerCompany.delete)
+
 
 //==============================
 //      SERVICES
