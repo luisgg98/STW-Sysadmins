@@ -12,8 +12,10 @@
     "bootstrap": "^4.6.0",
     "chart.js": "^2.5.2",
     "express": "^4.17.1",
+    "faker": "^5.5.3",
     "formik": "^2.2.6",
     "leaflet": "^1.7.1",
+    "protractor": "^7.0.0",
     "react": "^17.0.2",
     "react-bootstrap": "^1.5.2",
     "react-chartjs-2": "^2.11.1",
@@ -30,7 +32,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "e2e": "protractor ./src/test/config/conf.js ",
+    "e2e-driver": "webdriver-manager start"
   },
   "eslintConfig": {
     "extends": [
@@ -51,6 +55,8 @@
     ]
   },
   "devDependencies": {
-    "formik": "^2.2.6"
+    "babel-register": "^6.26.0",
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1"
   }
 }
