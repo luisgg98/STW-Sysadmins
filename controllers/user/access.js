@@ -1,6 +1,8 @@
 const utils = require('../../services/utils')
 const validate_email = require('../../services/validate_email')
 const User = require('../../models/user')
+const jwt_login_strategy= require('../../config/passport');
+const Admin =  require('mongoose').model('admin');
 
 // TODO can't be two users with same phone number
 /**
@@ -84,13 +86,18 @@ let login = async (req, res) => {
  */
 let update = async (req, res) => {
     try {
-        if(req._id != req.params.id){
+        if(!jwt_login_strategy.security(req.params.id,req.result)){
             res.status(401)
             res.send({ error: "Wrong User Access denied"})
         }
         else{
-            const user = await User.findOne({ _id: req.params.id })
-
+            let user;
+            if(req.result instanceof  Admin){
+                user = await User.findOne({ _id: req.params.id })
+            }
+            else{
+                user = req.result;
+            }
             if (req.body.first_name) {
                 user.first_name = req.body.first_name
             }
@@ -121,7 +128,7 @@ let update = async (req, res) => {
  */
 let delete_user = async (req, res) => {
     try {
-        if(req._id != req.params.id){
+        if(!jwt_login_strategy.security(req.params.id,req.result)){
             res.status(401)
             res.send({ error: "Wrong User Access denied"})
         }

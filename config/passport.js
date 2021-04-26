@@ -6,7 +6,7 @@ const passport = require('passport')
 // TODO MUST BE CHANGED according to our database
 const User = require('mongoose').model('user');
 const Company = require('mongoose').model('company');
-const Admin = require('../models/admin')
+const Admin =  require('mongoose').model('admin');
 
 // The idea is to have a file where the public key and the private
 // key are stored
@@ -71,6 +71,13 @@ let strategy = new JwtStrategy(options, function(jwt_payload, done) {
 passport.use(strategy);
 
 module.exports = {
+    /**
+     *
+     * @param req
+     * @param res
+     * @param next
+     * @returns {*}
+     */
     authenticate: function (req, res, next) {
         return passport.authenticate("jwt", {
             session: false
@@ -93,10 +100,29 @@ module.exports = {
                     return;
                 }
                 else{
-                    req._id = result._id;
+                    req.result = result;
                     next();
                 }
             }
         })(req, res, next);
+    },
+    /**
+     *
+     * @param id
+     * @param result
+     * @returns {boolean}
+     */
+    security: function (id,result) {
+        let accessGranted =false
+        if (result instanceof Admin){
+            accessGranted = true
+        }
+        else{
+            if(id == result._id){
+                accessGranted = true
+            }
+        }
+        return accessGranted;
+
     }
 };

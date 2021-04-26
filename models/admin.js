@@ -1,8 +1,8 @@
 const mongoose = require( 'mongoose' );
 // Admin
 /*
-    username: "zitation-stw"
-    password: "stw20-21"
+    {"username": "zitation-stw",
+    "password": "stw20-21"}
  */
 const admin = new mongoose.Schema({
     username : { type: String, required: true},

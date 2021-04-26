@@ -3,8 +3,8 @@ const validate = require('../../services/validate_email')
 const Company = require('../../models/company')
 const Service = require('../../models/service')
 const geolo = require('../../services/geocoding')
-const passport = require("passport");
-
+const jwt_login_strategy= require('../../config/passport');
+const Admin =  require('mongoose').model('admin');
 /**
  *
  * @param req
@@ -170,12 +170,20 @@ let login = async (req, res, next)=>{
  */
 let update = async (req, res, next)=> {
     try {
-        if(req._id != req.params.id){
+
+        if(!jwt_login_strategy.security(req.params.id,req.result)){
             res.status(401)
             res.send({ error: "Wrong User Access denied"})
         }
         else{
-            const company = await Company.findOne({ _id: req.params.id });
+            //const company = await Company.findOne({ _id: req.params.id });
+            let company;
+            if(req.result instanceof Admin){
+                company = await Company.findOne({ _id: req.params.id });
+            }
+            else{
+                company = req.result;
+            }
             if (req.body.name) {
                 company.name = req.body.name
             }
@@ -241,7 +249,7 @@ let update = async (req, res, next)=> {
  */
 let delete_company = async (req, res, next)=>{
     try {
-        if(req._id != req.params.id){
+        if(!jwt_login_strategy.security(req.params.id,req.result)){
             res.status(401)
             res.send({ error: "Wrong User Access denied"})
         }
@@ -349,6 +357,9 @@ let delete_service = async (req, res, next)=>{
         res.send({ error: "Service not found" })
     }
 }
+/***
+ * color1 instanceof String
+ */
 
 exports.get = get
 exports.register = register
