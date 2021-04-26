@@ -1,4 +1,3 @@
-
 const Healthzone = require('../models/healthzone');
 /**
  * Update the data related to a health zone

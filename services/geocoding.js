@@ -46,7 +46,6 @@ async function findCoordenates(place,streetnumber,street,zipcode) {
         let query = geoCoding(place,streetnumber,street,zipcode).then(
             (results) =>{
                 let coordinates;
-
                 if (results.length == 0) {
                     // In case it can not find the place it return the coordinates
                     // of the city of Zaragoza
@@ -80,9 +79,7 @@ async function findCoordenates(place,streetnumber,street,zipcode) {
                     }
                     resolve(coordinates)
                 }
-
             }
-
         ).catch(error =>{
             reject(error)
         })

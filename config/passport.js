@@ -30,7 +30,6 @@ const options = {
 let strategy = new JwtStrategy(options, function(jwt_payload, done) {
     //Shown on the console the payload of the token
     // We will assign the `sub` property on the JWT to the database ID of user
-    //TODO WHAT IS AN ID IN MONGODB
     User.findOne({_id: jwt_payload.sub}, function(err, user) {
         if(user){
             return done(null, user);

@@ -24,6 +24,7 @@ const apiRouter = require('./routes/api');
 const cron = require('node-cron');
 const ta=require('./services/transparency_aragon')
 const app = express();
+const Admin = require('./models/admin');
 
 
 // Add  fav icon
