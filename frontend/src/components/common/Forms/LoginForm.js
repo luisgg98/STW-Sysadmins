@@ -1,11 +1,13 @@
-import React, {useContext, useState} from "react";
-import {Button, Form, Row} from "react-bootstrap";
-import {UserContext} from "../../../UserContext"
-import {useForm} from 'react-hook-form';
-import {Link, useHistory} from 'react-router-dom';
+import React, { useContext, useState } from "react";
+import { Button, Form, Row } from "react-bootstrap";
+import { UserContext } from "../../../UserContext"
+import { useForm } from 'react-hook-form';
+import { Link, useHistory } from 'react-router-dom';
 import CredentialErrorAlert from "../Widgets/CredentialErrorAlert";
 import LoadingSpinner from "../Widgets/LoadingSpinner";
-import {loginUser} from "../../../services/UsersService"
+import { loginUser } from "../../../services/UsersService"
+import ReCAPTCHA from "react-google-recaptcha"
+import GenericAlert from "../Widgets/GenericAlert";
 
 const LoginForm = () => {
     // Datos del usuario hacer login
@@ -20,9 +22,10 @@ const LoginForm = () => {
         password: "",
         check: false,
     });
-
+    const [captcha, setCaptcha] = useState();
     // Mensaje de error
     const [apiError, setApiError] = useState(false);
+    const [captchaError, setCaptchaError] = useState({})
 
 
     const { formState: { errors, touchedFields }, register, setError, handleSubmit } = useForm({
@@ -36,36 +39,45 @@ const LoginForm = () => {
 
     const onSubmit = async (data, e) => {
         setLoading(true);
-        let loginUrl = "";
-        if (formValue.check)
-            loginUrl += 'companies/login'
-        else
-            loginUrl += 'users/login'
-
-        console.log("handling submit");
-        e.preventDefault();
-        console.log(data);
-        const response = await loginUser(loginUrl, 
-            {
-                email: formValue.email,
-                password: formValue.password
-            },
-            formValue.check
-        )
-        if (response){
+        if (captcha == undefined || null) {
+            setCaptchaError({estado: true, msg: "valida el captcha por favor"})
             setLoading(false)
-            history.push('/home')
         }
         else {
-            setApiError(true)
-            setLoading(false)
-            setForm({
-                email: '',
-                password: ''
-            })
+            let loginUrl = "";
+            if (formValue.check)
+                loginUrl += 'companies/login'
+            else
+                loginUrl += 'users/login'
+
+            console.log("handling submit");
+            e.preventDefault();
+            console.log(data);
+            const response = await loginUser(loginUrl,
+                {
+                    email: formValue.email,
+                    password: formValue.password
+                },
+                formValue.check
+            )
+            if (response) {
+                setLoading(false)
+                history.push('/home')
+            }
+            else {
+                setApiError(true)
+                setLoading(false)
+                setForm({
+                    email: '',
+                    password: ''
+                })
+            }
         }
     }
 
+    const captchaSubmit = (value) => {
+        setCaptcha(value)
+    }
 
     return (
         <div>
@@ -133,11 +145,18 @@ const LoginForm = () => {
                 </Form.Group>
                 {loading && <LoadingSpinner loading={true} />}
                 <Row className="justify-content-center mx-auto ">
-                    <Button variant="primary" type="submit" >Log In</Button>
+                    <Button variant="primary" type="submit"  >Log In</Button>
                 </Row>
                 <Row className="justify-content-center mx-auto pt-2">
                     <CredentialErrorAlert apiError={apiError} />
                 </Row>
+                {captchaError.estado && <Row className="justify-content-center mx-auto pt-2">
+                    <GenericAlert mensaje={captchaError.msg} tipo="danger" />
+                </Row> }
+                <ReCAPTCHA
+                    sitekey={process.env.REACT_APP_RECAPTCHA_API_KEY}
+                    onChange={captchaSubmit}
+                />
             </Form>
         </div>
     )

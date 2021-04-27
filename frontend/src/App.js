@@ -14,9 +14,12 @@ import ServiceCreation from "./views/ServiceCreation";
 import AddService from "./views/AddService";
 
 
+
 export default function App() {
     const [user, setUser] = useState({ name: "", email: "" });
     const history = useHistory();
+
+    require('dotenv').config()
 
     const ProtectedRouteCompany = ({
         component: Component,
@@ -54,6 +57,7 @@ export default function App() {
 
 
     return (
+        console.log(process.env.REACT_APP_RECAPTCHA_API_KEY),
         <Router history={history} >
             <Container fluid="true" className="App">
                 <UserContext.Provider value={{ user, setUser }}>
