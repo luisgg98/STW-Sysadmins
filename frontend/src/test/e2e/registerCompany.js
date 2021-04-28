@@ -2,7 +2,7 @@
 describe('Company Registration test', function() {
     var formNif = by.id('formSUNumber');
     var formEmail = by.id('formBasicEmail');
-    var formCompany =by.id('formSUFName');
+    var formCompany = by.id('formSUFName');
     var password = by.id('formBasicPassword');
     var confpassword = by.id('formSUConfPassword');
     var street = by.id('formSUCalle');
@@ -13,6 +13,11 @@ describe('Company Registration test', function() {
     var category = by.id('formSUCat');
 
     var EC = protractor.ExpectedConditions;
+
+    afterEach(function () {
+        browser.sleep(1000);
+    })
+
 
     it('Registering a company', function() {
 
@@ -55,7 +60,7 @@ describe('Company Registration test', function() {
 
     });
 
-    it('Login After registration',function () {
+    it('Login After company registration',function () {
         browser.get('/login');
 
     })
