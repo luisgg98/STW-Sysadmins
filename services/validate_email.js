@@ -14,7 +14,7 @@ function validateEmail(email) {
  * @returns {boolean}
  */
 function validateCategory(category) {
-    const categories = ["Ocio","Deporte","Administración pública","Salud y belleza","Comercio"]
+    const categories = ["Ocio","Deporte","Administración pública","Salud y Belleza","Comercio"]
     return categories.includes(category)
 }
 

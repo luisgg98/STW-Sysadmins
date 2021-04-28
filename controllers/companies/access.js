@@ -60,65 +60,69 @@ let register = async (req, res, next)=>{
             res.status(422)
             res.send({error: "Wrong category, check docs for further info /api-doc"})
         }
-        if (validate.validateEmail(req.body.email)) {
-            geolo.findCoordenates(req.body.name,req.body.streetnumber,req.body.street,req.body.zipcode)
-                .then( async (coordinates) =>{
+        else{
+            if (validate.validateEmail(req.body.email)) {
+                geolo.findCoordenates(req.body.name,req.body.streetnumber,req.body.street,req.body.zipcode)
+                    .then( async (coordinates) =>{
 
-                    const company = new Company({
-                        name: req.body.name,
-                        nif: req.body.nif,
-                        email : req.body.email,
-                        password: password.hash,
-                        salt: password.salt,
-                        category: req.body.category,
-                        streetnumber:req.body.streetnumber,
-                        street:req.body.street,
-                        zipcode:req.body.zipcode,
-                        location: {
-                            type: "Point",
-                            coordinates: [coordinates.latitude,  coordinates.longitude]
-                        },
-                        // Default description and service duration
-                        description: "null",
-                        service_duration: 0,
-                        schedule: {
-                            monday: {schedule_1:"null"},
-                            tuesday: {schedule_1:"null"},
-                            wednesday: {schedule_1:"null"},
-                            thursday: {schedule_1:"null"},
-                            friday: {schedule_1:"null"},
-                            saturday: {schedule_1:"null"},
-                            sunday: {schedule_1:"null"}
+                            const company = new Company({
+                                name: req.body.name,
+                                nif: req.body.nif,
+                                email : req.body.email,
+                                password: password.hash,
+                                salt: password.salt,
+                                category: req.body.category,
+                                streetnumber:req.body.streetnumber,
+                                street:req.body.street,
+                                zipcode:req.body.zipcode,
+                                location: {
+                                    type: "Point",
+                                    coordinates: [coordinates.latitude,  coordinates.longitude]
+                                },
+                                // Default description and service duration
+                                description: "null",
+                                service_duration: 0,
+                                schedule: {
+                                    monday: {schedule_1:"null"},
+                                    tuesday: {schedule_1:"null"},
+                                    wednesday: {schedule_1:"null"},
+                                    thursday: {schedule_1:"null"},
+                                    friday: {schedule_1:"null"},
+                                    saturday: {schedule_1:"null"},
+                                    sunday: {schedule_1:"null"}
+                                }
+                            })
+                            await company.save()
+                                .then(()=>{
+                                        res.send(company)
+                                    }
+                                )
+
+
                         }
-                    })
-                    await company.save()
-                        .then(()=>{
-                            res.send(company)
+
+                    )
+                    .catch(
+                        (e)=>{
+                            console.error(req.body.name);
+                            console.error(req.body.streetnumber);
+                            console.error(req.body.street);
+                            console.error(req.body.zipcode);
+                            res.status(412)
+                            res.send({ error: "Your company was not found in Open Street Map" })
+                            console.error(e)
                         }
+
                     )
 
 
-                }
+            } else {
+                res.status(422)
+                res.send({ error: "Not an email address" })
+            }
 
-                )
-                .catch(
-                    (e)=>{
-                        console.error(req.body.name);
-                        console.error(req.body.streetnumber);
-                            console.error(req.body.street);
-                                console.error(req.body.zipcode);
-                        res.status(412)
-                        res.send({ error: "Your company was not found in Open Street Map" })
-                        console.error(e)
-                    }
-
-                )
-
-
-        } else {
-            res.status(422)
-            res.send({ error: "Not an email address" })
         }
+
     } catch {
         res.status(405)
         res.send({ error: "Wrong json format, check docs for further info /api-doc" })
