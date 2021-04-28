@@ -47,18 +47,22 @@ async function findCoordenates(place,streetnumber,street,zipcode) {
             (results) =>{
                 let coordinates;
                 if (results.length == 0) {
+                    console.log('1-------');
                     // In case it can not find the place it return the coordinates
                     // of the city of Zaragoza
                     query = geoCodingStreet(street,zipcode)
                         .then(
                         (results) =>{
+                            console.log('2-------');
                             if (results.length == 0){
+                                console.log('4-------');
                                 coordinates = {
                                     latitude: 41.649693,
                                     longitude: -0.887712
                                 }
                             }
                             else{
+                                console.log('5-------');
                                 let result = results[0]
                                 coordinates={
                                     latitude: result.latitude,
@@ -68,10 +72,12 @@ async function findCoordenates(place,streetnumber,street,zipcode) {
                             resolve(coordinates)
                         }
                         ).catch(error =>{
+                            console.log('6-------');
                             reject(error)
                         })
 
                 } else {
+                    console.log('3-------');
                     let result = results[0]
                     coordinates={
                         latitude: result.latitude,
@@ -81,6 +87,7 @@ async function findCoordenates(place,streetnumber,street,zipcode) {
                 }
             }
         ).catch(error =>{
+            console.log('7-------');
             reject(error)
         })
     });
