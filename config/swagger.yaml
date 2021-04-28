@@ -400,28 +400,6 @@ paths:
           description: "Service deleted"
         "404":
             description: "Service not found"
-  /admin/login:
-    post:
-      operationId: loginAdmin
-      tags:
-        - "Admin"
-      summary: "Login admin user"
-      requestBody:
-        description: "username and password of admin"
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Admin_login"
-      responses:
-        "200":
-          description: "Admin logged successfully"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/User_retrieved"
-        "401":
-          description: "Wrong credentials"
   /healthzone:
     get:
       operationId: getAllHealthzone
@@ -1046,13 +1024,6 @@ components:
         token:
           type: string
         expiresIn:
-          type: string
-    Admin_login:
-      type: object
-      properties:
-        username:
-          type: string
-        password:
           type: string
     Healthzone:
       type: array
