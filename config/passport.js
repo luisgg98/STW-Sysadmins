@@ -41,22 +41,10 @@ let strategy = new JwtStrategy(options, function(jwt_payload, done) {
                 if (company) {
                     return done(null, company);
                 }
-                //Check if it is the admin
-                else{
-                    Admin.findOne({_id: jwt_payload.sub},function (err,admin) {
-                        if (err) {
-                            return done(err, false);
-                        }
-                        if(admin){
-                            return done(null,admin);
-
-                        }
-                        else {
-                            return done(null, false);
-                        }
-
-                    });
+                else {
+                    return done(null, false);
                 }
+
             });
         }
     });
