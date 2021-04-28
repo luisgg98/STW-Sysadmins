@@ -174,7 +174,6 @@ function  updateDatabase(date) {
                         // Map the name of the district with a health zone
                         hz.updateCovidHealthzone(ZonaSalud, newcases,updateRadius(newcases),date).then(async function (district) {
                             // A District found
-                            console.log(ZonaSalud + " health zone updated" );
                         }).catch((e) =>{
                             if(!e.includes('Not found:')){
                                 console.log({ error: "Error updating the data of a district" + e })

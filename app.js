@@ -53,12 +53,12 @@ loadDistrict.loadCouncilInfo();
 // Two in the morning '*/25 * * * *'
 // Due to covid most business close at the hour
 cron.schedule('*/25 * * * *', async function() {
-  console.log('Running Cron Job');
+  console.log('Starting to update Health Zone information');
   await ta.getCasesFile().then(r => {
-    console.log('Cron Job working correctly');
+    console.log('Information updated working correctly');
   }).catch((error) => {
-    console.log('Cron Job working error, something goes wrong');
-    console.log('Error '+ error );
+    console.log('Updating error, something goes wrong');
+    console.log('Error: '+ error );
   });
 });
 
