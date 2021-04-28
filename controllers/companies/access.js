@@ -4,7 +4,7 @@ const Company = require('../../models/company')
 const Service = require('../../models/service')
 const geolo = require('../../services/geocoding')
 const jwt_login_strategy= require('../../config/passport');
-const Admin =  require('mongoose').model('admin');
+
 /**
  *
  * @param req
@@ -81,6 +81,7 @@ let register = async (req, res, next)=>{
                                 },
                                 // Default description and service duration
                                 description: "null",
+                                security_level:1,
                                 service_duration: 0,
                                 schedule: {
                                     monday: {schedule_1:"null"},
@@ -180,9 +181,9 @@ let update = async (req, res, next)=> {
             res.send({ error: "Wrong User Access denied"})
         }
         else{
-            //const company = await Company.findOne({ _id: req.params.id });
             let company;
-            if(req.result instanceof Admin){
+            //result.security_level !== undefined &&
+            if(req.result.security_level !== undefined && req.result.security_level>1){
                 company = await Company.findOne({ _id: req.params.id });
             }
             else{

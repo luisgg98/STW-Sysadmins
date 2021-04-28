@@ -2,7 +2,6 @@ const utils = require('../../services/utils')
 const validate_email = require('../../services/validate_email')
 const User = require('../../models/user')
 const jwt_login_strategy= require('../../config/passport');
-const Admin =  require('mongoose').model('admin');
 
 // TODO can't be two users with same phone number
 /**
@@ -22,7 +21,8 @@ let register = async (req, res) => {
                 phone: req.body.phone,
                 email: req.body.email,
                 password: password.hash,
-                salt: password.salt
+                salt: password.salt,
+                security_level:1
             })
             await user.save()
             res.send(user)
@@ -92,7 +92,7 @@ let update = async (req, res) => {
         }
         else{
             let user;
-            if(req.result instanceof  Admin){
+            if(req.result.security_level !== undefined && req.result.security_level>1){
                 user = await User.findOne({ _id: req.params.id })
             }
             else{

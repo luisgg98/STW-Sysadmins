@@ -6,7 +6,6 @@ const passport = require('passport')
 // TODO MUST BE CHANGED according to our database
 const User = require('mongoose').model('user');
 const Company = require('mongoose').model('company');
-const Admin =  require('mongoose').model('admin');
 
 // The idea is to have a file where the public key and the private
 // key are stored
@@ -114,7 +113,7 @@ module.exports = {
      */
     security: function (id,result) {
         let accessGranted =false
-        if (result instanceof Admin){
+        if (result.security_level !== undefined && result.security_level>1){
             accessGranted = true
         }
         else{

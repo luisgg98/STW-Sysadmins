@@ -6,7 +6,8 @@ const user = new mongoose.Schema({
     phone : { type : Number, required: true},
     email : { type : String, required: true},
     password : { type : String, required: true},
-    salt : { type : String, required: true}
+    salt : { type : String, required: true},
+    security_level: { type : Number, required: false}
 });
 
 module.exports = mongoose.model("user", user);

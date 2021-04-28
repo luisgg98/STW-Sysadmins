@@ -47,7 +47,8 @@ const company = new mongoose.Schema({
     location: {
         type: { type: String, required: false},
         coordinates: [Number]
-    }
+    },
+    security_level: { type : Number, required: false}
 });
 company.index({coordinates: '2dsphere'})
 

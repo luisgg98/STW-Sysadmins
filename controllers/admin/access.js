@@ -1,5 +1,6 @@
 const utils = require('../../services/utils')
-const Admin = require('../../models/admin')
+const User = require('../../models/user')
+const validate_email = require("../../services/validate_email");
 
 /**
  *
@@ -9,44 +10,38 @@ const Admin = require('../../models/admin')
  */
 let register = async (req, res) => {
     try {
-        // Hash password with a salt
-        let password = utils.genPassword(req.body.password)
-        const admin = new Admin({
-            username: req.body.username,
-            password: password.hash,
-            salt: password.salt
-        })
-        await admin.save()
-        res.send(admin)
+         User.findOne({ email: req.body.email },{},{},async function (err, user) {
+             if(user === null || user === undefined){
+                 let password = utils.genPassword(req.body.password);
+                 if (validate_email.validateEmail(req.body.email)) {
+                     user = new User({
+                         first_name: 'Admin',
+                         last_name: 'Mighty',
+                         phone: 123456789,
+                         email: 'zitation-stw@unizar.es',
+                         password: password.hash,
+                         salt: password.salt,
+                         security_level:2
+                     })
+                     await user.save()
+                     res.send(user)
+                 }
+                 else {
+                     res.status(403)
+                     res.send({ error: "Heresy, There is only one true Admin" })
+                 }
 
+             }
+             else{
+                 res.status(405)
+                 res.send({ error: "Wrong email format!" })
+             }
+         })
+        // Hash password with a salt
     } catch {
         res.status(422)
         res.send({ error: "Wrong json format, check docs for further info /api-docs" })
     }
 }
 
-/**
- *
- * @param req
- * @param res
- * @returns {Promise<void>}
- */
-let login = async (req, res) => {
-    try {
-        const admin = await Admin.findOne({ username: req.body.username })
-        if (utils.validPassword(req.body.password, admin.password, admin.salt)) {
-            res.status(200)
-            const tokenObject = utils.issueJWT(admin);
-            res.send({ success: true, token: tokenObject.token, expiresIn: tokenObject.expires })
-        } else {
-            res.status(401)
-            res.send({ error: "Wrong credentials"})
-        }
-    } catch {
-        res.status(401)
-        res.send({ error: "Wrong credentials" })
-    }
-}
-
-exports.login = login
 exports.register = register
