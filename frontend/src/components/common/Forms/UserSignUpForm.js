@@ -25,9 +25,6 @@ function UserSUForm() {
     // Mensaje de error
     const [apiError, setApiError] = useState(false);
 
-    // Datos del usuario hacer login
-    const { user, setUser } = useContext(UserContext);
-
     const { formState: { errors, touchedFields }, getValues, register, reset, setError, handleSubmit } = useForm({
         mode: 'onSubmit', reValidateMode: 'onBlur',
         defaultValues: {
@@ -106,7 +103,7 @@ function UserSUForm() {
                         {...register("email", {
                             required: { value: true, message: "Email obligatorio" },
                             pattern: {
-                                value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                                value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                                 message: "Formato de email incorrecto"
                             }
                         })}

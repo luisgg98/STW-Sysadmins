@@ -10,11 +10,10 @@ function Companies(props) {
         getCompanies().then((response) => {
             setCompanies(response.data)
         })
-    })
+    }, []);
 
     let marcas = []
     companies.forEach(function (comercio) {
-        console.log(comercio)
         let marca = <Marker key={comercio._id} position={comercio.location.coordinates}>
             <Popup key={comercio._id}>{comercio.name}</Popup>
         </Marker>;

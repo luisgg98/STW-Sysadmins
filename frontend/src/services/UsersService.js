@@ -4,8 +4,8 @@ export const getUsers = async () => {
     return await axios.get('users/')
 }
 
-async function removeUser(userId) {
-    return await axios.delete('users/' + userId, {
+export function removeUser(userId) {
+    return axios.delete('users/' + userId, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': localStorage.getItem("token")
@@ -27,8 +27,7 @@ function saveUserInfo(response, isCompany) {
     if (isCompany) {
         localStorage.setItem("company", JSON.stringify(response.company))
         localStorage.setItem("user", JSON.stringify({}))
-    }
-    else {  
+    } else {
         localStorage.setItem("user", JSON.stringify(response.user))
         localStorage.setItem("company", JSON.stringify({}))
     }

@@ -1,6 +1,6 @@
 import {Button, Table} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
-import {getUsers} from "../../services/UsersService";
+import {getUsers, removeUser} from "../../services/UsersService";
 
 function UsersTable() {
 
@@ -13,9 +13,14 @@ function UsersTable() {
     }, []);
 
 
-    function handleClick() {
-        //TODO implementar borrado
-        console.log("Cuando este implementado borrare el usuario")
+    function handleClick(user_id) {
+        removeUser(user_id).then(r => {
+            if (r.status === 204) {
+                setUsers(users.filter(user => user._id !== user_id))
+            }
+        }).catch((error) => {
+            console.log("Error Borrado usuario", error)
+        })
     }
 
     return (
@@ -35,7 +40,7 @@ function UsersTable() {
                         <td>{user.first_name}</td>
                         <td>{user.last_name}</td>
                         <td>
-                            <Button variant="outline-danger" onClick={handleClick}>Borrar</Button>
+                            <Button variant="outline-danger" onClick={() => handleClick(user._id)}>Borrar</Button>
                         </td>
                     </tr>)
                 )}

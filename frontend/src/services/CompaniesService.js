@@ -86,6 +86,17 @@ export const updateCompanyInfo = async (companyName) => {
     })
 }
 
+export function removeCompany(companyId) {
+    return axios.delete('companies/' + companyId, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem("token")
+            },
+        }
+    )
+}
+
+
 export const postService = async  (service, id) => {
     console.log("registrando nuevo servicio para ", id, " con servicio ", service)
     let url = "companies/"+id+"/services"

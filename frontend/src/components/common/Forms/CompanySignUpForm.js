@@ -26,10 +26,6 @@ const CompanySignUpForm = () => {
         zipcode: 0
     });
 
-
-    // Datos del usuario hacer login
-    const { user, setUser } = useContext(UserContext);
-
     const { formState: { errors, touchedFields }, getValues, register, reset, setError, handleSubmit } = useForm({
         mode: 'onSubmit', reValidateMode: 'onBlur',
         defaultValues: {

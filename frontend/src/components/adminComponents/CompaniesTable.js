@@ -1,6 +1,7 @@
 import {Button, Table} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
-import {getCompanies} from "../../services/CompaniesService";
+import {getCompanies, removeCompany} from "../../services/CompaniesService";
+
 
 function CompaniesTable() {
 
@@ -13,9 +14,14 @@ function CompaniesTable() {
     }, []);
 
 
-    function handleClick() {
-        //TODO implementar borrado
-        console.log("Cuando este implementado borrare la compañia")
+    function handleClick(companyId) {
+        removeCompany(companyId).then(r => {
+            if (r.status === 204) {
+                setCompanies(companies.filter(company => company._id !== companyId))
+            }
+        }).catch((error) => {
+            console.log("Error Borrado compañia", error)
+        })
     }
 
     return (
@@ -38,7 +44,7 @@ function CompaniesTable() {
                         <td>{company.category}</td>
                         <td>{company.location.coordinates}</td>
                         <td>
-                            <Button variant="outline-danger" onClick={handleClick}>Borrar</Button>
+                            <Button variant="outline-danger" onClick={() => handleClick(company._id)}>Borrar</Button>
                         </td>
                     </tr>)
                 )}

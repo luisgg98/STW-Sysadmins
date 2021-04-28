@@ -20,7 +20,7 @@ function HealthZones() {
         getHealthZones().then((response) => {
             setHealthZones(response.data)
         })
-    })
+    }, []);
 
     let zonas = []
     healthZones.forEach(function (healthZone, index) {
