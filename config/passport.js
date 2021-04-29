@@ -69,22 +69,20 @@ module.exports = {
         return passport.authenticate("jwt", {
             session: false
         }, (err, result, info) => {
+            // Authentication failure result=false
             if (err) {
-
                 res.status(err.status || 500);
                 res.json({
                     message: err.message,
                     error: err,
-                });
-                return;
+                })
             }
             else{
                 if(info){
                     res.status(info.status || 401);
                     res.json({
                         error: info.message,
-                    });
-                    return;
+                    })
                 }
                 else{
                     req.result = result;
@@ -101,15 +99,14 @@ module.exports = {
      */
     security: function (id,result) {
         let accessGranted =false
-        if (result.security_level !== undefined && result.security_level>1){
+        if (result.security_level !== undefined && result.security_level > 1){
             accessGranted = true
         }
         else{
-            if(id == result._id){
+            if(id === result._id){
                 accessGranted = true
             }
         }
         return accessGranted;
-
     }
 };

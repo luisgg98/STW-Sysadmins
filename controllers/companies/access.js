@@ -173,9 +173,8 @@ let login = async (req, res, next)=>{
  * @param res
  * @returns {Promise<void>}
  */
-let update = async (req, res, next)=> {
+let update = async (req, res)=> {
     try {
-
         if(!jwt_login_strategy.security(req.params.id,req.result)){
             res.status(401)
             res.send({ error: "Wrong User Access denied"})
@@ -228,7 +227,6 @@ let update = async (req, res, next)=> {
                         await company.save()
                         res.send(company)
                     }
-
                 )
                 .catch(
                     (e)=>{
@@ -236,7 +234,6 @@ let update = async (req, res, next)=> {
                         res.status(404)
                         res.send({ error: "Company not found" })
                     })
-
         }
     }
     catch {
@@ -252,14 +249,16 @@ let update = async (req, res, next)=> {
  * @param res
  * @returns {Promise<void>}
  */
-let delete_company = async (req, res, next)=>{
+let delete_company = async (req, res)=>{
     try {
-        if(!jwt_login_strategy.security(req.params.id,req.result)){
+        if(!jwt_login_strategy.security(req.params.id, req.result)){
+            console.log("Algo va mal")
             res.status(401)
             res.send({ error: "Wrong User Access denied"})
-        }
-        else{
+        } else{
+            console.log("Fetching company")
             await Company.deleteOne({ _id: req.params.id })
+            console.log("Company fetched")
             res.status(204).send()
         }
     } catch {
