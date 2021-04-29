@@ -53,7 +53,7 @@ let fetchCompany = async (req, res) => {
  * @param res
  * @returns {Promise<void>}
  */
-let register = async (req, res, next)=>{
+let register = async (req, res)=>{
     try {
         // Test if exists another company with the same nif
         Company.count({nif: req.body.nif}, async function (err, count){
@@ -136,7 +136,7 @@ let register = async (req, res, next)=>{
  * @param res
  * @returns {Promise<void>}
  */
-let login = async (req, res, next)=>{
+let login = async (req, res)=>{
     try {
         const company = await Company.findOne({ email: req.body.email })
         if (utils.validPassword(req.body.password, company.password, company.salt)) {

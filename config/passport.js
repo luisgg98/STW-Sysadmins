@@ -103,7 +103,7 @@ module.exports = {
             accessGranted = true
         }
         else{
-            if(id === result._id){
+            if(id == result._id){
                 accessGranted = true
             }
         }
