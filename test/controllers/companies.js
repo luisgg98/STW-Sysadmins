@@ -7,7 +7,7 @@ const Company = require('../../models/company')
 chai.use(chaiHttp);
 
 
-let company = {  "nif": "string",
+let company = {  "nif": "B12345678",
     "name": "Cafetería Lamarula",
     "email": "user@example.com",
     "password": "string",
@@ -19,11 +19,7 @@ let company = {  "nif": "string",
 const url = '/api/companies/'
 
 describe('Testing Company API', () => {
-    beforeEach((done) => { //Before each test we empty the database
-        Company.remove({}, (err) => {
-            done();
-        });
-    });
+
     /*
       * Test the /GET route
       */
@@ -51,74 +47,46 @@ describe('Testing Company API', () => {
 
     }))
 
-
-    it('It should delete a new company using DELETE',(done => {
-
+    it('It should update a new company using PATCH',(done => {
         chai.request(server)
-            .post(url)
-            .send(company)
-            .end((err, res) => {
+            .post(url + 'login/')
+            .send({"email": "user@example.com","password": "string"})
+            .end((err,res)=>{
                 if(err) throw err;
                 res.should.have.status(200);
-
+                let bearer = res.body.token;
+                let id = res.body.company.id;
                 chai.request(server)
-                    .post(url + 'login/')
-                    .send({"email": "user@example.com","password": "string"})
+                    .patch(url + id )
+                    .send({"name": "This is a test"})
+                    .set({ "Authorization": `${bearer}`})
                     .end((err,res)=>{
                         if(err) throw err;
                         res.should.have.status(200);
-                        let bearer = res.body.token;
-                        let id = res.body.company.id;
-                        chai.request(server)
-                            .delete(url + id )
-                            .set({ "Authorization": `${bearer}` })
-                            .end((err,res)=>{
-                                if(err) throw err;
-                                res.should.have.status(204);
-                                done();
-                            })
-
-
+                        done();
                     })
-
             })
 
     }))
 
-    it('It should update a new company using PATCH',(done => {
-
+    it('It should delete a new company using DELETE',(done => {
         chai.request(server)
-            .post(url)
-            .send(company)
-            .end((err, res) => {
+            .post(url + 'login/')
+            .send({"email": "user@example.com","password": "string"})
+            .end((err,res)=>{
                 if(err) throw err;
                 res.should.have.status(200);
+                let bearer = res.body.token;
+                let id = res.body.company.id;
                 chai.request(server)
-                    .post(url + 'login/')
-                    .send({"email": "user@example.com","password": "string"})
+                    .delete(url + id )
+                    .timeout(5000)
+                    .set({ "Authorization": `${bearer}` })
                     .end((err,res)=>{
                         if(err) throw err;
-                        res.should.have.status(200);
-
-                        let bearer = res.body.token;
-                        let id = res.body.company.id;
-                        chai.request(server)
-                            .patch(url + id )
-                            .send({"name": "This is a test"})
-                            .set({ "Authorization": `${bearer}`})
-                            .end((err,res)=>{
-                                if(err) throw err;
-                                res.should.have.status(200);
-                                done();
-                            })
-                            .catch(
-                                (e)=>{
-                                    console.log(e.message);
-                                    done();
-                                }
-                            )
+                        res.should.have.status(204);
+                        done();
                     })
-
             })
 
     }))

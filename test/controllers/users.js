@@ -16,11 +16,7 @@ let user = {
 const url = '/api/users/'
 //Our parent block
 describe('Testing User API', () => {
-    beforeEach((done) => { //Before each test we empty the database
-        User.remove({}, (err) => {
-            done();
-        });
-    });
+
     /*
       * Test the /GET route
       */
@@ -47,73 +43,45 @@ describe('Testing User API', () => {
             })
 
     }))
-
-
-    it('It should delete a new user using DELETE',(done => {
-
+    it('It should update a new user using PATCH',(done => {
         chai.request(server)
-            .post(url)
-            .send(user)
-            .end((err, res) => {
+            .post(url + 'login/')
+            .send({"email": "user@example.com","password": "string"})
+            .end((err,res)=>{
                 if(err) throw err;
                 res.should.have.status(200);
-
+                let bearer = res.body.token;
+                let id = res.body.user.id;
                 chai.request(server)
-                    .post(url + 'login/')
-                    .send({"email": "user@example.com","password": "string"})
+                    .patch(url + id )
+                    .send({"last_name": "This is a test"})
+                    .set({ "Authorization": `${bearer}` })
                     .end((err,res)=>{
                         if(err) throw err;
                         res.should.have.status(200);
-                        let bearer = res.body.token;
-                        let id = res.body.user.id;
-                        chai.request(server)
-                            .delete(url + id )
-                            .set({ "Authorization": `${bearer}` })
-                            .end((err,res)=>{
-                                if(err) throw err;
-                                res.should.have.status(204);
-                                done();
-                            })
-
-
+                        done();
                     })
-
             })
-
     }))
 
-    it('It should update a new user using PATCH',(done => {
-
+    it('It should delete a new user using DELETE',(done => {
         chai.request(server)
-            .post(url)
-            .send(user)
-            .end((err, res) => {
+            .post(url + 'login/')
+            .send({"email": "user@example.com","password": "string"})
+            .end((err,res)=>{
                 if(err) throw err;
                 res.should.have.status(200);
-
+                let bearer = res.body.token;
+                let id = res.body.user.id;
                 chai.request(server)
-                    .post(url + 'login/')
-                    .send({"email": "user@example.com","password": "string"})
+                    .delete(url + id )
+                    .set({ "Authorization": `${bearer}` })
                     .end((err,res)=>{
                         if(err) throw err;
-                        res.should.have.status(200);
-                        let bearer = res.body.token;
-                        let id = res.body.user.id;
-                        chai.request(server)
-                            .patch(url + id )
-                            .send({"last_name": "This is a test"})
-                            .set({ "Authorization": `${bearer}` })
-                            .end((err,res)=>{
-                                if(err) throw err;
-                                res.should.have.status(200);
-                                done();
-                            })
-
-
+                        res.should.have.status(204);
+                        done();
                     })
-
             })
-
     }))
 
 });
