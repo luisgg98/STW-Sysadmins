@@ -12,32 +12,25 @@ const jwt_login_strategy= require('../../config/passport');
  */
 let register = async (req, res) => {
     try {
-        // Test if exists another user with the same phone
-        User.count({phone: req.body.phone}, async function (err, count){
-            if (count > 0) {
-                res.status(409)
-                res.send({ error: "User already exists"})
-            } else {
-                // Hash password with a salt
-                let password = utils.genPassword(req.body.password)
-                if (validate_email.validateEmail(req.body.email)) {
-                    const user = new User({
-                        first_name: req.body.first_name,
-                        last_name: req.body.last_name,
-                        phone: req.body.phone,
-                        email: req.body.email,
-                        password: password.hash,
-                        salt: password.salt,
-                        security_level:1
-                    })
-                    await user.save()
-                    res.send(user)
-                } else {
-                    res.status(405)
-                    res.send({ error: "Wrong email format!" })
-                }
-            }
-        })
+        // Hash password with a salt
+        let password = utils.genPassword(req.body.password)
+        if (validate_email.validateEmail(req.body.email)) {
+            const user = new User({
+                first_name: req.body.first_name,
+                last_name: req.body.last_name,
+                phone: req.body.phone,
+                email: req.body.email,
+                password: password.hash,
+                salt: password.salt,
+                security_level:1
+            })
+            await user.save()
+            res.send(user)
+        } else {
+            res.status(405)
+            res.send({ error: "Wrong email format!" })
+        }
+
     } catch {
         res.status(422)
         res.send({ error: "Wrong json format, check docs for further info /api-docs" })

@@ -55,8 +55,6 @@ paths:
           description: "Wrong email format"
         "405":
           description: "Wrong json format, check docs for further info /api-docs"
-        "409":
-          description: "User already exists"
   /users/{phone}:
     get:
       operationId: getUser
@@ -200,8 +198,6 @@ paths:
           description: "Wrong email format"
         "405":
           description: "Wrong json format, check docs for further info /api-doc"
-        "409":
-          description: "Company already exists"
   /companies/{nif}:
     get:
       operationId: getCompany
