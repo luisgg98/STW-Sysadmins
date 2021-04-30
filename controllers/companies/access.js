@@ -90,13 +90,13 @@ let register = async (req, res)=>{
                                         security_level:1,
                                         service_duration: 0,
                                         schedule: {
-                                            monday: {schedule_1:"null"},
-                                            tuesday: {schedule_1:"null"},
-                                            wednesday: {schedule_1:"null"},
-                                            thursday: {schedule_1:"null"},
-                                            friday: {schedule_1:"null"},
-                                            saturday: {schedule_1:"null"},
-                                            sunday: {schedule_1:"null"}
+                                            monday: {open_1:"null", close_1: "null"},
+                                            tuesday: {open_1:"null", close_1: "null"},
+                                            wednesday: {open_1:"null", close_1: "null"},
+                                            thursday: {open_1:"null", close_1: "null"},
+                                            friday: {open_1:"null", close_1: "null"},
+                                            saturday: {open_1:"null", close_1: "null"},
+                                            sunday: {open_1:"null", close_1: "null"}
                                         }
                                     })
                                     await company.save()
@@ -210,11 +210,18 @@ let update = async (req, res)=> {
             if (req.body.description) {
                 company.description = req.body.description
             }
-            if (req.body.duration) {
-                company.service_duration = req.body.duration
-            }
-            if (req.body.schedule) {
-                company.schedule = req.body.schedule
+            if (req.body.schedule || req.body.duration) {
+                if (req.body.schedule && req.body.duration){
+                    company.schedule = req.body.schedule
+                    company.service_duration = req.body.duration
+                    company.time_slots = await update_time_slots(req.params.id, parseInt(req.body.duration,10))
+                } else if (req.body.schedule){
+                    company.schedule = req.body.schedule
+                    company.time_slots = await update_time_slots(req.params.id, parseInt(company.service_duration,10))
+                } else {
+                    company.service_duration = req.body.duration
+                    company.time_slots = await update_time_slots(req.params.id, parseInt(req.body.duration,10))
+                }
             }
             if(req.body.category){
                 company.category = req.body.category;
@@ -276,14 +283,23 @@ let delete_company = async (req, res)=>{
  */
 let create_service = async (req, res, next)=> {
     try {
-        const service = new Service({
-            company: req.params.nif,
-            description: req.body.description,
-            capacity: req.body.capacity,
-            price: req.body.price
+        // Check if company exists
+        Company.count({nif: req.params.nif}, async function (err, count){
+            if (count === 0) {
+                // Company does not exist
+                res.status(404)
+                res.send({error: "Company not found"})
+            } else {
+                const service = new Service({
+                    company: req.params.nif,
+                    description: req.body.description,
+                    capacity: req.body.capacity,
+                    price: req.body.price
+                })
+                await service.save()
+                res.send(service)
+            }
         })
-        await service.save()
-        res.send(service)
     } catch {
         res.status(405)
         res.send({ error: "Wrong json format, check docs for further info /api-doc" })
@@ -302,12 +318,31 @@ let get_services = async (req, res, next)=>{
         if (req.query.id){
             // Fetch just one service
             let id = req.query.id
-            const service = await Service.find({_id:id})
-            res.send(service)
-        } else {
+            Company.count({nif: req.params.nif}, async function (err, count){
+                if (count === 0) {
+                    res.status(404)
+                    res.send({ error: "Company not found"})
+                } else {
+                    const service = await Service.findOne({_id:id})
+                    res.send(service)
+                }
+            })
+        } else if (req.params.nif !== ",") {
             // Fetch all services from a company
-            const services = await Service.find({company: req.params.nif})
-            res.send(services)
+            // Check if company exists
+            Company.count({nif: req.params.nif}, async function (err, count){
+                if (count === 0) {
+                    res.status(404)
+                    res.send({ error: "Company not found"})
+                } else {
+                    const services = await Service.find({company: req.params.nif})
+                    res.status(200)
+                    res.send(services)
+                }
+            })
+        } else {
+            res.status(405)
+            res.send({error:"Wrong request, check docs for further info /api-doc"})
         }
     }
     catch {
@@ -361,9 +396,78 @@ let delete_service = async (req, res, next)=>{
         res.send({ error: "Service not found" })
     }
 }
-/***
- * color1 instanceof String
- */
+
+
+async function update_time_slots(id, duration) {
+    let company = await Company.findOne({_id: id})
+    // Sacar duracion de los servicios
+    // Para cada día de la semana sacar las franjas horarias
+    // Monday
+    //Sacar hora y minutos de inicio y pasar to\do a minutos
+    let open_1 = company.schedule.monday.open_1
+    let close_1 = company.schedule.monday.close_1
+    // La compañia solo tiene un horario
+    // Sacar horas y minutos, vienen en formato hh:mm
+    open_1 = open_1.split(":")
+    // Hora de apertura
+    let open_1_hora = open_1[0]
+    // Pasar a minutos
+    open_1_hora = parseInt(open_1_hora,10) * 60
+    let open_1_minutes = parseInt(open_1[1],10)
+    // Sacar horario de cierre
+    close_1 = close_1.split(":")
+    let close_1_hora = parseInt(close_1[0], 10)*60
+    let close_1_minutes = parseInt(close_1[1],10)
+    close_1 = close_1_hora + close_1_minutes
+    let x = duration; //minutes interval
+    let times = []; // time array
+    let tt = open_1_hora + open_1_minutes; // start time
+    let ap = ['AM', 'PM']; // AM-PM
+    // loop to increment the time and push results in array
+    let i = 0
+    for (i;tt<close_1; i++) {
+        let hh = Math.floor(tt/60); // getting hours of day in 0-24 format
+        let mm = (tt%60); // getting minutes of the hour in 0-55 format
+        times[i] = ("0" + (hh % 12)).slice(-2) + ':' + ("0" + mm).slice(-2) + ap[Math.floor(hh/12)]; // pushing data in array in [00:00 - 12:00 AM/PM format]
+        tt = tt + x;
+    }
+    if (company.schedule.monday.open_2) {
+        // La compañia tiene doble horario
+        let open_2 = company.schedule.monday.open_2
+        let close_2 = company.schedule.monday.close_2
+        // La compañia solo tiene un horario
+        // Sacar horas y minutos, vienen en formato hh:mm
+        open_2 = open_2.split(":")
+        // Hora de apertura
+        let open_2_hora = open_2[0]
+        // Pasar a minutos
+        open_2_hora = parseInt(open_2_hora,10) * 60
+        let open_2_minutes = parseInt(open_2[1],10)
+        // Sacar horario de cierre
+        close_2 = close_2.split(":")
+        let close_2_hora = parseInt(close_2[0], 10)*60
+        let close_2_minutes = parseInt(close_2[1],10)
+        close_2 = close_2_hora + close_2_minutes
+        let x = duration; //minutes interval
+        let tt = open_2_hora + open_2_minutes; // start time
+        let ap = ['AM', 'PM']; // AM-PM
+        // loop to increment the time and push results in array
+        for (i;tt<close_2; i++) {
+            let hh = Math.floor(tt/60); // getting hours of day in 0-24 format
+            let mm = (tt%60); // getting minutes of the hour in 0-55 format
+            times[i] = ("0" + (hh % 12)).slice(-2) + ':' + ("0" + mm).slice(-2) + ap[Math.floor(hh/12)]; // pushing data in array in [00:00 - 12:00 AM/PM format]
+            tt = tt + x;
+        }
+        return times
+    }
+    /////////////////////////////
+    // Tuesday
+    // Wednesday
+    // Thursday
+    // Friday
+    // Saturday
+    // Sunday
+}
 
 exports.get = get
 exports.register = register

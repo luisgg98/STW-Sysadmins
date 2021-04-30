@@ -13,35 +13,51 @@ const company = new mongoose.Schema({
     description: { type: String, required: true},
     // Duration needs to be in **minutes**
     service_duration: { type: Number, required: true},
+    // Time slots
+    time_slots: { type: Array},
     // Schedule of his services
     schedule: {
         monday: {
-            schedule_1: { type: String, required: true},
-            schedule_2: { type: String }
+            open_1: { type: String, required: true},
+            close_1: { type: String, required: true},
+            open_2: { type: String},
+            close_2: { type: String}
         },
         tuesday: {
-            schedule_1: { type: String, required: true},
-            schedule_2: { type: String }
+            open_1: { type: String, required: true},
+            close_1: { type: String, required: true},
+            open_2: { type: String},
+            close_2: { type: String}
         },
         wednesday: {
-            schedule_1: { type: String, required: true},
-            schedule_2: { type: String }
+            open_1: { type: String, required: true},
+            close_1: { type: String, required: true},
+            open_2: { type: String},
+            close_2: { type: String}
         },
         thursday: {
-            schedule_1: { type: String, required: true},
-            schedule_2: { type: String }
+            open_1: { type: String, required: true},
+            close_1: { type: String, required: true},
+            open_2: { type: String},
+            close_2: { type: String}
         },
         friday: {
-            schedule_1: { type: String, required: true},
-            schedule_2: { type: String }
+            open_1: { type: String, required: true},
+            close_1: { type: String, required: true},
+            open_2: { type: String},
+            close_2: { type: String}
         },
         saturday: {
-            schedule_1: { type: String, required: true},
-            schedule_2: { type: String }
+            open_1: { type: String, required: true},
+            close_1: { type: String, required: true},
+            open_2: { type: String},
+            close_2: { type: String}
         },
         sunday: {
-            schedule_1: { type: String, required: true},
-            schedule_2: { type: String }
+            open_1: { type: String, required: true},
+            close_1: { type: String, required: true},
+            open_2: { type: String},
+            close_2: { type: String}
         }
     },
     location: {

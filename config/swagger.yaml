@@ -311,6 +311,12 @@ paths:
         - in: path
           name: "nif"
           description: "nif of service company to retrieve"
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: "id"
+          description: "id of service to retrieve"
           schema:
             type: string
       responses:
@@ -320,6 +326,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Get_services'
+        "405":
+          description: "Wrong request, check docs for further info /api-doc"
         "500":
           description: "Internal server error"
     post:
@@ -330,6 +338,7 @@ paths:
         - in: path
           name: "nif"
           description: "nif of service company to retrieve"
+          required: true
           schema:
             type: string
       requestBody:
@@ -587,57 +596,89 @@ components:
             type: number
           service_duration:
             type: string
+          time_slots:
+            type: array
+            items:
+              type: string
           schedule:
             type: object
             properties:
               monday:
                 type: object
                 properties:
-                  schedule_1:
+                  open_1:
                     type: string
-                  schedule_2:
+                  close_1:
+                    type: string
+                  open_2:
+                    type: string
+                  close_2:
                     type: string
               tuesday:
                 type: object
                 properties:
-                  schedule_1:
+                  open_1:
                     type: string
-                  schedule_2:
+                  close_1:
+                    type: string
+                  open_2:
+                    type: string
+                  close_2:
                     type: string
               wednesday:
                 type: object
                 properties:
-                  schedule_1:
+                  open_1:
                     type: string
-                  schedule_2:
+                  close_1:
+                    type: string
+                  open_2:
+                    type: string
+                  close_2:
                     type: string
               thursday:
                 type: object
                 properties:
-                  schedule_1:
+                  open_1:
                     type: string
-                  schedule_2:
+                  close_1:
+                    type: string
+                  open_2:
+                    type: string
+                  close_2:
                     type: string
               friday:
                 type: object
                 properties:
-                  schedule_1:
+                  open_1:
                     type: string
-                  schedule_2:
+                  close_1:
+                    type: string
+                  open_2:
+                    type: string
+                  close_2:
                     type: string
               saturday:
                 type: object
                 properties:
-                  schedule_1:
+                  open_1:
                     type: string
-                  schedule_2:
+                  close_1:
+                    type: string
+                  open_2:
+                    type: string
+                  close_2:
                     type: string
               sunday:
                 type: object
                 properties:
-                  schedule_1:
+                  open_1:
                     type: string
-                  schedule_2:
+                  close_1:
+                    type: string
+                  open_2:
+                    type: string
+                  close_2:
                     type: string
           category:
             type: string
@@ -708,37 +749,51 @@ components:
             monday:
               type: object
               properties:
-                schedule_1:
+                open_1:
+                  type: string
+                close_1:
                   type: string
             tuesday:
               type: object
               properties:
-                schedule_1:
+                open_1:
+                  type: string
+                close_1:
                   type: string
             wednesday:
               type: object
               properties:
-                schedule_1:
+                open_1:
+                  type: string
+                close_1:
                   type: string
             thursday:
               type: object
               properties:
-                schedule_1:
+                open_1:
+                  type: string
+                close_1:
                   type: string
             friday:
               type: object
               properties:
-                schedule_1:
+                open_1:
+                  type: string
+                close_1:
                   type: string
             saturday:
               type: object
               properties:
-                schedule_1:
+                open_1:
+                  type: string
+                close_1:
                   type: string
             sunday:
               type: object
               properties:
-                schedule_1:
+                open_1:
+                  type: string
+                close_1:
                   type: string
         location:
           type: object
@@ -791,57 +846,89 @@ components:
           type: string
         service_duration:
           type: string
+        time_slots:
+          type: array
+          items:
+            type: string
         schedule:
           type: object
           properties:
             monday:
               type: object
               properties:
-                schedule_1:
+                open_1:
                   type: string
-                schedule_2:
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
                   type: string
             tuesday:
               type: object
               properties:
-                schedule_1:
+                open_1:
                   type: string
-                schedule_2:
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
                   type: string
             wednesday:
               type: object
               properties:
-                schedule_1:
+                open_1:
                   type: string
-                schedule_2:
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
                   type: string
             thursday:
               type: object
               properties:
-                schedule_1:
+                open_1:
                   type: string
-                schedule_2:
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
                   type: string
             friday:
               type: object
               properties:
-                schedule_1:
+                open_1:
                   type: string
-                schedule_2:
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
                   type: string
             saturday:
               type: object
               properties:
-                schedule_1:
+                open_1:
                   type: string
-                schedule_2:
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
                   type: string
             sunday:
               type: object
               properties:
-                schedule_1:
+                open_1:
                   type: string
-                schedule_2:
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
                   type: string
         location:
           type: object
@@ -887,51 +974,79 @@ components:
             monday:
               type: object
               properties:
-                schedule_1:
+                open_1:
                   type: string
-                schedule_2:
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
                   type: string
             tuesday:
               type: object
               properties:
-                schedule_1:
+                open_1:
                   type: string
-                schedule_2:
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
                   type: string
             wednesday:
               type: object
               properties:
-                schedule_1:
+                open_1:
                   type: string
-                schedule_2:
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
                   type: string
             thursday:
               type: object
               properties:
-                schedule_1:
+                open_1:
                   type: string
-                schedule_2:
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
                   type: string
             friday:
               type: object
               properties:
-                schedule_1:
+                open_1:
                   type: string
-                schedule_2:
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
                   type: string
             saturday:
               type: object
               properties:
-                schedule_1:
+                open_1:
                   type: string
-                schedule_2:
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
                   type: string
             sunday:
               type: object
               properties:
-                schedule_1:
+                open_1:
                   type: string
-                schedule_2:
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
                   type: string
         location:
           type: object
@@ -965,57 +1080,89 @@ components:
               type: string
             service_duration:
               type: string
+            time_slots:
+              type: array
+              items:
+                type: string
             schedule:
               type: object
               properties:
                 monday:
                   type: object
                   properties:
-                    schedule_1:
+                    open_1:
                       type: string
-                    schedule_2:
+                    close_1:
+                      type: string
+                    open_2:
+                      type: string
+                    close_2:
                       type: string
                 tuesday:
                   type: object
                   properties:
-                    schedule_1:
+                    open_1:
                       type: string
-                    schedule_2:
+                    close_1:
+                      type: string
+                    open_2:
+                      type: string
+                    close_2:
                       type: string
                 wednesday:
                   type: object
                   properties:
-                    schedule_1:
+                    open_1:
                       type: string
-                    schedule_2:
+                    close_1:
+                      type: string
+                    open_2:
+                      type: string
+                    close_2:
                       type: string
                 thursday:
                   type: object
                   properties:
-                    schedule_1:
+                    open_1:
                       type: string
-                    schedule_2:
+                    close_1:
+                      type: string
+                    open_2:
+                      type: string
+                    close_2:
                       type: string
                 friday:
                   type: object
                   properties:
-                    schedule_1:
+                    open_1:
                       type: string
-                    schedule_2:
+                    close_1:
+                      type: string
+                    open_2:
+                      type: string
+                    close_2:
                       type: string
                 saturday:
                   type: object
                   properties:
-                    schedule_1:
+                    open_1:
                       type: string
-                    schedule_2:
+                    close_1:
+                      type: string
+                    open_2:
+                      type: string
+                    close_2:
                       type: string
                 sunday:
                   type: object
                   properties:
-                    schedule_1:
+                    open_1:
                       type: string
-                    schedule_2:
+                    close_1:
+                      type: string
+                    open_2:
+                      type: string
+                    close_2:
                       type: string
             category:
               type: string
