@@ -17,6 +17,7 @@ const CompanySignUpForm = () => {
 
     const [captcha, setCaptcha] = useState();
     const [captchaError, setCaptchaError] = useState({})
+    const [numAttempts, setNumAttempts] = useState(0)
 
     const [formValue, setForm] = useState({
         nif: "",
@@ -52,6 +53,16 @@ const CompanySignUpForm = () => {
         if (captcha == undefined || null) {
             setCaptchaError({estado: true, msg: "valida el captcha por favor"})
             setLoading(false)
+            let newNumAttemps = numAttempts + 1
+            setNumAttempts(newNumAttemps)
+            if (newNumAttemps >= 5) {
+                setCaptchaError({estado: true, msg: "Máximo de errores permitidos, a esperar 30 segundos"})
+                setTimeout(() => {
+                    setNumAttempts(0)
+                    setCaptchaError({estado: false, msg: ""})
+                    console.log("Reiniciado numAttemps");
+                }, 30000)
+            }
         } else {
             setLoading(true)
             setApiError(false);
@@ -327,7 +338,8 @@ const CompanySignUpForm = () => {
                 </Form.Group>
                 {loading && <LoadingSpinner loading={true}/>}
                 <Row className="justify-content-center mx-auto ">
-                    <Button variant="primary" type="submit" onSubmit={handleSubmit(onSubmit)}>Sign Up</Button>
+                    <Button variant="primary" disabled={numAttempts >= 5} type="submit"
+                            onSubmit={handleSubmit(onSubmit)}>Sign Up</Button>
                 </Row>
                 <Row className="justify-content-center mx-auto pt-2">
                     {apiError && <GenericAlert message="Error en el registro" tipo="danger"/>}

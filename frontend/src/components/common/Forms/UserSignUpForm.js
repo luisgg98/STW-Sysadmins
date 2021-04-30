@@ -1,5 +1,4 @@
 import React, {useContext, useState} from "react";
-import {UserContext} from "../../../UserContext";
 import {useForm} from 'react-hook-form';
 import {Button, Form, Row} from "react-bootstrap";
 import {Link, useHistory} from 'react-router-dom';
@@ -15,6 +14,7 @@ function UserSUForm() {
 
     const [captcha, setCaptcha] = useState();
     const [captchaError, setCaptchaError] = useState({})
+    const [numAttempts, setNumAttempts] = useState(0)
 
 
     const [formValue, setForm] = useState({
@@ -47,11 +47,21 @@ function UserSUForm() {
     const onSubmit = async (data, e) => {
         if (captcha == undefined || null) {
             setCaptchaError({estado: true, msg: "valida el captcha por favor"})
-            setLoading(false)
+            let newNumAttemps = numAttempts + 1
+            setNumAttempts(newNumAttemps)
+            if (newNumAttemps >= 5) {
+                setCaptchaError({estado: true, msg: "Máximo de errores permitidos, a esperar 30 segundos"})
+                setTimeout(() => {
+                    setNumAttempts(0)
+                    setCaptchaError({estado: false, msg: ""})
+                    console.log("Reiniciado numAttemps");
+                }, 30000)
+            }
+            setLoading(false);
         } else {
             console.log("handling submit");
-            setLoading(true)
-            setApiError(false)
+            setLoading(true);
+            setApiError(false);
 
             const phonee = formValue.phone;
             setForm({...formValue, phone: Number(phonee)});
@@ -245,7 +255,8 @@ function UserSUForm() {
                 </Form.Group>
                 {loading && <LoadingSpinner loading={true}/>}
                 <Row className="justify-content-center mx-auto ">
-                    <Button variant="primary" type="submit" onSubmit={handleSubmit(onSubmit)}>Sign Up</Button>
+                    <Button variant="primary" disabled={numAttempts >= 5} type="submit"
+                            onSubmit={handleSubmit(onSubmit)}>Sign Up</Button>
                 </Row>
                 <Row className="justify-content-center mx-auto pt-2">
                     {apiError && <GenericAlert message="Error en el registro" tipo="danger"/>}
