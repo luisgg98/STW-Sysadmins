@@ -20,7 +20,7 @@ let companiesArray = [
         street:'Av. Cesáreo Alierta',
         zipcode:50013,
         salt:'salty',category:'Testing',
-        description: 'desc', service_duration: 0, schedule: {monday:{open_1:"9", close_1:"10"},tuesday:{open_1:"9", close_1:"10"},wednesday:{open_1:"9", close_1:"10"},thursday:{open_1:"9", close_1:"10"},friday:{open_1:"9", close_1:"10"},saturday:{open_1:"9", close_1:"10"},sunday:{open_1:"9", close_1:"10"}}},
+        description: 'desc', service_duration: 0, schedule: {monday:{open_1:"9", close_1:"10"},tuesday:{open_1:"9", close_1:"10"},wednesday:{open_1:"9", close_1:"10"},thursday:{open_1:"9", close_1:"10"},friday:{open_1:"9", close_1:"10"},saturday:{open_1:"9", close_1:"10"},sunday:{open_1:"9", close_1:"10"}},
         location: {type:"Point",coordinates:[ 41.649693, -0.887712 ]}}];
 const newname ='Desatranques Jaen';
 

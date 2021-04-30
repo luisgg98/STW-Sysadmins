@@ -60,9 +60,7 @@ const company = new mongoose.Schema({
             close_2: { type: String}
         }
     },
-    location: {
-        type: { type: String, required: false},
-        coordinates: [Number]
+    location:{type: { type: String, required: false}, coordinates: [Number]
     },
     security_level: { type : Number, required: false}
 });
