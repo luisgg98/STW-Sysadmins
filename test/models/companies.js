@@ -7,20 +7,20 @@ let companiesArray = [
         street:'Calle Zaragoza la Vieja',
         zipcode: 50007,
         salt:'salty',
-        category:'Testing', description: 'desc', service_duration: 0, schedule: {monday:{schedule_1:"0"},tuesday:{schedule_1:"0"},wednesday:{schedule_1:"0"},thursday:{schedule_1:"0"},friday:{schedule_1:"0"},saturday:{schedule_1:"0"},sunday:{schedule_1:"0"}}, location: {type:"Point",coordinates:[41.649693, -0.887712 ]}},
+        category:'Testing', description: 'desc', service_duration: 0, schedule: {monday:{open_1:"9", close_1:"10"},tuesday:{open_1:"9", close_1:"10"},wednesday:{open_1:"9", close_1:"10"},thursday:{open_1:"9", close_1:"10"},friday:{open_1:"9", close_1:"10"},saturday:{open_1:"9", close_1:"10"},sunday:{open_1:"9", close_1:"10"}}, location: {type:"Point",coordinates:[41.649693, -0.887712 ]}},
 
     {name:'Multiverso Bar',nif:'2',email:'ho@hol.com',password:'aaa',
         streetnumber:29,
         street:'Calle La Paz',
         zipcode:50008,
-        salt:'salty',category:'Testing', description: 'desc', service_duration: 0, schedule: {monday:{schedule_1:"0"},tuesday:{schedule_1:"0"},wednesday:{schedule_1:"0"},thursday:{schedule_1:"0"},friday:{schedule_1:"0"},saturday:{schedule_1:"0"},sunday:{schedule_1:"0"}}, location: {type:"Point",coordinates:[ 41.649693, -0.887712 ]}},
+        salt:'salty',category:'Testing', description: 'desc', service_duration: 0, schedule: {monday:{open_1:"9", close_1:"10"},tuesday:{open_1:"9", close_1:"10"},wednesday:{open_1:"9", close_1:"10"},thursday:{open_1:"9", close_1:"10"},friday:{open_1:"9", close_1:"10"},saturday:{open_1:"9", close_1:"10"},sunday:{open_1:"9", close_1:"10"}}, location: {type:"Point",coordinates:[ 41.649693, -0.887712 ]}},
 
     {name:'Carniceria Maza', nif:'3',email:'ho@hol.com',password:'aaa',
         streetnumber:86,
         street:'Av. Cesáreo Alierta',
         zipcode:50013,
         salt:'salty',category:'Testing',
-        description: 'desc', service_duration: 0, schedule: {monday:{schedule_1:"0"},tuesday:{schedule_1:"0"},wednesday:{schedule_1:"0"},thursday:{schedule_1:"0"},friday:{schedule_1:"0"},saturday:{schedule_1:"0"},sunday:{schedule_1:"0"}},
+        description: 'desc', service_duration: 0, schedule: {monday:{open_1:"9", close_1:"10"},tuesday:{open_1:"9", close_1:"10"},wednesday:{open_1:"9", close_1:"10"},thursday:{open_1:"9", close_1:"10"},friday:{open_1:"9", close_1:"10"},saturday:{open_1:"9", close_1:"10"},sunday:{open_1:"9", close_1:"10"}}},
         location: {type:"Point",coordinates:[ 41.649693, -0.887712 ]}}];
 const newname ='Desatranques Jaen';
 
