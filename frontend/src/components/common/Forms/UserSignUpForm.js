@@ -6,11 +6,15 @@ import {Link, useHistory} from 'react-router-dom';
 import LoadingSpinner from "../Widgets/LoadingSpinner";
 import {signUpUser} from "../../../services/UsersService"
 import GenericAlert from "../Widgets/GenericAlert";
+import ReCAPTCHA from "react-google-recaptcha";
 
 function UserSUForm() {
 
     // Datos del formulario
     const [loading, setLoading] = useState(false);
+
+    const [captcha, setCaptcha] = useState();
+    const [captchaError, setCaptchaError] = useState({})
 
 
     const [formValue, setForm] = useState({
@@ -25,7 +29,7 @@ function UserSUForm() {
     // Mensaje de error
     const [apiError, setApiError] = useState(false);
 
-    const { formState: { errors, touchedFields }, getValues, register, reset, setError, handleSubmit } = useForm({
+    const {formState: {errors, touchedFields}, getValues, register, reset, setError, handleSubmit} = useForm({
         mode: 'onSubmit', reValidateMode: 'onBlur',
         defaultValues: {
             phone: 0,
@@ -41,26 +45,34 @@ function UserSUForm() {
     const history = useHistory()
 
     const onSubmit = async (data, e) => {
-        console.log("handling submit");
-        setLoading(true)
-        setApiError(false)
+        if (captcha == undefined || null) {
+            setCaptchaError({estado: true, msg: "valida el captcha por favor"})
+            setLoading(false)
+        } else {
+            console.log("handling submit");
+            setLoading(true)
+            setApiError(false)
 
-        const phonee = formValue.phone;
-        setForm({...formValue, phone: Number(phonee)});
+            const phonee = formValue.phone;
+            setForm({...formValue, phone: Number(phonee)});
 
-        console.log("antes de consulta", formValue)
-        const resp = await signUpUser (formValue)
-        reset();
-        setLoading(false);
-        if (!resp){
-            setApiError(true)
+            console.log("antes de consulta", formValue)
+            const resp = await signUpUser(formValue)
+            reset();
+            setLoading(false);
+            if (!resp) {
+                setApiError(true)
+            } else {
+                history.push('/login')
+            }
         }
-        else {
-            history.push('/login')
-        }
-        
+
+
     }
 
+    const captchaSubmit = (value) => {
+        setCaptcha(value)
+    }
 
 
     return (
@@ -74,23 +86,24 @@ function UserSUForm() {
                         placeholder="Número de móvil +34..."
                         value={formValue.phone}
                         {...register("phone", {
-                            required: { value: true, message: "Telefono obligatorio" },
-                            minLength: { value: 9, message: "Minimo 9 digitos" },
-                            maxLength: { value: 9, message: "Máximo 9 digitos" },
+                            required: {value: true, message: "Telefono obligatorio"},
+                            minLength: {value: 9, message: "Minimo 9 digitos"},
+                            maxLength: {value: 9, message: "Máximo 9 digitos"},
                             // valueAsNumber: true
                         })}
                         onChange={(e) => {
-                            setForm({ ...formValue, phone: parseInt(e.target.value, 10) })
+                            setForm({...formValue, phone: parseInt(e.target.value, 10)})
                             if (errors.phone) {
                                 console.log("error phone number")
-                                setError("phone", { type: "manual", message: errors.phone.message })
+                                setError("phone", {type: "manual", message: errors.phone.message})
                             }
 
                         }}
                         isInvalid={errors.phone && touchedFields.phone}
 
                     />
-                    {errors.phone && <Form.Control.Feedback type="invalid">{errors.phone.message}</Form.Control.Feedback>}
+                    {errors.phone &&
+                    <Form.Control.Feedback type="invalid">{errors.phone.message}</Form.Control.Feedback>}
                 </Form.Group>
 
                 <Form.Group controlId="formBasicEmail">
@@ -101,21 +114,22 @@ function UserSUForm() {
                         placeholder="Enter email"
                         value={formValue.email}
                         {...register("email", {
-                            required: { value: true, message: "Email obligatorio" },
+                            required: {value: true, message: "Email obligatorio"},
                             pattern: {
                                 value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                                 message: "Formato de email incorrecto"
                             }
                         })}
                         onChange={(e) => {
-                            setForm({ ...formValue, email: e.target.value })
+                            setForm({...formValue, email: e.target.value})
                             if (errors.email) {
-                                setError("email", { type: "manual", message: errors.email.message })
+                                setError("email", {type: "manual", message: errors.email.message})
                             }
                         }}
                         isInvalid={errors.email && touchedFields.email}
                     />
-                    {errors.email && <Form.Control.Feedback type="invalid">{errors.email.message}</Form.Control.Feedback>}
+                    {errors.email &&
+                    <Form.Control.Feedback type="invalid">{errors.email.message}</Form.Control.Feedback>}
                     <Form.Text className="text-muted">We'll never share your email with anyone else.</Form.Text>
                 </Form.Group>
 
@@ -127,17 +141,18 @@ function UserSUForm() {
                         placeholder="Nombre"
                         value={formValue.first_name}
                         {...register("first_name", {
-                            required: { value: true, message: "Nombre obligatorio" },
-                            maxLength: { value: 20, message: "Máximo superado" }
+                            required: {value: true, message: "Nombre obligatorio"},
+                            maxLength: {value: 20, message: "Máximo superado"}
                         })}
                         onChange={(e) => {
-                            setForm({ ...formValue, first_name: e.target.value })
+                            setForm({...formValue, first_name: e.target.value})
                             if (errors.first_name) {
-                                setError("first_name", { type: "manul", message: errors.first_name.message })
+                                setError("first_name", {type: "manul", message: errors.first_name.message})
                             }
                         }}
-                        isInvalid={errors.first_name&& touchedFields.first_name} />
-                    {errors.first_name&& <Form.Control.Feedback type="invalid">{errors.first_name.message}</Form.Control.Feedback>}
+                        isInvalid={errors.first_name && touchedFields.first_name}/>
+                    {errors.first_name &&
+                    <Form.Control.Feedback type="invalid">{errors.first_name.message}</Form.Control.Feedback>}
                 </Form.Group>
 
                 <Form.Group controlId="formSULName">
@@ -148,17 +163,18 @@ function UserSUForm() {
                         name="last_name"
                         value={formValue.lanme}
                         {...register("last_name", {
-                            required: { value: true, message: "Apellido obligatorio" },
-                            maxLength: { value: 50, message: "Máximo superado" }
+                            required: {value: true, message: "Apellido obligatorio"},
+                            maxLength: {value: 50, message: "Máximo superado"}
                         })}
                         onChange={(e) => {
-                            setForm({ ...formValue, last_name: e.target.value })
+                            setForm({...formValue, last_name: e.target.value})
                             if (errors.last_name) {
-                                setError("last_name", { type: "manul", message: errors.last_name.message })
+                                setError("last_name", {type: "manul", message: errors.last_name.message})
                             }
                         }}
-                        isInvalid={errors.last_name && touchedFields.last_name} />
-                    {errors.last_name && <Form.Control.Feedback type="invalid">{errors.last_name.message}</Form.Control.Feedback>}
+                        isInvalid={errors.last_name && touchedFields.last_name}/>
+                    {errors.last_name &&
+                    <Form.Control.Feedback type="invalid">{errors.last_name.message}</Form.Control.Feedback>}
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword">
@@ -169,19 +185,23 @@ function UserSUForm() {
                         name="password"
                         value={formValue.password}
                         {...register("password", {
-                            required: { value: true, message: "la contraseña es obligatorio" },
-                            minLength: { value: 8, message: "minimo 8 carácteres" },
-                            pattern: { value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/, message: "Debe contener mayus, números y simbolos" }
+                            required: {value: true, message: "la contraseña es obligatorio"},
+                            minLength: {value: 8, message: "minimo 8 carácteres"},
+                            pattern: {
+                                value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/,
+                                message: "Debe contener mayus, números y simbolos"
+                            }
                         })}
                         onChange={(e) => {
-                            setForm({ ...formValue, password: e.target.value })
+                            setForm({...formValue, password: e.target.value})
                             if (errors.password) {
-                                setError("password", { type: "manul", message: errors.password.message })
+                                setError("password", {type: "manul", message: errors.password.message})
                             }
                         }
                         }
-                        isInvalid={errors.password && touchedFields.password} />
-                    {errors.password && <Form.Control.Feedback type="invalid">{errors.password.message}</Form.Control.Feedback>}
+                        isInvalid={errors.password && touchedFields.password}/>
+                    {errors.password &&
+                    <Form.Control.Feedback type="invalid">{errors.password.message}</Form.Control.Feedback>}
                 </Form.Group>
 
                 <Form.Group controlId="formSUConfPassword">
@@ -195,35 +215,43 @@ function UserSUForm() {
                             // validate: {value: getValues().password === getValues().repassword, message: "Las contrasenas no coinciden"}, 
                             validate: value =>
                                 value === getValues().password || "Las contraseñas no coinciden",
-                            required: { value: true, message: "la contraseña es obligatorio" },
-                            minLength: { value: 8, message: "minimo 8 carácteres" },
+                            required: {value: true, message: "la contraseña es obligatorio"},
+                            minLength: {value: 8, message: "minimo 8 carácteres"},
                             // pattern: { value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/, message: "Debe contener mayus, números y simbolos" }
                         })}
                         onChange={(e) => {
-                            setForm({ ...formValue, repassword: e.target.value })
+                            setForm({...formValue, repassword: e.target.value})
                             if (errors.repassword) {
-                                setError("repassword", { type: "manul", message: errors.repassword.message })
+                                setError("repassword", {type: "manul", message: errors.repassword.message})
                             }
                         }
                         }
-                        isInvalid={errors.repassword && touchedFields.repassword} />
-                    {errors.repassword && <Form.Control.Feedback type="invalid">{errors.repassword.message}</Form.Control.Feedback>}
+                        isInvalid={errors.repassword && touchedFields.repassword}/>
+                    {errors.repassword &&
+                    <Form.Control.Feedback type="invalid">{errors.repassword.message}</Form.Control.Feedback>}
                 </Form.Group>
 
+                <ReCAPTCHA
+                    sitekey={process.env.REACT_APP_RECAPTCHA_API_KEY}
+                    onChange={captchaSubmit}
+                />
+                {captchaError.estado && <Row className="justify-content-center mx-auto pt-2">
+                    <GenericAlert mensaje={captchaError.msg} tipo="danger"/>
+                </Row>}
                 <Form.Group controlId="formSUlink">
                     <Link to="/login">
                         ¿Ya tienes una cuenta? Inicia sesión ahora!
                     </Link>
                 </Form.Group>
-                {loading && <LoadingSpinner loading={true} />}
+                {loading && <LoadingSpinner loading={true}/>}
                 <Row className="justify-content-center mx-auto ">
                     <Button variant="primary" type="submit" onSubmit={handleSubmit(onSubmit)}>Sign Up</Button>
                 </Row>
                 <Row className="justify-content-center mx-auto pt-2">
-                    {apiError && <GenericAlert message="Error en el registro" tipo="danger" />}
+                    {apiError && <GenericAlert message="Error en el registro" tipo="danger"/>}
                 </Row>
             </Form>
-        </div >
+        </div>
     )
 };
 
