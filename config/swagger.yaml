@@ -448,6 +448,10 @@ components:
           type: integer
         price:
           type: integer
+        time_slots_service:
+          type: array
+          items:
+            type: integer
     Service_register:
       type: object
       properties:

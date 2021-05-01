@@ -6,6 +6,7 @@ const service = new mongoose.Schema(
         company: { type: String, required: true},
         description: { type: String, required: true},
         capacity: {type: Number, required: true},
+        time_slots_service: { type: Array},
         price: { type: Number, required: true}
     }
 )

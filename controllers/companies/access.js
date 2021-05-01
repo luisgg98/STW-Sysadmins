@@ -283,26 +283,39 @@ let delete_company = async (req, res)=>{
  */
 let create_service = async (req, res, next)=> {
     try {
+        let found = true
         // Check if company exists
-        Company.count({nif: req.params.nif}, async function (err, count){
+        Company.count({nif: req.params.nif}, async function (err, count) {
             if (count === 0) {
                 // Company does not exist
+                found = false
                 res.status(404)
                 res.send({error: "Company not found"})
-            } else {
-                const service = new Service({
-                    company: req.params.nif,
-                    description: req.body.description,
-                    capacity: req.body.capacity,
-                    price: req.body.price
-                })
-                await service.save()
-                res.send(service)
+                found = false
             }
         })
+        if (found) {
+            let company = await Company.findOne({nif:req.params.nif})
+            // Crear un array con capacidad maxima
+            let capacity = parseInt(req.body.capacity,10)
+            let times = []
+            for (let i = 0; i < company.time_slots.length; i++){
+                times[i] = capacity
+            }
+            // Company exists
+            const service = new Service({
+                company: req.params.nif,
+                description: req.body.description,
+                capacity: capacity,
+                time_slots_service: times,
+                price: req.body.price
+            })
+            await service.save()
+            res.send(service)
+        }
     } catch {
         res.status(405)
-        res.send({ error: "Wrong json format, check docs for further info /api-doc" })
+        res.send({error: "Wrong json format, check docs for further info /api-doc"})
     }
 }
 
