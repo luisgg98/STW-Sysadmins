@@ -1,7 +1,7 @@
 FROM node:14
 
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /backend
 
 COPY . .
 
@@ -9,8 +9,6 @@ COPY . .
 ENV PORT=3000
 
 RUN npm install
-
-RUN node getKeys.js
 
 EXPOSE $PORT
 

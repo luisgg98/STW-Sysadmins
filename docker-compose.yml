@@ -1,0 +1,22 @@
+version: "3"
+services:
+  backend:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DOCKER=database
+      #- MONGODB_URI=mongodb+srv://zitation:unizar-zitation-stw-cuarto-98@zitation.6grcs.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+    depends_on:
+      - database
+  database:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data_container:/data/db
+    logging:
+      driver: none
+volumes:
+  mongodb_data_container:
