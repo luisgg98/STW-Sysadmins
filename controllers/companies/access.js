@@ -214,6 +214,7 @@ let update = async (req, res)=> {
                 if (req.body.schedule && req.body.duration){
                     company.schedule = req.body.schedule
                     company.service_duration = req.body.duration
+                    console.log(req.body.duration)
                     company.time_slots = await update_time_slots(req.params.id, parseInt(req.body.duration,10))
                 } else if (req.body.schedule){
                     company.schedule = req.body.schedule
