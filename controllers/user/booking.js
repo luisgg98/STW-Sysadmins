@@ -74,7 +74,22 @@ let update_bookings = async (req, res) => {
 
 let delete_booking = async (req,res) => {
     try {
-        await Booking.deleteOne({_id:req.params.booking_id})
+        let booking = await Booking.findOneAndDelete({_id:req.params.booking_id})
+        // sumar capacidad
+        let service = await Service.findOne({_id:booking.service_id})
+        let company = await Company.findOne({nif: service.company})
+        let time_slots = company.time_slots
+        let service_time_slots = service.time_slots_service
+        // Encontrar time slot correspondiente
+        for (let i = 0; i < time_slots.length; i++) {
+            // Restar uno a la capacidad del servicio en esa hora
+            if (booking.booking_time == time_slots[i]) {
+                service_time_slots[i] = service_time_slots + 1
+                break
+            }
+        }
+        service.time_slots_service = service_time_slots
+        await service.save()
         res.status(204).send
     }
     catch {
