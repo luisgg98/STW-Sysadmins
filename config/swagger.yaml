@@ -19,6 +19,20 @@ tags:
   - name: "Services"
     description: "Operations about services from a company"
 paths:
+  /captcha:
+    get:
+      tags:
+        - "Captcha"
+      summary: "Get key to load Captcha"
+      response:
+        "200":
+          description: "Captcha key found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaptchaKey'
+        "500":
+          description: "Internal server error"
   /users:
     get:
       tags:
@@ -1321,7 +1335,11 @@ components:
                 type: integer
               long:
                 type: integer
-
+    CaptchaKey:
+      type: object
+      properties:
+        key:
+          type: string
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"
