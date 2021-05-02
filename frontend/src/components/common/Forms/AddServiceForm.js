@@ -1,13 +1,10 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { Button, Col, Form, InputGroup, Row } from "react-bootstrap"
+import { Button, Form, InputGroup, Row } from "react-bootstrap"
 import { useHistory } from "react-router";
 import GenericAlert from '../Widgets/GenericAlert';
 import LoadingSpinner from '../Widgets/LoadingSpinner';
 import { postService } from '../../../services/CompaniesService';
-
-
-
 
 const AddServiceForm = () => {
 

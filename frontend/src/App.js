@@ -12,6 +12,7 @@ import AccountPage from "./views/AccountPage";
 import CompanyPage from "./views/CompanyPage";
 import ServiceCreation from "./views/ServiceCreation";
 import AddService from "./views/AddService";
+import UpdateCompanyInfo from "./views/UpdateCompanyInfo";
 
 
 
@@ -62,7 +63,7 @@ export default function App() {
             <Container fluid="true" className="App">
                 <UserContext.Provider value={{ user, setUser }}>
                     <Switch>
-                        <ProtectedRouteCompany path="/services/add" component={AddService}  isCompany={true} />
+                        <ProtectedRouteCompany path="/companies/editInfo" component={UpdateCompanyInfo}  isCompany={true} />
 
                         
                         <ProtectedRouteCompany path="/services" component={ServiceCreation}  isCompany={true} />

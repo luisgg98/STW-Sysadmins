@@ -37,7 +37,6 @@ export function saveCompany(response) {
     //     address: response.address,
     //     categor: response.category
     // }
-    localStorage.setItem("flag", "desde companies services")
     localStorage.setItem("company", JSON.stringify(response))
 }
 
