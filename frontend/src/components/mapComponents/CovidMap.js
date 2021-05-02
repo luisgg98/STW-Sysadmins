@@ -19,7 +19,7 @@ L.Marker.prototype.options.icon = DefaultIcon;
 // ****** End of fixing code ******
 
 
-const CovidMap = () => {
+const CovidMap = (props) => {
     const coordenadasZgz = [41.65, -0.87];
 
     return (
@@ -28,15 +28,16 @@ const CovidMap = () => {
                 center={coordenadasZgz}
                 zoom={14}
                 scrollWheelZoom={false}
-                style={{width: "100%", height: "80vh"}}
+                style={{width: "100%", height: "85" +
+                        "vh"}}
 
             >
                 <TileLayer
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <Companies/>
-                <HealthZones/>
+                <Companies companiesState={props.companiesState} filtersState={props.filtersState}/>
+                <HealthZones healthZonesState={props.healthZonesState} filtersState={props.filtersState}/>
             </MapContainer>
         </Container>
     );

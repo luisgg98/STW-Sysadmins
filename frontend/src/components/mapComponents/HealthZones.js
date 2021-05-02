@@ -12,9 +12,10 @@ function selectColor(newCases) {
     return color
 }
 
-function HealthZones() {
+function HealthZones(props) {
 
-    const [healthZones, setHealthZones] = useState([]);
+    const [healthZones, setHealthZones] = props.healthZonesState;
+    const [filters, _] = props.filtersState
 
     useEffect(() => {
         getHealthZones().then((response) => {
@@ -23,13 +24,21 @@ function HealthZones() {
     }, []);
 
     let zonas = []
-    healthZones.forEach(function (healthZone, index) {
-
-        let zona = <Circle center={healthZone.location.coordinates} radius={healthZone.radius + 400}
-                           color={selectColor(healthZone.newcases)}>
-            <Popup>{healthZone.name}: {healthZone.newcases}</Popup>
-        </Circle>
-        zonas.push(zona);
+    healthZones.forEach(function (healthZone) {
+        if (
+            !(filters.blackListHealthZones.includes(healthZone.name)) &&
+            healthZone.newcases >= filters.minCases
+        ) {
+            const zona =
+                <Circle key={healthZone.name} center={healthZone.location.coordinates}
+                        radius={healthZone.radius + 400}
+                        color={selectColor(healthZone.newcases)}>
+                    <Popup key={healthZone.name}>{healthZone.name}: {healthZone.newcases}</Popup>
+                </Circle>
+            zonas.push(zona);
+        } else {
+            console.log("Este no lo renderizo" + healthZone.name)
+        }
     });
     return zonas;
 }
