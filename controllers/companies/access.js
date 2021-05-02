@@ -4,6 +4,7 @@ const Company = require('../../models/company')
 const Service = require('../../models/service')
 const geolo = require('../../services/geocoding')
 const jwt_login_strategy= require('../../config/passport');
+const update_time_slots = require('./update_time_slots')
 
 /**
  *
@@ -214,14 +215,14 @@ let update = async (req, res)=> {
                 if (req.body.schedule && req.body.duration){
                     company.schedule = req.body.schedule
                     company.service_duration = req.body.duration
-                    console.log(req.body.duration)
-                    company.time_slots = await update_time_slots(req.params.id, parseInt(req.body.duration,10))
+                    company.time_slots = update_time_slots.update_time_slots(company)
+                    console.log(company.time_slots)
                 } else if (req.body.schedule){
                     company.schedule = req.body.schedule
-                    company.time_slots = await update_time_slots(req.params.id, parseInt(company.service_duration,10))
+                    company.time_slots = update_time_slots.update_time_slots(company)
                 } else {
                     company.service_duration = req.body.duration
-                    company.time_slots = await update_time_slots(req.params.id, parseInt(req.body.duration,10))
+                    company.time_slots = update_time_slots.update_time_slots(company)
                 }
             }
             if(req.body.category){
@@ -409,78 +410,6 @@ let delete_service = async (req, res, next)=>{
         res.status(404)
         res.send({ error: "Service not found" })
     }
-}
-
-
-async function update_time_slots(id, duration) {
-    let company = await Company.findOne({_id: id})
-    // Sacar duracion de los servicios
-    // Para cada día de la semana sacar las franjas horarias
-    // Monday
-    //Sacar hora y minutos de inicio y pasar to\do a minutos
-    let open_1 = company.schedule.monday.open_1
-    let close_1 = company.schedule.monday.close_1
-    // La compañia solo tiene un horario
-    // Sacar horas y minutos, vienen en formato hh:mm
-    open_1 = open_1.split(":")
-    // Hora de apertura
-    let open_1_hora = open_1[0]
-    // Pasar a minutos
-    open_1_hora = parseInt(open_1_hora,10) * 60
-    let open_1_minutes = parseInt(open_1[1],10)
-    // Sacar horario de cierre
-    close_1 = close_1.split(":")
-    let close_1_hora = parseInt(close_1[0], 10)*60
-    let close_1_minutes = parseInt(close_1[1],10)
-    close_1 = close_1_hora + close_1_minutes
-    let x = duration; //minutes interval
-    let times = []; // time array
-    let tt = open_1_hora + open_1_minutes; // start time
-    let ap = ['AM', 'PM']; // AM-PM
-    // loop to increment the time and push results in array
-    let i = 0
-    for (i;tt<close_1; i++) {
-        let hh = Math.floor(tt/60); // getting hours of day in 0-24 format
-        let mm = (tt%60); // getting minutes of the hour in 0-55 format
-        times[i] = ("0" + (hh % 12)).slice(-2) + ':' + ("0" + mm).slice(-2) + ap[Math.floor(hh/12)]; // pushing data in array in [00:00 - 12:00 AM/PM format]
-        tt = tt + x;
-    }
-    if (company.schedule.monday.open_2) {
-        // La compañia tiene doble horario
-        let open_2 = company.schedule.monday.open_2
-        let close_2 = company.schedule.monday.close_2
-        // La compañia solo tiene un horario
-        // Sacar horas y minutos, vienen en formato hh:mm
-        open_2 = open_2.split(":")
-        // Hora de apertura
-        let open_2_hora = open_2[0]
-        // Pasar a minutos
-        open_2_hora = parseInt(open_2_hora,10) * 60
-        let open_2_minutes = parseInt(open_2[1],10)
-        // Sacar horario de cierre
-        close_2 = close_2.split(":")
-        let close_2_hora = parseInt(close_2[0], 10)*60
-        let close_2_minutes = parseInt(close_2[1],10)
-        close_2 = close_2_hora + close_2_minutes
-        let x = duration; //minutes interval
-        let tt = open_2_hora + open_2_minutes; // start time
-        let ap = ['AM', 'PM']; // AM-PM
-        // loop to increment the time and push results in array
-        for (i;tt<close_2; i++) {
-            let hh = Math.floor(tt/60); // getting hours of day in 0-24 format
-            let mm = (tt%60); // getting minutes of the hour in 0-55 format
-            times[i] = ("0" + (hh % 12)).slice(-2) + ':' + ("0" + mm).slice(-2) + ap[Math.floor(hh/12)]; // pushing data in array in [00:00 - 12:00 AM/PM format]
-            tt = tt + x;
-        }
-        return times
-    }
-    /////////////////////////////
-    // Tuesday
-    // Wednesday
-    // Thursday
-    // Friday
-    // Saturday
-    // Sunday
 }
 
 exports.get = get
