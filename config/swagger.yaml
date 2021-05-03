@@ -557,18 +557,25 @@ components:
     Get_services:
       type: object
       properties:
-        company:
-          type: string
-        description:
-          type: string
-        capacity:
-          type: integer
-        price:
-          type: integer
-        time_slots_service:
+        services:
+          type: object
+          properties:
+            company:
+              type: string
+            description:
+              type: string
+            capacity:
+              type: integer
+            price:
+              type: integer
+            time_slots_service:
+              type: array
+              items:
+                type: integer
+        time_slots:
           type: array
           items:
-            type: integer
+            type: string
     Service_register:
       type: object
       properties:

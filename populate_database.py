@@ -89,7 +89,7 @@ for x in range(90,100):
     # Recogido el token, realizamos el update
     headers_update = {'content-type': 'application/json', 'Authorization': ''}
     headers_update['Authorization'] = bearer
-    url_update = 'http://localhost:3000/api/companies/{}'.format(company_id)
+    url_update = 'https://stw-zitation.herokuapp.com/api/companies/{}'.format(company_id)
     payload_update = {"duration": "20","schedule": {"monday": {"open_1": "9:00","close_1": "21:00"},"tuesday": {"open_1": "9:00","close_1": "21:00"},"wednesday": {"open_1": "9:00","close_1": "21:00"},"thursday": {"open_1": "9:00","close_1": "21:00"},"friday": {"open_1": "9:00","close_1": "21:00"},"saturday": {"open_1": "9:00","close_1": "21:00"},"sunday": {"open_1": "9:00","close_1": "21:00"}}}
     r = requests.patch(url_update, data=json.dumps(payload_update), headers=headers_update)
     '''
