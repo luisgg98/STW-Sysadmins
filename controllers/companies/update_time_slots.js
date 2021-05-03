@@ -1,4 +1,10 @@
-
+/**
+ *
+ * @param open_schedule
+ * @param close_schedule
+ * @param service_duration
+ * @returns {[]}
+ */
 function calculateSlots(open_schedule,close_schedule,service_duration){
     let times=[];
     let open_1 = open_schedule
@@ -119,7 +125,6 @@ function update_time_slots(company) {
 
     times = times.concat(day_times);
     console.log(day_times);
-
     console.log("Terminamos");
 
     return times;

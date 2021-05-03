@@ -18,6 +18,10 @@ tags:
     description: "Operations about health zones from Zaragoza"
   - name: "Services"
     description: "Operations about services from a company"
+  - name: "Captcha"
+    description: "Operations about captcha"
+  - name: "Webpush"
+    description: "Operations about webpush"
 paths:
   /captcha:
     get:
@@ -30,7 +34,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CaptchaKey'
+                $ref: '#/components/schemas/PublicKey'
+        "500":
+          description: "Internal server error"
+  /webpush:
+    get:
+      tags:
+        - "Webpush"
+      summary: "Get the public key to receive notifications"
+      response:
+        "200":
+          description: "Public key key found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKey'
         "500":
           description: "Internal server error"
   /users:
@@ -1335,7 +1353,7 @@ components:
                 type: integer
               long:
                 type: integer
-    CaptchaKey:
+    PublicKey:
       type: object
       properties:
         key:
