@@ -337,28 +337,32 @@ let get_services = async (req, res, next)=>{
         if (req.query.id){
             // Fetch just one service
             let id = req.query.id
+            let company_found = true
             Company.count({nif: req.params.nif}, async function (err, count){
                 if (count === 0) {
+                    company_found = false
                     res.status(404)
-                    res.send({ error: "Company not found"})
-                } else {
-                    const service = await Service.findOne({_id:id})
-                    res.send(service)
-                }
-            })
+                    res.send({ error: "Company not found"})}})
+            if (company_found) {
+                const service = await Service.findOne({_id:id})
+                const company = await Company.findOne({nif: req.params.nif})
+                res.send({services: service, time_slots: company.time_slots})
+            }
         } else if (req.params.nif !== ",") {
             // Fetch all services from a company
             // Check if company exists
+            let company_found = true
             Company.count({nif: req.params.nif}, async function (err, count){
                 if (count === 0) {
+                    company_found = false
                     res.status(404)
-                    res.send({ error: "Company not found"})
-                } else {
-                    const services = await Service.find({company: req.params.nif})
-                    res.status(200)
-                    res.send(services)
-                }
-            })
+                    res.send({ error: "Company not found"})}})
+            if (company_found){
+                const services = await Service.find({company: req.params.nif})
+                const company = await Company.findOne({nif: req.params.nif})
+                res.status(200)
+                res.send({services: services, time_slots: company.time_slots})
+            }
         } else {
             res.status(405)
             res.send({error:"Wrong request, check docs for further info /api-doc"})
