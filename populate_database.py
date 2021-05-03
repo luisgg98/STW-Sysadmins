@@ -49,7 +49,7 @@ payload = {'nif': 'G12345678', 'name': 'Voga', 'email': 'salud1@gmail.com', 'pas
 r = requests.post(url, data=json.dumps(payload), headers=headers)
 r.status_code
 
-payload = {'nif': 'H12345678', 'name': 'Farmcia', 'email': 'salud2@gmail.com', 'password': 'deportivo1234', 'street':'Calle de Miguel Servet', 'streetnumber': '84', 'zipcode': '50013', 'category': 'Salud y Belleza'}
+payload = {'nif': 'H12345678', 'name': 'Farmacia', 'email': 'salud2@gmail.com', 'password': 'deportivo1234', 'street':'Calle de Miguel Servet', 'streetnumber': '84', 'zipcode': '50013', 'category': 'Salud y Belleza'}
 r = requests.post(url, data=json.dumps(payload), headers=headers)
 r.status_code
 

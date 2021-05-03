@@ -18,11 +18,11 @@ let get = async (req, res, next)=> {
         if (req.query.name){
             // Fetch just one company
             let name = req.query.name
-            const company = await Company.find({name: {"$regex": name, "$options": "i"}}, function(err,docs){}).select('name nif email category description service_duration address location')
+            const company = await Company.find({name: {"$regex": name, "$options": "i"}}, function(err,docs){}).select('name nif email category description service_durationlocation')
             res.send(company)
         } else {
             // Fetch all companies
-            const companies = await Company.find({}, {name: true, nif: true, email: true, category: true, description: true, service_duration: true, address: true, location: true})
+            const companies = await Company.find({}, {name: true, nif: true, email: true, category: true, description: true, service_duration: true, location: true})
             res.send(companies)
         }
     } catch {
@@ -41,12 +41,22 @@ let fetchCompany = async (req, res) => {
     try {
         const company = await Company.findOne({ nif: req.params.nif })
         res.status(200)
-        res.send({name: company.name, email: company.email, category: company.category, description: company.description, service_duration: company.service_duration, address: company.address, location: company.location})
+        res.send({name: company.name, email: company.email, category: company.category,
+            description: company.description, service_duration: company.service_duration,
+            street: company.street,
+            streetnumber: company.streetnumber,
+            zipcode:company.zipcode,
+            location: company.location,
+            schedule:company.schedule})
     } catch {
         res.status(404)
         res.send({error: "Company not found"})
     }
 }
+/**                                        streetnumber:req.body.streetnumber,
+ street:req.body.street,
+ zipcode:req.body.zipcode,
+ */
 
 /**
  *
@@ -211,17 +221,17 @@ let update = async (req, res)=> {
             if (req.body.description) {
                 company.description = req.body.description
             }
-            if (req.body.schedule || req.body.duration) {
-                if (req.body.schedule && req.body.duration){
+            if (req.body.schedule || req.body.service_duration) {
+                if (req.body.schedule && req.body.service_duration){
                     company.schedule = req.body.schedule
-                    company.service_duration = req.body.duration
+                    company.service_duration = req.body.service_duration
                     company.time_slots = update_time_slots.update_time_slots(company)
                     console.log(company.time_slots)
                 } else if (req.body.schedule){
                     company.schedule = req.body.schedule
                     company.time_slots = update_time_slots.update_time_slots(company)
                 } else {
-                    company.service_duration = req.body.duration
+                    company.service_duration = req.body.service_duration
                     company.time_slots = update_time_slots.update_time_slots(company)
                 }
             }
@@ -261,13 +271,10 @@ let update = async (req, res)=> {
 let delete_company = async (req, res)=>{
     try {
         if(!jwt_login_strategy.security(req.params.id, req.result)){
-            console.log("Algo va mal")
             res.status(401)
             res.send({ error: "Wrong User Access denied"})
         } else{
-            console.log("Fetching company")
             await Company.deleteOne({ _id: req.params.id })
-            console.log("Company fetched")
             res.status(204).send()
         }
     } catch {
@@ -386,7 +393,6 @@ let update_service = async (req, res, next)=>{
         if (req.body.price){
             service.price = req.body.price
         }
-
         await service.save()
         res.send(service)
     } catch {
