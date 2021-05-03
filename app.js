@@ -18,6 +18,7 @@ const favicon = require('serve-favicon');
 
 require('./config/database');
 require('./config/passport');
+require('./config/webpush');
 const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/api');
 // This allows us to do cron scheduled activities

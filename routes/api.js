@@ -5,6 +5,7 @@ const companiesRouter = require('./companies')
 const healthZoneRouter = require('./healthzone')
 const adminRouter = require('./admin')
 const captchaRouter = require('./captcha')
+const webpushRouter = require('./webpush')
 /**
  *
  */
@@ -29,5 +30,10 @@ router.use('/admin', adminRouter)
  *
  */
 router.use('/captcha',captchaRouter)
+
+/**
+ *
+ */
+router.use('/webpush',webpushRouter)
 
 module.exports = router;
