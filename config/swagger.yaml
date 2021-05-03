@@ -20,8 +20,10 @@ tags:
     description: "Operations about services from a company"
   - name: "Captcha"
     description: "Operations about captcha"
-  - name: "Webpush"
-    description: "Operations about webpush"
+  - name: "AccessKey"
+    description: "Operations about public key for notifications"
+  - name: "Notifications"
+    description: "Operations about notifications"
 paths:
   /captcha:
     get:
@@ -37,10 +39,10 @@ paths:
                 $ref: '#/components/schemas/PublicKey'
         "500":
           description: "Internal server error"
-  /webpush:
+  /accesskey:
     get:
       tags:
-        - "Webpush"
+        - "AccessKey"
       summary: "Get the public key to receive notifications"
       response:
         "200":
@@ -51,6 +53,27 @@ paths:
                 $ref: '#/components/schemas/PublicKey'
         "500":
           description: "Internal server error"
+  /notifications:
+    post:
+      tags:
+        - "Notifications"
+      summary: "Create a new notifications"
+      requestBody:
+        description: "It require a new subscription to receive a notification"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Notification_key"
+      response:
+        "200":
+          description: "New subscription created and a notification sent"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification_key'
+          "500":
+            description: "Internal server error"
   /users:
     get:
       tags:
@@ -1363,6 +1386,11 @@ components:
     PublicKey:
       type: object
       properties:
+        key:
+          type: string
+    Notification_key:
+      type: object
+      message:
         key:
           type: string
 externalDocs:

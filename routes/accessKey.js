@@ -5,4 +5,5 @@ const router = express.Router()
     Get public key
  */
 router.get("/", AccessKey.getWebpush)
+
 module.exports = router;

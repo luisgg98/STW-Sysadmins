@@ -5,7 +5,8 @@ const companiesRouter = require('./companies')
 const healthZoneRouter = require('./healthzone')
 const adminRouter = require('./admin')
 const captchaRouter = require('./captcha')
-const webpushRouter = require('./webpush')
+const accessKeyRouter = require('./accessKey')
+const notificationRouter = require('./notifications')
 /**
  *
  */
@@ -34,6 +35,11 @@ router.use('/captcha',captchaRouter)
 /**
  *
  */
-router.use('/webpush',webpushRouter)
+router.use('/accesskey',accessKeyRouter)
+
+/**
+ *
+ */
+router.use('/notifications',notificationRouter)
 
 module.exports = router;

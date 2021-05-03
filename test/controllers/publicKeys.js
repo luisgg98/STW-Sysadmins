@@ -16,7 +16,7 @@ describe('Testing Public key API', () => {
             });
     });
     it('Getting webpush key',function (done) {
-        const url='/api/webpush/';
+        const url='/api/accesskey/';
         chai.request(server)
             .get(url)
             .end((err, res) => {
