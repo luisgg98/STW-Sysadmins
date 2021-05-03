@@ -4,7 +4,7 @@ const Company = require('../../models/company')
 const Service = require('../../models/service')
 const geolo = require('../../services/geocoding')
 const jwt_login_strategy= require('../../config/passport');
-const update_time_slots = require('./update_time_slots')
+const update_time_slots = require('../../services/update_time_slots')
 
 /**
  *
@@ -223,7 +223,6 @@ let update = async (req, res)=> {
                     company.schedule = req.body.schedule
                     company.service_duration = req.body.service_duration
                     company.time_slots = update_time_slots.update_time_slots(company)
-                    console.log(company.time_slots)
                 } else if (req.body.schedule){
                     company.schedule = req.body.schedule
                     company.time_slots = update_time_slots.update_time_slots(company)

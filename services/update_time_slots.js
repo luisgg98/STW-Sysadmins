@@ -98,8 +98,6 @@ function update_time_slots(company) {
     }
 
     times = times.concat(day_times);
-    console.log(day_times);
-    console.log("Terminamos");
 
     return times;
 }
