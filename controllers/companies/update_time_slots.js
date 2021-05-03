@@ -37,14 +37,19 @@ function calculateSlots(open_schedule,close_schedule,service_duration){
  * @param service_duration
  * @returns {[]}
  */
-function calculateTime(open_schedule_1,close_schedule_1,open_schedule_2,close_schedule_2,service_duration) {
+function calculateTime_1(open_schedule_1,close_schedule_1,open_schedule_2,close_schedule_2,service_duration) {
     let times =[];
     let morning_times=calculateSlots(open_schedule_1,close_schedule_1,service_duration)
     times = times.concat(morning_times);
-    if (open_schedule_2) {
-        let afternoon_times=calculateSlots(open_schedule_2,close_schedule_2,service_duration)
-        times = times.concat(afternoon_times);
-    }
+    let afternoon_times=calculateSlots(open_schedule_2,close_schedule_2,service_duration)
+    times = times.concat(afternoon_times);
+    return times;
+}
+
+function calculateTime_2(open_schedule_1,close_schedule_1,service_duration) {
+    let times =[];
+    let morning_times=calculateSlots(open_schedule_1,close_schedule_1,service_duration)
+    times = times.concat(morning_times);
     return times;
 }
 
@@ -55,67 +60,98 @@ function calculateTime(open_schedule_1,close_schedule_1,open_schedule_2,close_sc
  */
 function update_time_slots(company) {
     let times = [];
-    let day_times = calculateTime(company.schedule.monday.open_1,
-        company.schedule.monday.close_1,
-        company.schedule.monday.open_2,
-        company.schedule.monday.close_2,
-        company.service_duration);
+    let day_times;
+    if (company.schedule.monday.close_2) {
+        day_times = calculateTime_1(company.schedule.monday.open_1,
+            company.schedule.monday.close_1,
+            company.schedule.monday.open_2,
+            company.schedule.monday.close_2,
+            company.service_duration);
 
-    console.log("Comenzamos a calcular los slots");
-    console.log(day_times);
+        times = times.concat(day_times);
 
-    times = times.concat(day_times);
+        day_times = calculateTime_1(company.schedule.tuesday.open_1,
+            company.schedule.tuesday.close_1,
+            company.schedule.tuesday.open_2,
+            company.schedule.tuesday.close_2,
+            company.service_duration);
 
-    day_times = calculateTime(company.schedule.tuesday.open_1,
-        company.schedule.tuesday.close_1,
-        company.schedule.tuesday.open_2,
-        company.schedule.tuesday.close_2,
-        company.service_duration);
+        console.log(day_times);
 
-    console.log(day_times);
+        times = times.concat(day_times);
 
-    times = times.concat(day_times);
+        day_times = calculateTime_1(company.schedule.wednesday.open_1,
+            company.schedule.wednesday.close_1,
+            company.schedule.wednesday.open_2,
+            company.schedule.wednesday.close_2,
+            company.service_duration);
+        times = times.concat(day_times);
+        console.log(day_times);
 
-    day_times = calculateTime(company.schedule.wednesday.open_1,
-        company.schedule.wednesday.close_1,
-        company.schedule.wednesday.open_2,
-        company.schedule.wednesday.close_2,
-        company.service_duration);
-    times = times.concat(day_times);
-    console.log(day_times);
+        day_times = calculateTime_1(company.schedule.thursday.open_1,
+            company.schedule.thursday.close_1,
+            company.schedule.thursday.open_2,
+            company.schedule.thursday.close_2,
+            company.service_duration);
 
-    day_times = calculateTime(company.schedule.thursday.open_1,
-        company.schedule.thursday.close_1,
-        company.schedule.thursday.open_2,
-        company.schedule.thursday.close_2,
-        company.service_duration);
+        times = times.concat(day_times);
+        console.log(day_times);
 
-    times = times.concat(day_times);
-    console.log(day_times);
+        day_times = calculateTime_1(company.schedule.friday.open_1,
+            company.schedule.friday.close_1,
+            company.schedule.friday.open_2,
+            company.schedule.friday.close_2,
+            company.service_duration);
 
-    day_times = calculateTime(company.schedule.friday.open_1,
-        company.schedule.friday.close_1,
-        company.schedule.friday.open_2,
-        company.schedule.friday.close_2,
-        company.service_duration);
+        times = times.concat(day_times);
+        console.log(day_times);
 
-    times = times.concat(day_times);
-    console.log(day_times);
+        day_times = calculateTime_1(company.schedule.saturday.open_1,
+            company.schedule.saturday.close_1,
+            company.schedule.saturday.open_2,
+            company.schedule.saturday.close_2,
+            company.service_duration);
 
-    day_times = calculateTime(company.schedule.saturday.open_1,
-        company.schedule.saturday.close_1,
-        company.schedule.saturday.open_2,
-        company.schedule.saturday.close_2,
-        company.service_duration);
+        times = times.concat(day_times);
+        console.log(day_times);
 
-    times = times.concat(day_times);
-    console.log(day_times);
+        day_times = calculateTime_1(company.schedule.sunday.open_1,
+            company.schedule.sunday.close_1,
+            company.schedule.sunday.open_2,
+            company.schedule.sunday.close_2,
+            company.service_duration);
+    } else {
+        day_times = calculateTime_2(company.schedule.monday.open_1, company.schedule.monday.close_1, company.service_duration);
 
-    day_times = calculateTime(company.schedule.sunday.open_1,
-        company.schedule.sunday.close_1,
-        company.schedule.sunday.open_2,
-        company.schedule.sunday.close_2,
-        company.service_duration);
+        times = times.concat(day_times);
+
+        day_times = calculateTime_2(company.schedule.tuesday.open_1, company.schedule.tuesday.close_1, company.service_duration);
+
+        times = times.concat(day_times);
+
+        day_times = calculateTime_2(company.schedule.wednesday.open_1, company.schedule.wednesday.close_1,  company.service_duration);
+        times = times.concat(day_times);
+
+        day_times = calculateTime_2(company.schedule.thursday.open_1, company.schedule.thursday.close_1, company.service_duration);
+
+        times = times.concat(day_times);
+
+        day_times = calculateTime_2(company.schedule.friday.open_1,
+            company.schedule.friday.close_1,
+            company.service_duration);
+
+        times = times.concat(day_times);
+
+        day_times = calculateTime_2(company.schedule.saturday.open_1,
+            company.schedule.saturday.close_1,
+            company.service_duration);
+
+        times = times.concat(day_times);
+
+        day_times = calculateTime_2(company.schedule.sunday.open_1,
+            company.schedule.sunday.close_1,
+            company.service_duration);
+    }
 
     times = times.concat(day_times);
     console.log(day_times);
