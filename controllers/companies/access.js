@@ -30,7 +30,7 @@ let get = async (req, res, next)=> {
         res.send({error: "Internal server error"})
     }
 }
-
+//  TODO FILTRAR POR CATEGORIA
 /**
  *
  * @param req
@@ -53,10 +53,7 @@ let fetchCompany = async (req, res) => {
         res.send({error: "Company not found"})
     }
 }
-/**                                        streetnumber:req.body.streetnumber,
- street:req.body.street,
- zipcode:req.body.zipcode,
- */
+
 
 /**
  *

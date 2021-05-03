@@ -14,7 +14,59 @@ let company = {  "nif": "B12345678",
     "street":"Calle Francisco de Vitoria",
     "streetnumber":30,
     "zipcode":50008,
-    "category": "Ocio"};
+    "category": "Ocio",
+};
+
+let updated_company = {
+    "description":"Es un servicio maravilloso nadie deberia quejarse porque es una maravilla",
+    "name": "This is a test",
+    "service_duration":45,
+    "schedule": {
+        "monday": {
+            "open_1": "06:00",
+            "close_1": "20:00",
+            "open_2":  "00:00",
+            "close_2":  "00:00"
+        },
+        "tuesday": {
+            "open_1": "06:00",
+            "close_1": "20:00",
+            "open_2":  "00:00",
+            "close_2":  "00:00"
+        },
+        "wednesday": {
+            "open_1": "06:00",
+            "close_1": "20:00",
+            "open_2":  "00:00",
+            "close_2":  "00:00"
+        },
+        "thursday": {
+            "open_1": "06:00",
+            "close_1": "20:00",
+            "open_2":  "00:00",
+            "close_2":  "00:00"
+        },
+        "friday": {
+            "open_1": "06:00",
+            "close_1": "20:00",
+            "open_2":  "00:00",
+            "close_2":  "00:00"
+        },
+        "saturday": {
+            "open_1": "06:00",
+            "close_1": "20:00",
+            "open_2":  "00:00",
+            "close_2":  "00:00"
+        },
+        "sunday": {
+            "open_1": "06:00",
+            "close_1": "20:00",
+            "open_2":  "00:00",
+            "close_2":  "00:00"
+        }
+    },
+
+}
 
 const url = '/api/companies/'
 
@@ -58,16 +110,34 @@ describe('Testing Company API', () => {
                 let id = res.body.company.id;
                 chai.request(server)
                     .patch(url + id )
-                    .send({"name": "This is a test"})
+                    .send(updated_company)
                     .set({ "Authorization": `${bearer}`})
                     .end((err,res)=>{
                         if(err) throw err;
                         res.should.have.status(200);
                         done();
                     })
+            });
+
+    }));
+
+    /**
+     *
+     */
+    it('It should get a company by its NIF',(done => {
+        chai.request(server)
+            .get(url + '/'+company.nif)
+            .end((err,res)=>{
+                if(err) throw err;
+                res.should.have.status(200);
+                console.log(res.body);
+                res.body.schedule.should.be.eql(updated_company.schedule);
+                res.body.description.should.be.eql(updated_company.description);
+                done();
+
             })
 
-    }))
+    }));
 
     it('It should delete a new company using DELETE',(done => {
         chai.request(server)

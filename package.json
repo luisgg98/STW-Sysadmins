@@ -37,6 +37,7 @@
     "serve-favicon": "^2.5.0",
     "swagger-jsdoc": "6.0.0",
     "swagger-ui-express": "^4.1.6",
+    "web-push": "^3.4.4",
     "xlsx": "^0.16.9",
     "yamljs": "^0.3.0"
   },
