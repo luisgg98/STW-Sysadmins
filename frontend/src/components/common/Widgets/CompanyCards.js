@@ -1,17 +1,20 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Card, CardGroup} from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 function CompanyCard(props) {
+    const {company} = props;
+    const nif = company.nif;
+    console.log("company card", nif)
     return (
         <CardGroup >
             <Card>
                 <Card.Body>
-                    <Card.Title >{props.title}</Card.Title>
-                    <Card.Text>
-                        This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.
-      </Card.Text>
+                    <Link to={'/company/'+nif}>
+                        <Card.Title>{company.name}</Card.Title>
+                    </Link>
+                    <Card.Text>{company.description==="null" ? "No dispone de descripción" : company.description} </Card.Text>
                 </Card.Body>
             </Card>
         </CardGroup>

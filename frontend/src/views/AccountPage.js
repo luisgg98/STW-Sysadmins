@@ -18,9 +18,10 @@ const AccountPage = () => {
                             <Col xs={12} sm={12} md={4} lg={4} xl={4}>
                                 <ProfileData />
                             </Col>
-                            { localStorage.getItem("company") !== "{}" && <Col xs={12} sm={12} md={8} lg={8} xl ={8}>
-                                <ServiceCreation className="justify-content-center mx-auto"/>
-                            </Col>}
+                            {localStorage.getItem("company") !== "{}" &&
+                                <Col xs={12} sm={12} md={7} lg={7} xl={7}>
+                                    <ServiceCreation className="justify-content-center mx-auto" />
+                                </Col>}
                         </Row>
                     </div>
 

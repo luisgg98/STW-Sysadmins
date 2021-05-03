@@ -47,16 +47,8 @@ export const loginUser = (url, user, check) => {
             saveUserInfo(response.data, check)
             return true
         } else return false
-        // history.push('/home')
-        // setLoading(false);
     }).catch((error) => {
-        // setApiError(true);
         console.log("erorr catch", error);
-        // setForm({
-        //     email: '',
-        //     password: ''
-        // })
-        // setLoading(false);
         return false
     })
 }

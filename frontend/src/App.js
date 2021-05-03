@@ -13,6 +13,7 @@ import CompanyPage from "./views/CompanyPage";
 import ServiceCreation from "./views/ServiceCreation";
 import AddService from "./views/AddService";
 import UpdateCompanyInfo from "./views/UpdateCompanyInfo";
+import CompanyData from "./components/common/Widgets/CompanyData";
 
 
 
@@ -65,8 +66,10 @@ export default function App() {
                     <Switch>
                         <ProtectedRouteCompany path="/companies/editInfo" component={UpdateCompanyInfo}  isCompany={true} />
 
+                        <ProtectedRouteCompany path="/services/add" component={AddService}  isCompany={true} />
                         
                         <ProtectedRouteCompany path="/services" component={ServiceCreation}  isCompany={true} />
+
 
 
                         <Route path="/companies/health">
@@ -87,6 +90,10 @@ export default function App() {
 
                         <Route path="/companies/deporte">
                             <CompanyPage tipo="Deporte" search={[]} />
+                        </Route>
+
+                        <Route path="/company/:nif">
+                            <CompanyData />
                         </Route>
 
                         <Route path="/login">

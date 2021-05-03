@@ -5,8 +5,10 @@ import CompanyCard from "../components/common/Widgets/CompanyCards";
 import axios from '../services/APICall'
 import {Row} from "react-bootstrap";
 import LoadingSpinner from "../components/common/Widgets/LoadingSpinner"
+import { getCompaniesByCategory } from "../services/CompaniesService";
 
 const CompanyPage = (props) => {
+    const {tipo, search} = props
 
     const [loading, setLoading] = useState(true);
 
@@ -14,66 +16,35 @@ const CompanyPage = (props) => {
     const [companies, setCompanies] = useState();
 
 
-    useEffect(() => {
+    useEffect( async () =>  {
         console.log('use effect');
         console.log(props)
         // Actualiza el título del documento usando la API del navegador
         // getData();
-        if (props.search.length ===0) {
-            console.log("search if" , props.search)
-            let data = {};
-            try {
-                axios.get('/companies/',
-                    {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }).then(
-                        response => {
-                            if (response.status === 200) {
-                                console.log('fetched correctly');
-                                data = response.data;
-                                setCompanies({ content: data })
-                            }
-                            else {
-                                console.log('fetched wrong', response.status)
-                            }
-                            setLoading(false);
-                        }
-
-                    )
-            } catch (e) {
-                console.log('catch error');
-                console.log("error", e)
-
-            }
+        if (search.length ===0) {
+            setLoading(true)
+            // console.log("search if" , search)
+            const data = await getCompaniesByCategory(tipo)
+            // console.log("company page data recevied: ",  data)
+            setCompanies({ content: data})
+            setLoading(false)
         }
         else {
-            console.log("search else" , props.search)
-            setCompanies(props.search)
+            // console.log("search else" , search)
+            setCompanies(search)
         }
     }, []);
 
-
-    // const LoadingSpinner = () => {
-    //     return (
-    //         <Row className=" justify-content-center mx-auto pb-3" >
-    //             <Spinner animation="border" role="status">
-    //                 <span className="sr-only">Loading...</span>
-    //             </Spinner>
-    //         </Row>)
-    // }
-
     const Contenido = () => {
-        let existe = companies.content.some(item => item.category === props.tipo)
+        let existe = companies.content.some(item => item.category === tipo)
         if (!loading) {
             if (existe)
                 return (companies.content.map((company, index) => {
-                    console.log("tipo", props.tipo)
-                    console.log("cate", company.category)
-                    if (company.category === props.tipo) {
+                    // console.log("tipo", tipo)
+                    // console.log("cate", company.category)
+                    if (company.category === tipo) {
                         console.log("if");
-                        return <CompanyCard key={index} title={company.name} />
+                        return <CompanyCard key={index} company={company}/>
                     }
                     else return null
                 }
@@ -97,7 +68,7 @@ const CompanyPage = (props) => {
             )
         }
         else {
-            if (props.tipo !== ""){
+            if (tipo !== ""){
                 return <Contenido />
             }
             else 

@@ -26,6 +26,30 @@ export async function searchCompanies(texto) {
     } else return []
 }
 
+export function getCompaniesByCategory(category) {
+    console.log("get companies type: ", category)
+    return axios.get('companies/',
+        {
+            // params:
+            //     { category: category }
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    ).then(response => {
+        if (response.status === 200) {
+            console.log("respuesta tras get sercicio por categoria", response.data)
+            return response.data
+        }
+        else {
+            console.log("400x get servicio categorias")
+            return []
+        }
+    }).catch(error => {
+        console.log("error get servicios ", category)
+        return []
+    })
+}
 export function saveCompany(response) {
     localStorage.setItem("token", response.token);
     localStorage.setItem("logged", true)
@@ -79,7 +103,7 @@ export const updateCompanyInfo = async (companyName) => {
         console.log(response.status)
         saveCompany(response.data[0])
         return true
-    }).catch( error => {
+    }).catch(error => {
         console.log(error)
         return false
     })
@@ -87,64 +111,117 @@ export const updateCompanyInfo = async (companyName) => {
 
 export function removeCompany(companyId) {
     return axios.delete('companies/' + companyId, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem("token")
-            },
-        }
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem("token")
+        },
+    }
     )
 }
 
 
-export const postService = async  (service, id) => {
+export const postService = async (service, id) => {
     console.log("registrando nuevo servicio para ", id, " con servicio ", service)
-    let url = "companies/"+id+"/services"
-    return await axios.post(url, service, 
+    let url = "companies/" + id + "/services"
+    return await axios.post(url, service,
         {
             headers: {
                 'Content-Type': 'application/json'
             }
         }
-    ).then( response => {
-        if (response.status === 200){
+    ).then(response => {
+        if (response.status === 200) {
             console.log("exito registro servicio")
 
-            console.log("respuesta tras post sercicio",response.data)
+            console.log("respuesta tras post sercicio", response.data)
             return true
         }
         else {
             console.log("400x posteando servicio")
             return false
         }
-    }).catch ( error => {
-        console.log ("error posteando nuevo servicio", error)
+    }).catch(error => {
+        console.log("error posteando nuevo servicio", error)
         return false
     })
 }
 
 
-export const getServices = async  (id) => {
+export const getServices = async (id) => {
     console.log("cogreidno servicios para ", id)
-    let url = "companies/"+id+"/services"
-    return await axios.get(url, 
+    let url = "companies/" + id + "/services"
+    return await axios.get(url,
         {
             headers: {
                 'Content-Type': 'application/json'
             }
         }
-    ).then( response => {
-        if (response.status === 200){
+    ).then(response => {
+        if (response.status === 200) {
             console.log("exito get servicio")
 
-            console.log("respuesta tras get sercicio",response.data)
+            console.log("respuesta tras get sercicio", response.data)
             return response.data
         }
         else {
             console.log("400x get servicio")
             return []
         }
-    }).catch ( error => {
-        console.log ("error get servicios de",id, " error: " , error)
+    }).catch(error => {
+        console.log("error get servicios de", id, " error: ", error)
+        return []
+    })
+}
+
+
+export const patchCompanyInfo = async (id, data, token) => {
+    console.log("patch company infoo", id)
+    return await axios.patch('companies/' + id, data,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            }
+        }
+    ).then(response => {
+        if (response.status === 200) {
+            console.log("exito get servicio")
+
+            console.log("respuesta tras patch sercicio", response.data)
+            saveCompany(response.data)
+            return true
+        }
+        else {
+            console.log("400x get servicio")
+            return false
+        }
+    }).catch(error => {
+        console.log("error get servicios de", id, " error: ", error)
+        return false
+    })
+}
+
+
+export const getCompanyData = async (nif) => {
+    console.log("get company all data", nif)
+    return await axios.get('companies/' + nif,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+    ).then(response => {
+        if (response.status === 200) {
+            console.log("exito get company all data")
+            saveCompany(response.data)
+            return response.data
+        }
+        else {
+            console.log("400x get servicio")
+            return []
+        }
+    }).catch(error => {
+        console.log("error get servicios de", nif, " error: ", error)
         return []
     })
 }

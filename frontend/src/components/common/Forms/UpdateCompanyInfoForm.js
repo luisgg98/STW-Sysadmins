@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { Button, Col, Form, InputGroup, Row, Table } from "react-bootstrap"
 import GenericAlert from '../Widgets/GenericAlert';
 import LoadingSpinner from '../Widgets/LoadingSpinner';
 import TimePicker from 'react-bootstrap-time-picker'
 import { loginUser } from '../../../services/UsersService';
+import { patchCompanyInfo } from '../../../services/CompaniesService';
+import APICall from '../../../services/APICall';
 
 const UpdateCompanyInfoForm = () => {
 
@@ -21,7 +23,7 @@ const UpdateCompanyInfoForm = () => {
     const [dobleturno, setDobleturno] = useState(false)
 
     // Mensaje de error
-    const [apiError, setApiError] = useState(false);
+    const [apiError, setApiError] = useState({ estado: false, msg: "" });
 
 
 
@@ -36,6 +38,8 @@ const UpdateCompanyInfoForm = () => {
             password: ""
         }
     });
+    const [scheduleForm, setScheduleform] = useState()
+
 
     const [mon_op, setMon_op] = useState([])
     const [tue_op, setTue_op] = useState([])
@@ -129,161 +133,190 @@ const UpdateCompanyInfoForm = () => {
         )
     }
 
-
-
-    const onSubmit = async () => {
-        setForm({
-            ...formValue, schedule: {
+    const apiCall = async (comp) => {
+        console.log("trying login");
+        const resp = await loginUser('/companies/login', { email: comp.email, password: formValue.password }, true)
+        const sch = {
             "monday": {
                 "open_1": new Date(mon_op * 1000).toISOString().substr(11, 5),
-                "close_1": new  Date(mon_cl * 1000).toISOString().substr(11, 5) ,
-                "open_2":  new Date(mon_op_2 * 1000).toISOString().substr(11, 5) ,
-                "close_2": new  Date(mon_cl_2 * 1000).toISOString().substr(11, 5)
+                "close_1": new Date(mon_cl * 1000).toISOString().substr(11, 5),
+                "open_2": new Date(mon_op_2 * 1000).toISOString().substr(11, 5),
+                "close_2": new Date(mon_cl_2 * 1000).toISOString().substr(11, 5)
             },
             "tuesday": {
-                "open_1":  new Date(tue_op * 1000).toISOString().substr(11, 5),
-                "close_1": new  Date(tue_cl * 1000).toISOString().substr(11, 5) ,
-                "open_2":  new Date(tue_op_2 * 1000).toISOString().substr(11, 5) ,
-                "close_2": new  Date(tue_cl_2 * 1000).toISOString().substr(11, 5)
+                "open_1": new Date(tue_op * 1000).toISOString().substr(11, 5),
+                "close_1": new Date(tue_cl * 1000).toISOString().substr(11, 5),
+                "open_2": new Date(tue_op_2 * 1000).toISOString().substr(11, 5),
+                "close_2": new Date(tue_cl_2 * 1000).toISOString().substr(11, 5)
             },
             "wednesday": {
-                "open_1":  new Date(wed_op * 1000).toISOString().substr(11, 5),
-                "close_1": new  Date(wed_cl * 1000).toISOString().substr(11, 5) ,
-                "open_2":  new Date(wed_op_2 * 1000).toISOString().substr(11, 5) ,
-                "close_2": new  Date(wed_cl_2 * 1000).toISOString().substr(11, 5)
+                "open_1": new Date(wed_op * 1000).toISOString().substr(11, 5),
+                "close_1": new Date(wed_cl * 1000).toISOString().substr(11, 5),
+                "open_2": new Date(wed_op_2 * 1000).toISOString().substr(11, 5),
+                "close_2": new Date(wed_cl_2 * 1000).toISOString().substr(11, 5)
             },
             "thursday": {
-                "open_1":  new Date(thu_op * 1000).toISOString().substr(11, 5),
-                "close_1": new  Date(thu_cl * 1000).toISOString().substr(11, 5),
-                "open_2":  new Date(thu_op_2 * 1000).toISOString().substr(11, 5),
-                "close_2": new  Date(thu_cl_2 * 1000).toISOString().substr(11, 5)
+                "open_1": new Date(thu_op * 1000).toISOString().substr(11, 5),
+                "close_1": new Date(thu_cl * 1000).toISOString().substr(11, 5),
+                "open_2": new Date(thu_op_2 * 1000).toISOString().substr(11, 5),
+                "close_2": new Date(thu_cl_2 * 1000).toISOString().substr(11, 5)
             },
             "friday": {
-                "open_1":  new Date(fri_op * 1000).toISOString().substr(11, 5),
-                "close_1": new  Date(fri_cl * 1000).toISOString().substr(11, 5) ,
-                "open_2":  new Date(fri_op_2 * 1000).toISOString().substr(11, 5) ,
-                "close_2": new  Date(fri_cl_2 * 1000).toISOString().substr(11, 5)
+                "open_1": new Date(fri_op * 1000).toISOString().substr(11, 5),
+                "close_1": new Date(fri_cl * 1000).toISOString().substr(11, 5),
+                "open_2": new Date(fri_op_2 * 1000).toISOString().substr(11, 5),
+                "close_2": new Date(fri_cl_2 * 1000).toISOString().substr(11, 5)
             },
             "saturday": {
-                "open_1":  new Date(sat_op * 1000).toISOString().substr(11, 5),
-                "close_1": new  Date(sat_cl * 1000).toISOString().substr(11, 5) ,
-                "open_2":  new Date(sat_op_2 * 1000).toISOString().substr(11, 5) ,
-                "close_2": new  Date(sat_cl_2 * 1000).toISOString().substr(11, 5)
+                "open_1": new Date(sat_op * 1000).toISOString().substr(11, 5),
+                "close_1": new Date(sat_cl * 1000).toISOString().substr(11, 5),
+                "open_2": new Date(sat_op_2 * 1000).toISOString().substr(11, 5),
+                "close_2": new Date(sat_cl_2 * 1000).toISOString().substr(11, 5)
             },
             "sunday": {
-                "open_1":  new Date(sun_op * 1000).toISOString().substr(11, 5),
-                "close_1": new  Date(sun_cl * 1000).toISOString().substr(11, 5) ,
-                "open_2":  new Date(sun_op_2 * 1000).toISOString().substr(11, 5) ,
-                "close_2": new  Date(sun_cl_2 * 1000).toISOString().substr(11, 5)
+                "open_1": new Date(sun_op * 1000).toISOString().substr(11, 5),
+                "close_1": new Date(sun_cl * 1000).toISOString().substr(11, 5),
+                "open_2": new Date(sun_op_2 * 1000).toISOString().substr(11, 5),
+                "close_2": new Date(sun_cl_2 * 1000).toISOString().substr(11, 5)
             }
-        }})
-        console.log("trying login")
-        const comp = JSON.parse(localStorage.getItem("company"))
-        const resp = await loginUser('/companies/login', {email: comp.email, password: formValue.password}, true)
-        if (resp)
-            console.log("login intrue")
-}
+        }
+        if (resp) {
+            console.log("login intrue, updating", formValue)
+            const respUpdate = await patchCompanyInfo(
+                JSON.parse(localStorage.getItem("company")).id,
+                {
+                    "description": formValue.description,
+                    "service_duration": formValue.service_duration,
+                    "schedule": sch
+                },
+                localStorage.getItem("token"))
+            if (respUpdate)
+                console.log("update done")
+            else {
+                console.log("update mal")
+                setApiError({ estado: true, msg: "Error en el update" })
+            }
+            setLoading(false)
+        }
+        else {
+            setApiError({ estado: true, msg: "Error en la contraseña" })
+            setLoading(false)
+        }
+    }
 
-return (
-    <Form noValidate onSubmit={handleSubmit(onSubmit)}>
-        <Form.Group controlId="formDescription" >
-            <Form.Label>Descripción de su empresa.</Form.Label>
-            <Form.Control
-                type="text"
-                name="description"
-                as="textarea"
-                rows="4"
-                placeholder="Escribe una descripción de tu empresa"
-                {...register("description", {
-                    required: { value: true, message: "Es necesaria una descripción detallada de la empresa." },
-                    minLength: { value: 50, message: "Se mas preciso en la descripción. Mínimo 50 carácteres" },
-                    maxLength: { value: 500, message: "Carácteres de descripción excedidos" }
-                })}
-                onChange={(e) => {
-                    setForm({ ...formValue, description: e.target.value })
-                    if (errors.description) {
-                        setError("description", { type: "manual", message: errors.description.message })
+
+
+    const onSubmit = () => {
+        setLoading(true)
+        console.log("on submit")
+        apiCall(JSON.parse(localStorage.getItem("company")))
+    }
+
+
+
+    return (
+        <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+            <Form.Group controlId="formDescription" >
+                <Form.Label>Descripción de su empresa.</Form.Label>
+                <Form.Control
+                    type="text"
+                    name="description"
+                    as="textarea"
+                    rows="4"
+                    placeholder="Escribe una descripción de tu empresa"
+                    {...register("description", {
+                        minLength: { value: 50, message: "Se mas preciso en la descripción. Mínimo 50 carácteres" },
+                        maxLength: { value: 500, message: "Carácteres de descripción excedidos" }
+                    })}
+                    onChange={(e) => {
+                        setForm({ ...formValue, description: e.target.value })
+                        if (errors.description) {
+                            setError("description", { type: "manual", message: errors.description.message })
+                        }
                     }
-                }
-                }
-                isInvalid={errors.description && touchedFields.description}
-            />
-            {errors.description && <Form.Control.Feedback type="invalid">{errors.description.message}</Form.Control.Feedback>}
-            <Form.Text className="text-muted">Cuantos más detalles mejor para tus clientes.</Form.Text>
-        </Form.Group>
+                    }
+                    isInvalid={errors.description && touchedFields.description}
+                />
+                {errors.description && <Form.Control.Feedback type="invalid">{errors.description.message}</Form.Control.Feedback>}
+                <Form.Text className="text-muted">Cuantos más detalles mejor para tus clientes.</Form.Text>
+            </Form.Group>
 
 
-        <Form.Group controlId="formCapacity">
-            <Form.Label>Duración media de los servicios que ofrece
+            <Form.Group controlId="formCapacity">
+                <Form.Label>Duración media de los servicios que ofrece
                 </Form.Label>
-            <Form.Control
-                type="number"
-                name="service_duration"
-                placeholder="1"
-                value={formValue.service_duration}
-                // defaultValue="1"
-                {...register("service_duration", {
-                    required: { value: true, message: "Es necesario que especifiques este dato." },
-                    // valueAsNumber: true
-                })}
-                onChange={(e) => {
-                    setForm({ ...formValue, service_duration: Number(e.target.value) })
-                    if (errors.service_duration) {
-                        setError("service_duration", { type: "manual", message: errors.service_duration.message })
+                <Form.Control
+                    type="number"
+                    name="service_duration"
+                    placeholder="1"
+                    value={formValue.service_duration}
+                    // defaultValue="1"
+                    {...register("service_duration", {
+                        // valueAsNumber: true
+                    })}
+                    onChange={(e) => {
+                        setForm({ ...formValue, service_duration: Number(e.target.value) })
+                        if (errors.service_duration) {
+                            setError("service_duration", { type: "manual", message: errors.service_duration.message })
+                        }
+
+                    }}
+                    isInvalid={errors.service_duration && touchedFields.service_duration}
+
+                />
+                {errors.capacity && <Form.Control.Feedback type="invalid">{errors.capacity.message}</Form.Control.Feedback>}
+            </Form.Group>
+
+
+
+            <Form.Group controlId="formBasicCheckbox">
+                <Form.Check
+                    type="checkbox"
+                    label="¿Dispongo de horario partido?"
+                    onChange={(e) => {
+                        console.log("doble turno", !dobleturno)
+                        setDobleturno(!dobleturno)
+                    }} />
+            </Form.Group>
+
+            {!dobleturno && <TablaHorario texto="Turno único" open="" close="" array={0} />}
+            {dobleturno && <TablaHorario texto="Turno 1" open="turno 1" close="turno 1" array={0} />}
+            {dobleturno && <TablaHorario texto="Turno 2" open="turno 2" close="turno 2" array={1} />}
+
+            {/* <Row className="justify-content-center mx-auto ">
+                <Button variant="primary" type="button" onClick={() => setSchedule(true)} onSubmit={console.log()}>Confirmar cambios</Button>
+            </Row> */}
+
+            {true && <Form.Group controlId="formBasicPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                    type="password"
+                    placeholder="Introduce la contraseña para validar tus datos."
+                    value={formValue.password}
+                    {...register("password", {
+                        required: { value: true, message: "La contraseña es obligatorio" },
+                    })}
+                    onChange={(e) => {
+                        setForm({ ...formValue, password: e.target.value })
+                        if (errors.password) {
+                            setError("password", { type: "manul", message: errors.password.message })
+                        }
                     }
-
-                }}
-                isInvalid={errors.service_duration && touchedFields.service_duration}
-
-            />
-            {errors.capacity && <Form.Control.Feedback type="invalid">{errors.capacity.message}</Form.Control.Feedback>}
-        </Form.Group>
-
-
-
-        <Form.Group controlId="formBasicCheckbox">
-            <Form.Check
-                type="checkbox"
-                label="¿Dispongo de horario partido?"
-                onChange={(e) => {
-                    console.log("doble turno", !dobleturno)
-                    setDobleturno(!dobleturno)
-                }} />
-        </Form.Group>
-
-        {!dobleturno && <TablaHorario texto="Turno único" open="" close="" array={0} />}
-        {dobleturno && <TablaHorario texto="Turno 1" open="turno 1" close="turno 1" array={0} />}
-        {dobleturno && <TablaHorario texto="Turno 2" open="turno 2" close="turno 2" array={1} />}
-        <Form.Group controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-                type="password"
-                placeholder="Password"
-                value={formValue.password}
-                {...register("password", {
-                    required: { value: true, message: "la contraseña es obligatorio" },
-                })}
-                onChange={(e) => {
-                    setForm({ ...formValue, password: e.target.value })
-                    if (errors.password) {
-                        setError("password", { type: "manul", message: errors.password.message })
                     }
-                }
-                }
-                isInvalid={errors.password && touchedFields.password} />
-            {errors.password &&
-                <Form.Control.Feedback type="invalid">{errors.password.message}</Form.Control.Feedback>}
-        </Form.Group>
+                    isInvalid={errors.password && touchedFields.password} />
+                {errors.password &&
+                    <Form.Control.Feedback type="invalid">{errors.password.message}</Form.Control.Feedback>}
+            </Form.Group>}
 
-        {loading && <LoadingSpinner loading={true} />}
-        <Row className="justify-content-center mx-auto ">
-            <Button variant="primary" type="submit" onSubmit={handleSubmit(onSubmit)}>Registrar servicio</Button>
-        </Row>
-        <Row className="justify-content-center mx-auto pt-2">
-            {apiError && <GenericAlert message="Error en el registro del servicio" tipo="danger" />}
-        </Row>
-    </Form>
-)
+            {loading && <LoadingSpinner loading={true} />}
+            {true && <Row className="justify-content-center mx-auto ">
+                <Button variant="primary" type="submit" onSubmit={handleSubmit(onSubmit)}>Registrar servicio</Button>
+            </Row>}
+            {apiError.estado && <Row className="justify-content-center mx-auto pt-2">
+                <GenericAlert mensaje={apiError.msg} tipo="danger" />
+            </Row>}
+        </Form>
+    )
 }
 
 export default UpdateCompanyInfoForm;
