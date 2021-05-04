@@ -367,7 +367,7 @@ let get_services = async (req, res, next)=>{
                 if (err){
                     throw err
                 } else {
-                    if (!company) {
+                    if (company) {
                         const service = await Service.find({company: req.params.nif})
                         res.send({services: service, time_slots: company.time_slots})
                     } else {
