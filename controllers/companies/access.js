@@ -39,15 +39,25 @@ let get = async (req, res, next)=> {
  */
 let fetchCompany = async (req, res) => {
     try {
-        const company = await Company.findOne({ nif: req.params.nif })
-        res.status(200)
-        res.send({name: company.name, email: company.email, category: company.category,
-            description: company.description, service_duration: company.service_duration,
-            street: company.street,
-            streetnumber: company.streetnumber,
-            zipcode:company.zipcode,
-            location: company.location,
-            schedule:company.schedule})
+        Company.findOne({ nif: req.params.nif }, async function (err, company){
+            if (err){ throw  err}
+            else{
+                if (company){
+                    res.status(200)
+                    res.send({name: company.name, email: company.email, category: company.category,
+                        description: company.description, service_duration: company.service_duration,
+                        street: company.street,
+                        streetnumber: company.streetnumber,
+                        zipcode:company.zipcode,
+                        location: company.location,
+                        schedule:company.schedule})
+                }
+                else {
+                    res.status(404)
+                    res.send({error: "Company not found"})
+                }
+            }
+        })
     } catch {
         res.status(404)
         res.send({error: "Company not found"})
@@ -144,7 +154,7 @@ let register = async (req, res)=>{
  * @param res
  * @returns {Promise<void>}
  */
-let login = async (req, res)=>{
+let login = async (req, res) => {
     try {
         const company = await Company.findOne({ email: req.body.email })
         if (utils.validPassword(req.body.password, company.password, company.salt)) {
@@ -340,7 +350,7 @@ let get_services = async (req, res, next)=>{
                 if (err){
                     throw err
                 } else {
-                    if (company != null || company !== undefined) {
+                    if (company) {
                         const service = await Service.findOne({_id:id})
                         const company = await Company.findOne({nif: req.params.nif})
                         res.send({services: service, time_slots: company.time_slots})
@@ -350,16 +360,6 @@ let get_services = async (req, res, next)=>{
                     }
                 }
             })
-            /*Company.count({nif: req.params.nif}, async function (err, count){
-                if (count === 0) {
-                    company_found = false
-                    res.status(404)
-                    res.send({ error: "Company not found"})}})
-            if (company_found) {
-                const service = await Service.findOne({_id:id})
-                const company = await Company.findOne({nif: req.params.nif})
-                res.send({services: service, time_slots: company.time_slots})
-            }*/
         } else if (req.params.nif != "," || req.params.nif != undefined) {
             // Fetch all services from a company
             // Check if company exists
@@ -376,17 +376,6 @@ let get_services = async (req, res, next)=>{
                     }
                 }
             })
-            /*Company.count({nif: req.params.nif}, async function (err, count){
-                if (count === 0) {
-                    company_found = false
-                    res.status(404)
-                    res.send({ error: "Company not found"})}})
-            if (company_found){
-                const services = await Service.find({company: req.params.nif})
-                const company = await Company.findOne({nif: req.params.nif})
-                res.status(200)
-                res.send({services: services, time_slots: company.time_slots})
-            }*/
         } else {
             res.status(405)
             res.send({error:"Wrong request, check docs for further info /api-doc"})

@@ -33,7 +33,7 @@ function calculateSlots(open_schedule,close_schedule,service_duration){
     }
     return times;
 }
-
+// TODO if para cada uno de los dias
 /**
  *
  * @param open_schedule_1
