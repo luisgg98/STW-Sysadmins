@@ -12,9 +12,9 @@ function CompanyCard(props) {
             <Card>
                 <Card.Body>
                     <Link to={'/company/'+nif}>
-                        <Card.Title>{company.name}</Card.Title>
+                        <Card.Title>{(company.name).toUpperCase()}</Card.Title>
                     </Link>
-                    <Card.Text>{company.description==="null" ? "No dispone de descripción" : company.description} </Card.Text>
+                    <Card.Text>{company.description==="null" ? ("No dispone de descripción").toUpperCase() : (company.description).toUpperCase()} </Card.Text>
                 </Card.Body>
             </Card>
         </CardGroup>

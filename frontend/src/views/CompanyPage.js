@@ -1,14 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import ZitationHeader from "../components/common/Headers/Header";
 import SearchBar from "../components/common/Bars/SearchBar";
 import CompanyCard from "../components/common/Widgets/CompanyCards";
-import axios from '../services/APICall'
-import {Row} from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import LoadingSpinner from "../components/common/Widgets/LoadingSpinner"
 import { getCompaniesByCategory } from "../services/CompaniesService";
 
 const CompanyPage = (props) => {
-    const {tipo, search} = props
+    const { tipo, search } = props
 
     const [loading, setLoading] = useState(true);
 
@@ -16,24 +15,27 @@ const CompanyPage = (props) => {
     const [companies, setCompanies] = useState();
 
 
-    useEffect( async () =>  {
+    useEffect( () => {
         console.log('use effect');
-        console.log(props)
+        // console.log(props)
         // Actualiza el título del documento usando la API del navegador
         // getData();
-        if (search.length ===0) {
-            setLoading(true)
-            // console.log("search if" , search)
-            const data = await getCompaniesByCategory(tipo)
-            // console.log("company page data recevied: ",  data)
-            setCompanies({ content: data})
-            setLoading(false)
+        async function fetch() {
+            if (search.length === 0) {
+                setLoading(true)
+                // console.log("search if" , search)
+                const data = await getCompaniesByCategory(tipo)
+                // console.log("company page data recevied: ",  data)
+                setCompanies({ content: data })
+                setLoading(false)
+            }
+            else {
+                // console.log("search else" , search)
+                setCompanies(search)
+            }
         }
-        else {
-            // console.log("search else" , search)
-            setCompanies(search)
-        }
-    }, []);
+        fetch()
+    }, [search, tipo]);
 
     const Contenido = () => {
         let existe = companies.content.some(item => item.category === tipo)
@@ -43,8 +45,7 @@ const CompanyPage = (props) => {
                     // console.log("tipo", tipo)
                     // console.log("cate", company.category)
                     if (company.category === tipo) {
-                        console.log("if");
-                        return <CompanyCard key={index} company={company}/>
+                        return <CompanyCard key={index} company={company} />
                     }
                     else return null
                 }
@@ -55,10 +56,10 @@ const CompanyPage = (props) => {
 
     const AllContenido = () => {
         if (!loading)
-                return (companies.content.map((company, index) => {
-                        return <CompanyCard key={index} title={company.name} />
-                    }
-                ))
+            return (companies.content.map((company, index) => {
+                return <CompanyCard key={index} title={company.name} />
+            }
+            ))
     }
 
     const Content = () => {
@@ -68,12 +69,12 @@ const CompanyPage = (props) => {
             )
         }
         else {
-            if (tipo !== ""){
+            if (tipo !== "") {
                 return <Contenido />
             }
-            else 
+            else
                 return <AllContenido />
-            
+
         }
     }
 

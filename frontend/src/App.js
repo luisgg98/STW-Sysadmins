@@ -13,7 +13,8 @@ import CompanyPage from "./views/CompanyPage";
 import ServiceCreation from "./views/ServiceCreation";
 import AddService from "./views/AddService";
 import UpdateCompanyInfo from "./views/UpdateCompanyInfo";
-import CompanyData from "./components/common/Widgets/CompanyData";
+import CompanyDetailsPage from "./views/CompanyDetailsPage";
+import ServiceDetailsPage from "./views/ServiceDetailsPage";
 
 
 
@@ -91,10 +92,15 @@ export default function App() {
                         <Route path="/companies/deporte">
                             <CompanyPage tipo="Deporte" search={[]} />
                         </Route>
+                        
+                        <Route path="/company/:nif/services/:id">
+                            <ServiceDetailsPage />
+                        </Route>
 
                         <Route path="/company/:nif">
-                            <CompanyData />
+                            <CompanyDetailsPage />
                         </Route>
+
 
                         <Route path="/login">
                             <LoginPage />

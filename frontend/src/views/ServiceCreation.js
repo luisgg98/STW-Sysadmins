@@ -2,11 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { Row, Button, Container, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import ZitationHeader from "../components/common/Headers/ZitationHeader";
 import LoadingSpinner from "../components/common/Widgets/LoadingSpinner";
 import ServicesCard from "../components/common/Widgets/ServiceCard";
 import { getServices, updateCompanyInfo } from "../services/CompaniesService";
-import useWindowSize from "../services/WindowSize";
 
 
 const ServiceCreation = () => {
@@ -14,46 +12,37 @@ const ServiceCreation = () => {
     const [hayServicios, setHayServicios] = useState(false)
     const [servicios, setServicios] = useState([])
     const [comp, setComp] = useState()
-    const [font, setFont] = useState()
 
-    useEffect(() => {
-        setLoading(true)
+    async function fetch(nif) {
+        const resp = await getServices(nif)
+        setServicios(resp.services)
+        setHayServicios(true)
+        setLoading(false)
+    }
+    useEffect(async () => {
         const company = JSON.parse(localStorage.getItem("company"))
+        fetch(company.nif)
         console.log("useeffect", company)
         if (updateCompanyInfo(company.name)) {
             console.log("update done")
             setComp(company)
         }
-        getServices(company.nif).then(
-            resp => {
-                console.log(".then services", resp)
-                setServicios(resp)
-                if (resp.length > 0) {
-                    setHayServicios(true)
-                    console.log("long mayor que 0")
-                }
-                setLoading(false)
-            }
-        )
 
     }, [])
 
     return (
         <Container fluid>
-            {/* <ZitationHeader /> */}
             {loading && <Row className="my-auto mx-auto justify-content-center">
-                    <Col xs={1} md={1} sm={1} lg={1} xl={1}>
-                        <LoadingSpinner loading={true} />
+                <Col xs={1} md={1} sm={1} lg={1} xl={1}>
+                    <LoadingSpinner loading={true} />
 
-                    </Col>
-                </Row>}
+                </Col>
+            </Row>}
             <Row className=" justify-content-center my-5 align-item-scenter" >
-
-                {/* {hayServicios && <div style={{ fontSize: 30 }} className="display-4">Servicio de {comp.name}</div>} */}
 
                 <Row className="justify-content-center">
                     {hayServicios && servicios.map((serv, index) => {
-                        return <ServicesCard key={index} serv={serv} comp={comp} />
+                        return <ServicesCard key={index} serv={serv} comp={comp} reservar={false} borrar={true} />
                     })}
                 </Row>
 

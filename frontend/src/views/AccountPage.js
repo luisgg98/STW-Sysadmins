@@ -10,7 +10,8 @@ const AccountPage = () => {
 
     return (
         <div>
-            { localStorage.getItem("logged") === "true"
+            { localStorage.getItem("logged") === "true" 
+            // && localStorage.getItem("token") !== "undefined"
                 ? (
                     <div>
                         <ZitationHeader />
