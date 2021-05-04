@@ -367,9 +367,8 @@ let get_services = async (req, res, next)=>{
                 if (err){
                     throw err
                 } else {
-                    if (company != null || company !== undefined) {
+                    if (!company) {
                         const service = await Service.find({company: req.params.nif})
-                        const company = await Company.findOne({nif: req.params.nif})
                         res.send({services: service, time_slots: company.time_slots})
                     } else {
                         res.status(404)
