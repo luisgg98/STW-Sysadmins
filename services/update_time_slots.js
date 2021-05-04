@@ -33,26 +33,15 @@ function calculateSlots(open_schedule,close_schedule,service_duration){
     }
     return times;
 }
-// TODO if para cada uno de los dias
+
 /**
  *
  * @param open_schedule_1
  * @param close_schedule_1
- * @param open_schedule_2
- * @param close_schedule_2
  * @param service_duration
  * @returns {[]}
  */
-function calculateTime_1(open_schedule_1,close_schedule_1,open_schedule_2,close_schedule_2,service_duration) {
-    let times =[];
-    let morning_times=calculateSlots(open_schedule_1,close_schedule_1,service_duration)
-    times = times.concat(morning_times);
-    let afternoon_times=calculateSlots(open_schedule_2,close_schedule_2,service_duration)
-    times = times.concat(afternoon_times);
-    return times;
-}
-
-function calculateTime_2(open_schedule_1,close_schedule_1,service_duration) {
+function calculateTime(open_schedule_1,close_schedule_1,service_duration) {
     let times =[];
     let morning_times=calculateSlots(open_schedule_1,close_schedule_1,service_duration)
     times = times.concat(morning_times);
@@ -67,38 +56,64 @@ function calculateTime_2(open_schedule_1,close_schedule_1,service_duration) {
 function update_time_slots(company) {
     let times = [];
     let day_times;
-    if (company.schedule.monday.close_2) {
-        day_times = calculateTime_1(company.schedule.monday.open_1, company.schedule.monday.close_1, company.schedule.monday.open_2, company.schedule.monday.close_2, company.service_duration);
+    if(company.schedule.monday.open_1 && company.schedule.monday.close_1){
+        day_times = calculateTime(company.schedule.monday.open_1, company.schedule.monday.close_1, company.service_duration);
         times = times.concat(day_times);
-        day_times = calculateTime_1(company.schedule.tuesday.open_1, company.schedule.tuesday.close_1, company.schedule.tuesday.open_2, company.schedule.tuesday.close_2, company.service_duration);
-        times = times.concat(day_times);
-        day_times = calculateTime_1(company.schedule.wednesday.open_1, company.schedule.wednesday.close_1, company.schedule.wednesday.open_2, company.schedule.wednesday.close_2, company.service_duration);
-        times = times.concat(day_times);
-        day_times = calculateTime_1(company.schedule.thursday.open_1, company.schedule.thursday.close_1, company.schedule.thursday.open_2, company.schedule.thursday.close_2, company.service_duration);
-        times = times.concat(day_times);
-        day_times = calculateTime_1(company.schedule.friday.open_1, company.schedule.friday.close_1, company.schedule.friday.open_2, company.schedule.friday.close_2, company.service_duration);
-        times = times.concat(day_times);
-        day_times = calculateTime_1(company.schedule.saturday.open_1, company.schedule.saturday.close_1, company.schedule.saturday.open_2, company.schedule.saturday.close_2, company.service_duration);
-        times = times.concat(day_times);
-        day_times = calculateTime_1(company.schedule.sunday.open_1, company.schedule.sunday.close_1, company.schedule.sunday.open_2, company.schedule.sunday.close_2, company.service_duration);
-    } else {
-        day_times = calculateTime_2(company.schedule.monday.open_1, company.schedule.monday.close_1, company.service_duration);
-        times = times.concat(day_times);
-        day_times = calculateTime_2(company.schedule.tuesday.open_1, company.schedule.tuesday.close_1, company.service_duration);
-        times = times.concat(day_times);
-        day_times = calculateTime_2(company.schedule.wednesday.open_1, company.schedule.wednesday.close_1,  company.service_duration);
-        times = times.concat(day_times);
-        day_times = calculateTime_2(company.schedule.thursday.open_1, company.schedule.thursday.close_1, company.service_duration);
-        times = times.concat(day_times);
-        day_times = calculateTime_2(company.schedule.friday.open_1, company.schedule.friday.close_1, company.service_duration);
-        times = times.concat(day_times);
-        day_times = calculateTime_2(company.schedule.saturday.open_1, company.schedule.saturday.close_1, company.service_duration);
-        times = times.concat(day_times);
-        day_times = calculateTime_2(company.schedule.sunday.open_1, company.schedule.sunday.close_1, company.service_duration);
     }
+    if(company.schedule.tuesday.open_1 && company.schedule.tuesday.close_1){
+        day_times = calculateTime(company.schedule.tuesday.open_1, company.schedule.tuesday.close_1, company.service_duration);
+        times = times.concat(day_times);
+    }
+    if(company.schedule.wednesday.open_1 && company.schedule.wednesday.close_1){
+        day_times = calculateTime(company.schedule.wednesday.open_1, company.schedule.wednesday.close_1,  company.service_duration);
+        times = times.concat(day_times);
+    }
+    if(company.schedule.thursday.open_1 && company.schedule.thursday.close_1){
+        day_times = calculateTime(company.schedule.thursday.open_1, company.schedule.thursday.close_1, company.service_duration);
+        times = times.concat(day_times);
+    }
+    if(company.schedule.friday.open_1 && company.schedule.friday.close_1){
 
-    times = times.concat(day_times);
+        day_times = calculateTime(company.schedule.friday.open_1, company.schedule.friday.close_1, company.service_duration);
+        times = times.concat(day_times);
+    }
+    if(company.schedule.saturday.open_1 && company.schedule.saturday.close_1){
+        day_times = calculateTime(company.schedule.saturday.open_1, company.schedule.saturday.close_1, company.service_duration);
+        times = times.concat(day_times);
+    }
+    if(company.schedule.sunday.open_1 && company.schedule.sunday.close_1){
+        day_times = calculateTime(company.schedule.sunday.open_1, company.schedule.sunday.close_1, company.service_duration);
+        times = times.concat(day_times);
+    }
+    if(company.schedule.monday.open_2 && company.schedule.monday.close_2){
+        day_times = calculateTime(company.schedule.monday.open_2, company.schedule.monday.close_2, company.service_duration);
+        times = times.concat(day_times);
+    }
+    if(company.schedule.tuesday.open_2 && company.schedule.tuesday.close_1){
+        day_times = calculateTime(company.schedule.tuesday.open_1, company.schedule.tuesday.close_2, company.service_duration);
+        times = times.concat(day_times);
+    }
+    if(company.schedule.wednesday.open_2 && company.schedule.wednesday.close_2){
+        day_times = calculateTime(company.schedule.wednesday.open_2, company.schedule.wednesday.close_1,  company.service_duration);
+        times = times.concat(day_times);
+    }
+    if(company.schedule.thursday.open_2 && company.schedule.thursday.close_1){
+        day_times = calculateTime(company.schedule.thursday.open_2, company.schedule.thursday.close_2, company.service_duration);
+        times = times.concat(day_times);
+    }
+    if(company.schedule.friday.open_2 && company.schedule.friday.close_2){
 
+        day_times = calculateTime(company.schedule.friday.open_1, company.schedule.friday.close_2, company.service_duration);
+        times = times.concat(day_times);
+    }
+    if(company.schedule.saturday.open_2 && company.schedule.saturday.close_2){
+        day_times = calculateTime(company.schedule.saturday.open_2, company.schedule.saturday.close_2, company.service_duration);
+        times = times.concat(day_times);
+    }
+    if(company.schedule.sunday.open_2 && company.schedule.sunday.close_2){
+        day_times = calculateTime(company.schedule.sunday.open_2, company.schedule.sunday.close_2, company.service_duration);
+        times = times.concat(day_times);
+    }
     return times;
 }
 
