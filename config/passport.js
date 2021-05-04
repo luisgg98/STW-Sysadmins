@@ -3,7 +3,6 @@ const JwtStrategy = require('passport-jwt').Strategy,
 const fs = require('fs');
 const path = require('path');
 const passport = require('passport')
-// TODO MUST BE CHANGED according to our database
 const User = require('mongoose').model('user');
 const Company = require('mongoose').model('company');
 
@@ -14,7 +13,6 @@ const pathToKey = path.join(__dirname, '..', 'scripts','id_rsa_pub.pem');
 //It reads the keys from the file
 const PUB_KEY = fs.readFileSync(pathToKey, 'utf8');
 
-// TODO create the file to generate the key and talk to frontend
 const options = {
     //The token must be in the header as an access token
     //ExtractJwt.fromAuthHeaderAsBearerToken()

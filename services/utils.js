@@ -2,7 +2,6 @@ const crypto = require('crypto');
 const jsonwebtoken = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
-
 //It necessary to have previously a private key to cypher
 // the JWT token
 const pathToKey = path.join(__dirname, '..', 'scripts','id_rsa_priv.pem');
@@ -14,7 +13,6 @@ const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
 /**
  * -------------- HELPER FUNCTIONS ----------------
  */
-
 /**
  *
  * @param {*} password - The plain text password
@@ -54,7 +52,6 @@ function genPassword(password) {
  */
 // User can be a company
 function issueJWT(user) {
-    // TODO CHECK THE WHAT IS AND ID IN MONGODB
     const _id = user._id;
     // In a day the token will be useless
     const expiresIn = '1d';

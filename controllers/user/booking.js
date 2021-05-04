@@ -16,19 +16,23 @@ const Service = require('../../models/service')
  */
 let create_booking = async (req, res) => {
     try {
-        let service_found = true
         Service.countDocuments({_id: req.body.service}, async function(err,count){
-            if (count === 0){
-                service_found = false
-                res.status(404)
-                res.send({ error: "Service not found"})
+            if(err){
+                throw err;
+            }
+            else{
+                if(count < 1){
+                    res.status(404)
+                    res.send({ error: "Service not found"})
+                }
+                else{
+                    let booking = update_time_slots(req.body.service, req.params.id, req.body.booking_time)
+                    res.status(200)
+                    res.send(booking)
+                }
             }
         })
-        if (service_found){
-            let booking = update_time_slots(req.body.service, req.params.id, req.body.booking_time)
-            res.status(200)
-            res.send(booking)
-        }
+
     }
     catch {
         res.status(405)
@@ -36,20 +40,52 @@ let create_booking = async (req, res) => {
     }
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let get_bookings = async (req, res) => {
     try {
         // if the url contains a query, just search for one booking
         if (req.query.id) {
             let id = req.query.id
-            const booking = await Booking.findOne({_id:id})
-            res.status(200)
-            res.send(booking)
+            Booking.findOne({_id:id},{},{},function (err, booking) {
+                if(err){
+                    throw err;
+                }
+                else{
+                    if(booking){
+                        res.status(200)
+                        res.send(booking)}
+                    else{
+                        res.status(404)
+                        res.send({error:"Not found booking"})
+                    }
+                }
+            })
+
         } else {
             // Fetch all bookings
-            const bookings = await Booking.find({user_id: req.params.id})
-            console.log(bookings)
-            res.status(200)
-            res.send(bookings)
+            Booking.find({user_id: req.params.id},{},{},function (err, bookings) {
+                if(err){
+                    throw err;
+                }
+                else{
+                    if(bookings){
+                        console.log(bookings)
+                        res.status(200)
+                        res.send(bookings)
+                    }
+                    else{
+                        res.status(404)
+                        res.send({error:"Not found booking"})
+                    }
+                }
+
+            })
+
         }
     } catch {
         res.status(500)
@@ -57,6 +93,12 @@ let get_bookings = async (req, res) => {
     }
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let update_bookings = async (req, res) => {
     try{
         let booking = await Booking.findOneAndDelete({_id: req.params.booking_id})
@@ -72,8 +114,15 @@ let update_bookings = async (req, res) => {
     }
 }
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let delete_booking = async (req,res) => {
     try {
+        //TODO CAMBIAR PARA EVITAR FALLOS Y BUGS, UTILIZAR CALLBACKS
         let booking = await Booking.findOneAndDelete({_id:req.params.booking_id})
         // sumar capacidad
         let service = await Service.findOne({_id:booking.service_id})
@@ -98,7 +147,15 @@ let delete_booking = async (req,res) => {
     }
 }
 
+/**
+ *
+ * @param id_service
+ * @param id_user
+ * @param booking_time
+ * @returns {Promise<Document>}
+ */
 async function update_time_slots(id_service, id_user, booking_time) {
+    //TODO CAMBIAR PARA EVITAR FALLOS Y BUGS, UTILIZAR CALLBACKS
     // Actualizar time_slots del servicio
     let service = await Service.findOne({_id: id_service})
     let company = await Company.findOne({nif: service.company})
