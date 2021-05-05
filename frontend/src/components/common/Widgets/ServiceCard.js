@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Card, Button, CardGroup, Col } from 'react-bootstrap';
 import useWindowSize from '../../../services/WindowSize';
@@ -7,7 +7,7 @@ import { useHistory } from 'react-router';
 
 
 function ServicesCard(props) {
-    const {serv, comp, nif, reservar, borrar} = props
+    const { serv, comp, nif, reservar, borrar } = props
 
     console.log("serv", serv)
     const [rem, setRem] = useState()
@@ -22,25 +22,27 @@ function ServicesCard(props) {
 
     const borrarServicio = async () => {
         const resp = await deleteService(comp.nif, serv._id)
-        if (resp)
+        if (resp) {
             console.log("servicio borrado")
-        else 
+            window.location.reload(false);
+        }
+        else
             console.log("servicio no borrado")
     }
 
     const history = useHistory()
-    const onClick = ()  => {
+    const onClick = () => {
         let id = serv._id
         console.log("id", serv._id)
         console.log("nif", nif)
-        history.push('/company/'+nif+'/services/'+id)
+        history.push('/company/' + nif + '/services/' + id)
     }
 
     return (
         { checkRem },
-        < Col sm = { 12 } md = { 12} lg = { 12} xl = { 12} className = "mx-5 px-5" >
+        < Col sm={12} md={12} lg={12} xl={12} className="mx-5 px-5" >
             <CardGroup className="py-1 my-1 mx-5 px-5 text-center" >
-                <Card style={{ width: {rem} }}>
+                <Card style={{ width: { rem } }}>
                     <Card.Header>{(comp.name).toUpperCase()}</Card.Header>
                     <Card.Body>
                         <Card.Text>{(serv.description).toUpperCase()}</Card.Text>

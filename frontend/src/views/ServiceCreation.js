@@ -41,7 +41,7 @@ const ServiceCreation = () => {
             <Row className=" justify-content-center my-5 align-item-scenter" >
 
                 <Row className="justify-content-center">
-                    {hayServicios && servicios.map((serv, index) => {
+                    {servicios !== undefined && servicios.map((serv, index) => {
                         return <ServicesCard key={index} serv={serv} comp={comp} reservar={false} borrar={true} />
                     })}
                 </Row>

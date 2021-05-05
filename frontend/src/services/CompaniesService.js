@@ -147,29 +147,23 @@ export const postService = async (service, id) => {
 
 
 export const deleteService = async (nif, id) => {
-    // console.log("borrando  servicio de ", nif, " con id ", id)
-    let url = "companies/" + nif + "/services" + id
-    // return await axios.delete(url,
-    //     {
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         }
-    //     }
-    // ).then(response => {
-    //     if (response.status === 200) {
-    //         // console.log("exito registro servicio")
-
-    //         // console.log("respuesta tras post sercicio", response.data)
-    //         return true
-    //     }
-    //     else {
-    //         // console.log("400x posteando servicio")
-    //         return false
-    //     }
-    // }).catch(error => {
-    //     // console.log("error posteando nuevo servicio", error)
-    //     return false
-    // })
+    let url = "companies/" + nif + "/services/" + id
+    return await axios.delete(url,
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    ).then(response => {
+        if (response.status === 204) {
+            return true
+        }
+        else {
+            return false
+        }
+    }).catch(error => {
+        return false
+    })
 }
 
 
