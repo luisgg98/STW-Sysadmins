@@ -311,17 +311,12 @@ let create_service = async (req, res, next)=> {
         })
         if (found) {
             let company = await Company.findOne({nif:req.params.nif})
-            // Crear un array con capacidad maxima
-            let capacity = parseInt(req.body.capacity,10)
-            let times = []
-            for (let i = 0; i < company.time_slots.length; i++){
-                times[i] = capacity
-            }
+            let times = update_time_slots.update_time_slots_services(company, parseInt(req.body.capacity, 10))
             // Company exists
             const service = new Service({
                 company: req.params.nif,
                 description: req.body.description,
-                capacity: capacity,
+                capacity: req.body.capacity,
                 time_slots_service: times,
                 price: req.body.price
             })
