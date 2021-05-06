@@ -249,19 +249,14 @@ let update = async (req, res)=> {
                     async (coordinates) =>{
                         company.lat = coordinates.latitude
                         company.long = coordinates.long
-                        await company.save()
-                        res.send(company)
+                        await company.save();
+                        res.send(company);
                     }
-                )
-                .catch(
-                    (e)=>{
-                        console.error(e)
-                        res.status(404)
-                        res.send({ error: "Company not found" })
-                    })
+                );
         }
     }
-    catch {
+    catch (e) {
+        console.log("Error while patching company" + e )
         res.status(404)
         res.send({ error: "Company not found" })
     }

@@ -223,9 +223,9 @@ describe('Testing Company API', () => {
                     .end((err,res)=>{
                         if(err) throw err;
                         res.should.have.status(200);
-                        console.log(res.body);
                         let id = res.body._id;
                         //PATCH //companies/{nif}/services/{id}
+                        console.log("Updating company service")
                         chai.request(server)
                             .patch(url + company.nif + url_service +'/' + id  )
                             .send(update_service)
@@ -241,9 +241,8 @@ describe('Testing Company API', () => {
 
     });
 
-
     // GET /companies/{nif}/services
-    it('It should get a company by its NIF',(done => {
+    it('It should get services from a company',(done => {
         chai.request(server)
             .get(url + company.nif + url_service )
             .end((err,res)=>{
@@ -251,11 +250,12 @@ describe('Testing Company API', () => {
                 res.should.have.status(200);
                 console.log(res.body);
                 let services = res.body.services;
-                services.length.should.be.eql(1);
+                services.length.should.be.greaterThan(0);
                 let first_service = services[0];
 
                 first_service.description.should.be.eql(update_service.description);
                 let id = first_service._id;
+                console.log("Deleting a service from a company");
                 chai.request(server)
                     // DELETE /companies/{nif}/services/{id}
                     .post(url + 'login/')
