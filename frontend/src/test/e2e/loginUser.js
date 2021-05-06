@@ -1,10 +1,13 @@
 
 describe('User logging test', function() {
-    const email = 'fede31@unizar.es';
-    const pass = 'fede1234';
+    let user = {'phone': '676416354', 'first_name': 'Isabel', 'last_name': 'Casado', 'email': 'isabel85@gmail.es', 'password': 'Isabel1234-'}
+    let userUpdate ={
+        'first_name': 'Martin',
+        'last_name': 'Rodriguez'
+    }
     const loading = 4000;
     const timeout = 3000;
-    const Username='Test User';
+
     var EC = protractor.ExpectedConditions;
 
     /**
@@ -18,10 +21,10 @@ describe('User logging test', function() {
         browser.get('/login');
 
         element(formEmail).click();
-        element(formEmail).sendKeys(email);
+        element(formEmail).sendKeys(user.email);
 
         element(password).click();
-        element(password).sendKeys(pass);
+        element(password).sendKeys(user.password);
         element(button).click();
 
         browser.wait(EC.urlContains('home'), loading).then(function(result) {
@@ -63,7 +66,12 @@ describe('User logging test', function() {
 
         var name = by.id('formSUFName');
         element(name).click();
-        element(name).sendKeys(Username);
+        element(name).sendKeys(userUpdate.first_name);
+
+
+        var surname = by.id('formSULName');
+        element(surname).click();
+        element(surname).sendKeys(userUpdate.last_name);
 
         var confirm =by.buttonText('Confirmar');
         element(confirm).click();
