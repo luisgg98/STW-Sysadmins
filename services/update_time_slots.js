@@ -135,104 +135,133 @@ function update_time_slots(company) {
 
 function update_time_slots_services(company, capacity){
     let time_slots = company.time_slots
+    console.log(time_slots)
     let time_slots_services = {}
-    if (time_slots.monday_1){
+    if (time_slots.monday_1.length){
+        time_slots_services.monday_1 = {}
         let times = []
         for (let i = 0; i < company.time_slots.monday_1.length; i++) {
             times[i] = capacity
         }
-        time_slots_services.monday_1 = times
+        time_slots_services.monday_1.places_left = times
+        time_slots_services.monday_1.slots = time_slots.monday_1
     }
     if (time_slots.monday_2){
+        time_slots_services.monday_2 = {}
         let times = []
         for (let i = 0; i < company.time_slots.monday_2.length; i++) {
             times[i] = capacity
         }
-        time_slots_services.monday_2 = times
+        time_slots_services.monday_2.places_left = times
+        time_slots_services.monday_2.slots = time_slots.monday_2
     }
     if (time_slots.tuesday_1){
+        time_slots_services.tuesday_1 = {}
         let times = []
         for (let i = 0; i < company.time_slots.tuesday_1.length; i++) {
             times[i] = capacity
         }
-        time_slots_services.tuesday_1 = times
+        time_slots_services.tuesday_1.places_left = times
+        time_slots_services.tuesday_1.slots = time_slots.tuesday_1
     }
     if (time_slots.tuesday_2){
+        time_slots_services.tuesday_2 = {}
         let times = []
         for (let i = 0; i < company.time_slots.tuesday_2.length; i++) {
             times[i] = capacity
         }
-        time_slots_services.tuesday_2 = times
+        time_slots_services.tuesday_2.places_left = times
+        time_slots_services.tuesday_2.slots = time_slots.tuesday_2
     }
     if (time_slots.wednesday_1){
+        time_slots_services.wednesday_1 = {}
         let times = []
         for (let i = 0; i < company.time_slots.wednesday_1.length; i++) {
             times[i] = capacity
         }
-        time_slots_services.wednesday_1 = times
+        time_slots_services.wednesday_1.places_left = times
+        time_slots_services.wednesday_1.slots = time_slots.wednesday_1
     }
     if (time_slots.wednesday_2){
+        time_slots_services.wednesday_2 = {}
         let times = []
         for (let i = 0; i < company.time_slots.wednesday_2.length; i++) {
             times[i] = capacity
         }
-        time_slots_services.wednesday_2 = times
+        time_slots_services.wednesday_2.places_left = times
+        time_slots_services.wednesday_2.slots = time_slots.wednesday_2
     }
     if (time_slots.thursday_1){
+        time_slots_services.thursday_1 = {}
         let times = []
         for (let i = 0; i < company.time_slots.thursday_1.length; i++) {
             times[i] = capacity
         }
-        time_slots_services.thursday_1 = times
+        time_slots_services.thursday_1.places_left = times
+        time_slots_services.thursday_1.slots = time_slots.thursday_1
     }
     if (time_slots.thursday_2){
+        time_slots_services.thursday_2 = {}
         let times = []
         for (let i = 0; i < company.time_slots.thursday_2.length; i++) {
             times[i] = capacity
         }
-        time_slots_services.thursday_2 = times
+        time_slots_services.thursday_2.places_left = times
+        time_slots_services.thursday_2.slots = time_slots.thursday_2
     }
     if (time_slots.friday_1){
+        time_slots_services.friday_1 = {}
         let times = []
         for (let i = 0; i < company.time_slots.friday_1.length; i++) {
             times[i] = capacity
         }
-        time_slots_services.friday_1 = times
+        time_slots_services.friday_1.places_left = times
+        time_slots_services.friday_1.slots = time_slots.friday_1
     }
     if (time_slots.friday_2){
+        time_slots_services.friday_2 = {}
         let times = []
         for (let i = 0; i < company.time_slots.friday_2.length; i++) {
             times[i] = capacity
         }
-        time_slots_services.friday_2 = times
+        time_slots_services.friday_2.places_left = times
+        time_slots_services.friday_2.slots = time_slots.friday_2
     }
     if (time_slots.saturday_1){
+        time_slots_services.saturday_1 = {}
         let times = []
         for (let i = 0; i < company.time_slots.saturday_1.length; i++) {
             times[i] = capacity
         }
-        time_slots_services.saturday_1 = times
+        time_slots_services.saturday_1.places_left = times
+        time_slots_services.saturday_1.slots = time_slots.saturday_1
     }
     if (time_slots.saturday_2){
+        time_slots_services.saturday_2 = {}
         let times = []
         for (let i = 0; i < company.time_slots.saturday_2.length; i++) {
             times[i] = capacity
         }
-        time_slots_services.saturday_2 = times
+        time_slots_services.saturday_2.places_left = times
+        time_slots_services.saturday_2.slots = time_slots.saturday_2
     }
     if (time_slots.sunday_1){
+        time_slots_services.sunday_1 = {}
         let times = []
         for (let i = 0; i < company.time_slots.sunday_1.length; i++) {
             times[i] = capacity
         }
-        time_slots_services.sunday_1 = times
+        time_slots_services.sunday_1.places_left = times
+        time_slots_services.sunday_1.slots = time_slots.sunday_1
     }
     if (time_slots.sunday_2){
+        time_slots_services.sunday_2 = {}
         let times = []
         for (let i = 0; i < company.time_slots.sunday_2.length; i++) {
             times[i] = capacity
         }
-        time_slots_services.sunday_2 = times
+        time_slots_services.sunday_2.places_left = times
+        time_slots_services.sunday_2.slots = time_slots.sunday_2
     }
     return time_slots_services
 }
