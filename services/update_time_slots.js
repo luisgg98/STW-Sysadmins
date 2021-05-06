@@ -99,12 +99,12 @@ function update_time_slots(company) {
         //times = times.concat(day_times);
     }
     if(company.schedule.tuesday.open_2 && company.schedule.tuesday.close_2){
-        day_times = calculateTime(company.schedule.tuesday.open_1, company.schedule.tuesday.close_2, company.service_duration);
+        day_times = calculateTime(company.schedule.tuesday.open_2, company.schedule.tuesday.close_2, company.service_duration);
         times.tuesday_2 = day_times
         //times = times.concat(day_times);
     }
     if(company.schedule.wednesday.open_2 && company.schedule.wednesday.close_2){
-        day_times = calculateTime(company.schedule.wednesday.open_2, company.schedule.wednesday.close_1,  company.service_duration);
+        day_times = calculateTime(company.schedule.wednesday.open_2, company.schedule.wednesday.close_2,  company.service_duration);
         times.wednesday_2 = day_times
         //times = times.concat(day_times);
     }
@@ -114,7 +114,7 @@ function update_time_slots(company) {
         //times = times.concat(day_times);
     }
     if(company.schedule.friday.open_2 && company.schedule.friday.close_2){
-        day_times = calculateTime(company.schedule.friday.open_1, company.schedule.friday.close_2, company.service_duration);
+        day_times = calculateTime(company.schedule.friday.open_2, company.schedule.friday.close_2, company.service_duration);
         times.friday_2 = day_times
         //times = times.concat(day_times);
     }

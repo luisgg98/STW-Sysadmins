@@ -9,7 +9,7 @@ db.users.delete_many({})
 db.services.delete_many({})
 db.bookings.delete_many({})
 '''
-'''
+
 ## Populate USERS collection
 
 #url = 'https://stw-zitation.herokuapp.com/api/users'
@@ -58,7 +58,7 @@ payload = {'nif': 'D12345678', 'name': 'Fox', 'email': 'ocio2@gmail.com', 'passw
 r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Something went wrong with company: {}'.format(payload['name']))
-'''
+
 
 url = 'https://stw-zitation.herokuapp.com/api/companies'
 headers = {'content-type': 'application/json'}
@@ -67,7 +67,7 @@ payload = {'nif': 'V12345678', 'name': 'Centro Cívico Delicias', 'email': 'civi
 r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Something went wrong with company: {}'.format(payload['name']))
-'''
+
 payload = {'nif': 'F12345678', 'name': 'Ayuntamiento de Zaragoza: Servicio de Educación', 'email': 'admin1@gmail.com', 'password': 'deportivo1234', 'street':'Calle de Miguel Servet', 'streetnumber': '57', 'zipcode': '50013', 'category': 'Administración pública'}
 r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
@@ -97,8 +97,8 @@ payload = {'nif': 'J12345678', 'name': 'Carrefour', 'email': 'comercio2@gmail.co
 r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Something went wrong with company: {}'.format(payload['name']))
-'''
-'''
+
+
 ## Populate SERVICES collection
 ## Collect Bearer token in order to be able to authentificate
 #url = 'https://stw-zitation.herokuapp.com/api/companies/login'
@@ -290,4 +290,3 @@ payload = {'service_duration': '15','schedule': {'monday': {'open_1': '9:00','cl
 r = requests.patch(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error updating: {}'.format(company_id))
-'''
