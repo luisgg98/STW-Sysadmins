@@ -44,13 +44,7 @@ let fetchCompany = async (req, res) => {
             else{
                 if (company){
                     res.status(200)
-                    res.send({name: company.name, email: company.email, category: company.category,
-                        description: company.description, service_duration: company.service_duration,
-                        street: company.street,
-                        streetnumber: company.streetnumber,
-                        zipcode:company.zipcode,
-                        location: company.location,
-                        schedule:company.schedule})
+                    res.send(company);
                 }
                 else {
                     res.status(404)
@@ -160,20 +154,7 @@ let login = async (req, res) => {
         if (utils.validPassword(req.body.password, company.password, company.salt)) {
             const tokenObject = utils.issueJWT(company);
             res.send({
-                    company: {
-                        name:company.name,
-                        email:company.email,
-                        nif:company.nif,
-                        id:company._id,
-                        category:company.category,
-                        description: company.description,
-                        service_duration: company.service_duration,
-                        streetnumber:company.streetnumber,
-                        street:company.street,
-                        zipcode:company.zipcode,
-                        schedule: company.schedule,
-                        location: company.location
-                    },
+                    company: company,
                     token: tokenObject.token, expiresIn: tokenObject.expires })
         } else {
             res.status(401)
