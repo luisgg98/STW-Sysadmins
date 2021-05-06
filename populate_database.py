@@ -37,7 +37,7 @@ if (r.status_code != 200):
 
 ## Populate COMPANIES collection
 
-#url = 'https://stw-zitation.herokuapp.com/api/companies'
+url = 'https://stw-zitation.herokuapp.com/api/companies'
 url = 'http://localhost:3000/api/companies'
 payload = {'nif': 'A12345678', 'name': 'Centro Deportivo Municipal Alberto Maestro', 'email': 'deportivo1@gmail.com', 'password': 'deportivo1234', 'street':'Camino de las Torres', 'streetnumber': '2', 'zipcode': '50002', 'category': 'Deporte'}
 r = requests.post(url, data=json.dumps(payload), headers=headers)
@@ -58,7 +58,16 @@ payload = {'nif': 'D12345678', 'name': 'Fox', 'email': 'ocio2@gmail.com', 'passw
 r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Something went wrong with company: {}'.format(payload['name']))
+'''
 
+url = 'https://stw-zitation.herokuapp.com/api/companies'
+headers = {'content-type': 'application/json'}
+
+payload = {'nif': 'V12345678', 'name': 'Centro Cívico Delicias', 'email': 'civico1234@gmail.com', 'password': 'deportivo1234', 'street':'Av. Navarra', 'streetnumber': '54', 'zipcode': '50010', 'category': 'Administración pública'}
+r = requests.post(url, data=json.dumps(payload), headers=headers)
+if (r.status_code != 200):
+    print('Something went wrong with company: {}'.format(payload['name']))
+'''
 payload = {'nif': 'F12345678', 'name': 'Ayuntamiento de Zaragoza: Servicio de Educación', 'email': 'admin1@gmail.com', 'password': 'deportivo1234', 'street':'Calle de Miguel Servet', 'streetnumber': '57', 'zipcode': '50013', 'category': 'Administración pública'}
 r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
@@ -88,6 +97,7 @@ payload = {'nif': 'J12345678', 'name': 'Carrefour', 'email': 'comercio2@gmail.co
 r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Something went wrong with company: {}'.format(payload['name']))
+'''
 '''
 ## Populate SERVICES collection
 ## Collect Bearer token in order to be able to authentificate
@@ -280,3 +290,4 @@ payload = {'service_duration': '15','schedule': {'monday': {'open_1': '9:00','cl
 r = requests.patch(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error updating: {}'.format(company_id))
+'''
