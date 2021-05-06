@@ -610,9 +610,13 @@ components:
             price:
               type: integer
             time_slots_service:
-              type: array
-              items:
-                type: integer
+              type: object
+              properties:
+                items:
+                  slots:
+                    type: array
+                  places_left:
+                    type: array
         time_slots:
           type: array
           items:
@@ -620,8 +624,6 @@ components:
     Service_register:
       type: object
       properties:
-        company:
-          type: string
         description:
           type: string
         capacity:
