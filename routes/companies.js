@@ -1,5 +1,6 @@
 const express = require('express')
 const ControllerCompany = require('../controllers/companies/access')
+const ControllerOpinion = require('../controllers/opinion/access')
 const router = express.Router()
 const jwt_login_strategy= require('../config/passport');
 
@@ -42,4 +43,12 @@ router.post("/:nif/services", ControllerCompany.create_service)
 router.patch("/:nif/services/:id", ControllerCompany.update_service)
 router.delete("/:nif/services/:id", ControllerCompany.delete_service)
 
+
+//================================
+//  OPINIONS
+//================================
+router.post("/:nif/opinions",jwt_login_strategy.authenticate,ControllerOpinion.write_opinion);
+router.patch("/:nif/opinions/:id",jwt_login_strategy.authenticate,ControllerOpinion.vote_opinion);
+router.delete("/:nif/opinions/:id",jwt_login_strategy.authenticate,ControllerOpinion.delete_opinion);
+router.get("/:nif/opinions",ControllerOpinion.get_opinion);
 module.exports = router

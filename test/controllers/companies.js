@@ -96,7 +96,6 @@ describe('Testing Company API', () => {
                 res.should.have.status(200);
                 done();
             })
-
     }))
 
     it('It should update a new company using PATCH',(done => {
@@ -280,7 +279,7 @@ describe('Testing Company API', () => {
     it('It should delete a new company using DELETE',(done => {
         chai.request(server)
             .post(url + 'login/')
-            .send({"email": "user@example.com","password": "string"})
+            .send({"email": company.email,"password": company.password})
             .end((err,res)=>{
                 if(err) throw err;
                 res.should.have.status(200);

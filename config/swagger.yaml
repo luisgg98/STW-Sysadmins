@@ -20,10 +20,8 @@ tags:
     description: "Operations about services from a company"
   - name: "Captcha"
     description: "Operations about captcha"
-  - name: "AccessKey"
-    description: "Operations about public key for notifications"
-  - name: "Notifications"
-    description: "Operations about notifications"
+  - name: "Opinion"
+    description: "Operations about opinion"
 paths:
   /captcha:
     get:
@@ -39,41 +37,6 @@ paths:
                 $ref: '#/components/schemas/PublicKey'
         "500":
           description: "Internal server error"
-  /accesskey:
-    get:
-      tags:
-        - "AccessKey"
-      summary: "Get the public key to receive notifications"
-      response:
-        "200":
-          description: "Public key key found"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PublicKey'
-        "500":
-          description: "Internal server error"
-  /notifications:
-    post:
-      tags:
-        - "Notifications"
-      summary: "Create a new notifications"
-      requestBody:
-        description: "It require a new subscription to receive a notification"
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Notification_key"
-      response:
-        "200":
-          description: "New subscription created and a notification sent"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Notification_key'
-          "500":
-            description: "Internal server error"
   /users:
     get:
       tags:
@@ -571,6 +534,129 @@ paths:
           description: "Service deleted"
         "404":
             description: "Service not found"
+  /companies/{nif}/opinions/{id}:
+    patch:
+      operationId: voteOpinion
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Opinion"
+      summary: "Add a new vote to the opinion"
+      parameters:
+        - in: path
+          name: "nif"
+          description: "nif of service company to update"
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: "id"
+          description: "id of service to update"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: "Opinion to being voted"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Opinion_created"
+      responses:
+        "200":
+          description: "Company updated"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Opinion_created'
+        "401":
+          description: "Error while voting an Opinion, you have already vote"
+        "404":
+          description: "Error while voting an Opinion, could find not the Opinion"
+        "500":
+          description: "Internal server error"
+    delete:
+      security:
+        - bearerAuth: [ ]
+      operationId: deleteOpinion
+      tags:
+        - "Opinion"
+      summary: "Delete an opinion"
+      parameters:
+        - in: path
+          name: "nif"
+          description: "nif of service company to update"
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: "id"
+          description: "id of service to update"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: "Opinion to being voted"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Opinion_created"
+      responses:
+        "204":
+          description: "Opinion deleted"
+        "404":
+          description: "Opinion not found"
+        "500":
+          description: "Internal server error"
+  /companies/{nif}/opinions/:
+    post:
+      security:
+        - bearerAuth: [ ]
+      operationId: createOpinion
+      tags:
+        - "Opinion"
+      summary: "Create a new Opinion"
+      parameters:
+        - in: path
+          name: "nif"
+          description: "nif of service company to update"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: "Opinion to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Opinion_created"
+      responses:
+        "200":
+          description: "Company created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Opinion_created'
+        "404":
+          description: "Error while finding a company or an user to give their opinion"
+        "500":
+          description: "Internal server error"
+  get:
+    tags:
+      - "Opinion"
+    summary: "Get all opinions of a Company"
+    responses:
+      "200":
+        description: "All opinions have been found"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Opinion_created'
+      "404":
+        description: "No opinions found"
+      "500":
+        description: "Internal server error"
   /healthzone:
     get:
       operationId: getAllHealthzone
@@ -1390,11 +1476,19 @@ components:
       properties:
         key:
           type: string
-    Notification_key:
+    Opinion_created:
       type: object
-      message:
-        key:
+      properties:
+        comment:
           type: string
+        user_id:
+          type: string
+        stars:
+          type: integer
+      required:
+        - comment
+        - user_id
+        - stars
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"
