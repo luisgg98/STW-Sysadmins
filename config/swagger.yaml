@@ -642,21 +642,22 @@ paths:
           description: "Error while finding a company or an user to give their opinion"
         "500":
           description: "Internal server error"
-  get:
-    tags:
-      - "Opinion"
-    summary: "Get all opinions of a Company"
-    responses:
-      "200":
-        description: "All opinions have been found"
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Opinion_created'
-      "404":
-        description: "No opinions found"
-      "500":
-        description: "Internal server error"
+    get:
+      operationId: getOpinions
+      tags:
+        - "Opinion"
+      summary: "Get all opinions of a Company"
+      responses:
+        "200":
+          description: "All opinions have been found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Opinion_created'
+        "404":
+          description: "No opinions found"
+        "500":
+          description: "Internal server error"
   /healthzone:
     get:
       operationId: getAllHealthzone
