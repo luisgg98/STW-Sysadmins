@@ -555,6 +555,13 @@ paths:
           required: true
           schema:
             type: string
+      requestBody:
+        description: "User who is voting"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User_voting"
       responses:
         "200":
           description: "Company updated"
@@ -1519,6 +1526,11 @@ components:
             - comment
             - user_id
             - stars
+    User_voting:
+      type: object
+      properties:
+        user_id:
+          type: string
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

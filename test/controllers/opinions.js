@@ -128,9 +128,9 @@ describe('Testing Opinion API', () => {
      user_id: {type: String, required: true}
      */
     it('It should vote an opinion',(done => {
-
         chai.request(server)
             .patch(url + '/' + opinion_id)
+            .send({"user_id": opinion.user_id})
             .set({ "Authorization": `${token_user}` })
             .timeout(5000)
             .end((err,res)=>{
@@ -148,6 +148,7 @@ describe('Testing Opinion API', () => {
     it('It should not vote an opinion',(done => {
         chai.request(server)
             .patch(url + '/' + opinion_id)
+            .send({"user_id": opinion.user_id})
             .set({ "Authorization": `${token_user}` })
             .timeout(5000)
             .end((err,res)=>{
