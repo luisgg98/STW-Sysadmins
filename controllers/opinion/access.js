@@ -71,11 +71,13 @@ let write_opinion = async (req, res, next)=> {
                             }
                             else{
                                 if(user){
+                                    let today_date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
                                     const opinion = new Opinion({
                                         company_nif: req.params.nif,
                                         comment: req.body.comment,
                                         user_id: req.body.user_id,
                                         stars: starts,
+                                        date:today_date,
                                         votes:0
                                     });
                                     opinion.save().then(()=>{

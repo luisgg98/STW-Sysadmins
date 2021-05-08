@@ -1500,6 +1500,8 @@ components:
           type: integer
         votes:
           type: integer
+        date:
+          type: string
       required:
         - comment
         - user_id
@@ -1522,6 +1524,8 @@ components:
             type: integer
           votes:
             type: integer
+          date:
+            type: string
         required:
             - comment
             - user_id
