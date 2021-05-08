@@ -233,7 +233,7 @@ export const getCompanyData = async (nif) => {
     ).then(response => {
         if (response.status === 200) {
             // console.log("exito get company all data")
-            saveCompany(response.data)
+            // saveCompany(response.data) Para que quieres esto aqui??
             return response.data
         }
         else {

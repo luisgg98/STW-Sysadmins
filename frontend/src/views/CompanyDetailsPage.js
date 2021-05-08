@@ -6,6 +6,7 @@ import { Col, Row } from 'react-bootstrap'
 import ServicesCard from '../components/common/Widgets/ServiceCard'
 import CompanyDetails from '../components/common/Widgets/CompanyDetails'
 import LoadingSpinner from '../components/common/Widgets/LoadingSpinner'
+import CompanyOpinions from "../components/common/Widgets/CompanyOpinions";
 
 const CompanyDetailsPage = (props) => {
 
@@ -63,17 +64,24 @@ const CompanyDetailsPage = (props) => {
         <div>
             <ZitationHeader />
             {loading && <LoadingSpinner />}
-            <Row className="justify-content-center">
-                <Col xl={6} lg={6} md={6} sm={6}>
-                    {compData !== undefined && <CompanyDetails company={compData} />}
-                </Col>
+            <Col>
+                <Row className="justify-content-center ">
+                    <Col xl={6} lg={6} md={6} sm={6}>
+                        {compData !== undefined && <CompanyDetails company={compData} />}
+                    </Col>
 
-                <Col xl={6} lg={6} md={6} sm={6}>
-                    {servicios !== undefined && <Row className="justify-content-center" > <h5 >  SERVICIOS DE {(compData.name).toUpperCase()}</h5></Row>}
-                    {servicios !== undefined ? <ServicesCompany /> : <LoadingSpinner />}
-                </Col>
+                    <Col xl={6} lg={6} md={6} sm={6}>
+                        {compData !== undefined && servicios !== undefined && <Row className="justify-content-center" > <h5 >  SERVICIOS DE {(compData.name).toUpperCase()}</h5></Row>}
+                        {servicios !== undefined ? <ServicesCompany /> : <LoadingSpinner />}
+                    </Col>
+                </Row>
 
-            </Row>
+                <Row className="justify-content-center border">
+                        <CompanyOpinions nif={nif}/>
+                </Row>
+            </Col>
+
+
         </div>
     )
 }
