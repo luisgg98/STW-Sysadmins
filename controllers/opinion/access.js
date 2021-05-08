@@ -125,7 +125,7 @@ let delete_opinion = async (req, res, next)=> {
                 if(err){throw  err}
                 else{
                     await Opinion.deleteOne({ _id: req.params.id })
-                    res.status(204).send()
+                    res.status(204).send({ message: "Opinion removed"})
                 }})
         }
     }

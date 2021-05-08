@@ -545,23 +545,16 @@ paths:
       parameters:
         - in: path
           name: "nif"
-          description: "nif of service company to update"
+          description: "nif of company how received the opinion"
           required: true
           schema:
             type: string
         - in: path
           name: "id"
-          description: "id of service to update"
+          description: "id of opinion to vote"
           required: true
           schema:
             type: string
-      requestBody:
-        description: "Opinion to being voted"
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Opinion_created"
       responses:
         "200":
           description: "Company updated"
@@ -585,26 +578,25 @@ paths:
       parameters:
         - in: path
           name: "nif"
-          description: "nif of service company to update"
+          description: "nif of company which received an opinion"
           required: true
           schema:
             type: string
         - in: path
           name: "id"
-          description: "id of service to update"
+          description: "id of opinion to  delete"
           required: true
           schema:
             type: string
-      requestBody:
-        description: "Opinion to being voted"
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Opinion_created"
       responses:
         "204":
           description: "Opinion deleted"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Opinion_removed'
+        "401":
+          description: "Trying to delete an opinion which does not belong to the user"
         "404":
           description: "Opinion not found"
         "500":
@@ -630,7 +622,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Opinion_created"
+              $ref: "#/components/schemas/Opinion_new"
       responses:
         "200":
           description: "Company created"
@@ -653,7 +645,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Opinion_created'
+                $ref: '#/components/schemas/All_Opinions'
         "404":
           description: "No opinions found"
         "500":
@@ -1477,7 +1469,7 @@ components:
       properties:
         key:
           type: string
-    Opinion_created:
+    Opinion_new:
       type: object
       properties:
         comment:
@@ -1490,6 +1482,43 @@ components:
         - comment
         - user_id
         - stars
+    Opinion_created:
+      type: object
+      properties:
+        comment:
+          type: string
+        user_id:
+          type: string
+        stars:
+          type: integer
+        votes:
+          type: integer
+      required:
+        - comment
+        - user_id
+        - stars
+    Opinion_removed:
+      type: object
+      properties:
+        message:
+          type: string
+    All_Opinions:
+      type: array
+      items:
+        type: object
+        properties:
+          comment:
+            type: string
+          user_id:
+            type: string
+          stars:
+            type: integer
+          votes:
+            type: integer
+        required:
+            - comment
+            - user_id
+            - stars
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"
