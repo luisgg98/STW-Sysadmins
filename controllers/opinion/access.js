@@ -69,8 +69,10 @@ let write_opinion = async (req, res, next)=> {
                             if(err){
                                 throw err;
                             }
-                            else{
+                            else{/**    first_name : { type: String, required: true},
+                             last_name : { type : String, required: true},*/
                                 if(user){
+                                    let name_new = (user.first_name + ' ' + user.last_name);
                                     let today_date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')
                                     const opinion = new Opinion({
                                         company_nif: req.params.nif,
@@ -78,6 +80,7 @@ let write_opinion = async (req, res, next)=> {
                                         user_id: req.body.user_id,
                                         stars: starts,
                                         date:today_date,
+                                        name: name_new,
                                         votes:0
                                     });
                                     opinion.save().then(()=>{

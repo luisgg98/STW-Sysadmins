@@ -1502,6 +1502,8 @@ components:
           type: integer
         date:
           type: string
+        name:
+          type: string
       required:
         - comment
         - user_id
@@ -1525,6 +1527,8 @@ components:
           votes:
             type: integer
           date:
+            type: string
+          name:
             type: string
         required:
             - comment

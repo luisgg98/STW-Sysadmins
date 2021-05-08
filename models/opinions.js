@@ -8,6 +8,7 @@ const opinion = new mongoose.Schema(
         user_id: {type: String, required: true},
         stars: {type: Number, min: 0, required: false},
         date: {type: String, required: false},
+        name: {type: String, required: false},
         votes:{type: Number, min: 0, required: false}
     }
 )

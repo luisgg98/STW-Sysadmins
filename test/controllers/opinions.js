@@ -27,7 +27,7 @@ const user = {
 let opinion = {
     comment: 'I think that your opinion is wrong as always.',
     user_id: '',
-    stars: 1,
+    stars: 1
 }
 
 const url_company = '/api/companies/';
