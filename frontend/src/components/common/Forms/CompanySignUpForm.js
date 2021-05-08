@@ -1,5 +1,4 @@
-import React, {useContext, useState} from "react";
-import {UserContext} from "../../../UserContext";
+import React, {useState} from "react";
 import {useForm} from 'react-hook-form';
 import {Button, Col, Form, Row} from "react-bootstrap";
 import {Link, useHistory} from 'react-router-dom';
@@ -50,7 +49,7 @@ const CompanySignUpForm = () => {
     const history = useHistory()
 
     const onSubmit = async (data, e) => {
-        if (captcha == undefined || null) {
+        if (captcha === undefined || null) {
             setCaptchaError({estado: true, msg: "valida el captcha por favor"})
             setLoading(false)
             let newNumAttemps = numAttempts + 1

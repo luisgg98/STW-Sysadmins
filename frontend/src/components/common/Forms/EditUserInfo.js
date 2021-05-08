@@ -17,7 +17,7 @@ const EditUserInfo = (props) => {
     });
 
 
-    const { formState: { errors, touchedFields, isSubmitted, isValid }, register, getValues, setError, reset, handleSubmit } = useForm({
+    const { formState: { errors, touchedFields, isSubmitted }, register, setError, handleSubmit } = useForm({
         mode: 'onSubmit',
         reValidateMode: 'onBlur',
         defaultValues: {
@@ -37,17 +37,17 @@ const EditUserInfo = (props) => {
         console.log("id", props.id)
         let newData = {}
         console.log("new data antes de modif", newData)
-        if (formValue.first_name != "") {
+        if (formValue.first_name !== "") {
             modifica = true;
             newData = { ...newData, first_name: formValue.first_name }
             console.log("new data if name ", newData)
         }
-        if (formValue.last_name != "") {
+        if (formValue.last_name !== "") {
             modifica = true;
             newData = { ...newData, last_name: formValue.last_name }
             console.log("new data if lastname", newData)
         }
-        if (formValue.password != "") {
+        if (formValue.password !== "") {
             modifica = true;
             newData = { ...newData, password: formValue.password }
             console.log("new data if pass", newData)

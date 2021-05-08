@@ -23,6 +23,7 @@ const ProfileData = (props) => {
         else if (localStorage.getItem("company") === "{}") {
             console.log("es user")
             str = "user"
+            setCompany(false)
         }
 
         let localUser = JSON.parse(localStorage.getItem(str))
@@ -44,7 +45,7 @@ const ProfileData = (props) => {
 
     return (
         <div>
-            <Row>
+            <Row className="justify-content-center">
                 <Card style={{ width: '18rem' }} border="white" className="text-center ml-5 mt-5">
                     <Card.Img variant="top" src={profile} />
                     <Card.Body >
@@ -52,24 +53,27 @@ const ProfileData = (props) => {
                         <Card.Subtitle>{user.email}</Card.Subtitle>
                         <Card.Text>Hola {user.name !== "" ? (user.fname + " " + user.lname) : ("Nombre generado")}, nos alegra verte de nuevo</Card.Text>
 
-                        <Row className="justify-content-center mx-auto py-2">
-                            {isCompany && <Link to="/services"> <Button type="button">To services</Button>  </Link>}
-                        </Row>
-
                         <Link to="/home">
                             <Row className="justify-content-center mx-auto">
                                 <Button type="button" onClick={logOut}>Cerrar sesión</Button>
                             </Row>
                         </Link>
-                        <Row className="justify-content-center mx-auto pt-1">
-                            {!editInfo && <Button type="button" onClick={() => { (setEditInfo(true)) }} >Editar datos</Button>}
-                        </Row>
+                        {!isCompany &&
+                            <Row className="justify-content-center mx-auto pt-1">
+                                {!editInfo && <Button type="button" onClick={() => { (setEditInfo(true)) }} >Editar datos</Button>}
+                            </Row>
+                        }
                         <Row className="pt-2">
                             {editInfo && <EditUserInfo id={user.id} />}
                         </Row>
                         <Row className="justify-content-center mx-auto pt-1">
                             {editInfo && <Button type="button" onClick={() => { (setEditInfo(false)) }} >Cancelar</Button>}
                         </Row>
+                        {isCompany &&
+                            <Row className="justify-content-center mx-auto pt-1">
+                                <Link to="/companies/editInfo"> <Button type="button" >Editar datos de la empresa.</Button> </Link>
+                            </Row>
+                        }
                     </Card.Body>
                 </Card>
             </Row>

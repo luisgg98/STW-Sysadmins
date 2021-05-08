@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useState} from "react";
 import {Button, Form, Row} from "react-bootstrap";
 import {UserContext} from "../../../UserContext"
 import {useForm} from 'react-hook-form';
@@ -9,7 +9,6 @@ import {loginUser} from "../../../services/UsersService"
 
 const LoginForm = () => {
     // Datos del usuario hacer login
-    const {user, setUser} = useContext(UserContext);
 
     const history = useHistory();
 

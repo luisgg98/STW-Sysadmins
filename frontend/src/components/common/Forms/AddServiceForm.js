@@ -1,13 +1,10 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { Button, Col, Form, InputGroup, Row } from "react-bootstrap"
+import { Button, Form, InputGroup, Row } from "react-bootstrap"
 import { useHistory } from "react-router";
 import GenericAlert from '../Widgets/GenericAlert';
 import LoadingSpinner from '../Widgets/LoadingSpinner';
 import { postService } from '../../../services/CompaniesService';
-
-
-
 
 const AddServiceForm = () => {
 
@@ -41,7 +38,7 @@ const AddServiceForm = () => {
         if (!resp)
             setApiError(true)
         else {
-            history.push('/services')
+            history.push('/cuenta')
         }
     }
 
@@ -72,7 +69,7 @@ const AddServiceForm = () => {
                     placeholder="Escribe una descripción detallada del servicio"
                     {...register("description", {
                         required: { value: true, message: "Es necesaria una descripción detallada del servicio." },
-                        minLength: { value: 100, message: "Se mas preciso en la descripción. Mínimo 100 carácteres" },
+                        minLength: { value: 30, message: "Se mas preciso en la descripción. Mínimo 30 carácteres" },
                         maxLength: { value: 500, message: "Carácteres de descripción excedidos" }
                     })}
                     onChange={(e) => {
@@ -145,9 +142,6 @@ const AddServiceForm = () => {
                 <Form.Text className="text-muted">
                         Especifica en euros el precio del servicio que tendrá que pagar cada cliente.</Form.Text>
             </Form.Group>
-
-            {/* <Col xl={1} lg={1} md={1} sm={1} xl={1}> */}
-            {/* </Col> */}
 
             {loading && <LoadingSpinner loading={true} />}
             <Row className="justify-content-center mx-auto ">

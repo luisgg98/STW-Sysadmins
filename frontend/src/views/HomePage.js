@@ -27,7 +27,7 @@ const HomePage = () => {
     const Contenido = () => {
         if (results.length !== 0) {
             return (results.map((company, index) => {
-                return <CompanyCard key={index} title={company.name} />
+                return <CompanyCard key={index} company={company} />
             }
             ))
         }
