@@ -6,7 +6,7 @@ const MapButton = () => {
     return (
         <Row className="justify-content-center mx-auto pt-3">
             <Link to='/mapa'>
-            <Button id="mapButton">Mapa incidencia Covid-19 en Zaragoza</Button>
+            <Button id="mapButton" size="lg">Mapa incidencia COVID-19 en Zaragoza</Button>
         </Link>
         </Row>
     )
