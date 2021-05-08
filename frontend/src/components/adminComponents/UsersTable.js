@@ -1,4 +1,4 @@
-import {Button, Table} from "react-bootstrap";
+import {Button, Card, Table} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import {getUsers, removeUser} from "../../services/UsersService";
 
@@ -24,28 +24,29 @@ function UsersTable() {
     }
 
     return (
-
-        <Table responsive striped bordered hover>
-            <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Apellidos</th>
-                <th>Opciones</th>
-            </tr>
-            </thead>
-            <tbody>
-            {
-                users.map((user, index) => (
-                    <tr key={index}>
-                        <td>{user.first_name}</td>
-                        <td>{user.last_name}</td>
-                        <td>
-                            <Button variant="outline-danger" onClick={() => handleClick(user._id)}>Borrar</Button>
-                        </td>
-                    </tr>)
-                )}
-            </tbody>
-        </Table>
+        <Card style={{overflowY: "scroll", height: "75vh"}}>
+            <Table responsive="lg" striped bordered hover>
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Opciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                {
+                    users.map((user, index) => (
+                        <tr key={index}>
+                            <td>{user.first_name}</td>
+                            <td>{user.last_name}</td>
+                            <td>
+                                <Button variant="outline-danger" onClick={() => handleClick(user._id)}>Borrar</Button>
+                            </td>
+                        </tr>)
+                    )}
+                </tbody>
+            </Table>
+        </Card>
     )
 }
 
