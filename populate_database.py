@@ -37,7 +37,7 @@ if (r.status_code != 200):
 
 ## Populate COMPANIES collection
 
-url = 'https://stw-zitation.herokuapp.com/api/companies'
+#url = 'https://stw-zitation.herokuapp.com/api/companies'
 url = 'http://localhost:3000/api/companies'
 payload = {'nif': 'A12345678', 'name': 'Centro Deportivo Municipal Alberto Maestro', 'email': 'deportivo1@gmail.com', 'password': 'deportivo1234', 'street':'Camino de las Torres', 'streetnumber': '2', 'zipcode': '50002', 'category': 'Deporte'}
 r = requests.post(url, data=json.dumps(payload), headers=headers)
@@ -58,10 +58,6 @@ payload = {'nif': 'D12345678', 'name': 'Fox', 'email': 'ocio2@gmail.com', 'passw
 r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Something went wrong with company: {}'.format(payload['name']))
-
-
-url = 'https://stw-zitation.herokuapp.com/api/companies'
-headers = {'content-type': 'application/json'}
 
 payload = {'nif': 'V12345678', 'name': 'Centro Cívico Delicias', 'email': 'civico1234@gmail.com', 'password': 'deportivo1234', 'street':'Av. Navarra', 'streetnumber': '54', 'zipcode': '50010', 'category': 'Administración pública'}
 r = requests.post(url, data=json.dumps(payload), headers=headers)
@@ -109,12 +105,12 @@ r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error login: {}'.format(payload['email']))
 bearer = r.json()['token']
-company_id = r.json()['company']['id']
+company_id = r.json()['company']['_id']
 ## Update company schedule and service duration in order to generate time_slots
 headers = {'content-type': 'application/json', 'Authorization': bearer}
 #url = 'https://stw-zitation.herokuapp.com/api/companies/{}'.format(company_id)
 url = 'http://localhost:3000/api/companies/{}'.format(company_id)
-payload = {'service_duration': '20','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
+payload = {'service_duration': '20', 'capacity': '3','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
 r = requests.patch(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error updating: {}'.format(company_id))
@@ -129,12 +125,12 @@ r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error login: {}'.format(payload['email']))
 bearer = r.json()['token']
-company_id = r.json()['company']['id']
+company_id = r.json()['company']['_id']
 ## Update company schedule and service duration in order to generate time_slots
 headers = {'content-type': 'application/json', 'Authorization': bearer}
 #url = 'https://stw-zitation.herokuapp.com/api/companies/{}'.format(company_id)
 url = 'http://localhost:3000/api/companies/{}'.format(company_id)
-payload = {'service_duration': '30','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
+payload = {'service_duration': '30', 'capacity': '3','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
 r = requests.patch(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error updating: {}'.format(company_id))
@@ -148,12 +144,12 @@ r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error login: {}'.format(payload['email']))
 bearer = r.json()['token']
-company_id = r.json()['company']['id']
+company_id = r.json()['company']['_id']
 ## Update company schedule and service duration in order to generate time_slots
 headers = {'content-type': 'application/json', 'Authorization': bearer}
 #url = 'https://stw-zitation.herokuapp.com/api/companies/{}'.format(company_id)
 url = 'http://localhost:3000/api/companies/{}'.format(company_id)
-payload = {'service_duration': '15','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
+payload = {'service_duration': '15', 'capacity': '3','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
 r = requests.patch(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error updating: {}'.format(company_id))
@@ -167,12 +163,12 @@ r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error login: {}'.format(payload['email']))
 bearer = r.json()['token']
-company_id = r.json()['company']['id']
+company_id = r.json()['company']['_id']
 ## Update company schedule and service duration in order to generate time_slots
 headers = {'content-type': 'application/json', 'Authorization': bearer}
 #url = 'https://stw-zitation.herokuapp.com/api/companies/{}'.format(company_id)
 url = 'http://localhost:3000/api/companies/{}'.format(company_id)
-payload = {'service_duration': '15','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
+payload = {'service_duration': '15', 'capacity': '3','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
 r = requests.patch(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error updating: {}'.format(company_id))
@@ -186,12 +182,12 @@ r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error login: {}'.format(payload['email']))
 bearer = r.json()['token']
-company_id = r.json()['company']['id']
+company_id = r.json()['company']['_id']
 ## Update company schedule and service duration in order to generate time_slots
 headers = {'content-type': 'application/json', 'Authorization': bearer}
 #url = 'https://stw-zitation.herokuapp.com/api/companies/{}'.format(company_id)
 url = 'http://localhost:3000/api/companies/{}'.format(company_id)
-payload = {'service_duration': '15','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
+payload = {'service_duration': '15', 'capacity': '3','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
 r = requests.patch(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error updating: {}'.format(company_id))
@@ -205,12 +201,12 @@ r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error login: {}'.format(payload['email']))
 bearer = r.json()['token']
-company_id = r.json()['company']['id']
+company_id = r.json()['company']['_id']
 ## Update company schedule and service duration in order to generate time_slots
 headers = {'content-type': 'application/json', 'Authorization': bearer}
 #url = 'https://stw-zitation.herokuapp.com/api/companies/{}'.format(company_id)
 url = 'http://localhost:3000/api/companies/{}'.format(company_id)
-payload = {'service_duration': '15','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
+payload = {'service_duration': '15', 'capacity': '3','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
 r = requests.patch(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error updating: {}'.format(company_id))
@@ -224,12 +220,12 @@ r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error login: {}'.format(payload['email']))
 bearer = r.json()['token']
-company_id = r.json()['company']['id']
+company_id = r.json()['company']['_id']
 ## Update company schedule and service duration in order to generate time_slots
 headers = {'content-type': 'application/json', 'Authorization': bearer}
 #url = 'https://stw-zitation.herokuapp.com/api/companies/{}'.format(company_id)
 url = 'http://localhost:3000/api/companies/{}'.format(company_id)
-payload = {'service_duration': '15','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
+payload = {'service_duration': '15', 'capacity': '3','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
 r = requests.patch(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error updating: {}'.format(company_id))
@@ -243,12 +239,12 @@ r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error login: {}'.format(payload['email']))
 bearer = r.json()['token']
-company_id = r.json()['company']['id']
+company_id = r.json()['company']['_id']
 ## Update company schedule and service duration in order to generate time_slots
 headers = {'content-type': 'application/json', 'Authorization': bearer}
 #url = 'https://stw-zitation.herokuapp.com/api/companies/{}'.format(company_id)
 url = 'http://localhost:3000/api/companies/{}'.format(company_id)
-payload = {'service_duration': '15','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
+payload = {'service_duration': '15', 'capacity': '3','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
 r = requests.patch(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error updating: {}'.format(company_id))
@@ -262,12 +258,12 @@ r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error login: {}'.format(payload['email']))
 bearer = r.json()['token']
-company_id = r.json()['company']['id']
+company_id = r.json()['company']['_id']
 ## Update company schedule and service duration in order to generate time_slots
 headers = {'content-type': 'application/json', 'Authorization': bearer}
 #url = 'https://stw-zitation.herokuapp.com/api/companies/{}'.format(company_id)
 url = 'http://localhost:3000/api/companies/{}'.format(company_id)
-payload = {'service_duration': '15','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
+payload = {'service_duration': '15', 'capacity': '3','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
 r = requests.patch(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error updating: {}'.format(company_id))
@@ -281,12 +277,28 @@ r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error login: {}'.format(payload['email']))
 bearer = r.json()['token']
-company_id = r.json()['company']['id']
+company_id = r.json()['company']['_id']
 ## Update company schedule and service duration in order to generate time_slots
 headers = {'content-type': 'application/json', 'Authorization': bearer}
 #url = 'https://stw-zitation.herokuapp.com/api/companies/{}'.format(company_id)
 url = 'http://localhost:3000/api/companies/{}'.format(company_id)
-payload = {'service_duration': '15','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
+payload = {'service_duration': '15', 'capacity': '3','schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}}}
 r = requests.patch(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error updating: {}'.format(company_id))
+
+url = 'http://localhost:3000/api/companies/A12345678/services'
+headers = {'content-type': 'application/json'}
+payload = {'description': 'Reservar campo de futbol sala', 'price':'11'}
+r = requests.post(url, data=json.dumps(payload), headers=headers)
+if (r.status_code != 200):
+    print('Error creating service')
+print(r.json())
+
+url = 'http://localhost:3000/api/users/6097a3ac66fe8b679cb763ea/bookings'
+headers = {'content-type': 'application/json'}
+payload = {'service':'6097a57166fe8b679cb763f9', 'date':'2021-05-10', 'time':'9:00'}
+r = requests.post(url, data=json.dumps(payload), headers=headers)
+if (r.status_code != 200):
+    print('Error creating booking')
+print(r.json())

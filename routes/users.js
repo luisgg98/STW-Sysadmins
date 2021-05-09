@@ -27,6 +27,7 @@ router.delete("/:id",jwt_login_strategy.authenticate, ControllerUser.delete)
 
 router.post("/:id/bookings", ControllerBooking.create_booking)
 router.get("/:id/bookings", ControllerBooking.get_bookings)
-router.patch("/:id/bookings/{booking_id}", ControllerBooking.update_bookings)
+router.patch("/:id/bookings/:booking_id", ControllerBooking.update_bookings)
+router.delete("/:id/bookings/:booking_id", ControllerBooking.delete_booking)
 
 module.exports = router;

@@ -330,7 +330,7 @@ paths:
           schema:
             type: string
       requestBody:
-        description: "Service id and booking time hh:mm[AM|PM]"
+        description: "Service id and booking time"
         required: true
         content:
           application/json:
@@ -367,9 +367,12 @@ paths:
             schema:
               type: object
               properties:
-                booking_time:
+                date:
                   type: string
-                  description: hh:mm[AM|PM]
+                  description: YYYY-MM-DD
+                time:
+                  type: string
+                  description: HH:MM
       responses:
         "204":
           description: "Booking updated"
@@ -831,9 +834,12 @@ components:
         service:
           type: string
           description: id of service
-        booking_time:
+        date:
           type: string
-          description: hh:mm[AM|PM]
+          description: YYYY-MM-DD
+        time:
+          type: string
+          description: HH:MM
     Booking_retrieved:
       type: object
       properties:
@@ -843,8 +849,12 @@ components:
           type: string
         service_id:
           type: string
-        booking_time:
+        date:
           type: string
+          description: YYYY-MM-DD
+        time:
+          type: string
+          description: HH:MM
     Get_companies:
       type: array
       items:
@@ -873,6 +883,8 @@ components:
             type: number
           service_duration:
             type: string
+          capacity:
+            type: number
           time_slots:
             type: array
             items:
@@ -1245,6 +1257,8 @@ components:
           type: string
         service_duration:
           type: string
+        capacity:
+          type: number
         schedule:
           type: object
           properties:
@@ -1357,6 +1371,8 @@ components:
               type: string
             service_duration:
               type: string
+            capacity:
+              type: number
             time_slots:
               type: array
               items:

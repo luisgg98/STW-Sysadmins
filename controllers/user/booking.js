@@ -1,6 +1,6 @@
-const Company = require('../../models/company')
 const Booking = require('../../models/booking')
 const Service = require('../../models/service')
+const User = require('../../models/user')
 
 // /users/{ID}/bookings
 // GET (get all bookings or filter by id
@@ -16,24 +16,33 @@ const Service = require('../../models/service')
  */
 let create_booking = async (req, res) => {
     try {
-        Service.countDocuments({_id: req.body.service}, async function(err,count){
-            if(err){
-                throw err;
-            }
-            else{
-                if(count < 1){
+        Service.findOne({_id: req.body.service}, async function(err, service){
+            if (err){ throw err}
+            else {
+                if (service){
+                    //Check if user exists
+                    User.findOne({_id: req.params.id},async function(err, user){
+                        if (err){ throw err}
+                        else{
+                            if (user){
+                                const booking = new Booking({
+                                    user_id: req.params.id,
+                                    service_id: req.body.service,
+                                    company_id: service.company,
+                                    date: req.body.date,
+                                    time: req.body.time
+                            })
+                                await booking.save()
+                                res.send(booking)
+                            }
+                            else{
+                                res.status(404)
+                                res.send({error: "User not found"})
+                            }}})}
+                else {
                     res.status(404)
                     res.send({ error: "Service not found"})
-                }
-                else{
-                    let booking = update_time_slots(req.body.service, req.params.id, req.body.booking_time)
-                    res.status(200)
-                    res.send(booking)
-                }
-            }
-        })
-
-    }
+                }}})}
     catch {
         res.status(405)
         res.send({ error: "Wrong body format, check docs for further info /api-docs"})
@@ -51,7 +60,7 @@ let get_bookings = async (req, res) => {
         // if the url contains a query, just search for one booking
         if (req.query.id) {
             let id = req.query.id
-            Booking.findOne({_id:id},{},{},function (err, booking) {
+            Booking.findOne({_id:id},function (err, booking) {
                 if(err){
                     throw err;
                 }
@@ -61,14 +70,14 @@ let get_bookings = async (req, res) => {
                         res.send(booking)}
                     else{
                         res.status(404)
-                        res.send({error:"Not found booking"})
+                        res.send({error:"Booking not found"})
                     }
                 }
             })
 
         } else {
             // Fetch all bookings
-            Booking.find({user_id: req.params.id},{},{},function (err, bookings) {
+            Booking.find({user_id: req.params.id},function (err, bookings) {
                 if(err){
                     throw err;
                 }
@@ -80,12 +89,10 @@ let get_bookings = async (req, res) => {
                     }
                     else{
                         res.status(404)
-                        res.send({error:"Not found booking"})
+                        res.send({error:"No bookings were found"})
                     }
                 }
-
             })
-
         }
     } catch {
         res.status(500)
@@ -101,12 +108,21 @@ let get_bookings = async (req, res) => {
  */
 let update_bookings = async (req, res) => {
     try{
-        let booking = await Booking.findOneAndDelete({_id: req.params.booking_id})
-        if (req.body.booking_time) {
-            // Borrar booking y crear otro nuevo
-            let booking = update_time_slots(booking.service_id, booking.user_id, booking.booking_time)
-            res.send(booking)
-        }
+        Booking.findOne({_id: req.params.booking_id}, async function(err, booking){
+            if(err){throw err}
+            else{
+                if (booking){
+                    if(req.body.date){booking.date = req.body.date}
+                    if(req.body.time){booking.time = req.body.time}
+                    await booking.save()
+                    res.status(200)
+                    res.send(booking)
+                } else {
+                    res.status(404)
+                    res.send({error: "Booking not found"})
+                }
+            }
+        })
     }
     catch {
         res.status(500)
@@ -122,63 +138,22 @@ let update_bookings = async (req, res) => {
  */
 let delete_booking = async (req,res) => {
     try {
-        //TODO CAMBIAR PARA EVITAR FALLOS Y BUGS, UTILIZAR CALLBACKS
-        let booking = await Booking.findOneAndDelete({_id:req.params.booking_id})
-        // sumar capacidad
-        let service = await Service.findOne({_id:booking.service_id})
-        let company = await Company.findOne({nif: service.company})
-        let time_slots = company.time_slots
-        let service_time_slots = service.time_slots_service
-        // Encontrar time slot correspondiente
-        for (let i = 0; i < time_slots.length; i++) {
-            // Restar uno a la capacidad del servicio en esa hora
-            if (booking.booking_time == time_slots[i]) {
-                service_time_slots[i] = service_time_slots + 1
-                break
+        Booking.findOneAndDelete({_id:req.params.booking_id}, async function(err, booking){
+            if(err){throw err}
+            else{
+                if (booking){
+                    res.status(204).send()
+                } else{
+                    res.status(404)
+                    res.send({error: "Booking not found"})
+               }
             }
-        }
-        service.time_slots_service = service_time_slots
-        await service.save()
-        res.status(204).send
+        })
     }
     catch {
         res.status(404)
         res.send({ error: "Booking not found"})
     }
-}
-
-/**
- *
- * @param id_service
- * @param id_user
- * @param booking_time
- * @returns {Promise<Document>}
- */
-async function update_time_slots(id_service, id_user, booking_time) {
-    //TODO CAMBIAR PARA EVITAR FALLOS Y BUGS, UTILIZAR CALLBACKS
-    // Actualizar time_slots del servicio
-    let service = await Service.findOne({_id: id_service})
-    let company = await Company.findOne({nif: service.company})
-    let time_slots = company.time_slots
-    let service_time_slots = service.time_slots_service
-    // Encontrar time slot correspondiente
-    for (let i = 0; i < time_slots.length; i++) {
-        // Restar uno a la capacidad del servicio en esa hora
-        if (booking_time == time_slots[i]) {
-            service_time_slots[i] = service_time_slots - 1
-            break
-        }
-    }
-    // Guardar el nuevo service_time_slots
-    service.time_slots_service = service_time_slots
-    await service.save()
-    let booking = new Booking({
-        user_id: id_user,
-        service_id: id_service,
-        booking_time: booking_time
-    })
-    await booking.save()
-    return booking
 }
 
 exports.create_booking = create_booking

@@ -18,7 +18,7 @@ let get = async (req, res, next)=> {
         if (req.query.name){
             // Fetch just one company
             let name = req.query.name
-            const company = await Company.find({name: {"$regex": name, "$options": "i"}}, function(err,docs){}).select('name nif email category description service_durationlocation')
+            const company = await Company.find({name: {"$regex": name, "$options": "i"}}, function(err,docs){}).select('name nif email category description service_duration time_slots schedule capacity location')
             res.send(company)
         } else {
             // Fetch all companies
@@ -187,28 +187,15 @@ let update = async (req, res)=> {
             else{
                 company = req.result;
             }
-            if (req.body.name) {
-                company.name = req.body.name
-            }
+            if (req.body.name) {company.name = req.body.name}
             //TODO it must be changed
-            if (req.body.password) {
-                company.password = req.body.password
-            }
-            if (req.body.email) {
-                company.email = req.body.email
-            }
-            if(req.body.streetnumber){
-                company.streetnumber= req.body.streetnumber
-            }
-            if(req.body.street){
-                company.street = req.body.street
-            }
-            if(req.body.zipcode){
-                company.zipcode = req.body.zipcode
-            }
-            if (req.body.description) {
-                company.description = req.body.description
-            }
+            if (req.body.password) {company.password = req.body.password}
+            if (req.body.email) {company.email = req.body.email}
+            if(req.body.streetnumber){company.streetnumber= req.body.streetnumber}
+            if(req.body.street){company.street = req.body.street}
+            if(req.body.zipcode){company.zipcode = req.body.zipcode}
+            if (req.body.description) {company.description = req.body.description}
+            if (req.body.capacity) { company.capacity = req.body.capacity}
             if (req.body.schedule || req.body.service_duration) {
                 if (req.body.schedule && req.body.service_duration){
                     company.schedule = req.body.schedule
@@ -222,9 +209,7 @@ let update = async (req, res)=> {
                     company.time_slots = update_time_slots.update_time_slots(company)
                 }
             }
-            if(req.body.category){
-                company.category = req.body.category;
-            }
+            if(req.body.category){company.category = req.body.category;}
             geolo.findCoordenates(company.name,company.streetnumber,company.street,company.zipcode)
                 .then(
                     async (coordinates) =>{
@@ -286,14 +271,10 @@ let create_service = async (req, res, next)=> {
             }
         })
         if (found) {
-            let company = await Company.findOne({nif:req.params.nif})
-            let times = update_time_slots.update_time_slots_services(company, parseInt(req.body.capacity, 10))
             // Company exists
             const service = new Service({
                 company: req.params.nif,
                 description: req.body.description,
-                capacity: req.body.capacity,
-                time_slots_service: times,
                 price: req.body.price
             })
             await service.save()
