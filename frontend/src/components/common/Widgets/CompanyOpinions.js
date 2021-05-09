@@ -34,33 +34,27 @@ function CompanyOpinions(props) {
     }, []);
 
     return (
-        <Col>
+        <Container>
             <Row className="justify-content-center">
                 <h2>Comentarios</h2>
             </Row>
-            <Row>
+            <Row className="justify-content-center">
                 {company_opinions.length > 0 ?
-                <Card className="border-0" style={{overflowY: "auto", maxHeight: "30vh", width: "150vh", overflowX: "hidden"}}>
-                    {
-                        company_opinions.map((company_opinion) => (
-                            <Row className="p-1 justify-content-center">
-                                <CompanyOpinion key={company_opinion._id} user={company_opinion.user_id}
-                                                text={company_opinion.comment} date={company_opinion.date}
-                                                stars={company_opinion.stars}/>
-                            </Row>
-                        ))
-                    }
-                </Card> : <div>¡¡De momento no hy comentarios, puedes ser el primero!!</div>}
+                    <Container className="border-0"
+                          style={{overflowY: "auto", maxHeight: "30vh", overflowX: "hidden"}}>
+                        {
+                            company_opinions.map((company_opinion) => (
+                                <Row className="p-1 justify-content-center">
+                                    <CompanyOpinion key={company_opinion._id} user={company_opinion.name}
+                                                    text={company_opinion.comment} date={company_opinion.date}
+                                                    stars={company_opinion.stars}/>
+                                </Row>
+                            ))
+                        }
+                    </Container> : <div>¡¡De momento no hy comentarios, puedes ser el primero!!</div>}
 
             </Row>
-            {
-                localStorage.getItem("user").length > 2 &&
-                <Row className="justify-content-center">
-                    <OpinionForm nif={props.nif}/>
-                </Row>
-            }
-
-        </Col>
+        </Container>
     )
 }
 

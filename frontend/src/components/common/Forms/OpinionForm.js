@@ -16,7 +16,7 @@ function OpinionForm(props) {
     }
 
     return (
-        <Container>
+        <Container className="p-2" style={{maxWidth: "75vh"}}>
             <h3>Deja tu comentario</h3>
             <Form validated={validated}>
                 <Form.Row>
