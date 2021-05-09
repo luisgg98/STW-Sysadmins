@@ -28,8 +28,7 @@ const CovidMap = (props) => {
                 center={coordenadasZgz}
                 zoom={14}
                 scrollWheelZoom={false}
-                style={{width: "100%", height: "85" +
-                        "vh"}}
+                style={{width: "100%", height: "75vh"}}
 
             >
                 <TileLayer

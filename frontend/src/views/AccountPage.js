@@ -5,6 +5,7 @@ import { Redirect } from "react-router-dom";
 import ProfileData from "../components/common/Widgets/ProfileData";
 import ZitationHeader from "../components/common/Headers/ZitationHeader";
 import ServiceCreation from './ServiceCreation';
+import Header from "../components/common/Headers/Header";
 
 const AccountPage = () => {
 
@@ -14,7 +15,7 @@ const AccountPage = () => {
             // && localStorage.getItem("token") !== "undefined"
                 ? (
                     <div>
-                        <ZitationHeader />
+                        <Header />
                         <Row fluid="md">
                             <Col xs={12} sm={12} md={4} lg={4} xl={4}>
                                 <ProfileData />

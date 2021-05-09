@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Card, Col, Row } from 'react-bootstrap'
-import { Link, useParams } from 'react-router-dom'
+import React, {useState, useEffect} from 'react'
+import {Button, Card, Col, Row} from 'react-bootstrap'
+import {Link, useParams} from 'react-router-dom'
 import ZitationHeader from '../components/common/Headers/ZitationHeader'
 import LoadingSpinner from '../components/common/Widgets/LoadingSpinner'
-import { getCompanyData, getServiceData } from '../services/CompaniesService'
+import {getCompanyData, getServiceData} from '../services/CompaniesService'
+import Header from "../components/common/Headers/Header";
 
 const ServiceDetailsPage = () => {
-    const { nif, id } = useParams()
+    const {nif, id} = useParams()
 
     const [company, setCompany] = useState()
     const [service, setService] = useState()
@@ -31,17 +32,22 @@ const ServiceDetailsPage = () => {
     }
 
     useEffect(() => {
-        fetchCompData().then(() => { setLoading(false) })
-        fetchServiceData().then(() => { setHayServ(true) })
+        fetchCompData().then(() => {
+            setLoading(false)
+        })
+        fetchServiceData().then(() => {
+            setHayServ(true)
+        })
     }, [])
 
     const Content = () => {
         if (company !== undefined && service !== undefined)
             return (
-                <Card style={{ width: '60rem' }} className="text-center">
+                <Card style={{width: '60rem'}} className="text-center">
                     <Card.Header as="h5">{(company.name).toUpperCase()}</Card.Header>
                     <Card.Body>
-                        <Link to={{ pathname: googleURL + company.street + "+" + company.zipcode + "+Zaragoza" }} target="_blank" rel="noopener noreferrer">
+                        <Link to={{pathname: googleURL + company.street + "+" + company.zipcode + "+Zaragoza"}}
+                              target="_blank" rel="noopener noreferrer">
                             <Card.Title>{company.street},{company.streetnumber},{company.zipcode},Zaragoza.</Card.Title>
                         </Link>
                         <Card.Text>{(service.services.description).toUpperCase()}.</Card.Text>
@@ -49,7 +55,7 @@ const ServiceDetailsPage = () => {
                     <Card.Footer className="text-muted">Precio: {service.services.price} </Card.Footer>
                 </Card>
             )
-        else return < LoadingSpinner />
+        else return < LoadingSpinner/>
     }
     const BotonesHora = () => {
         if (service !== undefined)
@@ -77,25 +83,25 @@ const ServiceDetailsPage = () => {
 
     return (
         <div>
-            <ZitationHeader />
+            <Header/>
             <Row className="justify-content-center">
                 <Col xl={7} lg={7} md={7} sm={7} xs={7}>
-                    {company !== undefined && service !== undefined && <Content className="mx-5" />}
+                    {company !== undefined && service !== undefined && <Content className="mx-5"/>}
                 </Col>
             </Row>
             <Row className="justify-content-center">
                 <Col xl={7} lg={7} md={7} sm={7} xs={7}>
-                    {service !== undefined && <BotonesHora />}
+                    {service !== undefined && <BotonesHora/>}
                 </Col>
 
             </Row>
             <Row className="justify-content-center">
                 <Col xl={7} lg={7} md={7} sm={7} xs={7}>
-                    {service !== undefined && <Plazas />}
+                    {service !== undefined && <Plazas/>}
                 </Col>
             </Row>
             <Row>
-                {loading && <LoadingSpinner />}
+                {loading && <LoadingSpinner/>}
             </Row>
         </div>
     )
