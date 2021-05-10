@@ -28,7 +28,7 @@ let create_booking = async (req, res) => {
                                 const booking = new Booking({
                                     user_id: req.params.id,
                                     service_id: req.body.service,
-                                    company_id: service.company,
+                                    company_nif: service.company,
                                     date: req.body.date,
                                     time: req.body.time
                             })
@@ -156,7 +156,34 @@ let delete_booking = async (req,res) => {
     }
 }
 
+/////////////////////////////////////////////////////
+//             BOOKINGS FROM COMPANY               //
+/////////////////////////////////////////////////////
+
+let services_bookings = async (req, res) => {
+    try{
+        Booking.find({service_id: req.params.id}, async function(err, booking){
+            if(err){throw err}
+            else{
+                if(booking){
+                    res.status(200)
+                    res.send(booking)
+                }
+                else{
+                    res.status(404)
+                    res.send({error: "No bookings found"})
+                }
+            }
+        })
+    }
+    catch {
+        res.status(500)
+        res.send({error:"Internal server error"})
+    }
+}
+
 exports.create_booking = create_booking
 exports.get_bookings = get_bookings
 exports.update_bookings = update_bookings
 exports.delete_booking = delete_booking
+exports.services_bookings = services_bookings

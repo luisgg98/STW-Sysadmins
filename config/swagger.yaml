@@ -537,6 +537,36 @@ paths:
           description: "Service deleted"
         "404":
             description: "Service not found"
+  /companies/{nif}/services/{id}/bookings:
+    get:
+      operationId: getBookingsFromService
+      tags:
+        - "Services"
+      summary: "Get all bookings from a service"
+      parameters:
+        - in: path
+          name: "nif"
+          description: "nif of service's company"
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: "id"
+          description: "Id of service"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Bookings fetched"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking_retrieved"
+        "404":
+          description: "No bookings found"
+        "500":
+          description: "Internal server error"
   /companies/{nif}/opinions/{id}:
     patch:
       operationId: voteOpinion
@@ -848,6 +878,8 @@ components:
         user_id:
           type: string
         service_id:
+          type: string
+        company_nif:
           type: string
         date:
           type: string
