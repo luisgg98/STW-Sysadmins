@@ -1,11 +1,10 @@
 import React, {useContext} from "react";
-import {Link, Redirect} from "react-router-dom";
-import {PageDescription} from "../components/common/Headers/Header"
+import {Redirect} from "react-router-dom";
 import UserSUForm from "../components/common/Forms/UserSignUpForm"
 import {UserContext} from "../UserContext";
-import api from "../services/APICall";
 import {Container, Row} from "react-bootstrap";
 import ZitationHeader from "../components/common/Headers/ZitationHeader";
+import PageDescription from "../components/common/Widgets/PageDescription";
 
 const UserRegistrationPage = () => {
 

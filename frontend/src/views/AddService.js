@@ -3,6 +3,7 @@ import { Container, Row } from "react-bootstrap";
 import { Redirect } from 'react-router';
 import AddServiceForm from '../components/common/Forms/AddServiceForm';
 import ZitationHeader from '../components/common/Headers/ZitationHeader';
+import Header from "../components/common/Headers/Header";
 
 
 
@@ -18,7 +19,7 @@ const AddService = () => {
     }, [])
     return (
         <div>
-            <ZitationHeader />
+            <Header/>
 
             { servicios 
             ? (<Redirect to="/services" ></Redirect>)

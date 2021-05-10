@@ -1,10 +1,10 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Card, CardGroup} from 'react-bootstrap';
-import salud from "../../../assets/salud.jpeg";
-import comercio from "../../../assets/comercio.jpeg";
-import deporte from "../../../assets/deporte.jpeg";
-import ocio from "../../../assets/ocio.jpeg";
+import salud from "../../../assets/salud.png";
+import comercio from "../../../assets/comercio.png";
+import deporte from "../../../assets/deporte.png";
+import ocio from "../../../assets/ocio.png";
 import admin from "../../../assets/admin.png";
 import {Link} from 'react-router-dom';
 
@@ -16,7 +16,7 @@ const CategoryCards = () => {
         <Card.Img variant="top" src={salud} />
         <Card.Body>
           <Link to="/companies/health">
-            <Card.Title >Salud y Belleza</Card.Title>
+            <Card.Title>Salud y Belleza</Card.Title>
           </Link>
           <Card.Text>
             This is a wider card with supporting text below as a natural lead-in to

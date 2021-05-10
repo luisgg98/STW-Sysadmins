@@ -71,7 +71,7 @@ const ProfileData = (props) => {
                         </Row>
                         {isCompany &&
                             <Row className="justify-content-center mx-auto pt-1">
-                                <Link to="/companies/editInfo"> <Button type="button" >Editar datos de la empresa.</Button> </Link>
+                                <Link to="/companies/editInfo"> <Button type="button" >Editar datos de la empresa</Button> </Link>
                             </Row>
                         }
                     </Card.Body>

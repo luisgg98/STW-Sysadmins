@@ -39,42 +39,57 @@ function MapFilterForm(props) {
     }
 
     return (
-        <Form>
-            <Card>
-                <Card.Title>Casos COVID</Card.Title>
-                <RangeSlider
-                    variant="primary"
-                    tooltip="auto"
-                    tooltipPlacement="top"
-                    step={5}
-                    max={200}
-                    value={casosCovid}
-                    onChange={changeEvent => {
-                        setCasosCovid(changeEvent.target.value);
-                    }}
-                    onAfterChange={() => setFilters({...filters, minCases: casosCovid})}
-                />
-                <div>Casos: {casosCovid}</div>
+        <Container>
+            <Row>
+                <Container>
+                    <h4>Casos COVID</h4>
+                    <RangeSlider
+                        variant="primary"
+                        tooltip="auto"
+                        tooltipPlacement="top"
+                        step={5}
+                        max={200}
+                        value={casosCovid}
+                        onChange={changeEvent => {
+                            setCasosCovid(changeEvent.target.value);
+                        }}
+                        onAfterChange={() => setFilters({...filters, minCases: casosCovid})}
+                    />
+                    <div>Casos: {casosCovid}</div>
+                </Container>
+            </Row>
+            <Row>
+                <Container>
+                    <h4>Categorías</h4>
+                    <Container style={{overflowY: "auto", maxHeight: "30vh"}}>
+                        <Form.Label>
+                            {categories.sort().map((categoria) => (
+                                <Form.Check key={categoria} type="checkbox" label={categoria} defaultChecked={true}
+                                            onChange={() => toggleCompanyByCategory(categoria)}/>
+                            ))}
+                        </Form.Label>
+                    </Container>
 
-            </Card>
-            <Card>
-                <Card.Title>Categorías</Card.Title>
-                <Form.Label>
-                    {categories.sort().map((categoria) => (
-                        <Form.Check key={categoria} type="checkbox" label={categoria} defaultChecked={true}
-                                    onChange={() => toggleCompanyByCategory(categoria)}/>
-                    ))}
-                </Form.Label>
-            </Card>
-            <Card style={{overflowY: "scroll", height: "50vh"}}>
-                <Card.Title>Zonas de salud</Card.Title>
-                {Array.from(healthZones).map((healthZone) => (
-                    <Form.Check key={healthZone.name} type="checkbox" label={healthZone.name} defaultChecked={true}
-                                onChange={() => toggleHealthZoneByName(healthZone.name)}>
-                    </Form.Check>
-                ))}
-            </Card>
-        </Form>
+                </Container>
+            </Row>
+            <Row>
+                <Container >
+                    <h4>Zonas de salud</h4>
+                    <Container style={{overflowY: "auto", maxHeight: "40vh"}}>
+                        {Array.from(healthZones).map((healthZone) => (
+                            <Form.Check key={healthZone.name} type="checkbox" label={healthZone.name} defaultChecked={true}
+                                        onChange={() => toggleHealthZoneByName(healthZone.name)}>
+                            </Form.Check>
+                        ))}
+                    </Container>
+
+                </Container>
+            </Row>
+
+
+
+        </Container>
+
     );
 }
 

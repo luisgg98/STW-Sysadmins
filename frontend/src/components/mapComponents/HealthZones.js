@@ -1,6 +1,6 @@
 import {Circle, Popup} from "react-leaflet";
 import React, {useEffect, useState} from "react";
-import {getHealthZones} from "../../services/HealthZones";
+import {getHealthZones} from "../../services/HealthZonesService";
 
 function selectColor(newCases) {
     let color;
