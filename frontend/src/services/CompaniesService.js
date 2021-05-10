@@ -50,16 +50,9 @@ export function getCompaniesByCategory(category) {
     })
 }
 export function saveCompany(response) {
-    localStorage.setItem("token", response.token);
+    if(response.token !== undefined) 
+        localStorage.setItem("token", (response.token).replace(/"/, ''));
     localStorage.setItem("logged", true)
-    // let company = {
-    //     company: true,
-    //     first_name: response.name,
-    //     email: response.email,
-    //     id: response.id,
-    //     address: response.address,
-    //     categor: response.category
-    // }
     localStorage.setItem("company", JSON.stringify(response))
 }
 
@@ -98,7 +91,7 @@ export const updateCompanyInfo = async (companyName) => {
         }
     ).then(response => {
         // setResults(response.data)
-        // console.log("datos", response.data)
+        console.log("datos", response.data)
         // console.log(response.status)
         saveCompany(response.data[0])
         return true
@@ -200,7 +193,7 @@ export const patchCompanyInfo = async (id, data, token) => {
         {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': token
+                'Authorization': token.replace(/"/g, '')
             }
         }
     ).then(response => {
@@ -259,7 +252,6 @@ export const getServiceData = async (nif, idServ) => {
     ).then(response => {
         if (response.status === 200) {
             // console.log("exito get company all data")
-            saveCompany(response.data)
             return response.data
         }
         else {

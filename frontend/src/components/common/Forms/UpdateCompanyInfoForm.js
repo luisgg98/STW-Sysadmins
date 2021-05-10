@@ -1,4 +1,4 @@
-import React, { useState  } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { Button, Form, Row, Table } from "react-bootstrap"
 import GenericAlert from '../Widgets/GenericAlert';
@@ -6,7 +6,6 @@ import LoadingSpinner from '../Widgets/LoadingSpinner';
 import TimePicker from 'react-bootstrap-time-picker'
 import { loginUser } from '../../../services/UsersService';
 import { patchCompanyInfo } from '../../../services/CompaniesService';
-import APICall from '../../../services/APICall';
 
 const UpdateCompanyInfoForm = () => {
 
@@ -41,37 +40,34 @@ const UpdateCompanyInfoForm = () => {
     const [scheduleForm, setScheduleform] = useState()
 
 
-    const [mon_op, setMon_op] = useState([])
-    const [tue_op, setTue_op] = useState([])
-    const [wed_op, setWed_op] = useState([])
-    const [thu_op, setThu_op] = useState([])
-    const [fri_op, setFri_op] = useState([])
-    const [sat_op, setSat_op] = useState([])
-    const [sun_op, setSun_op] = useState([])
-
-    const [mon_cl, setMon_cl] = useState([])
-    const [tue_cl, setTue_cl] = useState([])
-    const [wed_cl, setWed_cl] = useState([])
-    const [thu_cl, setThu_cl] = useState([])
-    const [fri_cl, setFri_cl] = useState([])
-    const [sat_cl, setSat_cl] = useState([])
-    const [sun_cl, setSun_cl] = useState([])
-
-    const [mon_op_2, setMon_op_2] = useState([])
-    const [tue_op_2, setTue_op_2] = useState([])
-    const [wed_op_2, setWed_op_2] = useState([])
-    const [thu_op_2, setThu_op_2] = useState([])
-    const [fri_op_2, setFri_op_2] = useState([])
-    const [sat_op_2, setSat_op_2] = useState([])
-    const [sun_op_2, setSun_op_2] = useState([])
-
-    const [mon_cl_2, setMon_cl_2] = useState([])
-    const [tue_cl_2, setTue_cl_2] = useState([])
-    const [wed_cl_2, setWed_cl_2] = useState([])
-    const [thu_cl_2, setThu_cl_2] = useState([])
-    const [fri_cl_2, setFri_cl_2] = useState([])
-    const [sat_cl_2, setSat_cl_2] = useState([])
-    const [sun_cl_2, setSun_cl_2] = useState([])
+    const [mon_op, setMon_op] = useState("--:--")
+    const [tue_op, setTue_op] = useState("--:--")
+    const [wed_op, setWed_op] = useState("--:--")
+    const [thu_op, setThu_op] = useState("--:--")
+    const [fri_op, setFri_op] = useState("--:--")
+    const [sat_op, setSat_op] = useState("--:--")
+    const [sun_op, setSun_op] = useState("--:--")
+    const [mon_cl, setMon_cl] = useState("--:--")
+    const [tue_cl, setTue_cl] = useState("--:--")
+    const [wed_cl, setWed_cl] = useState("--:--")
+    const [thu_cl, setThu_cl] = useState("--:--")
+    const [fri_cl, setFri_cl] = useState("--:--")
+    const [sat_cl, setSat_cl] = useState("--:--")
+    const [sun_cl, setSun_cl] = useState("--:--")
+    const [mon_op_2, setMon_op_2] = useState("--:--")
+    const [tue_op_2, setTue_op_2] = useState("--:--")
+    const [wed_op_2, setWed_op_2] = useState("--:--")
+    const [thu_op_2, setThu_op_2] = useState("--:--")
+    const [fri_op_2, setFri_op_2] = useState("--:--")
+    const [sat_op_2, setSat_op_2] = useState("--:--")
+    const [sun_op_2, setSun_op_2] = useState("--:--")
+    const [mon_cl_2, setMon_cl_2] = useState("--:--")
+    const [tue_cl_2, setTue_cl_2] = useState("--:--")
+    const [wed_cl_2, setWed_cl_2] = useState("--:--")
+    const [thu_cl_2, setThu_cl_2] = useState("--:--")
+    const [fri_cl_2, setFri_cl_2] = useState("--:--")
+    const [sat_cl_2, setSat_cl_2] = useState("--:--")
+    const [sun_cl_2, setSun_cl_2] = useState("--:--")
 
     const TablaHorario = (props) => {
         const { texto, open, close, array } = props;
@@ -138,52 +134,52 @@ const UpdateCompanyInfoForm = () => {
         const resp = await loginUser('/companies/login', { email: comp.email, password: formValue.password }, true)
         const sch = {
             "monday": {
-                "open_1": new Date(mon_op * 1000).toISOString().substr(11, 5),
-                "close_1": new Date(mon_cl * 1000).toISOString().substr(11, 5),
-                "open_2": new Date(mon_op_2 * 1000).toISOString().substr(11, 5),
-                "close_2": new Date(mon_cl_2 * 1000).toISOString().substr(11, 5)
+                "open_1":   mon_op!=="--:--" ? new Date(mon_op * 1000).toISOString().substr(11, 5) : undefined,
+                "close_1":  mon_cl!=="--:--" ? new Date(mon_cl * 1000).toISOString().substr(11, 5) : undefined,
+                "open_2":   mon_op_2!=="--:--" ? new Date(mon_op_2 * 1000).toISOString().substr(11, 5) : undefined,
+                "close_2":  mon_cl_2!=="--:--" ? new Date(mon_cl_2 * 1000).toISOString().substr(11, 5) : undefined
             },
             "tuesday": {
-                "open_1": new Date(tue_op * 1000).toISOString().substr(11, 5),
-                "close_1": new Date(tue_cl * 1000).toISOString().substr(11, 5),
-                "open_2": new Date(tue_op_2 * 1000).toISOString().substr(11, 5),
-                "close_2": new Date(tue_cl_2 * 1000).toISOString().substr(11, 5)
+                "open_1":  tue_op!=="--:--" ?  new Date(tue_op * 1000).toISOString().substr(11, 5) : undefined,
+                "close_1": tue_cl!=="--:--" ?  new Date(tue_cl * 1000).toISOString().substr(11, 5) : undefined,
+                "open_2":  tue_op_2!=="--:--" ?  new Date(tue_op_2 * 1000).toISOString().substr(11, 5) : undefined,
+                "close_2": tue_cl_2!=="--:--" ?  new Date(tue_cl_2 * 1000).toISOString().substr(11, 5) : undefined
             },
             "wednesday": {
-                "open_1": new Date(wed_op * 1000).toISOString().substr(11, 5),
-                "close_1": new Date(wed_cl * 1000).toISOString().substr(11, 5),
-                "open_2": new Date(wed_op_2 * 1000).toISOString().substr(11, 5),
-                "close_2": new Date(wed_cl_2 * 1000).toISOString().substr(11, 5)
+                "open_1":   wed_op !=="--:--" ? new Date(wed_op * 1000).toISOString().substr(11, 5) : undefined,
+                "close_1":  wed_cl !=="--:--" ? new Date(wed_cl * 1000).toISOString().substr(11, 5) : undefined,
+                "open_2":   wed_op_2 !=="--:--" ? new Date(wed_op_2 * 1000).toISOString().substr(11, 5) : undefined,
+                "close_2":  wed_cl_2 !=="--:--" ? new Date(wed_cl_2 * 1000).toISOString().substr(11, 5) : undefined
             },
             "thursday": {
-                "open_1": new Date(thu_op * 1000).toISOString().substr(11, 5),
-                "close_1": new Date(thu_cl * 1000).toISOString().substr(11, 5),
-                "open_2": new Date(thu_op_2 * 1000).toISOString().substr(11, 5),
-                "close_2": new Date(thu_cl_2 * 1000).toISOString().substr(11, 5)
+                "open_1":   thu_op!=="--:--" ? new Date(thu_op * 1000).toISOString().substr(11, 5) : undefined,
+                "close_1":  thu_cl!=="--:--" ? new Date(thu_cl * 1000).toISOString().substr(11, 5) : undefined,
+                "open_2":   thu_op_2!=="--:--" ? new Date(thu_op_2 * 1000).toISOString().substr(11, 5) : undefined,
+                "close_2":  thu_cl_2!=="--:--" ? new Date(thu_cl_2 * 1000).toISOString().substr(11, 5) : undefined
             },
             "friday": {
-                "open_1": new Date(fri_op * 1000).toISOString().substr(11, 5),
-                "close_1": new Date(fri_cl * 1000).toISOString().substr(11, 5),
-                "open_2": new Date(fri_op_2 * 1000).toISOString().substr(11, 5),
-                "close_2": new Date(fri_cl_2 * 1000).toISOString().substr(11, 5)
+                "open_1":  fri_op !=="--:--" ?  new Date(fri_op * 1000).toISOString().substr(11, 5) : undefined,
+                "close_1": fri_cl !=="--:--" ?  new Date(fri_cl * 1000).toISOString().substr(11, 5) : undefined,
+                "open_2":  fri_op_2 !=="--:--" ?  new Date(fri_op_2 * 1000).toISOString().substr(11, 5) : undefined,
+                "close_2": fri_cl_2 !=="--:--" ?  new Date(fri_cl_2 * 1000).toISOString().substr(11, 5) : undefined
             },
             "saturday": {
-                "open_1": new Date(sat_op * 1000).toISOString().substr(11, 5),
-                "close_1": new Date(sat_cl * 1000).toISOString().substr(11, 5),
-                "open_2": new Date(sat_op_2 * 1000).toISOString().substr(11, 5),
-                "close_2": new Date(sat_cl_2 * 1000).toISOString().substr(11, 5)
+                "open_1":   sat_op !=="--:--" ?  new Date(sat_op * 1000).toISOString().substr(11, 5) : undefined ,
+                "close_1":  sat_cl !=="--:--" ?  new Date(sat_cl * 1000).toISOString().substr(11, 5) : undefined ,
+                "open_2":   sat_op_2 !=="--:--" ?  new Date(sat_op_2 * 1000).toISOString().substr(11, 5) : undefined ,
+                "close_2":  sat_cl_2 !=="--:--" ?  new Date(sat_cl_2 * 1000).toISOString().substr(11, 5) : undefined 
             },
             "sunday": {
-                "open_1": new Date(sun_op * 1000).toISOString().substr(11, 5),
-                "close_1": new Date(sun_cl * 1000).toISOString().substr(11, 5),
-                "open_2": new Date(sun_op_2 * 1000).toISOString().substr(11, 5),
-                "close_2": new Date(sun_cl_2 * 1000).toISOString().substr(11, 5)
+                "open_1": sun_op !== "--:--" ? new Date(sun_op * 1000).toISOString().substr(11, 5) : undefined,
+                "close_1": sun_cl !== "--:--" ? new Date(sun_cl * 1000).toISOString().substr(11, 5) : undefined,
+                "open_2": sun_op_2 !== "--:--" ? new Date(sun_op_2 * 1000).toISOString().substr(11, 5) : undefined,
+                "close_2": sun_cl_2 !== "--:--" ? new Date(sun_cl_2 * 1000).toISOString().substr(11, 5) : undefined
             }
         }
         if (resp) {
             console.log("login intrue, updating", formValue)
             const respUpdate = await patchCompanyInfo(
-                JSON.parse(localStorage.getItem("company")).id,
+                JSON.parse(localStorage.getItem("company"))._id,
                 {
                     "description": formValue.description,
                     "service_duration": formValue.service_duration,

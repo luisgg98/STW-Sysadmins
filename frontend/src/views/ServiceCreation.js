@@ -23,10 +23,11 @@ const ServiceCreation = () => {
         const company = JSON.parse(localStorage.getItem("company"))
         fetch(company.nif)
         console.log("useeffect", company)
-        if (updateCompanyInfo(company.name)) {
-            console.log("update done")
-            setComp(company)
-        }
+        setComp(company)
+        // if (updateCompanyInfo(company.name)) {
+        //     console.log("update done")
+        //     setComp(company)
+        // }
 
     }, [])
 
@@ -41,7 +42,7 @@ const ServiceCreation = () => {
             <Row className=" justify-content-center my-5 align-item-scenter" >
 
                 <Row className="justify-content-center">
-                    {servicios !== undefined && servicios.map((serv, index) => {
+                    {servicios !== undefined && comp !== undefined && servicios.map((serv, index) => {
                         return <ServicesCard key={index} serv={serv} comp={comp} reservar={false} borrar={true} />
                     })}
                 </Row>

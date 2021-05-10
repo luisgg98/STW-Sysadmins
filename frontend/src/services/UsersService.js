@@ -8,7 +8,7 @@ export function removeUser(userId) {
     return axios.delete('users/' + userId, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem("token")
+                'Authorization': localStorage.getItem("token").replace(/"/, '')
             },
         }
     )
@@ -22,14 +22,16 @@ export const logOut = () => {
 }
 
 function saveUserInfo(response, isCompany) {
-    localStorage.setItem("token", response.token);
+    localStorage.setItem("token", (response.token).replace(/"/, ''));
     localStorage.setItem("logged", true)
     if (isCompany) {
         localStorage.setItem("company", JSON.stringify(response.company))
         localStorage.setItem("user", JSON.stringify({}))
+        localStorage.setItem("token", JSON.stringify((response.token).replace(/"/, '') ))
     } else {
         localStorage.setItem("user", JSON.stringify(response.user))
         localStorage.setItem("company", JSON.stringify({}))
+        localStorage.setItem("token", JSON.stringify((response.token).replace(/"/, '') ))
     }
 }
 
@@ -79,7 +81,7 @@ export const updateUserData = (id, newData) => {
         {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem("token")
+                'Authorization': localStorage.getItem("token").replace(/"/, '')
             }
         }).then(response => {
         if (response.status === 200) {

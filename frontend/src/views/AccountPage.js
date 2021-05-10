@@ -1,17 +1,18 @@
-import React, { useContext, useState } from 'react';
-import { UserContext } from "../UserContext";
+import React, { useContext, useEffect, useState } from 'react';
 import { Col, Row } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 import ProfileData from "../components/common/Widgets/ProfileData";
 import ZitationHeader from "../components/common/Headers/ZitationHeader";
 import ServiceCreation from './ServiceCreation';
+import { searchCompanies } from '../services/CompaniesService';
 
 const AccountPage = () => {
+
+
 
     return (
         <div>
             { localStorage.getItem("logged") === "true" 
-            // && localStorage.getItem("token") !== "undefined"
                 ? (
                     <div>
                         <ZitationHeader />

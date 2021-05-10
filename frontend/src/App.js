@@ -60,7 +60,7 @@ export default function App() {
 
 
     return (
-        console.log(process.env.REACT_APP_RECAPTCHA_API_KEY),
+        // localStorage.clear(),
         <Router history={history} >
             <Container fluid="true" className="App">
                 <UserContext.Provider value={{ user, setUser }}>
@@ -73,7 +73,7 @@ export default function App() {
 
 
 
-                        <Route path="/companies/health">
+                        <Route path="/companies/health">c
                             <CompanyPage tipo="Salud y Belleza" search={[]} />
                         </Route>
 
