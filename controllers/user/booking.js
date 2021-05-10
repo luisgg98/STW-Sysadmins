@@ -1,6 +1,8 @@
 const Booking = require('../../models/booking')
 const Service = require('../../models/service')
 const User = require('../../models/user')
+const Company = require('../../models/company')
+const {sendReminder} = require("../../scripts/email");
 
 // /users/{ID}/bookings
 // GET (get all bookings or filter by id
@@ -24,25 +26,39 @@ let create_booking = async (req, res) => {
                     User.findOne({_id: req.params.id},async function(err, user){
                         if (err){ throw err}
                         else{
-                            if (user){
+                            if (user) {
                                 const booking = new Booking({
                                     user_id: req.params.id,
                                     service_id: req.body.service,
                                     company_nif: service.company,
                                     date: req.body.date,
                                     time: req.body.time
-                            })
-                                await booking.save()
-                                res.send(booking)
-                            }
-                            else{
+                                })
+                                Company.findOne({nif: service.company}, {}, {}, async function (err, company) {
+                                    if (err) {
+                                        throw err;
+                                    } else {
+                                        if (company) {
+                                            await booking.save();
+                                            res.status(200).send(booking)
+                                            // Send email
+                                            sendReminder(user, booking, company);
+                                        }
+                                    }
+                                });
+                            }else{
                                 res.status(404)
                                 res.send({error: "User not found"})
-                            }}})}
+                            }}}
+
+                        )}
                 else {
                     res.status(404)
                     res.send({ error: "Service not found"})
-                }}})}
+                }
+            }
+        });
+    }
     catch {
         res.status(405)
         res.send({ error: "Wrong body format, check docs for further info /api-docs"})
@@ -114,9 +130,31 @@ let update_bookings = async (req, res) => {
                 if (booking){
                     if(req.body.date){booking.date = req.body.date}
                     if(req.body.time){booking.time = req.body.time}
-                    await booking.save()
-                    res.status(200)
-                    res.send(booking)
+
+                    User.findOne({_id: booking.user_id},{},{},async function (err,user){
+                        if(err){throw err}
+                        else{
+                            if(user){
+                                Company.findOne({nif:booking.company_nif},{},{},async function (err,company){
+                                    if(err){
+                                        throw err;
+                                    }
+                                    else{
+                                        if(company){
+                                            await booking.save();
+                                            res.status(200).send(booking)
+                                            // Send email
+                                            sendReminder(user,booking,company);
+                                        }
+                                    }
+
+                                })
+
+                            }
+                        }
+
+                    })
+
                 } else {
                     res.status(404)
                     res.send({error: "Booking not found"})
