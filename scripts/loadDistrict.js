@@ -49,6 +49,7 @@ function loadCouncilInfo() {
         hz.saveHealthzone(title, coordinates).then(() => {
 
         }).catch((e) => {
+            /* istanbul ignore next */
                 console.log("Error saving:" + title);
                 console.log(e);
             });

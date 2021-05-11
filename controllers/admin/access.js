@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const utils = require('../../services/utils')
 const User = require('../../models/user')
 const validate_email = require("../../services/validate_email");

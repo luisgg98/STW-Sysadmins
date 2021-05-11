@@ -16,7 +16,7 @@ let allHealthzone = async (req, res) => {
         else{
             res.status(404).send({error : "No elements found"});
         }
-
+        /* istanbul ignore next */
     } catch(e) {
         res.status(500).send({error : "Internal server error, something went wrong while searching for Health Zones"});
         console.log("ERROR: " +e);

@@ -26,6 +26,7 @@ let get = async (req, res, next)=> {
             res.send(companies)
         }
     } catch {
+        /* istanbul ignore next */
         res.status(500)
         res.send({error: "Internal server error"})
     }
@@ -52,6 +53,7 @@ let fetchCompany = async (req, res) => {
                 }
             }
         })
+        /* istanbul ignore next */
     } catch {
         res.status(404)
         res.send({error: "Company not found"})
@@ -82,7 +84,6 @@ let register = async (req, res)=>{
                     if (validate.validateEmail(req.body.email)) {
                         geolo.findCoordenates(req.body.name,req.body.streetnumber,req.body.street,req.body.zipcode)
                             .then( async (coordinates) =>{
-
                                     const company = new Company({
                                         name: req.body.name,
                                         nif: req.body.nif,
@@ -111,31 +112,23 @@ let register = async (req, res)=>{
                                             sunday: {open_1:"null", close_1: "null"}
                                         }
                                     })
+                                console.log("a")
                                     await company.save()
                                         .then(()=>{
                                                 res.send(company)
                                             }
                                         )
                                 }
-                            )
-                            .catch(
-                                (e)=>{
-                                    console.error(req.body.name);
-                                    console.error(req.body.streetnumber);
-                                    console.error(req.body.street);
-                                    console.error(req.body.zipcode);
-                                    res.status(412)
-                                    res.send({ error: "Your company was not found in Open Street Map" })
-                                    console.error(e)
-                                }
-                            )
+                            );
                     } else {
+                        /* istanbul ignore next */
                         res.status(422)
                         res.send({ error: "Not an email address" })
                     }
                 }
             }
-        })
+        });
+        console.log("B")
     } catch {
         res.status(405)
         res.send({ error: "Wrong json format, check docs for further info /api-doc" })

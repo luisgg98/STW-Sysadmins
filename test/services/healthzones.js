@@ -53,6 +53,6 @@ describe('Testing Health Zones ',function () {
             throw error;
         });
 
-    })
+    });
 
 })

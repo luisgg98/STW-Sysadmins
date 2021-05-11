@@ -5,12 +5,10 @@ let chaiHttp = require('chai-http');
 let server = require('../../app');
 let should = chai.should();
 chai.use(chaiHttp);
-const User = require('../../models/user');
-const Company = require('../../models/company');
-const Service = require('../../models/service');
 
 
-const company = {  "nif": "B12345678",
+
+const company = {  "nif": "012345678",
     "name": "Cafetería Lamarula",
     "email": "user@example.com",
     "password": "string",
@@ -70,7 +68,7 @@ let user = {
     "last_name":"string",
     "email": "user@example.com",
     "password": "string",
-    "phone": 123456789};
+    "phone": 523456789};
 let service_new =
     {
         "company": company.nif,
@@ -123,12 +121,7 @@ describe('Testing Booking API', () => {
             });
     });
 
-    after(function (done) {
-       User.remove();
-       Company.remove();
-       Service.remove();
-       done();
-    });
+
 //'/users/:id/bookings
     //router.post("/:id/bookings", ControllerBooking.create_booking)
     it('It should create a new booking',function (done) {

@@ -3,10 +3,10 @@ let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../../app');
 let should = chai.should();
-const Opinion = require('../../models/opinions')
 chai.use(chaiHttp);
 
-const company = {  "nif": "B12345678",
+
+const company = {  "nif": "Y12345678",
     "name": "Cafetería Lamarula",
     "email": "user@example.com",
     "password": "string",
@@ -21,7 +21,7 @@ const user = {
         "last_name":"string",
         "email": "user@example.com",
         "password": "string",
-        "phone": 123456789
+        "phone": 823456789
 }
 
 let opinion = {
@@ -53,43 +53,6 @@ describe('Testing Opinion API', () => {
                     })
             })
     });
-
-    after(function (done) {
-        chai.request(server)
-            .post(url_company + 'login/')
-            .send({"email": company.email,"password": company.password})
-            .end((err,res)=>{
-                if(err) throw err;
-                let bearer = res.body.token;
-                let id = res.body.company._id;
-                chai.request(server)
-                    .delete(url_company + id )
-                    .set({ "Authorization": `${bearer}` })
-                    .end((err,res)=>{
-                        if(err) throw err;
-                        //Deleting user
-                        chai.request(server)
-                            .post(url_user + 'login/')
-                            .send({"email": user.email,"password": user.password})
-                            .end((err,res)=>{
-                                if(err) throw err;
-                                let bearer = res.body.token;
-                                let id = res.body.user.id;
-                                chai.request(server)
-                                    .delete(url_user + id )
-                                    .set({ "Authorization": `${bearer}` })
-                                    .end((err,res)=>{
-                                        done();
-                                    })
-                            })
-
-                    })
-            })
-
-
-    });
-
-
 
     const url = ('/api/companies/' + company.nif+'/opinions');
     let opinion_id = '';

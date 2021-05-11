@@ -75,6 +75,7 @@ async function findCoordenates(place,streetnumber,street,zipcode) {
                 }
             }
         ).catch(error =>{
+            /* istanbul ignore next */
             console.log("ERROR: WHILE UPDATING COORDINATES" + error);
             resolve(coordinates);
         })

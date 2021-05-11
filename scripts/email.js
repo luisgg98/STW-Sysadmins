@@ -47,15 +47,7 @@ module.exports.sendReminder = function (user, booking, company) {
             subject: 'Cita en ' + company.name,
             text: text_reminder
         };
-
-        transporter.sendMail(mailOptions, function (error, info) {
-            console.log(info)
-            if (error) {
-                console.log(error);
-            } else {
-                console.log('Email sent: ' + info.response);
-            }
-        });
+        transporter.sendMail(mailOptions);
 
     } catch (e) {
         console.log(e + " Error sending a email as a reminder to " + user.email);

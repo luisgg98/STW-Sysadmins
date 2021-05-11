@@ -211,6 +211,7 @@ let vote_opinion = async (req, res, next)=> {
 let get_opinion = async (req, res, next)=> {
     try{
         Opinion.find({company_nif: req.params.nif},{},{},
+
             async function (err, opinions){
                 if(err){
                     throw err;
@@ -224,7 +225,6 @@ let get_opinion = async (req, res, next)=> {
                         res.send({error: "Opinions not found"});
                     }
                 }
-
         })
     }
     catch (e) {

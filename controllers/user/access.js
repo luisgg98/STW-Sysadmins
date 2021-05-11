@@ -38,7 +38,10 @@ let register = async (req, res) => {
                 }
             }
         })
-    } catch {
+
+    }
+        /* istanbul ignore file */
+    catch {
         res.status(422)
         res.send({ error: "Wrong json format, check docs for further info /api-docs" })
     }
@@ -160,7 +163,9 @@ let getAllUsers = async (req, res) => {
     try {
         const users = await User.find({}, {first_name: true, last_name: true})
         res.send(users)
-    } catch {
+    }
+        /* istanbul ignore file */
+    catch {
         res.status(500)
         res.send({error: "Internal server error"})
     }

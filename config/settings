@@ -1,8 +1,10 @@
 #!/usr/bin/env node
+/* istanbul ignore file */
 /**
  * Creating the keys for encryption
  * @type {{genKeyPair?: function(): void}}
  */
+
 const getkeys = require('../scripts/getKeys');
 getkeys.genKeyPair();
 

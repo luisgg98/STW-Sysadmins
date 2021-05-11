@@ -137,7 +137,7 @@ function update_time_slots_services(company, capacity){
     let time_slots = company.time_slots
     console.log(time_slots)
     let time_slots_services = {}
-    if (time_slots.monday_1.length){
+    if (time_slots.monday_1){
         time_slots_services.monday_1 = {}
         let times = []
         for (let i = 0; i < company.time_slots.monday_1.length; i++) {

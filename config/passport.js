@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt;
 const fs = require('fs');
@@ -8,6 +9,7 @@ const Company = require('mongoose').model('company');
 
 // The idea is to have a file where the public key and the private
 // key are stored
+
 const pathToKey = path.join(__dirname, '..', 'scripts','id_rsa_pub.pem');
 
 //It reads the keys from the file

@@ -14,6 +14,7 @@ async function updateCovidHealthzone(ZonaSalud, newcases,radius,date) {
             { $set:{newcases: newcases,radius:radius, date:date}},
             {},
             function (err) {
+                /* istanbul ignore next */
                 if(err){
                     throw err;
                 }
@@ -53,6 +54,7 @@ async function saveHealthzone(title ,coordinates){
         });
 
     }
+        /* istanbul ignore next */
     catch (e) {
         console.log("Error while starting the Health zone database");
         console.log("Problems with:");

@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const mongoose = require('mongoose');
 
 // Define a database connection string
