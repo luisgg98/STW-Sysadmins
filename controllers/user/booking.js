@@ -211,8 +211,7 @@ let services_bookings = async (req, res) => {
             Booking.find({service_id: req.params.id, date: req.query.date, time: req.query.time}, async function (err, booking){
                 if(err){throw err}
                 else{
-                    let one_booking = booking[0]
-                    Company.findOne({nif: one_booking.company_nif}, async function (err, company){
+                    Company.findOne({nif: req.params.nif}, async function (err, company){
                         let capacity = company.capacity - booking.length
                         let result = {}
                         result.capacity = capacity
@@ -270,8 +269,7 @@ let company_bookings = async (req, res) => {
             Booking.find({company_nif: req.params.nif, date: req.query.date, time: req.query.time}, async function (err, booking){
                 if(err){throw err}
                 else{
-                    let one_booking = booking[0]
-                    Company.findOne({nif: one_booking.company_nif}, async function (err, company){
+                    Company.findOne({nif: req.params.nif}, async function (err, company){
                         let capacity = company.capacity - booking.length
                         let result = {}
                         result.capacity = capacity
