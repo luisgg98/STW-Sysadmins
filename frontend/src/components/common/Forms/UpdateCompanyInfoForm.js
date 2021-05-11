@@ -6,6 +6,7 @@ import LoadingSpinner from '../Widgets/LoadingSpinner';
 import TimePicker from 'react-bootstrap-time-picker'
 import { loginUser } from '../../../services/UsersService';
 import { patchCompanyInfo } from '../../../services/CompaniesService';
+import {useHistory} from "react-router";
 
 const UpdateCompanyInfoForm = () => {
 
@@ -20,6 +21,7 @@ const UpdateCompanyInfoForm = () => {
 
 
     const [dobleturno, setDobleturno] = useState(false)
+    const [modificaHorario, setModificaHorario] = useState(false)
 
     // Mensaje de error
     const [apiError, setApiError] = useState({ estado: false, msg: "" });
@@ -129,6 +131,8 @@ const UpdateCompanyInfoForm = () => {
         )
     }
 
+    const history = useHistory()
+
     const apiCall = async (comp) => {
         console.log("trying login");
         const resp = await loginUser('/companies/login', { email: comp.email, password: formValue.password }, true)
@@ -177,14 +181,20 @@ const UpdateCompanyInfoForm = () => {
             }
         }
         if (resp) {
-            console.log("login intrue, updating", formValue)
+            let newData = {}
+            if (formValue.description !== "")
+                newData["description"] = formValue.description
+            else if (formValue.service_duration !== 0)
+                newData["service_duration"] = formValue.service_duration
+            else if (modificaHorario)
+                newData["schedule"] = sch;
+
+
+
+            console.log("login intrue, updating", newData)
             const respUpdate = await patchCompanyInfo(
                 JSON.parse(localStorage.getItem("company"))._id,
-                {
-                    "description": formValue.description,
-                    "service_duration": formValue.service_duration,
-                    "schedule": sch
-                },
+                newData,
                 localStorage.getItem("token"))
             if (respUpdate)
                 console.log("update done")
@@ -193,19 +203,21 @@ const UpdateCompanyInfoForm = () => {
                 setApiError({ estado: true, msg: "Error en el update" })
             }
             setLoading(false)
+            history.push('/cuenta')
         }
         else {
             setApiError({ estado: true, msg: "Error en la contraseña" })
             setLoading(false)
+            history.push('/cuenta')
         }
     }
-
 
 
     const onSubmit = () => {
         setLoading(true)
         console.log("on submit")
         apiCall(JSON.parse(localStorage.getItem("company")))
+
     }
 
 
@@ -264,20 +276,28 @@ const UpdateCompanyInfoForm = () => {
             </Form.Group>
 
 
-
-            <Form.Group controlId="formBasicCheckbox">
+            <Form.Group controlId="formBasicCheckbox1">
                 <Form.Check
                     type="checkbox"
-                    label="¿Dispongo de horario partido?"
+                    label="Quiero actualizar mi horario"
+                    onChange={(e) => {
+                        setModificaHorario(!modificaHorario)
+                    }} />
+            </Form.Group>
+
+            {modificaHorario && <Form.Group controlId="formBasicCheckbox2">
+                <Form.Check
+                    type="checkbox"
+                    label="Dispongo de horario partido"
                     onChange={(e) => {
                         console.log("doble turno", !dobleturno)
                         setDobleturno(!dobleturno)
                     }} />
-            </Form.Group>
+            </Form.Group>}
 
-            {!dobleturno && <TablaHorario texto="Turno único" open="" close="" array={0} />}
-            {dobleturno && <TablaHorario texto="Turno 1" open="turno 1" close="turno 1" array={0} />}
-            {dobleturno && <TablaHorario texto="Turno 2" open="turno 2" close="turno 2" array={1} />}
+            {modificaHorario && !dobleturno && <TablaHorario texto="Turno único" open="" close="" array={0} />}
+            {modificaHorario && dobleturno && <TablaHorario texto="Turno 1" open="turno 1" close="turno 1" array={0} />}
+            {modificaHorario && dobleturno && <TablaHorario texto="Turno 2" open="turno 2" close="turno 2" array={1} />}
 
             {/* <Row className="justify-content-center mx-auto ">
                 <Button variant="primary" type="button" onClick={() => setSchedule(true)} onSubmit={console.log()}>Confirmar cambios</Button>

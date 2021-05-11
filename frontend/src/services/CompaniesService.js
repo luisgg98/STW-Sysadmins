@@ -263,3 +263,26 @@ export const getServiceData = async (nif, idServ) => {
         return []
     })
 }
+
+export const getServiceBookings = async (nif, idService) => {
+    // console.log("get company all data", nif)
+    return await axios.get('companies/'+ nif + '/services/' +idService + '/bookings',
+        {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+    ).then(response => {
+        if (response.status === 200) {
+            // console.log("exito get company all data")
+            return response.data
+        }
+        else {
+            // console.log("400x get servicio")
+            return []
+        }
+    }).catch(error => {
+        // console.log("error get servicios de", id, " error: ", error)
+        return []
+    })
+}

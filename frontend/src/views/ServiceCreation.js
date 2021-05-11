@@ -34,7 +34,7 @@ const ServiceCreation = () => {
 
     return (
         <div>
-            <Header/>
+            {/*<Header/>*/}
             <Container fluid>
                 {loading && <Row className="my-auto mx-auto justify-content-center">
                     <Col xs={1} md={1} sm={1} lg={1} xl={1}>

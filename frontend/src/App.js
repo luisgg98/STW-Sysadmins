@@ -14,7 +14,7 @@ import ServiceCreation from "./views/ServiceCreation";
 import AddService from "./views/AddService";
 import UpdateCompanyInfo from "./views/UpdateCompanyInfo";
 import CompanyDetailsPage from "./views/CompanyDetailsPage";
-import ServiceDetailsPage from "./views/ServiceDetailsPage";
+import ServiceDetailsPage from "./views/ServiceDetailsPage.js";
 
 
 

@@ -86,9 +86,10 @@ const CompanyDetailsPage = (props) => {
 
                     <Col xl={6} lg={6} md={6} sm={6}>
                         {compData !== undefined && servicios !== undefined &&
-                        <Row className="justify-content-center"><h5> SERVICIOS DE {(compData.name).toUpperCase()}</h5>
+                        <Row className="justify-content-center"><h5>
+                            SERVICIOS DE {(compData.name).toUpperCase()}</h5>
                         </Row>}
-                        {servicios !== undefined ? <ServicesCompany/> : <LoadingSpinner/>}
+                        {servicios !== undefined && compData !== undefined ? <ServicesCompany/> : <LoadingSpinner/>}
                     </Col>
                 </Row>
 
