@@ -34,16 +34,16 @@ let create_booking = async (req, res) => {
                                     date: req.body.date,
                                     time: req.body.time
                                 })
-                                Company.findOne({nif: service.company}, {}, {}, async function (err, company) {
+                                Company.findOne({nif: service.company}, {}, {}, async function (err, company){
                                     if (err) {
                                         throw err;
                                     } else {
-                                        if (company) {
-                                            await booking.save();
-                                            res.status(200).send(booking)
-                                            // Send email
-                                            sendReminder(user, booking, company);
-                                        }
+                                        company.capacity -= 1
+                                        await company.save()
+                                        await booking.save();
+                                        res.status(200).send(booking)
+                                        // Send email
+                                        sendReminder(user, booking, company);
                                     }
                                 });
                             }else{
@@ -180,7 +180,14 @@ let delete_booking = async (req,res) => {
             if(err){throw err}
             else{
                 if (booking){
-                    res.status(204).send()
+                    Company.findOne({nif: booking.company_nif}, async function (err, company){
+                        if(err){throw err}
+                        else{
+                            company.capacity += 1
+                            await company.save()
+                            res.status(204).send()
+                        }
+                    })
                 } else{
                     res.status(404)
                     res.send({error: "Booking not found"})
@@ -195,24 +202,116 @@ let delete_booking = async (req,res) => {
 }
 
 /////////////////////////////////////////////////////
-//             BOOKINGS FROM COMPANY               //
+//             BOOKINGS FROM SERVICE               //
 /////////////////////////////////////////////////////
 
 let services_bookings = async (req, res) => {
     try{
-        Booking.find({service_id: req.params.id}, async function(err, booking){
-            if(err){throw err}
-            else{
-                if(booking){
-                    res.status(200)
+        if (req.query.date && req.query.time) {
+            Booking.find({service_id: req.params.id, date: req.query.date, time: req.query.time}, async function (err, booking){
+                if(err){throw err}
+                else{
+                    let one_booking = booking[0]
+                    Company.findOne({nif: one_booking.company_nif}, async function (err, company){
+                        let capacity = company.capacity - booking.length
+                        let result = {}
+                        result.capacity = capacity
+                        result.bookings = booking
+                        res.send(result)
+                    })
+                }
+            })
+        }
+        else if (req.query.date){
+            Booking.find({service_id: req.params.id, date: req.query.date}, async function (err, booking){
+                if(err){throw err}
+                else{
                     res.send(booking)
                 }
+            })
+        }
+        else if (req.query.time) {
+            Booking.find({service_id: req.params.id, time: req.query.time}, async function (err, booking){
+                if(err){throw err}
                 else{
-                    res.status(404)
-                    res.send({error: "No bookings found"})
+                    res.send(booking)
                 }
-            }
-        })
+            })
+        }
+        else {
+            Booking.find({service_id: req.params.id}, async function(err, booking){
+                if(err){throw err}
+                else{
+                    if(booking){
+                        res.status(200)
+                        res.send(booking)
+                    }
+                    else{
+                        res.status(404)
+                        res.send({error: "No bookings found"})
+                    }
+                }
+                })
+        }
+    }
+    catch {
+        res.status(500)
+        res.send({error:"Internal server error"})
+    }
+}
+
+/////////////////////////////////////////////////////
+//             BOOKINGS FROM COMPANY               //
+/////////////////////////////////////////////////////
+
+let company_bookings = async (req, res) => {
+    try{
+        if (req.query.date && req.query.time) {
+            Booking.find({company_nif: req.params.nif, date: req.query.date, time: req.query.time}, async function (err, booking){
+                if(err){throw err}
+                else{
+                    let one_booking = booking[0]
+                    Company.findOne({nif: one_booking.company_nif}, async function (err, company){
+                        let capacity = company.capacity - booking.length
+                        let result = {}
+                        result.capacity = capacity
+                        result.bookings = booking
+                        res.send(result)
+                    })
+                }
+            })
+        }
+        else if (req.query.date){
+            Booking.find({company_nif: req.params.nif, date: req.query.date}, async function (err, booking){
+                if(err){throw err}
+                else{
+                    res.send(booking)
+                }
+            })
+        }
+        else if (req.query.time) {
+            Booking.find({company_nif: req.params.nif, time: req.query.time}, async function (err, booking){
+                if(err){throw err}
+                else{
+                    res.send(booking)
+                }
+            })
+        }
+        else {
+            Booking.find({company_nif: req.params.nif}, async function(err, booking){
+                if(err){throw err}
+                else{
+                    if(booking){
+                        res.status(200)
+                        res.send(booking)
+                    }
+                    else{
+                        res.status(404)
+                        res.send({error: "No bookings found"})
+                    }
+                }
+            })
+        }
     }
     catch {
         res.status(500)
@@ -225,3 +324,4 @@ exports.get_bookings = get_bookings
 exports.update_bookings = update_bookings
 exports.delete_booking = delete_booking
 exports.services_bookings = services_bookings
+exports.company_bookings = company_bookings
