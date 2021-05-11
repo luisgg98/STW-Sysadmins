@@ -789,8 +789,6 @@ components:
       properties:
         description:
           type: string
-        capacity:
-          type: integer
         price:
           type: integer
       required:
@@ -803,8 +801,6 @@ components:
       properties:
         description:
           type: string
-        capacity:
-          type: integer
         price:
           type: integer
     Get_users:

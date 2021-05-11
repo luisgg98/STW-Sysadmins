@@ -176,7 +176,7 @@ let update_bookings = async (req, res) => {
  */
 let delete_booking = async (req,res) => {
     try {
-        Booking.findOneAndDelete({_id:req.params.booking_id}, async function(err, booking){
+        Booking.findOneAndDelete({_id: req.params.booking_id}, async function(err, booking){
             if(err){throw err}
             else{
                 if (booking){
