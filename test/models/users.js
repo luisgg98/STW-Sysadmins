@@ -1,4 +1,4 @@
-const assert = require('chai').assert;
+ const assert = require('chai').assert;
 const User = require('../../models/user');
 require('../../config/database')
 const newname = 'Rodolfo Mascarpone'

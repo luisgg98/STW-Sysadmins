@@ -75,7 +75,6 @@ describe('Testing Company API', () => {
     /*
       * Test the /GET route
       */
-
     it('It should GET all the companies', (done) => {
         chai.request(server)
             .get(url)
@@ -156,55 +155,12 @@ describe('Testing Company API', () => {
             "And the times are tough all right\n" +
             "The sound of evil laughter\n" +
             "Falls around the world tonight\n" +
-            "Fightin' hard, fightin' on for the steel\n" +
-            "Through the wastelands evermore\n" +
-            "The skeletors souls will feel the hell\n" +
-            "Bodies wasted on the shores\n" +
-            "On the blackest wings in hell's domain\n" +
-            "We watch the lands become\n" +
-            "In fire and flame, and once again we know\n" +
-            "So now we're flying we're free\n" +
-            "We're free before the thunderstorm\n" +
-            "On towards the wilderness\n" +
-            "Our quest carries on\n" +
-            "Far beyond the sun down, far beyond the moonlight\n" +
-            "Deep inside our hearts and all our souls\n" +
-            "So far away we wait for the day\n" +
-            "For the light source so wasted and gone\n" +
-            "We feel the pain of a lifetime lost in a thousand days\n" +
-            "Through the fire and flames we carry on\n" +
-            "As the red day is dawning\n" +
-            "And the lightning cracks the sky\n" +
-            "They'll raise their hands\n" +
-            "To the heavens above\n" +
-            "Who descend unto their lies\n" +
-            "Running back through the mid morning light\n" +
-            "There's a burning in my heart\n" +
-            "We're banished from the time in the foreign land\n" +
-            "To a light beyond the stars\n" +
-            "In your blackest dreams see to the need, that destiny is tied\n" +
-            "And endlessly we're roaming free tonight\n" +
-            "And on the wings of a dream so far beyond reality\n" +
-            "All alone in desperation, now the time has gone\n" +
-            "Lost inside you'll never find, lost within my own mind\n" +
-            "Day after day this misery must go on\n" +
-            "So far away we wait for the day\n" +
-            "For the light source so wasted and gone\n" +
-            "We feel the pain of a lifetime lost in a thousand days\n" +
-            "Through the fire and flames we carry on\n" +
-            "Now here we stand with their blood on our hands\n" +
-            "We fought so hard, now can we understand\n" +
-            "I'll break the seal of this curse if I possibly can\n" +
-            "For freedom of every man\n" +
-            "So far away we wait for the day\n" +
-            "For the light source so wasted and gone\n" +
-            "We feel the pain of a lifetime lost in a thousand days\n" +
-            "Through the fire and flames we carry on",
+            "Fightin' hard, fightin' on for the steel\n",
         "capacity": 10,
         "price": 10
     }
 
-
+    let id_service='';
     //POST /companies/{nif}/services
     it('Add a new service to the company',done => {
         chai.request(server)
@@ -221,11 +177,11 @@ describe('Testing Company API', () => {
                     .end((err,res)=>{
                         if(err) throw err;
                         res.should.have.status(200);
-                        let id = res.body._id;
+                        let id_service = res.body._id;
                         //PATCH //companies/{nif}/services/{id}
                         console.log("Updating company service")
                         chai.request(server)
-                            .patch(url + company.nif + url_service +'/' + id  )
+                            .patch(url + company.nif + url_service +'/' + id_service  )
                             .send(update_service)
                             .set({ "Authorization": `${bearer}`})
                             .end((err,res)=>{
@@ -238,6 +194,11 @@ describe('Testing Company API', () => {
             });
 
     });
+
+
+
+
+
 
     // GET /companies/{nif}/services
     it('It should get services from a company',(done => {
