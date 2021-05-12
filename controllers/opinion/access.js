@@ -227,13 +227,11 @@ let get_opinion = async (req, res, next)=> {
                 }
                 else{
                     if(opinions){
-                        console.log(req.query.user_id)
                         let id = req.query.user_id;
                         let votes_user=[]
                         //Try to find if the user has already voted it
                         if(id){
                             votes_user = await Vote.find({user_id:req.query.user_id},{},{});
-                            console.log(votes_user)
                         }
                         let new_opinions = []
                         // for each opinion add if it is voted or not
