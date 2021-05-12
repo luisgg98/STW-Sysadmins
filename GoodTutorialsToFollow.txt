@@ -1,0 +1,6 @@
+https://developer.mongodb.com/how-to/use-atlas-on-heroku/
+https://medium.com/make-school/how-to-deploy-your-node-js-mongodb-app-to-the-web-using-heroku-63d4bccf2675
+https://devcenter.heroku.com/articles/troubleshooting-node-deploys
+
+https://www.paradigmadigital.com/dev/testeando-javascript-mocha-chai/
+https://solidgeargroup.com/mocha-unit-tests-en-javascript/

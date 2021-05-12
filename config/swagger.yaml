@@ -1,0 +1,1661 @@
+openapi: "3.0.0"
+info:
+  description: "This is the API for Zitation app.  You can find out more about this app in [project wiki](#)."
+  version: "1.0.0"
+  title: "Zitation API"
+  contact:
+    email: "757024@unizar.es"
+servers:
+  - url: "http://localhost:3000/api"
+  - url: "https://stw-zitation.herokuapp.com/api"
+    description: Production server
+tags:
+  - name: "User"
+    description: "Operations about users"
+  - name: "Company"
+    description: "Operations about companies"
+  - name: "HealthZone"
+    description: "Operations about health zones from Zaragoza"
+  - name: "Services"
+    description: "Operations about services from a company"
+  - name: "Captcha"
+    description: "Operations about captcha"
+  - name: "Opinion"
+    description: "Operations about opinion"
+paths:
+  /captcha:
+    get:
+      tags:
+        - "Captcha"
+      summary: "Get key to load Captcha"
+      response:
+        "200":
+          description: "Captcha key found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKey'
+        "500":
+          description: "Internal server error"
+  /users:
+    get:
+      tags:
+        - "User"
+      summary: "Get all users"
+      responses:
+        "200":
+          description: "All users correctly fetched"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Get_users'
+        "500":
+          description: "Internal server error"
+    post:
+      tags:
+        - "User"
+      summary: "Add a new user to the database"
+      requestBody:
+        description: "User object to be added to the database"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User_register"
+      responses:
+        "200":
+          description: "User created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User_registered'
+        "422":
+          description: "Wrong email format"
+        "405":
+          description: "Wrong json format, check docs for further info /api-docs"
+        "409":
+          description: "User already exists"
+  /users/{phone}:
+    get:
+      operationId: getUser
+      tags:
+        - "User"
+      summary: "Get all public data of an user"
+      parameters:
+        - in: path
+          name: "phone"
+          description: "Phone number of user to retrieve"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "User correctly retrieved"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User_fetched'
+  /users/{id}:
+    patch:
+      operationId: updateUser
+      security:
+        - bearerAuth: []
+      tags:
+        - "User"
+      summary: "Update user data"
+      parameters:
+        - in: path
+          name: "id"
+          description: "id of user to update"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: "User data to change"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User_update"
+      responses:
+        "200":
+          description: "User updated"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User_registered'
+        "401":
+          description: "Error: Unauthorized"
+        "404":
+          description: "User not found"
+    delete:
+      operationId: deleteUser
+      security:
+        - bearerAuth: []
+      tags:
+        - "User"
+      summary: "Delete an user"
+      parameters:
+        - in: path
+          name: "id"
+          description: "id of user to delete"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "204":
+          description: "User deleted"
+        "401":
+          description: "Error: Unauthorized"
+        "404":
+          description: "User not found"
+  /users/login/:
+    post:
+      tags:
+        - "User"
+      summary: "Retrieve security token of an user"
+      requestBody:
+        description: "User email and password to retrieve security token"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User_login"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User_retrieved"
+          links:
+            token:
+              operationId: updateUser, deleteUser
+        "401":
+          description: "Incorrect login"
+        "404":
+          description: "User not found"
+  /companies:
+    get:
+      operationId: getAllCompanies
+      tags:
+        - "Company"
+      summary: "Get all companies and their location or filter by name"
+      parameters:
+        - in: query
+          name: "name"
+          description: "name of company to retrieve"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "All right"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Get_companies'
+        "500":
+          description: "Internal server error"
+    post:
+      tags:
+        - "Company"
+      summary: "Add a new company to the database"
+      requestBody:
+        description: "Company object to be added to the database"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Company_register"
+      responses:
+        "200":
+          description: "Company created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company_registered'
+        "422":
+          description: "Wrong email format"
+        "405":
+          description: "Wrong json format, check docs for further info /api-doc"
+        "409":
+          description: "Company already exists"
+  /companies/{nif}:
+    get:
+      operationId: getCompany
+      tags:
+        - "Company"
+      summary: "Get all public data of a company"
+      parameters:
+        - in: path
+          name: "nif"
+          description: "Nif of company to retrieve"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Company correctly retrieved"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company_fetched'
+  /companies/{id}:
+    patch:
+      operationId: updateCompany
+      security:
+        - bearerAuth: []
+      tags:
+        - "Company"
+      summary: "Update company data"
+      parameters:
+        - in: path
+          name: "id"
+          description: "id of company to update"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: "Company data to change (service_duration in minutes)"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Company_update"
+      responses:
+        "200":
+          description: "Company updated"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company_registered'
+        "401":
+          description: "Error: Unauthorized"
+        "404":
+          description: "Company not found"
+    delete:
+      operationId: deleteCompany
+      security:
+        - bearerAuth: []
+      tags:
+        - "Company"
+      summary: "Delete a company"
+      parameters:
+        - in: path
+          name: "id"
+          description: "id of company to delete"
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: "Company deleted"
+        "401":
+          description: "Error: Unauthorized"
+        "404":
+          description: "Company not found"
+  /users/{id}/bookings:
+    get:
+      tags:
+        - "User"
+      summary: "Get all booking from a user or filter by id"
+      parameters:
+        - in: path
+          name: "id"
+          description: "Id of user"
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: "id"
+          description: "Id of booking"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Bookings correctly fetched"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking_retrieved"
+    post:
+      tags:
+        - "User"
+      summary: "Add a new booking to the database"
+      parameters:
+        - in: path
+          name: "id"
+          description: "Id of user"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: "Service id and booking time"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Booking_create"
+      responses:
+        "200":
+          description: "Booking added to database"
+        "405":
+          description: "Wrong request body"
+  /users/{id}/bookings/{booking_id}:
+    patch:
+      tags:
+        - "User"
+      summary: "Update a booking schedule"
+      parameters:
+        - in: path
+          name: "id"
+          description: "Id of user"
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: "booking_id"
+          description: "Id of booking"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: "New booking schedule"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+                  description: YYYY-MM-DD
+                time:
+                  type: string
+                  description: HH:MM
+      responses:
+        "204":
+          description: "Booking updated"
+        "500":
+          description: "Internal server error"
+    delete:
+      tags:
+        - "User"
+      summary: "Delete a booking"
+      parameters:
+        - in: path
+          name: "id"
+          description: "Id of user"
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: "booking_id"
+          description: "Id of booking"
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: "Booking deleted"
+        "404":
+          description: "Booking not found"
+  /companies/login:
+    post:
+      tags:
+        - "Company"
+      summary: "Retrieve security token of a company"
+      requestBody:
+        description: "Company email and password to retrieve security token"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Company_login"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Company_retrieved"
+          links:
+            token:
+              operationId: updateCompany, deleteCompany
+        "401":
+          description: "Incorrect login"
+        "404":
+          description: "Company not found"
+  /companies/{nif}/services:
+    get:
+      tags:
+        - "Services"
+      summary: "Get all services from a company or filter by id"
+      parameters:
+        - in: path
+          name: "nif"
+          description: "nif of service company to retrieve"
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: "id"
+          description: "id of service to retrieve"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "All right"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Get_services'
+        "405":
+          description: "Wrong request, check docs for further info /api-doc"
+        "500":
+          description: "Internal server error"
+    post:
+      tags:
+        - "Services"
+      summary: "Add a new service to the database"
+      parameters:
+        - in: path
+          name: "nif"
+          description: "nif of service company to retrieve"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: "Service object to be added to the database"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Service_register"
+      responses:
+        "200":
+          description: "Company created"
+          content:
+            application/json:
+               schema:
+                $ref: '#/components/schemas/Service_register'
+        "422":
+          description: "Wrong email format"
+        "405":
+          description: "Wrong json format, check docs for further info /api-doc"
+  /companies/{nif}/services/{id}:
+    patch:
+      operationId: updateService
+      tags:
+        - "Services"
+      summary: "Update service data"
+      parameters:
+        - in: path
+          name: "nif"
+          description: "nif of service company to update"
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: "id"
+          description: "id of service to update"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: "Company data to change (service_duration in minutes)"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Service_update"
+      responses:
+        "200":
+          description: "Company updated"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Get_services'
+        "401":
+          description: "Error: Unauthorized"
+        "404":
+          description: "Company not found"
+    delete:
+      operationId: deleteService
+      tags:
+        - "Services"
+      summary: "Delete a service"
+      parameters:
+        - in: path
+          name: "nif"
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: "id"
+          description: "id of service to delete"
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: "Service deleted"
+        "404":
+            description: "Service not found"
+  /companies/{nif}/services/{id}/bookings:
+    get:
+      operationId: getBookingsFromService
+      tags:
+        - "Services"
+      summary: "Get all bookings from a service"
+      parameters:
+        - in: path
+          name: "nif"
+          description: "nif of service's company"
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: "id"
+          description: "Id of service"
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: date
+          schema:
+            type: string
+        - in: query
+          name: time
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Bookings fetched"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking_retrieved"
+        "404":
+          description: "No bookings found"
+        "500":
+          description: "Internal server error"
+  /companies/{nif}/bookings:
+    get:
+      tags:
+        - "Company"
+      summary: "Get all bookings from a company"
+      parameters:
+        - in: path
+          name: "nif"
+          description: "nif of service's company"
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: date
+          schema:
+            type: string
+        - in: query
+          name: time
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Bookings fetched"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking_retrieved"
+        "404":
+          description: "No bookings found"
+        "500":
+          description: "Internal server error"
+  /companies/{nif}/opinions/{id}:
+    patch:
+      operationId: voteOpinion
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - "Opinion"
+      summary: "Add a new vote to the opinion"
+      parameters:
+        - in: path
+          name: "nif"
+          description: "nif of company how received the opinion"
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: "id"
+          description: "id of opinion to vote"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: "User who is voting"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User_voting"
+      responses:
+        "200":
+          description: "Company updated"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Opinion_updated'
+        "401":
+          description: "Error while voting an Opinion, you have already vote"
+        "404":
+          description: "Error while voting an Opinion, could find not the Opinion"
+        "500":
+          description: "Internal server error"
+    delete:
+      security:
+        - bearerAuth: [ ]
+      operationId: deleteOpinion
+      tags:
+        - "Opinion"
+      summary: "Delete an opinion"
+      parameters:
+        - in: path
+          name: "nif"
+          description: "nif of company which received an opinion"
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: "id"
+          description: "id of opinion to  delete"
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: "Opinion deleted"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Opinion_removed'
+        "401":
+          description: "Trying to delete an opinion which does not belong to the user"
+        "404":
+          description: "Opinion not found"
+        "500":
+          description: "Internal server error"
+  /companies/{nif}/opinions/:
+    post:
+      security:
+        - bearerAuth: [ ]
+      operationId: createOpinion
+      tags:
+        - "Opinion"
+      summary: "Create a new Opinion"
+      parameters:
+        - in: path
+          name: "nif"
+          description: "nif of service company to update"
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: "Opinion to be created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Opinion_new"
+      responses:
+        "200":
+          description: "Company created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Opinion_created'
+        "404":
+          description: "Error while finding a company or an user to give their opinion"
+        "500":
+          description: "Internal server error"
+    get:
+      operationId: getOpinions
+      tags:
+        - "Opinion"
+      summary: "Get all opinions of a Company"
+      parameters:
+        - in: query
+          name: user_id
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "All opinions have been found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/All_Opinions'
+        "404":
+          description: "No opinions found"
+        "500":
+          description: "Internal server error"
+  /healthzone:
+    get:
+      operationId: getAllHealthzone
+      tags:
+        - "HealthZone"
+      responses:
+        "200":
+          description: "Receive all basic health zone information from Zaragoza"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Healthzone'
+        "404":
+          description: "No health zones data found"
+        "500":
+          description: "Internal server error, something went wrong while searching for Health Zones"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Get_services:
+      type: object
+      properties:
+        services:
+          type: object
+          properties:
+            company:
+              type: string
+            description:
+              type: string
+            capacity:
+              type: integer
+            price:
+              type: integer
+            time_slots_service:
+              type: object
+              properties:
+                items:
+                  slots:
+                    type: array
+                  places_left:
+                    type: array
+        time_slots:
+          type: array
+          items:
+            type: string
+    Service_register:
+      type: object
+      properties:
+        description:
+          type: string
+        price:
+          type: integer
+      required:
+        - company
+        - description
+        - capacity
+        - price
+    Service_update:
+      type: object
+      properties:
+        description:
+          type: string
+        price:
+          type: integer
+    Get_users:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+    User_register:
+      type: object
+      properties:
+        phone:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - phone
+        - first_name
+        - last_name
+        - email
+        - password
+    User_registered:
+      type: object
+      properties:
+        phone:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        salt:
+          type: string
+      required:
+        - phone
+        - first_name
+        - last_name
+        - password
+        - salt
+    User_login:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - email
+        - password
+    User_retrieved:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            first_name:
+              type: string
+            last_name:
+              type: string
+            phone:
+              type: integer
+            email:
+              type: string
+              format: email
+        token:
+          type: string
+        expiresIn:
+          type: string
+    User_update:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        password:
+          type: string
+    User_fetched:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+    Booking_create:
+      type: object
+      properties:
+        service:
+          type: string
+          description: id of service
+        date:
+          type: string
+          description: YYYY-MM-DD
+        time:
+          type: string
+          description: HH:MM
+    Booking_retrieved:
+      type: object
+      properties:
+        _id:
+          type: string
+        user_id:
+          type: string
+        service_id:
+          type: string
+        company_nif:
+          type: string
+        date:
+          type: string
+          description: YYYY-MM-DD
+        time:
+          type: string
+          description: HH:MM
+    Get_companies:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          location:
+            type: array
+            items:
+              type: number
+            minItems: 2
+            maxItems: 2
+          nif:
+            type: string
+          email:
+            type: string
+            format: email
+          description:
+            type: string
+          street:
+            type: string
+          streetnumber:
+            type: number
+          zipcode:
+            type: number
+          service_duration:
+            type: string
+          capacity:
+            type: number
+          time_slots:
+            type: array
+            items:
+              type: string
+          schedule:
+            type: object
+            properties:
+              monday:
+                type: object
+                properties:
+                  open_1:
+                    type: string
+                  close_1:
+                    type: string
+                  open_2:
+                    type: string
+                  close_2:
+                    type: string
+              tuesday:
+                type: object
+                properties:
+                  open_1:
+                    type: string
+                  close_1:
+                    type: string
+                  open_2:
+                    type: string
+                  close_2:
+                    type: string
+              wednesday:
+                type: object
+                properties:
+                  open_1:
+                    type: string
+                  close_1:
+                    type: string
+                  open_2:
+                    type: string
+                  close_2:
+                    type: string
+              thursday:
+                type: object
+                properties:
+                  open_1:
+                    type: string
+                  close_1:
+                    type: string
+                  open_2:
+                    type: string
+                  close_2:
+                    type: string
+              friday:
+                type: object
+                properties:
+                  open_1:
+                    type: string
+                  close_1:
+                    type: string
+                  open_2:
+                    type: string
+                  close_2:
+                    type: string
+              saturday:
+                type: object
+                properties:
+                  open_1:
+                    type: string
+                  close_1:
+                    type: string
+                  open_2:
+                    type: string
+                  close_2:
+                    type: string
+              sunday:
+                type: object
+                properties:
+                  open_1:
+                    type: string
+                  close_1:
+                    type: string
+                  open_2:
+                    type: string
+                  close_2:
+                    type: string
+          category:
+            type: string
+            enum:
+              - "Ocio"
+              - "Deporte"
+              - "Administración pública"
+              - "Salud y belleza"
+              - "Comercio"
+    Company_register:
+      type: object
+      properties:
+        nif:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        street:
+          type: string
+        streetnumber:
+          type: number
+        zipcode:
+          type: number
+        category:
+          type: string
+          enum:
+            - "Ocio"
+            - "Deporte"
+            - "Administración pública"
+            - "Salud y belleza"
+            - "Comercio"
+      required:
+        - nif
+        - name
+        - password
+        - lat
+        - long
+        - category
+        - street
+        - streetnumber
+        - zipcode
+    Company_registered:
+      type: object
+      properties:
+        nif:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        salt:
+          type: string
+        street:
+          type: string
+        streetnumber:
+          type: number
+        zipcode:
+          type: number
+        schedule:
+          type: object
+          properties:
+            monday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+            tuesday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+            wednesday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+            thursday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+            friday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+            saturday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+            sunday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+        location:
+          type: object
+          properties:
+            lat:
+              type: integer
+            long:
+              type: integer
+        category:
+          type: string
+          enum:
+            - "Ocio"
+            - "Deporte"
+            - "Administración pública"
+            - "Salud y belleza"
+            - "Comercio"
+      required:
+        - nif
+        - name
+        - password
+        - location
+        - salt
+        - street
+        - streetnumber
+        - zipcode
+        - schedule
+    Company_fetched:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        street:
+          type: string
+        streetnumber:
+          type: number
+        zipcode:
+          type: number
+        category:
+          type: string
+          enum:
+            - "Ocio"
+            - "Deporte"
+            - "Administración pública"
+            - "Salud y belleza"
+            - "Comercio"
+        description:
+          type: string
+        service_duration:
+          type: string
+        time_slots:
+          type: array
+          items:
+            type: string
+        schedule:
+          type: object
+          properties:
+            monday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
+                  type: string
+            tuesday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
+                  type: string
+            wednesday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
+                  type: string
+            thursday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
+                  type: string
+            friday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
+                  type: string
+            saturday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
+                  type: string
+            sunday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
+                  type: string
+        location:
+          type: object
+          properties:
+            lat:
+              type: integer
+            long:
+              type: integer
+    Company_login:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+    Company_update:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        salt:
+          type: string
+        street:
+          type: string
+        streetnumber:
+          type: number
+        zipcode:
+          type: number
+        description:
+          type: string
+        service_duration:
+          type: string
+        capacity:
+          type: number
+        schedule:
+          type: object
+          properties:
+            monday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
+                  type: string
+            tuesday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
+                  type: string
+            wednesday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
+                  type: string
+            thursday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
+                  type: string
+            friday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
+                  type: string
+            saturday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
+                  type: string
+            sunday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+                open_2:
+                  type: string
+                close_2:
+                  type: string
+        location:
+          type: object
+          properties:
+            lat:
+              type: integer
+            long:
+              type: integer
+    Company_retrieved:
+      type: object
+      properties:
+        company:
+          type: object
+          properties:
+            name:
+              type: string
+            nif:
+              type: string
+            id:
+              type: integer
+            email:
+              type: string
+              format: email
+            street:
+              type: string
+            streetnumber:
+              type: number
+            zipcode:
+              type: number
+            description:
+              type: string
+            service_duration:
+              type: string
+            capacity:
+              type: number
+            time_slots:
+              type: array
+              items:
+                type: string
+            schedule:
+              type: object
+              properties:
+                monday:
+                  type: object
+                  properties:
+                    open_1:
+                      type: string
+                    close_1:
+                      type: string
+                    open_2:
+                      type: string
+                    close_2:
+                      type: string
+                tuesday:
+                  type: object
+                  properties:
+                    open_1:
+                      type: string
+                    close_1:
+                      type: string
+                    open_2:
+                      type: string
+                    close_2:
+                      type: string
+                wednesday:
+                  type: object
+                  properties:
+                    open_1:
+                      type: string
+                    close_1:
+                      type: string
+                    open_2:
+                      type: string
+                    close_2:
+                      type: string
+                thursday:
+                  type: object
+                  properties:
+                    open_1:
+                      type: string
+                    close_1:
+                      type: string
+                    open_2:
+                      type: string
+                    close_2:
+                      type: string
+                friday:
+                  type: object
+                  properties:
+                    open_1:
+                      type: string
+                    close_1:
+                      type: string
+                    open_2:
+                      type: string
+                    close_2:
+                      type: string
+                saturday:
+                  type: object
+                  properties:
+                    open_1:
+                      type: string
+                    close_1:
+                      type: string
+                    open_2:
+                      type: string
+                    close_2:
+                      type: string
+                sunday:
+                  type: object
+                  properties:
+                    open_1:
+                      type: string
+                    close_1:
+                      type: string
+                    open_2:
+                      type: string
+                    close_2:
+                      type: string
+            category:
+              type: string
+              enum:
+                - "Ocio"
+                - "Deporte"
+                - "Administración pública"
+                - "Salud y belleza"
+                - "Comercio"
+        token:
+          type: string
+        expiresIn:
+          type: string
+    Healthzone:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          newcases:
+            type: integer
+          radius:
+            type: integer
+          location:
+            type: object
+            properties:
+              lat:
+                type: integer
+              long:
+                type: integer
+    PublicKey:
+      type: object
+      properties:
+        key:
+          type: string
+    Opinion_new:
+      type: object
+      properties:
+        comment:
+          type: string
+        user_id:
+          type: string
+        stars:
+          type: integer
+      required:
+        - comment
+        - user_id
+        - stars
+    Opinion_created:
+      type: object
+      properties:
+        comment:
+          type: string
+        user_id:
+          type: string
+        stars:
+          type: integer
+        votes:
+          type: integer
+        date:
+          type: string
+        name:
+          type: string
+      required:
+        - comment
+        - user_id
+        - stars
+    Opinion_updated:
+      type: object
+      properties:
+        comment:
+          type: string
+        user_id:
+          type: string
+        stars:
+          type: integer
+        votes:
+          type: integer
+        date:
+          type: string
+        name:
+          type: string
+        liked:
+          type: boolean
+      required:
+        - comment
+        - user_id
+        - stars
+    Opinion_removed:
+      type: object
+      properties:
+        message:
+          type: string
+    All_Opinions:
+      type: array
+      items:
+        type: object
+        properties:
+          comment:
+            type: string
+          user_id:
+            type: string
+          stars:
+            type: integer
+          votes:
+            type: integer
+          date:
+            type: string
+          name:
+            type: string
+          liked:
+            type: boolean
+        required:
+            - comment
+            - user_id
+            - stars
+    User_voting:
+      type: object
+      properties:
+        user_id:
+          type: string
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
