@@ -173,7 +173,16 @@ let vote_opinion = async (req, res, next)=> {
                                             opinion.votes = new_vote;
                                             await opinion.save()
                                                 .then(() => {
-                                                    res.send(opinion);
+                                                    let new_opinion = {
+                                                        "comment": opinion.comment,
+                                                        "user_id": opinion.user_id,
+                                                        "stars": opinion.stars,
+                                                        "date":opinion.date,
+                                                        "name": opinion.name,
+                                                        "votes":opinion.votes,
+                                                        "liked": true
+                                                    }
+                                                    res.send(new_opinion);
                                                 });
                                         })
                                     }
@@ -218,7 +227,45 @@ let get_opinion = async (req, res, next)=> {
                 }
                 else{
                     if(opinions){
-                        res.send(opinions);
+                        console.log(req.query.user_id)
+                        let id = req.query.user_id;
+                        let votes_user=[]
+                        //Try to find if the user has already voted it
+                        if(id){
+                            votes_user = await Vote.find({user_id:req.query.user_id},{},{});
+                            console.log(votes_user)
+                        }
+                        let new_opinions = []
+                        // for each opinion add if it is voted or not
+                        for(let i =0; i<opinions.length; i++){
+                            let liked = false
+                            let opinion_id =opinions[i]._id
+                            //Check if exists in the user votes
+                            if(votes_user != [] && votes_user!=undefined && votes_user.length>0){
+                                let j = 0;
+                                while(!liked && (j<votes_user.length)){
+                                    let vote_id = votes_user[j].opinion_id;
+                                    if( vote_id == opinion_id){
+                                        liked = true
+                                        //remove the votes_user in order no to check it again
+                                        const index = votes_user[j];
+                                        votes_user.splice(index, 1);
+                                    }
+                                    j++;
+                                }
+                            }
+                            console.log(opinions[i])
+                            new_opinions[i] = {
+                                "comment": opinions[i].comment,
+                                "user_id": opinions[i].user_id,
+                                "stars": opinions[i].stars,
+                                "date":opinions[i].date,
+                                "name": opinions[i].name,
+                                "votes":opinions[i].votes,
+                                "liked": liked
+                            }
+                        }
+                        res.send(new_opinions);
                     }
                     else{
                         res.status(404);

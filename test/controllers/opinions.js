@@ -146,6 +146,25 @@ describe('Testing Opinion API', () => {
     /**
      *
      */
+    it('It should get opinions of a company with the user ID',(done => {
+        chai.request(server)
+            .get(url+'?user_id='+opinion.user_id )
+            .end((err,res)=>{
+                if(err) {
+                    throw err;}
+                else{
+                    console.log(res.body)
+                    res.should.have.status(200);
+                    done();
+                }});
+
+    }));
+
+    //?page=2
+
+    /**
+     *
+     */
     it('It should delete opinions',(done => {
         console.log(opinion_id)
         chai.request(server)

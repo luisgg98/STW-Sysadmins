@@ -645,7 +645,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Opinion_created'
+                $ref: '#/components/schemas/Opinion_updated'
         "401":
           description: "Error while voting an Opinion, you have already vote"
         "404":
@@ -723,6 +723,12 @@ paths:
       tags:
         - "Opinion"
       summary: "Get all opinions of a Company"
+      parameters:
+        - in: query
+          name: user_id
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: "All opinions have been found"
@@ -1596,6 +1602,27 @@ components:
         - comment
         - user_id
         - stars
+    Opinion_updated:
+      type: object
+      properties:
+        comment:
+          type: string
+        user_id:
+          type: string
+        stars:
+          type: integer
+        votes:
+          type: integer
+        date:
+          type: string
+        name:
+          type: string
+        liked:
+          type: boolean
+      required:
+        - comment
+        - user_id
+        - stars
     Opinion_removed:
       type: object
       properties:
@@ -1618,6 +1645,8 @@ components:
             type: string
           name:
             type: string
+          liked:
+            type: boolean
         required:
             - comment
             - user_id
