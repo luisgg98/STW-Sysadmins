@@ -28,30 +28,25 @@ let create_booking = async (req, res) => {
                             if (err) {
                                 throw err
                             } else {
-                                if (user) {
-                                    const booking = new Booking({
-                                        user_id: req.params.id,
-                                        service_id: req.body.service,
-                                        company_nif: service.company,
-                                        date: req.body.date,
-                                        time: req.body.time
-                                    })
-                                    Company.findOne({nif: service.company}, {}, {}, async function (err, company) {
-                                        if (err) {
-                                            throw err;
-                                        } else {
-                                            company.bookings = company.bookings + 1
-                                            await company.save()
-                                            await booking.save();
-                                            res.status(200).send(booking)
-                                            // Send email
-                                            sendReminder(user, booking, company);
-                                        }
-                                    });
-                                } else {
-                                    res.status(404)
-                                    res.send({error: "User not found"})
-                                }
+                                const booking = new Booking({
+                                    user_id: req.params.id,
+                                    service_id: req.body.service,
+                                    company_nif: service.company,
+                                    date: req.body.date,
+                                    time: req.body.time
+                                })
+                                Company.findOne({nif: service.company}, {}, {}, async function (err, company) {
+                                    if (err) {
+                                        throw err;
+                                    } else {
+                                        company.bookings = company.bookings + 1
+                                        await company.save()
+                                        await booking.save();
+                                        res.status(200).send(booking)
+                                        // Send email
+                                        sendReminder(user, booking, company);
+                                    }
+                                });
                             }
                         }
                     )
