@@ -1,6 +1,6 @@
 import requests
 import json
-'''
+
 from pymongo import MongoClient
 client = MongoClient('localhost:27017')
 db = client.zitation
@@ -302,3 +302,4 @@ r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 200):
     print('Error creating booking')
 print(r.json())
+'''

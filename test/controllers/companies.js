@@ -12,6 +12,9 @@ let company = {
     "password": "string",
     "street": "Calle Francisco de Vitoria",
     "streetnumber": 30,
+    "capacity": 3,
+    "service_duration" : 15,
+    'schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}},
     "zipcode": 50008,
     "category": "Ocio",
 };
@@ -23,6 +26,9 @@ let company_wrong_email = {
     "password": "string",
     "street": "Calle Francisco de Vitoria",
     "streetnumber": 30,
+    "capacity": 3,
+    "service_duration" : 15,
+    'schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}},
     "zipcode": 50008,
     "category": "Ocio",
 };
@@ -34,6 +40,9 @@ let company_category = {
     "password": "string",
     "street": "Calle Francisco de Vitoria",
     "streetnumber": 30,
+    "capacity": 3,
+    "service_duration" : 15,
+    'schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}},
     "zipcode": 50008,
     "category": "WRONG CATEGORY",
 };

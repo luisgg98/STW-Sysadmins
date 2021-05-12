@@ -13,6 +13,7 @@ const company = new mongoose.Schema({
     description: {type: String, required: true},
     // Duration needs to be in **minutes**
     service_duration: {type: Number, required: true},
+    bookings: {type: Number, required: true},
     capacity: {type: Number},
     // Time slots
     time_slots: {

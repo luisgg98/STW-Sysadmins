@@ -1073,42 +1073,7 @@ components:
           type: number
         zipcode:
           type: number
-        category:
-          type: string
-          enum:
-            - "Ocio"
-            - "Deporte"
-            - "Administración pública"
-            - "Salud y belleza"
-            - "Comercio"
-      required:
-        - nif
-        - name
-        - password
-        - lat
-        - long
-        - category
-        - street
-        - streetnumber
-        - zipcode
-    Company_registered:
-      type: object
-      properties:
-        nif:
-          type: string
-        name:
-          type: string
-        email:
-          type: string
-        password:
-          type: string
-        salt:
-          type: string
-        street:
-          type: string
-        streetnumber:
-          type: number
-        zipcode:
+        capacity:
           type: number
         schedule:
           type: object
@@ -1162,6 +1127,103 @@ components:
                   type: string
                 close_1:
                   type: string
+        category:
+          type: string
+          enum:
+            - "Ocio"
+            - "Deporte"
+            - "Administración pública"
+            - "Salud y belleza"
+            - "Comercio"
+      required:
+        - nif
+        - name
+        - password
+        - lat
+        - long
+        - category
+        - street
+        - streetnumber
+        - zipcode
+    Company_registered:
+      type: object
+      properties:
+        nif:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        salt:
+          type: string
+        street:
+          type: string
+        streetnumber:
+          type: number
+        zipcode:
+          type: number
+        bookings:
+          type: number
+        capacity:
+          type: number
+        schedule:
+          type: object
+          properties:
+            monday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+            tuesday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+            wednesday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+            thursday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+            friday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+            saturday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+            sunday:
+              type: object
+              properties:
+                open_1:
+                  type: string
+                close_1:
+                  type: string
+        time_slots:
+          type: array
+          items:
+            type: string
         location:
           type: object
           properties:
@@ -1213,6 +1275,8 @@ components:
           type: string
         service_duration:
           type: string
+        bookings:
+          type: number
         time_slots:
           type: array
           items:
@@ -1450,6 +1514,8 @@ components:
             service_duration:
               type: string
             capacity:
+              type: number
+            bookings:
               type: number
             time_slots:
               type: array

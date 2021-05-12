@@ -102,6 +102,10 @@ let register = async (req, res) => {
                                         streetnumber: req.body.streetnumber,
                                         street: req.body.street,
                                         zipcode: req.body.zipcode,
+                                        schedule: req.body.schedule,
+                                        capacity: req.body.capacity,
+                                        bookings: 0,
+                                        service_duration: req.body.service_duration,
                                         location: {
                                             type: "Point",
                                             coordinates: [coordinates.latitude, coordinates.longitude]
@@ -109,18 +113,8 @@ let register = async (req, res) => {
                                         // Default description and service duration
                                         description: "null",
                                         security_level: 1,
-                                        service_duration: 0,
-                                        schedule: {
-                                            monday: {open_1: "null", close_1: "null"},
-                                            tuesday: {open_1: "null", close_1: "null"},
-                                            wednesday: {open_1: "null", close_1: "null"},
-                                            thursday: {open_1: "null", close_1: "null"},
-                                            friday: {open_1: "null", close_1: "null"},
-                                            saturday: {open_1: "null", close_1: "null"},
-                                            sunday: {open_1: "null", close_1: "null"}
-                                        }
                                     })
-                                    console.log("a")
+                                    company.time_slots = update_time_slots.update_time_slots(company),
                                     await company.save()
                                         .then(() => {
                                                 res.send(company)

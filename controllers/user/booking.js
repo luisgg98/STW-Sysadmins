@@ -40,7 +40,7 @@ let create_booking = async (req, res) => {
                                         if (err) {
                                             throw err;
                                         } else {
-                                            company.capacity -= 1
+                                            company.bookings += 1
                                             await company.save()
                                             await booking.save();
                                             res.status(200).send(booking)
@@ -91,8 +91,16 @@ let get_bookings = async (req, res) => {
                     }
                 }
             })
-
-        } else {
+        }
+        else if(req.query.date) {
+            Booking.find({user_id: req.params.id, date: req.query.date}, function(err, bookings){
+                if(err){throw err}
+                else{
+                    res.status(200).send(bookings)
+                }
+            })
+        }
+        else {
             // Fetch all bookings
             Booking.find({user_id: req.params.id}, function (err, bookings) {
                 if (err) {
@@ -184,14 +192,10 @@ let delete_booking = async (req, res) => {
                 throw err
             } else {
                 if (booking) {
-                    Company.findOne({nif: booking.company_nif}, async function (err, company) {
-                        if (err) {
-                            throw err
-                        } else {
-                            company.capacity += 1
-                            await company.save()
-                            res.status(204).send()
-                        }
+                    Company.findOne({nif:booking.company_nif}, async function(err, company){
+                        company.bookings -= 1
+                        await company.save()
+                        res.status(204).send()
                     })
                 } else {
                     res.status(404)
@@ -282,9 +286,10 @@ let company_bookings = async (req, res) => {
                     throw err
                 } else {
                     Company.findOne({nif: req.params.nif}, async function (err, company) {
-                        let capacity = company.capacity + booking.length
+                        // Get remaining places in that date and time
+                        let remaining_capacity = company.capacity - booking.length
                         let result = {}
-                        result.capacity = capacity
+                        result.capacity = remaining_capacity
                         result.bookings = booking
                         res.send(result)
                     })

@@ -14,6 +14,7 @@ let companiesArray = [
         category: 'Testing',
         description: 'desc',
         service_duration: 0,
+        capacity: 3,
         schedule: {
             monday: {open_1: "9", close_1: "10"},
             tuesday: {open_1: "9", close_1: "10"},
@@ -38,6 +39,7 @@ let companiesArray = [
         category: 'Testing',
         description: 'desc',
         service_duration: 0,
+        capacity: 3,
         schedule: {
             monday: {open_1: "9", close_1: "10"},
             tuesday: {open_1: "9", close_1: "10"},
@@ -61,6 +63,7 @@ let companiesArray = [
         salt: 'salty',
         category: 'Testing',
         description: 'desc',
+        capacity: 3,
         service_duration: 0,
         schedule: {
             monday: {open_1: "9", close_1: "10"},
@@ -106,7 +109,7 @@ describe('Company model tests', function () {
         })
     })
 
-    it('Should find all company without error', function (done) {
+    it('Should find all companies without error', function (done) {
         Company.find(function (error, companies) {
             assert.isAtLeast(companies.length, 3)
             done();
