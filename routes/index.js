@@ -7,9 +7,10 @@ const router = express.Router()
  *
  */
 router.get("/", async (req, res) => {
-    let users = await User.find()
-    users = users + await Company.find()
-    res.send(users)
+    let message = {
+        "message": "I am a useless teapot"
+    }
+    res.status(418).send(message)
 })
 
 module.exports = router
