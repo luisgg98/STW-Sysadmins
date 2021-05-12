@@ -9,7 +9,7 @@ const opinion = new mongoose.Schema(
         stars: {type: Number, min: 0, required: false},
         date: {type: String, required: false},
         name: {type: String, required: false},
-        votes:{type: Number, min: 0, required: false}
+        votes: {type: Number, min: 0, required: false}
     }
 )
 module.exports = mongoose.model("opinion", opinion)

@@ -1,4 +1,3 @@
-
 const Healthzone = require('../../models/healthzone');
 
 /**
@@ -10,16 +9,15 @@ const Healthzone = require('../../models/healthzone');
 let allHealthzone = async (req, res) => {
     try {
         let healthzones = await Healthzone.find();
-        if(healthzones != [] && healthzones!== undefined && healthzones!=null ) {
+        if (healthzones != [] && healthzones !== undefined && healthzones != null) {
             res.status(200).send(healthzones)
-        }
-        else{
-            res.status(404).send({error : "No elements found"});
+        } else {
+            res.status(404).send({error: "No elements found"});
         }
         /* istanbul ignore next */
-    } catch(e) {
-        res.status(500).send({error : "Internal server error, something went wrong while searching for Health Zones"});
-        console.log("ERROR: " +e);
+    } catch (e) {
+        res.status(500).send({error: "Internal server error, something went wrong while searching for Health Zones"});
+        console.log("ERROR: " + e);
     }
 
 }

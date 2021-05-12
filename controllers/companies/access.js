@@ -3,7 +3,7 @@ const validate = require('../../services/validate_email')
 const Company = require('../../models/company')
 const Service = require('../../models/service')
 const geolo = require('../../services/geocoding')
-const jwt_login_strategy= require('../../config/passport');
+const jwt_login_strategy = require('../../config/passport');
 const update_time_slots = require('../../services/update_time_slots')
 
 /**
@@ -12,17 +12,26 @@ const update_time_slots = require('../../services/update_time_slots')
  * @param res
  * @returns {Promise<void>}
  */
-let get = async (req, res, next)=> {
+let get = async (req, res, next) => {
     try {
         // If the url contains a query, search just for the company of the query
-        if (req.query.name){
+        if (req.query.name) {
             // Fetch just one company
             let name = req.query.name
-            const company = await Company.find({name: {"$regex": name, "$options": "i"}}, function(err,docs){}).select('name nif email category description service_duration time_slots schedule capacity location')
+            const company = await Company.find({name: {"$regex": name, "$options": "i"}}, function (err, docs) {
+            }).select('name nif email category description service_duration time_slots schedule capacity location')
             res.send(company)
         } else {
             // Fetch all companies
-            const companies = await Company.find({}, {name: true, nif: true, email: true, category: true, description: true, service_duration: true, location: true})
+            const companies = await Company.find({}, {
+                name: true,
+                nif: true,
+                email: true,
+                category: true,
+                description: true,
+                service_duration: true,
+                location: true
+            })
             res.send(companies)
         }
     } catch {
@@ -40,14 +49,14 @@ let get = async (req, res, next)=> {
  */
 let fetchCompany = async (req, res) => {
     try {
-        Company.findOne({ nif: req.params.nif }, async function (err, company){
-            if (err){ throw  err}
-            else{
-                if (company){
+        Company.findOne({nif: req.params.nif}, async function (err, company) {
+            if (err) {
+                throw  err
+            } else {
+                if (company) {
                     res.status(200)
                     res.send(company);
-                }
-                else {
+                } else {
                     res.status(404)
                     res.send({error: "Company not found"})
                 }
@@ -67,54 +76,53 @@ let fetchCompany = async (req, res) => {
  * @param res
  * @returns {Promise<void>}
  */
-let register = async (req, res)=>{
+let register = async (req, res) => {
     try {
         // Test if exists another company with the same nif
-        Company.count({nif: req.body.nif}, async function (err, count){
+        Company.count({nif: req.body.nif}, async function (err, count) {
             if (count > 0) {
                 res.status(409)
-                res.send({ error: "Company already exists"})
+                res.send({error: "Company already exists"})
             } else {
                 let password = utils.genPassword(req.body.password)
-                if (!validate.validateCategory(req.body.category)){
+                if (!validate.validateCategory(req.body.category)) {
                     res.status(422)
                     res.send({error: "Wrong category, check docs for further info /api-doc"})
-                }
-                else{
+                } else {
                     if (validate.validateEmail(req.body.email)) {
-                        geolo.findCoordenates(req.body.name,req.body.streetnumber,req.body.street,req.body.zipcode)
-                            .then( async (coordinates) =>{
+                        geolo.findCoordenates(req.body.name, req.body.streetnumber, req.body.street, req.body.zipcode)
+                            .then(async (coordinates) => {
                                     const company = new Company({
                                         name: req.body.name,
                                         nif: req.body.nif,
-                                        email : req.body.email,
+                                        email: req.body.email,
                                         password: password.hash,
                                         salt: password.salt,
                                         category: req.body.category,
-                                        streetnumber:req.body.streetnumber,
-                                        street:req.body.street,
-                                        zipcode:req.body.zipcode,
+                                        streetnumber: req.body.streetnumber,
+                                        street: req.body.street,
+                                        zipcode: req.body.zipcode,
                                         location: {
                                             type: "Point",
-                                            coordinates: [coordinates.latitude,  coordinates.longitude]
+                                            coordinates: [coordinates.latitude, coordinates.longitude]
                                         },
                                         // Default description and service duration
                                         description: "null",
-                                        security_level:1,
+                                        security_level: 1,
                                         service_duration: 0,
                                         schedule: {
-                                            monday: {open_1:"null", close_1: "null"},
-                                            tuesday: {open_1:"null", close_1: "null"},
-                                            wednesday: {open_1:"null", close_1: "null"},
-                                            thursday: {open_1:"null", close_1: "null"},
-                                            friday: {open_1:"null", close_1: "null"},
-                                            saturday: {open_1:"null", close_1: "null"},
-                                            sunday: {open_1:"null", close_1: "null"}
+                                            monday: {open_1: "null", close_1: "null"},
+                                            tuesday: {open_1: "null", close_1: "null"},
+                                            wednesday: {open_1: "null", close_1: "null"},
+                                            thursday: {open_1: "null", close_1: "null"},
+                                            friday: {open_1: "null", close_1: "null"},
+                                            saturday: {open_1: "null", close_1: "null"},
+                                            sunday: {open_1: "null", close_1: "null"}
                                         }
                                     })
-                                console.log("a")
+                                    console.log("a")
                                     await company.save()
-                                        .then(()=>{
+                                        .then(() => {
                                                 res.send(company)
                                             }
                                         )
@@ -123,7 +131,7 @@ let register = async (req, res)=>{
                     } else {
                         /* istanbul ignore next */
                         res.status(422)
-                        res.send({ error: "Not an email address" })
+                        res.send({error: "Not an email address"})
                     }
                 }
             }
@@ -131,7 +139,7 @@ let register = async (req, res)=>{
         console.log("B")
     } catch {
         res.status(405)
-        res.send({ error: "Wrong json format, check docs for further info /api-doc" })
+        res.send({error: "Wrong json format, check docs for further info /api-doc"})
     }
 }
 
@@ -143,19 +151,20 @@ let register = async (req, res)=>{
  */
 let login = async (req, res) => {
     try {
-        const company = await Company.findOne({ email: req.body.email })
+        const company = await Company.findOne({email: req.body.email})
         if (utils.validPassword(req.body.password, company.password, company.salt)) {
             const tokenObject = utils.issueJWT(company);
             res.send({
-                    company: company,
-                    token: tokenObject.token, expiresIn: tokenObject.expires })
+                company: company,
+                token: tokenObject.token, expiresIn: tokenObject.expires
+            })
         } else {
             res.status(401)
-            res.send({ error: "Incorrect login"})
+            res.send({error: "Incorrect login"})
         }
     } catch {
         res.status(404)
-        res.send({ error: "Company not found" })
+        res.send({error: "Company not found"})
     }
 }
 
@@ -165,36 +174,50 @@ let login = async (req, res) => {
  * @param res
  * @returns {Promise<void>}
  */
-let update = async (req, res)=> {
+let update = async (req, res) => {
     try {
-        if(!jwt_login_strategy.security(req.params.id,req.result)){
+        if (!jwt_login_strategy.security(req.params.id, req.result)) {
             res.status(401)
-            res.send({ error: "Wrong User Access denied"})
-        }
-        else{
+            res.send({error: "Wrong User Access denied"})
+        } else {
             let company;
             //result.security_level !== undefined &&
-            if(req.result.security_level !== undefined && req.result.security_level>1){
-                company = await Company.findOne({ _id: req.params.id });
-            }
-            else{
+            if (req.result.security_level !== undefined && req.result.security_level > 1) {
+                company = await Company.findOne({_id: req.params.id});
+            } else {
                 company = req.result;
             }
-            if (req.body.name) {company.name = req.body.name}
+            if (req.body.name) {
+                company.name = req.body.name
+            }
             //TODO it must be changed
-            if (req.body.password) {company.password = req.body.password}
-            if (req.body.email) {company.email = req.body.email}
-            if(req.body.streetnumber){company.streetnumber= req.body.streetnumber}
-            if(req.body.street){company.street = req.body.street}
-            if(req.body.zipcode){company.zipcode = req.body.zipcode}
-            if (req.body.description) {company.description = req.body.description}
-            if (req.body.capacity) { company.capacity = req.body.capacity}
+            if (req.body.password) {
+                company.password = req.body.password
+            }
+            if (req.body.email) {
+                company.email = req.body.email
+            }
+            if (req.body.streetnumber) {
+                company.streetnumber = req.body.streetnumber
+            }
+            if (req.body.street) {
+                company.street = req.body.street
+            }
+            if (req.body.zipcode) {
+                company.zipcode = req.body.zipcode
+            }
+            if (req.body.description) {
+                company.description = req.body.description
+            }
+            if (req.body.capacity) {
+                company.capacity = req.body.capacity
+            }
             if (req.body.schedule || req.body.service_duration) {
-                if (req.body.schedule && req.body.service_duration){
+                if (req.body.schedule && req.body.service_duration) {
                     company.schedule = req.body.schedule
                     company.service_duration = req.body.service_duration
                     company.time_slots = update_time_slots.update_time_slots(company)
-                } else if (req.body.schedule){
+                } else if (req.body.schedule) {
                     company.schedule = req.body.schedule
                     company.time_slots = update_time_slots.update_time_slots(company)
                 } else {
@@ -202,10 +225,12 @@ let update = async (req, res)=> {
                     company.time_slots = update_time_slots.update_time_slots(company)
                 }
             }
-            if(req.body.category){company.category = req.body.category;}
-            geolo.findCoordenates(company.name,company.streetnumber,company.street,company.zipcode)
+            if (req.body.category) {
+                company.category = req.body.category;
+            }
+            geolo.findCoordenates(company.name, company.streetnumber, company.street, company.zipcode)
                 .then(
-                    async (coordinates) =>{
+                    async (coordinates) => {
                         company.lat = coordinates.latitude
                         company.long = coordinates.long
                         await company.save();
@@ -213,11 +238,10 @@ let update = async (req, res)=> {
                     }
                 );
         }
-    }
-    catch (e) {
-        console.log("Error while patching company" + e )
+    } catch (e) {
+        console.log("Error while patching company" + e)
         res.status(404)
-        res.send({ error: "Company not found" })
+        res.send({error: "Company not found"})
     }
 
 }
@@ -228,18 +252,18 @@ let update = async (req, res)=> {
  * @param res
  * @returns {Promise<void>}
  */
-let delete_company = async (req, res)=>{
+let delete_company = async (req, res) => {
     try {
-        if(!jwt_login_strategy.security(req.params.id, req.result)){
+        if (!jwt_login_strategy.security(req.params.id, req.result)) {
             res.status(401)
-            res.send({ error: "Wrong User Access denied"})
-        } else{
-            await Company.deleteOne({ _id: req.params.id })
+            res.send({error: "Wrong User Access denied"})
+        } else {
+            await Company.deleteOne({_id: req.params.id})
             res.status(204).send()
         }
     } catch {
         res.status(404)
-        res.send({ error: "Company not found" })
+        res.send({error: "Company not found"})
     }
 }
 
@@ -250,7 +274,7 @@ let delete_company = async (req, res)=>{
  * @param next
  * @returns {Promise<void>}
  */
-let create_service = async (req, res, next)=> {
+let create_service = async (req, res, next) => {
     try {
         let found = true
         // Check if company exists
@@ -286,30 +310,30 @@ let create_service = async (req, res, next)=> {
  * @param next
  * @returns {Promise<void>}
  */
-let get_services = async (req, res, next)=>{
-    try{
-        if (req.query.id){
+let get_services = async (req, res, next) => {
+    try {
+        if (req.query.id) {
             // Fetch just one service
             let id = req.query.id
-            Company.findOne({nif: req.params.nif}, async function (err, company){
-                if (err){
+            Company.findOne({nif: req.params.nif}, async function (err, company) {
+                if (err) {
                     throw err
                 } else {
                     if (company) {
-                        const service = await Service.findOne({_id:id})
+                        const service = await Service.findOne({_id: id})
                         const company = await Company.findOne({nif: req.params.nif})
                         res.send({services: service, time_slots: company.time_slots})
                     } else {
                         res.status(404)
-                        res.send({ error: "Company not found"})
+                        res.send({error: "Company not found"})
                     }
                 }
             })
         } else if (req.params.nif != "," || req.params.nif != undefined) {
             // Fetch all services from a company
             // Check if company exists
-            Company.findOne({nif: req.params.nif}, async function (err, company){
-                if (err){
+            Company.findOne({nif: req.params.nif}, async function (err, company) {
+                if (err) {
                     throw err
                 } else {
                     if (company) {
@@ -317,16 +341,15 @@ let get_services = async (req, res, next)=>{
                         res.send({services: service, time_slots: company.time_slots})
                     } else {
                         res.status(404)
-                        res.send({ error: "Company not found"})
+                        res.send({error: "Company not found"})
                     }
                 }
             })
         } else {
             res.status(405)
-            res.send({error:"Wrong request, check docs for further info /api-doc"})
+            res.send({error: "Wrong request, check docs for further info /api-doc"})
         }
-    }
-    catch {
+    } catch {
         res.status(500)
         res.send({error: "Internal server error"})
     }
@@ -339,24 +362,24 @@ let get_services = async (req, res, next)=>{
  * @param next
  * @returns {Promise<void>}
  */
-let update_service = async (req, res, next)=>{
+let update_service = async (req, res, next) => {
     try {
-        const service = await Service.findOne({ _id: req.params.id });
+        const service = await Service.findOne({_id: req.params.id});
 
         if (req.body.description) {
             service.description = req.body.description
         }
-        if (req.body.capacity){
+        if (req.body.capacity) {
             service.capacity = req.body.capacity
         }
-        if (req.body.price){
+        if (req.body.price) {
             service.price = req.body.price
         }
         await service.save()
         res.send(service)
     } catch {
         res.status(404)
-        res.send({ error: "Company not found" })
+        res.send({error: "Company not found"})
     }
 }
 
@@ -367,13 +390,13 @@ let update_service = async (req, res, next)=>{
  * @param next
  * @returns {Promise<void>}
  */
-let delete_service = async (req, res, next)=>{
+let delete_service = async (req, res, next) => {
     try {
-        await Service.deleteOne({ _id: req.params.id })
+        await Service.deleteOne({_id: req.params.id})
         res.status(204).send()
     } catch {
         res.status(404)
-        res.send({ error: "Service not found" })
+        res.send({error: "Service not found"})
     }
 }
 

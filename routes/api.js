@@ -18,7 +18,7 @@ router.use('/companies', companiesRouter)
 /**
  *
  */
-router.use('/healthzone',healthZoneRouter)
+router.use('/healthzone', healthZoneRouter)
 
 /**
  *
@@ -28,6 +28,6 @@ router.use('/admin', adminRouter)
 /**
  *
  */
-router.use('/captcha',captchaRouter)
+router.use('/captcha', captchaRouter)
 
 module.exports = router;

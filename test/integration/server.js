@@ -4,7 +4,7 @@ let chaiHttp = require('chai-http');
 let server = require('../../app');
 chai.use(chaiHttp);
 
-describe('Integration test',function () {
+describe('Integration test', function () {
     it('Testing application endpoint', (done) => {
         chai.request(server)
             .get('/')

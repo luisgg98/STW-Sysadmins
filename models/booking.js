@@ -6,11 +6,11 @@ const mongoose = require('mongoose')
 // Schema of a booking
 const booking = new mongoose.Schema(
     {
-        user_id: { type: String, required: true},
-        service_id: { type: String, required: true},
-        company_nif: { type: String, required: true},
-        date: { type: String, required: true},
-        time: { type: String, required: true}
+        user_id: {type: String, required: true},
+        service_id: {type: String, required: true},
+        company_nif: {type: String, required: true},
+        date: {type: String, required: true},
+        time: {type: String, required: true}
     }
 )
 

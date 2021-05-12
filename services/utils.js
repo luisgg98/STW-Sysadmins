@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 //It necessary to have previously a private key to cypher
 // the JWT token
-const pathToKey = path.join(__dirname, '..', 'scripts','id_rsa_priv.pem');
+const pathToKey = path.join(__dirname, '..', 'scripts', 'id_rsa_priv.pem');
 // The main idea is to have randomly created a file which contains
 //this necessary keys
 
@@ -61,7 +61,7 @@ function issueJWT(user) {
         iat: Date.now()
     };
     // Signedtoken, (like the certificates in the Distributed Systems)
-    const signedToken = jsonwebtoken.sign(payload, PRIV_KEY, { expiresIn: expiresIn, algorithm: 'RS256' });
+    const signedToken = jsonwebtoken.sign(payload, PRIV_KEY, {expiresIn: expiresIn, algorithm: 'RS256'});
     return {
         token: "Bearer " + signedToken,
         expires: expiresIn

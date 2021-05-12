@@ -6,7 +6,7 @@ const db = require('../config/database');
  * @param res
  * @param next
  */
-const index = function(req, res, next) {
+const index = function (req, res, next) {
 
 };
 

@@ -8,7 +8,7 @@ chai.use(chaiHttp);
 const url = '/api/healthzone/'
 describe('Testing Health ZOne API', () => {
 
-    it('Get petition to Endpoint',function (done) {
+    it('Get petition to Endpoint', function (done) {
         chai.request(server)
             .get(url)
             .end((err, res) => {

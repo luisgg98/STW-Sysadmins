@@ -1,12 +1,12 @@
-const mongoose = require( 'mongoose' );
+const mongoose = require('mongoose');
 // Healthzone
 const healthzone = new mongoose.Schema({
-    name : { type: String, required: true},
-    newcases : { type : Number, required: false},
-    radius : { type : Number, required: false},
+    name: {type: String, required: true},
+    newcases: {type: Number, required: false},
+    radius: {type: Number, required: false},
     date: {type: String, required: false},
     location: {
-        type: { type: String },
+        type: {type: String},
         coordinates: [Number]
     }
 });

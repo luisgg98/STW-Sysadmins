@@ -1,11 +1,11 @@
 const fs = require('fs');
 const https = require('https');
 const moment = require('moment');
-const Excel  = require("exceljs");
+const Excel = require("exceljs");
 const hz = require('./healthzone');
 
 // CONSTANT VARIABLES
-const  filePath ="scripts/covid_data.xlsx";
+const filePath = "scripts/covid_data.xlsx";
 
 //METHODS
 /**
@@ -13,46 +13,46 @@ const  filePath ="scripts/covid_data.xlsx";
  * specified location.
  */
 async function downloadFile(url, filePath) {
-    const proto =  https;
+    const proto = https;
     // A promise is a proxy for a no known value
     // It allows asynchronous code
-        return new Promise((resolve, reject) => {
-            //Stream between the new file an the request
-            const file = fs.createWriteStream(filePath, {flag: 'a+'});
-            let fileInfo = null;
-            file.on('open', () => {
-                const request = proto.get(url, response => {
+    return new Promise((resolve, reject) => {
+        //Stream between the new file an the request
+        const file = fs.createWriteStream(filePath, {flag: 'a+'});
+        let fileInfo = null;
+        file.on('open', () => {
+            const request = proto.get(url, response => {
 
-                    if (response.statusCode !== 200) {
-                        reject(new Error(`Failed to get '${url}' (${response.statusCode})`));
-                    }
-                    fileInfo = {
-                        mime: response.headers['content-type'],
-                        size: parseInt(response.headers['content-length'], 10),
-                    };
-                    // Send data to the file
-                    response.pipe(file);
-                });
-                //Events which can occur once the connections is finished
-                // The destination stream is ended by the time it's called
-                file.on('finish', () => {
-                    console.log('The file has been closed without problems');
-                    resolve(fileInfo);
-                });
-                // In case there is a error with the request it triggers
-                request.on('error', err => {
-                    console.log('Error while requesting the file');
-                    fs.unlink(filePath, () => reject(err));
-                });
-
-                // This is here in case any errors occur
-                file.on('error', err => {
-                    console.log('Error while writing the data in the new file');
-                    fs.unlink(filePath, () => reject(err));
-                });
-                request.end();
+                if (response.statusCode !== 200) {
+                    reject(new Error(`Failed to get '${url}' (${response.statusCode})`));
+                }
+                fileInfo = {
+                    mime: response.headers['content-type'],
+                    size: parseInt(response.headers['content-length'], 10),
+                };
+                // Send data to the file
+                response.pipe(file);
             });
+            //Events which can occur once the connections is finished
+            // The destination stream is ended by the time it's called
+            file.on('finish', () => {
+                console.log('The file has been closed without problems');
+                resolve(fileInfo);
+            });
+            // In case there is a error with the request it triggers
+            request.on('error', err => {
+                console.log('Error while requesting the file');
+                fs.unlink(filePath, () => reject(err));
+            });
+
+            // This is here in case any errors occur
+            file.on('error', err => {
+                console.log('Error while writing the data in the new file');
+                fs.unlink(filePath, () => reject(err));
+            });
+            request.end();
         });
+    });
 }
 
 /**
@@ -62,12 +62,11 @@ async function downloadFile(url, filePath) {
  * @param date
  * @returns {string}
  */
-function formatDate(date){
-    if(date >= 10){
+function formatDate(date) {
+    if (date >= 10) {
         return date.toString();
-    }
-    else{
-        return '0'+ date.toString();
+    } else {
+        return '0' + date.toString();
     }
 }
 
@@ -78,8 +77,8 @@ function formatDate(date){
  * @param year
  * @returns {string}
  */
-function buildUrl(day,month,year){
-    year= year.toString();
+function buildUrl(day, month, year) {
+    year = year.toString();
     month = formatDate(month);
     day = formatDate(day);
     let url = `https://transparencia.aragon.es/sites/default/files/documents/${year}${month}${day}_casos_confirmados_zbs.xlsx`
@@ -92,11 +91,12 @@ function buildUrl(day,month,year){
  * @param year
  * @returns {number}
  */
-let getDaysInMonth = function(month, year) {
+let getDaysInMonth = function (month, year) {
     // Here January is 1 based
     //Day 0 is the last day in the previous month
     return new Date(year, month, 0).getDate();
 };
+
 /**
  * Asynchronous method which tries to download the excel file
  * from the council city website.
@@ -132,9 +132,9 @@ async function getCasesFile() {
             let yesterday = moment().subtract(attempts, 'days');
             today_date = new Date(yesterday.format());
         });
-    } while (!correctAccess && attempts < getDaysInMonth(today_date.getMonth(),today_date.getFullYear()));
+    } while (!correctAccess && attempts < getDaysInMonth(today_date.getMonth(), today_date.getFullYear()));
 
-    if(correctAccess){
+    if (correctAccess) {
         //Update the information in the mongodb database
         console.log("Updating the database")
         updateDatabase(today_date.toISOString());
@@ -146,8 +146,9 @@ async function getCasesFile() {
 /**
  * Update the previous information about the covid cases of the health zones
  */
+
 /* istanbul ignore next */
-function  updateDatabase(date) {
+function updateDatabase(date) {
     let workbook = new Excel.Workbook();
     try {
         workbook.xlsx.readFile(filePath).then(async function () {
@@ -166,33 +167,32 @@ function  updateDatabase(date) {
             let index_column = startinit + 1;
             while (index_column < limit) {
                 // Tries to read the data in the table
-                try{
+                try {
                     let row = worksheet.getRow(index_column);
                     // Just getting the name and the new cases
                     let ZonaSalud = row.getCell(2).value;
-                    if(ZonaSalud != null){
+                    if (ZonaSalud != null) {
                         let newcases = row.getCell(3).value;
                         // Map the name of the district with a health zone
-                        hz.updateCovidHealthzone(ZonaSalud, newcases,updateRadius(newcases),date).then(async function (district) {
+                        hz.updateCovidHealthzone(ZonaSalud, newcases, updateRadius(newcases), date).then(async function (district) {
                             // A District found
-                        }).catch((e) =>{
-                            if(!e.includes('Not found:')){
-                                console.log({ error: "Error updating the data of a district" + e })
+                        }).catch((e) => {
+                            if (!e.includes('Not found:')) {
+                                console.log({error: "Error updating the data of a district" + e})
                             }
                         });
 
                     }
-                }
-                catch (e) {
+                } catch (e) {
                     //Something about the reading goes wrong
-                    console.log({ error: e })
+                    console.log({error: e})
                 }
                 index_column = index_column + 1;
             }
 
         });
-    }catch(error) {
-        console.log("Error getting the information HealthZone" )
+    } catch (error) {
+        console.log("Error getting the information HealthZone")
         console.log({error: error})
     }
 
@@ -202,13 +202,14 @@ function  updateDatabase(date) {
  * Random way to get the value of the radius
  * @param cases
  */
+
 /* istanbul ignore next */
 function updateRadius(cases) {
     let radius = (cases * 15);
-    if(radius < 50){
+    if (radius < 50) {
         radius = 50;
     }
-    if(radius > 500){
+    if (radius > 500) {
         radius = 500;
     }
     return radius;
@@ -219,7 +220,7 @@ function updateRadius(cases) {
  * @param cell
  * @returns {*}
  */
-function getFinal(cell){
+function getFinal(cell) {
     return (cell != null && (cell.includes('Total') || cell.includes('TOTAL')));
 
 }
@@ -229,7 +230,7 @@ function getFinal(cell){
  * @param cell
  * @returns {*}
  */
-function getInit(cell){
+function getInit(cell) {
     return (cell != null && cell.includes('Zona de salud'));
 
 }

@@ -1,19 +1,19 @@
-const mongoose = require( 'mongoose' )
+const mongoose = require('mongoose')
 // Company
 const company = new mongoose.Schema({
-    name : { type: String, required: true},
-    nif : { type : String, required: true},
-    email : { type : String, required: true},
-    password : { type : String, required: true},
-    salt : { type : String, required: true},
-    category: { type: String, required: true},
-    streetnumber:{ type: Number, required: true},
-    street:{ type: String, required: true},
-    zipcode:{ type: Number, required: true},
-    description: { type: String, required: true},
+    name: {type: String, required: true},
+    nif: {type: String, required: true},
+    email: {type: String, required: true},
+    password: {type: String, required: true},
+    salt: {type: String, required: true},
+    category: {type: String, required: true},
+    streetnumber: {type: Number, required: true},
+    street: {type: String, required: true},
+    zipcode: {type: Number, required: true},
+    description: {type: String, required: true},
     // Duration needs to be in **minutes**
-    service_duration: { type: Number, required: true},
-    capacity: { type: Number },
+    service_duration: {type: Number, required: true},
+    capacity: {type: Number},
     // Time slots
     time_slots: {
         monday_1: {type: Array},
@@ -34,51 +34,52 @@ const company = new mongoose.Schema({
     // Schedule of his services
     schedule: {
         monday: {
-            open_1: { type: String},
-            close_1: { type: String},
-            open_2: { type: String},
-            close_2: { type: String}
+            open_1: {type: String},
+            close_1: {type: String},
+            open_2: {type: String},
+            close_2: {type: String}
         },
         tuesday: {
-            open_1: { type: String},
-            close_1: { type: String},
-            open_2: { type: String},
-            close_2: { type: String}
+            open_1: {type: String},
+            close_1: {type: String},
+            open_2: {type: String},
+            close_2: {type: String}
         },
         wednesday: {
-            open_1: { type: String},
-            close_1: { type: String},
-            open_2: { type: String},
-            close_2: { type: String}
+            open_1: {type: String},
+            close_1: {type: String},
+            open_2: {type: String},
+            close_2: {type: String}
         },
         thursday: {
-            open_1: { type: String},
-            close_1: { type: String},
-            open_2: { type: String},
-            close_2: { type: String}
+            open_1: {type: String},
+            close_1: {type: String},
+            open_2: {type: String},
+            close_2: {type: String}
         },
         friday: {
-            open_1: { type: String},
-            close_1: { type: String},
-            open_2: { type: String},
-            close_2: { type: String}
+            open_1: {type: String},
+            close_1: {type: String},
+            open_2: {type: String},
+            close_2: {type: String}
         },
         saturday: {
-            open_1: { type: String},
-            close_1: { type: String},
-            open_2: { type: String},
-            close_2: { type: String}
+            open_1: {type: String},
+            close_1: {type: String},
+            open_2: {type: String},
+            close_2: {type: String}
         },
         sunday: {
-            open_1: { type: String},
-            close_1: { type: String},
-            open_2: { type: String},
-            close_2: { type: String}
+            open_1: {type: String},
+            close_1: {type: String},
+            open_2: {type: String},
+            close_2: {type: String}
         }
     },
-    location:{type: { type: String, required: false}, coordinates: [Number]
+    location: {
+        type: {type: String, required: false}, coordinates: [Number]
     },
-    security_level: { type : Number, required: false}
+    security_level: {type: Number, required: false}
 })
 company.index({coordinates: '2dsphere'})
 

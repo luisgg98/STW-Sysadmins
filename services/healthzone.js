@@ -1,4 +1,5 @@
 const Healthzone = require('../models/healthzone');
+
 /**
  * Update the data related to a health zone
  * @param ZonaSalud
@@ -7,20 +8,19 @@ const Healthzone = require('../models/healthzone');
  * @returns {Promise<void>}
  */
 
-async function updateCovidHealthzone(ZonaSalud, newcases,radius,date) {
-    try{
+async function updateCovidHealthzone(ZonaSalud, newcases, radius, date) {
+    try {
         Healthzone.updateOne(
-            {name:ZonaSalud },
-            { $set:{newcases: newcases,radius:radius, date:date}},
+            {name: ZonaSalud},
+            {$set: {newcases: newcases, radius: radius, date: date}},
             {},
             function (err) {
                 /* istanbul ignore next */
-                if(err){
+                if (err) {
                     throw err;
                 }
             });
-    }
-    catch (e) {
+    } catch (e) {
         console.log(ZonaSalud)
         console.log("Error updating Health Zone: " + e);
     }
@@ -32,18 +32,18 @@ async function updateCovidHealthzone(ZonaSalud, newcases,radius,date) {
  * @param coordinates
  * @returns {Promise<void>}
  */
-async function saveHealthzone(title ,coordinates){
-    try{
-        Healthzone.findOne({name:title},{},{},async function(error,hz) {
-            if(error){
+async function saveHealthzone(title, coordinates) {
+    try {
+        Healthzone.findOne({name: title}, {}, {}, async function (error, hz) {
+            if (error) {
                 throw error;
             }
-            if(hz == null){
+            if (hz == null) {
                 // Change order of coordinates
                 let healthzone = new Healthzone({
                     name: title,
-                    newcases : 0,
-                    radius : 0,
+                    newcases: 0,
+                    radius: 0,
                     location: {
                         type: "Point",
                         coordinates: coordinates
@@ -54,8 +54,7 @@ async function saveHealthzone(title ,coordinates){
         });
 
     }
-        /* istanbul ignore next */
-    catch (e) {
+        /* istanbul ignore next */ catch (e) {
         console.log("Error while starting the Health zone database");
         console.log("Problems with:");
         console.log(e);
@@ -63,7 +62,7 @@ async function saveHealthzone(title ,coordinates){
 }
 
 module.exports.updateCovidHealthzone = updateCovidHealthzone;
-module.exports.saveHealthzone =saveHealthzone;
+module.exports.saveHealthzone = saveHealthzone;
 
 
 

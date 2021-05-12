@@ -99,7 +99,7 @@ paths:
     patch:
       operationId: updateUser
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       tags:
         - "User"
       summary: "Update user data"
@@ -131,7 +131,7 @@ paths:
     delete:
       operationId: deleteUser
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       tags:
         - "User"
       summary: "Delete an user"
@@ -244,7 +244,7 @@ paths:
     patch:
       operationId: updateCompany
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       tags:
         - "Company"
       summary: "Update company data"
@@ -276,7 +276,7 @@ paths:
     delete:
       operationId: deleteCompany
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       tags:
         - "Company"
       summary: "Delete a company"
@@ -477,7 +477,7 @@ paths:
           description: "Company created"
           content:
             application/json:
-               schema:
+              schema:
                 $ref: '#/components/schemas/Service_register'
         "422":
           description: "Wrong email format"
@@ -541,7 +541,7 @@ paths:
         "204":
           description: "Service deleted"
         "404":
-            description: "Service not found"
+          description: "Service not found"
   /companies/{nif}/services/{id}/bookings:
     get:
       operationId: getBookingsFromService
@@ -1648,9 +1648,9 @@ components:
           liked:
             type: boolean
         required:
-            - comment
-            - user_id
-            - stars
+          - comment
+          - user_id
+          - stars
     User_voting:
       type: object
       properties:

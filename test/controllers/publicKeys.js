@@ -6,8 +6,8 @@ let should = chai.should();
 chai.use(chaiHttp);
 
 describe('Testing Public key API', () => {
-    it('Getting captcha Key ',function (done) {
-        const url='/api/captcha/';
+    it('Getting captcha Key ', function (done) {
+        const url = '/api/captcha/';
         chai.request(server)
             .get(url)
             .end((err, res) => {

@@ -10,7 +10,7 @@ const Company = require('mongoose').model('company');
 // The idea is to have a file where the public key and the private
 // key are stored
 
-const pathToKey = path.join(__dirname, '..', 'scripts','id_rsa_pub.pem');
+const pathToKey = path.join(__dirname, '..', 'scripts', 'id_rsa_pub.pem');
 
 //It reads the keys from the file
 const PUB_KEY = fs.readFileSync(pathToKey, 'utf8');
@@ -26,22 +26,20 @@ const options = {
 };
 
 
-let strategy = new JwtStrategy(options, function(jwt_payload, done) {
+let strategy = new JwtStrategy(options, function (jwt_payload, done) {
     //Shown on the console the payload of the token
     // We will assign the `sub` property on the JWT to the database ID of user
-    User.findOne({_id: jwt_payload.sub}, function(err, user) {
-        if(user){
+    User.findOne({_id: jwt_payload.sub}, function (err, user) {
+        if (user) {
             return done(null, user);
-        }
-        else{
-            Company.findOne({_id: jwt_payload.sub},function (err,company) {
+        } else {
+            Company.findOne({_id: jwt_payload.sub}, function (err, company) {
                 if (err) {
                     return done(err, false);
                 }
                 if (company) {
                     return done(null, company);
-                }
-                else {
+                } else {
                     return done(null, false);
                 }
 
@@ -76,15 +74,13 @@ module.exports = {
                     message: err.message,
                     error: err,
                 })
-            }
-            else{
-                if(info){
+            } else {
+                if (info) {
                     res.status(info.status || 401);
                     res.json({
                         error: info.message,
                     })
-                }
-                else{
+                } else {
                     req.result = result;
                     next();
                 }
@@ -97,13 +93,12 @@ module.exports = {
      * @param result
      * @returns {boolean}
      */
-    security: function (id,result) {
-        let accessGranted =false
-        if (result.security_level !== undefined && result.security_level > 1){
+    security: function (id, result) {
+        let accessGranted = false
+        if (result.security_level !== undefined && result.security_level > 1) {
             accessGranted = true
-        }
-        else{
-            if(id == result._id){
+        } else {
+            if (id == result._id) {
                 accessGranted = true
             }
         }
