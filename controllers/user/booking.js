@@ -40,7 +40,7 @@ let create_booking = async (req, res) => {
                                         if (err) {
                                             throw err;
                                         } else {
-                                            company.bookings += 1
+                                            company.bookings = company.bookings + 1
                                             await company.save()
                                             await booking.save();
                                             res.status(200).send(booking)
