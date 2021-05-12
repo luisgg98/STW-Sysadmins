@@ -212,9 +212,18 @@ let update = async (req, res) => {
             if (req.body.capacity) {
                 company.capacity = req.body.capacity
             }
-            if (req.body.schedule) {
-                company.schedule = req.body.schedule
-                company.time_slots = update_time_slots.update_time_slots(company)
+            if (req.body.schedule || req.body.service_duration) {
+                if (req.body.schedule && req.body.service_duration) {
+                    company.schedule = req.body.schedule
+                    company.service_duration = req.body.service_duration
+                    company.time_slots = update_time_slots.update_time_slots(company)
+                } else if (req.body.schedule) {
+                    company.schedule = req.body.schedule
+                    company.time_slots = update_time_slots.update_time_slots(company)
+                } else {
+                    company.service_duration = req.body.service_duration
+                    company.time_slots = update_time_slots.update_time_slots(company)
+                }
             }
             if (req.body.category) {
                 company.category = req.body.category;
