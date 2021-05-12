@@ -109,7 +109,6 @@ describe('Testing Company API', () => {
         chai.request(server)
             .get(url)
             .end((err, res) => {
-                console.log(res.body)
                 res.should.have.status(200);
                 res.body.should.be.a('array');
                 done();
@@ -189,14 +188,12 @@ describe('Testing Company API', () => {
                 let bearer = res.body.token;
                 token_company = bearer;
                 id_company = res.body.company._id;
-                console.log(res.body)
                 chai.request(server)
                     .patch(url + id_company)
                     .send(updated_company)
                     .set({"Authorization": `${bearer}`})
                     .end((err, res) => {
                         if (err) throw err;
-                        console.log(res.body)
                         res.should.have.status(200);
                         done();
                     })
@@ -266,7 +263,6 @@ describe('Testing Company API', () => {
                 res.should.have.status(200);
                 let id_service = res.body._id;
                 //PATCH //companies/{nif}/services/{id}
-                console.log("Updating company service")
                 chai.request(server)
                     .patch(url + company.nif + url_service + '/' + id_service)
                     .send(update_service)
@@ -332,7 +328,6 @@ describe('Testing Company API', () => {
                 let first_service = services[0];
                 first_service.description.should.be.eql(update_service.description);
                 let id = first_service._id;
-                console.log("Deleting a service from a company");
                 chai.request(server)
                     .delete(url + company.nif + url_service + '/' + id)
                     .timeout(5000)
@@ -385,7 +380,6 @@ describe('Testing Company API', () => {
             .get(url + "wrong" + url_service)
             .end((err, res) => {
                 if (err) throw err;
-                console.log(res.body)
                 res.should.have.status(404);
                 done();
 
@@ -398,7 +392,6 @@ describe('Testing Company API', () => {
             .get(url + "wrong")
             .end((err, res) => {
                 if (err) throw err;
-                console.log(res.body)
                 res.should.have.status(404);
                 done();
 

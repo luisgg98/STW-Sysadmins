@@ -13,20 +13,20 @@ let companiesArray = [
         salt: 'salty',
         category: 'Testing',
         description: 'desc',
-        service_duration: 0,
+        service_duration: 15,
         capacity: 3,
+        bookings: 0,
         schedule: {
-            monday: {open_1: "9", close_1: "10"},
-            tuesday: {open_1: "9", close_1: "10"},
-            wednesday: {open_1: "9", close_1: "10"},
-            thursday: {open_1: "9", close_1: "10"},
-            friday: {open_1: "9", close_1: "10"},
-            saturday: {open_1: "9", close_1: "10"},
-            sunday: {open_1: "9", close_1: "10"}
+            monday: {open_1: "9:00", close_1: "10:00"},
+            tuesday: {open_1: "9:00", close_1: "10:00"},
+            wednesday: {open_1: "9:00", close_1: "10:00"},
+            thursday: {open_1: "9:00", close_1: "10:00"},
+            friday: {open_1: "9:00", close_1: "10:00"},
+            saturday: {open_1: "9:00", close_1: "10:00"},
+            sunday: {open_1: "9:00", close_1: "10:00"}
         },
         location: {type: "Point", coordinates: [41.649693, -0.887712]}
     },
-
     {
         name: 'Multiverso Bar',
         nif: '2',
@@ -38,20 +38,20 @@ let companiesArray = [
         salt: 'salty',
         category: 'Testing',
         description: 'desc',
-        service_duration: 0,
+        bookings: 0,
+        service_duration: 15,
         capacity: 3,
         schedule: {
-            monday: {open_1: "9", close_1: "10"},
-            tuesday: {open_1: "9", close_1: "10"},
-            wednesday: {open_1: "9", close_1: "10"},
-            thursday: {open_1: "9", close_1: "10"},
-            friday: {open_1: "9", close_1: "10"},
-            saturday: {open_1: "9", close_1: "10"},
-            sunday: {open_1: "9", close_1: "10"}
+            monday: {open_1: "9:00", close_1: "10:00"},
+            tuesday: {open_1: "9:00", close_1: "10:00"},
+            wednesday: {open_1: "9:00", close_1: "10:00"},
+            thursday: {open_1: "9:00", close_1: "10:00"},
+            friday: {open_1: "9:00", close_1: "10:00"},
+            saturday: {open_1: "9:00", close_1: "10:00"},
+            sunday: {open_1: "9:00", close_1: "10:00"}
         },
         location: {type: "Point", coordinates: [41.649693, -0.887712]}
     },
-
     {
         name: 'Carniceria Maza',
         nif: '3',
@@ -63,16 +63,17 @@ let companiesArray = [
         salt: 'salty',
         category: 'Testing',
         description: 'desc',
+        bookings: 0,
         capacity: 3,
-        service_duration: 0,
+        service_duration: 15,
         schedule: {
-            monday: {open_1: "9", close_1: "10"},
-            tuesday: {open_1: "9", close_1: "10"},
-            wednesday: {open_1: "9", close_1: "10"},
-            thursday: {open_1: "9", close_1: "10"},
-            friday: {open_1: "9", close_1: "10"},
-            saturday: {open_1: "9", close_1: "10"},
-            sunday: {open_1: "9", close_1: "10"}
+            monday: {open_1: "9:00", close_1: "10:00"},
+            tuesday: {open_1: "9:00", close_1: "10:00"},
+            wednesday: {open_1: "9:00", close_1: "10:00"},
+            thursday: {open_1: "9:00", close_1: "10:00"},
+            friday: {open_1: "9:00", close_1: "10:00"},
+            saturday: {open_1: "9:00", close_1: "10:00"},
+            sunday: {open_1: "9:00", close_1: "10:00"}
         },
         location: {type: "Point", coordinates: [41.649693, -0.887712]}
     }];

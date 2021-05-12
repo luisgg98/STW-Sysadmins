@@ -14,6 +14,17 @@ const company = {
     "street": "Calle Francisco de Vitoria",
     "streetnumber": 30,
     "zipcode": 50008,
+    capacity: 3,
+    service_duration: 15,
+    schedule: {
+        monday: {open_1: "9:00", close_1: "10:00"},
+        tuesday: {open_1: "9:00", close_1: "10:00"},
+        wednesday: {open_1: "9:00", close_1: "10:00"},
+        thursday: {open_1: "9:00", close_1: "10:00"},
+        friday: {open_1: "9:00", close_1: "10:00"},
+        saturday: {open_1: "9:00", close_1: "10:00"},
+        sunday: {open_1: "9:00", close_1: "10:00"}
+    },
     "category": "Ocio",
 };
 

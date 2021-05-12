@@ -54,7 +54,6 @@ function calculateTime(open_schedule_1, close_schedule_1, service_duration) {
  * @returns {{}}
  */
 function update_time_slots(company) {
-    console.log("UPDATING TIME SLOTS")
     let times = {};
     let day_times;
     if (company.service_duration > 0) {
