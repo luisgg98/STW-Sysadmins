@@ -36,6 +36,7 @@ router.patch("/:id", jwt_login_strategy.authenticate, ControllerCompany.update)
 router.delete("/:id", jwt_login_strategy.authenticate, ControllerCompany.delete)
 
 router.get("/:nif/bookings", ControllerBooking.company_bookings)
+router.get("/:nif/bookings/capacity", ControllerBooking.remaining_space_by_date)
 
 //==============================
 //      SERVICES

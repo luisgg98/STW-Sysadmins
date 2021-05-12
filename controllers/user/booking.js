@@ -296,11 +296,20 @@ let company_bookings = async (req, res) => {
                 }
             })
         } else if (req.query.date) {
-            Booking.find({company_nif: req.params.nif, date: req.query.date}, async function (err, booking) {
-                if (err) {
-                    throw err
-                } else {
-                    res.send(booking)
+            Company.findOne({nif: req.params.nif}, async function(err, company){
+                if(err){throw err}
+                else {
+                    Booking.find({company_nif: req.params.nif, date: req.query.date}, async function (err, booking) {
+                        if (err) {
+                            throw err
+                        } else {
+                            let remaining_capacity = company.capacity - booking.length
+                            let result = {}
+                            result.capacity = remaining_capacity
+                            result.bookings = booking
+                            res.send(result)
+                        }
+                    })
                 }
             })
         } else if (req.query.time) {
@@ -332,9 +341,173 @@ let company_bookings = async (req, res) => {
     }
 }
 
+/////////////////////////////////////////////////////
+//     REMAINING SPACE IN A DATE FROM COMPANY      //
+/////////////////////////////////////////////////////
+
+let remaining_space_by_date = async(req, res) => {
+    try{
+        if(req.query.date){
+            Company.findOne({nif: req.params.nif},  function(err, company){
+                if(err){throw err}
+                else {
+                    // Parse date
+                    let array_date = req.query.date.split("-")
+                    let year = parseInt(array_date[0])
+                    let month = parseInt(array_date[1]) - 1
+                    let day = parseInt(array_date[2])
+                    let date = new Date(Date.UTC(year, month, day))
+                    // Get time slots from company
+                    let weekly_time_slots = company.time_slots
+                    // Get day from date
+                    let wanted_day = date.getDay()
+                    // Get time slots from that date
+                    let result = { };
+                    if (wanted_day === 1){
+                        if (weekly_time_slots.monday_1.length !== 0){
+                            let booking
+                            for (let i = 0; i < weekly_time_slots.monday_1.length; i ++){
+                                let bookings = Booking.find({company_nif: req.params.nif, date: req.query.date, time: weekly_time_slots.monday_1[i]})
+                                bookings = Array.from(bookings)
+                                result[weekly_time_slots.monday_1[i]] = company.capacity - bookings.length
+                            }
+                        }
+                        if (weekly_time_slots.monday_2.length !== 0){
+                            let booking
+                            for (let i = 0; i < weekly_time_slots.monday_2.length; i ++){
+                                let bookings = Booking.find({company_nif: req.params.nif, date: req.query.date, time: weekly_time_slots.monday_2[i]})
+                                bookings = Array.from(bookings)
+                                result[weekly_time_slots.monday_2[i]] = company.capacity - bookings.length
+                            }
+                        }
+                    }
+                    if (wanted_day === 2){
+                        if (weekly_time_slots.tuesday_1.length !== 0){
+                            let booking
+                            for (let i = 0; i < weekly_time_slots.tuesday_1.length; i ++){
+                                let bookings = Booking.find({company_nif: req.params.nif, date: req.query.date, time: weekly_time_slots.tuesday_1[i]})
+                                bookings = Array.from(bookings)
+                                result[weekly_time_slots.tuesday_1[i]] = company.capacity - bookings.length
+                            }
+                        }
+                        if (weekly_time_slots.tuesday_2.length !== 0){
+                            let booking
+                            for (let i = 0; i < weekly_time_slots.tuesday_2.length; i ++){
+                                let bookings = Booking.find({company_nif: req.params.nif, date: req.query.date, time: weekly_time_slots.tuesday_2[i]})
+                                bookings = Array.from(bookings)
+                                result[weekly_time_slots.tuesday_2[i]] = company.capacity - bookings.length
+                            }
+                        }
+                    }
+                    if (wanted_day === 3){ // Wednesday
+                        // Get time slots from wednesday_1 and wednesday_2
+                        if (weekly_time_slots.wednesday_1.length !== 0){
+                            let booking
+                            for (let i = 0; i < weekly_time_slots.wednesday_1.length; i ++){
+                                let bookings = Booking.find({company_nif: req.params.nif, date: req.query.date, time: weekly_time_slots.wednesday_1[i]})
+                                bookings = Array.from(bookings)
+                                result[weekly_time_slots.wednesday_1[i]] = company.capacity - bookings.length
+                            }
+                        }
+                        if (weekly_time_slots.wednesday_2.length !== 0){
+                            let booking
+                            for (let i = 0; i < weekly_time_slots.wednesday_2.length; i ++){
+                                let bookings = Booking.find({company_nif: req.params.nif, date: req.query.date, time: weekly_time_slots.wednesday_2[i]})
+                                bookings = Array.from(bookings)
+                                result[weekly_time_slots.wednesday_2[i]] = company.capacity - bookings.length
+                            }
+                        }
+                    }
+                    if (wanted_day === 4){
+                        if (weekly_time_slots.thursday_1.length !== 0){
+                            let booking
+                            for (let i = 0; i < weekly_time_slots.thursday_1.length; i ++){
+                                let bookings = Booking.find({company_nif: req.params.nif, date: req.query.date, time: weekly_time_slots.thursday_1[i]})
+                                bookings = Array.from(bookings)
+                                result[weekly_time_slots.thursday_1[i]] = company.capacity - bookings.length
+                            }
+                        }
+                        if (weekly_time_slots.thursday_2.length !== 0){
+                            let booking
+                            for (let i = 0; i < weekly_time_slots.thursday_2.length; i ++){
+                                let bookings = Booking.find({company_nif: req.params.nif, date: req.query.date, time: weekly_time_slots.thursday_2[i]})
+                                bookings = Array.from(bookings)
+                                result[weekly_time_slots.thursday_2[i]] = company.capacity - bookings.length
+                            }
+                        }
+                    }
+                    if (wanted_day === 5){
+                        if (weekly_time_slots.friday_1.length !== 0){
+                            let booking
+                            for (let i = 0; i < weekly_time_slots.friday_1.length; i ++){
+                                let bookings = Booking.find({company_nif: req.params.nif, date: req.query.date, time: weekly_time_slots.friday_1[i]})
+                                bookings = Array.from(bookings)
+                                result[weekly_time_slots.friday_1[i]] = company.capacity - bookings.length
+                            }
+                        }
+                        if (weekly_time_slots.friday_2.length !== 0){
+                            let booking
+                            for (let i = 0; i < weekly_time_slots.friday_2.length; i ++){
+                                let bookings = Booking.find({company_nif: req.params.nif, date: req.query.date, time: weekly_time_slots.friday_2[i]})
+                                bookings = Array.from(bookings)
+                                result[weekly_time_slots.friday_2[i]] = company.capacity - bookings.length
+                            }
+                        }
+                    }
+                    if (wanted_day === 6){
+                        if (weekly_time_slots.saturday_1.length !== 0){
+                            let booking
+                            for (let i = 0; i < weekly_time_slots.saturday_1.length; i ++){
+                                let bookings = Booking.find({company_nif: req.params.nif, date: req.query.date, time: weekly_time_slots.saturday_1[i]})
+                                bookings = Array.from(bookings)
+                                result[weekly_time_slots.saturday_1[i]] = company.capacity - bookings.length
+                            }
+                        }
+                        if (weekly_time_slots.saturday_2.length !== 0){
+                            let booking
+                            for (let i = 0; i < weekly_time_slots.saturday_2.length; i ++){
+                                let bookings = Booking.find({company_nif: req.params.nif, date: req.query.date, time: weekly_time_slots.saturday_2[i]})
+                                bookings = Array.from(bookings)
+                                result[weekly_time_slots.saturday_2[i]] = company.capacity - bookings.length
+                            }
+                        }
+                    }
+                    if (wanted_day === 0){
+                        if (weekly_time_slots.sunday_1.length !== 0){
+                            let booking
+                            for (let i = 0; i < weekly_time_slots.sunday_1.length; i ++){
+                                let bookings = Booking.find({company_nif: req.params.nif, date: req.query.date, time: weekly_time_slots.sunday_1[i]})
+                                bookings = Array.from(bookings)
+                                result[weekly_time_slots.sunday_1[i]] = company.capacity - bookings.length
+                            }
+                        }
+                        if (weekly_time_slots.sunday_2.length !== 0){
+                            let booking
+                            for (let i = 0; i < weekly_time_slots.sunday_2.length; i ++){
+                                let bookings = Booking.find({company_nif: req.params.nif, date: req.query.date, time: weekly_time_slots.sunday_2[i]})
+                                bookings = Array.from(bookings)
+                                result[weekly_time_slots.sunday_2[i]] = company.capacity - bookings.length
+                            }
+                        }
+                    }
+                    res.send(result)
+                }
+            })
+        }
+        else{
+            res.status(405).send({error: "Date missing"})
+        }
+    }
+    catch {
+        res.status(500)
+        res.send({error: "Internal server error"})
+    }
+}
+
 exports.create_booking = create_booking
 exports.get_bookings = get_bookings
 exports.update_bookings = update_bookings
 exports.delete_booking = delete_booking
 exports.services_bookings = services_bookings
 exports.company_bookings = company_bookings
+exports.remaining_space_by_date = remaining_space_by_date
