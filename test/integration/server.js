@@ -9,7 +9,7 @@ describe('Integration test',function () {
         chai.request(server)
             .get('/')
             .end((err, res) => {
-                res.should.have.status(200);
+                res.should.have.status(418);
                 done();
             });
     });
