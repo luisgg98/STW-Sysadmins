@@ -20,6 +20,15 @@ def create_user(payload):
     return r.json()['_id']
 
 
+def log_user(payload):
+    url = 'https://stw-zitation.herokuapp.com/api/users/login'
+    headers = {'content-type': 'application/json'}
+    r = requests.post(url, data=json.dumps(payload), headers=headers)
+    if r.status_code != 200:
+        print('Something went wrong with user: {}'.format(payload['first_name']))
+    return r.json()['token']
+
+
 def update_company_return_token(company, update):
     url = 'https://stw-zitation.herokuapp.com/api/companies/login'
     headers = {'content-type': 'application/json'}
@@ -73,25 +82,52 @@ def create_master():
     r = requests.post(url, data=json.dumps(payload), headers=headers)
 
 
+# url = 'https://stw-zitation.herokuapp.com/api/api/companies/' + company.nif + '/opinions'
+def populate_opinions(companies, users, tokens):
+    opinions = [
+        {'comment': 'Me gusta este lugar.', 'user_id': users[0], 'stars': 5},
+        {'comment': 'No me gusta este lugar.', 'user_id': users[1], 'stars': 0},
+        {'comment': 'Es un lugar maravilloso.', 'user_id': users[2], 'stars': 3},
+        {'comment': 'Me turbo flipa.', 'user_id': users[3], 'stars': 5},
+    ]
+    for x in companies:
+        url = 'https://stw-zitation.herokuapp.com/api/companies/' + x.nif + '/opinions'
+        for i in range(len(opinions)):
+            headers = {'content-type': 'application/json', 'Authorization': tokens[i]}
+            r = requests.patch(url, data=json.dumps(opinions[i]), headers=headers)
+            if r.status_code != 201:
+                print('Error updating: commenting')
+            print(i)
+
+
 # Create master
 print('Creating users...')
 create_master()
 ## Populate USERS collection
-isabel = {'phone': '676416354', 'first_name': 'Isabel', 'last_name': 'Casado', 'email': 'isabel85@gmail.es',
+isabel = {'phone': '676416354', 'first_name': 'Isabel', 'last_name': 'Casado', 'email': 'isabel85Wrong@gmail.es',
           'password': 'Isabel1234-'}
 isabel_id = create_user(isabel)
+isabel_token = log_user(isabel)
 
-facundo = {'phone': '678010101', 'first_name': 'Facundo', 'last_name': 'Diaz', 'email': 'facu90@gmail.com',
+facundo = {'phone': '678010101', 'first_name': 'Facundo', 'last_name': 'Diaz', 'email': 'facu90Wrong@gmail.com',
            'password': 'Facundo1234-'}
 facundo_id = create_user(facundo)
+facundo_token = log_user(facundo)
 
-borja = {'phone': '679010101', 'first_name': 'Borja', 'last_name': 'Pavon', 'email': 'pavon90@gmail.com',
+borja = {'phone': '679010101', 'first_name': 'Borja', 'last_name': 'Pavon', 'email': 'pavon90Wrong@gmail.com',
          'password': 'Borja1234-'}
 borja_id = create_user(borja)
+borja_token = log_user(borja)
 
-ramon = {'phone': '680010101', 'first_name': 'Ramon', 'last_name': 'Emilio', 'email': 'ramon90@gmail.com',
+ramon = {'phone': '680010101', 'first_name': 'Ramon', 'last_name': 'Emilio', 'email': 'ramon90Wrong@gmail.com',
          'password': 'Ramon1234-'}
 ramon_id = create_user(ramon)
+ramon_token = log_user(ramon)
+
+miguel = {'phone': '610010101', 'first_name': 'Miguel', 'last_name': 'Maltorres', 'email': 'maltorres90Wrong@gmail.com',
+          'password': 'Maltorres1234-'}
+miguel_id = create_user(miguel)
+miguel_token = log_user(miguel)
 
 print('Users created!')
 ## Populate COMPANIES collection
@@ -271,6 +307,7 @@ print('Creating services...')
 services_1 = [{'description': 'Reservar campo de futbol sala', 'price': 11},
               {'description': 'Reservar campo de balonmano', 'price': 10},
               {'description': 'Reservar pista para baloncesto', 'price': 9},
+              {'description': 'Reservar pista de padel', 'price': 11},
               {'description': 'Reservar campo de waterpolo', 'price': 11},
               {'description': 'Reservar sala de baile', 'price': 11}]
 
@@ -298,10 +335,73 @@ for x in services_2:
     id = create_service(ocio2['nif'], x, ocio2_token)
     services_ocio2_id.append(id)
 
-
 services_3 = [{'description': 'Tarea administrativa', 'price': 11},
               {'description': 'Visita guiada', 'price': 10}]
 
+services_admin1_id = []
+for x in services_3:
+    id = create_service(admin1['nif'], x, admin1_token)
+    services_admin1_id.append(id)
+
+services_admin2_id = []
+for x in services_3:
+    id = create_service(admin2['nif'], x, admin2_token)
+    services_admin2_id.append(id)
+
+services_4 = [{'description': 'Hora para comprar', 'price': 11}]
+
+services_comercio1_id = []
+for x in services_4:
+    id = create_service(comercio1['nif'], x, comercio1_token)
+    services_admin1_id.append(id)
+
+services_comercio2_id = []
+for x in services_4:
+    id = create_service(comercio2['nif'], x, comercio2_token)
+    services_comercio2_id.append(id)
+
+services_salud1_id = []
+for x in services_4:
+    id = create_service(salud1['nif'], x, salud1_token)
+    services_salud1_id.append(id)
+
+services_salud2_id = []
+for x in services_4:
+    id = create_service(salud2['nif'], x, salud2_token)
+    services_salud2_id.append(id)
 
 print('Services created!')
+print('Creating Opinions...')
+
+print('Opinions created!')
+companies = [
+    ocio1.nif,
+    ocio2.nif,
+    deportivo1.nif,
+    deportivo2.nif,
+    salud1.nif,
+    salud2.nif,
+    comercio1.nif,
+    comercio2.nif,
+    admin1.nif,
+    admino2.nif,
+]
+
+users = [
+    facundo_id,
+    miguel_id,
+    isabel_id,
+    borja_id
+]
+tokens = [
+    facundo_token,
+    miguel_token,
+    isabel_token,
+    borja_token
+
+]
+
+populate_opinions(companies, users, tokens)
+print('Opinions populated!')
+
 ##BOOKING

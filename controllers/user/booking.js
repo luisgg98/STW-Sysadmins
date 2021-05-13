@@ -46,7 +46,7 @@ let create_booking = async (req, res) => {
                                                 await booking.save()
                                                     .catch((e) => {
                                                         res.status(405)
-                                                        res.send({error: "Wrong json format, check docs for further info /api-doc"})
+                                                        res.send({error: "It was no possible to book it, something is missing"})
                                                         console.log(e)
                                                     });
                                                 res.status(201).send(booking)
@@ -54,8 +54,8 @@ let create_booking = async (req, res) => {
                                                 sendReminder(user, booking, company);
                                             })
                                             .catch((e) => {
-                                                res.status(405)
-                                                res.send({error: "Wrong json format, check docs for further info /api-doc"})
+                                                res.status(404)
+                                                res.send({error: "Company was not found"})
                                                 console.log(e)
                                             });
 
