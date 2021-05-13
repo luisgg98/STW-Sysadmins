@@ -119,7 +119,11 @@ let register = async (req, res) => {
                                             .then(() => {
                                                     res.status(201).send(company)
                                                 }
-                                            )
+                                            ).catch((e) => {
+                                                res.status(405)
+                                                res.send({error: "Wrong json format, check docs for further info /api-doc"})
+                                                console.log(e)
+                                            })
                                 }
                             );
                     } else {
@@ -226,8 +230,15 @@ let update = async (req, res) => {
                     async (coordinates) => {
                         company.lat = coordinates.latitude
                         company.long = coordinates.long
-                        await company.save();
-                        res.send(company);
+                        await company.save()
+                            .then(() => {
+                                    res.status(200).send(company)
+                                }
+                            ).catch((e) => {
+                                res.status(405)
+                                res.send({error: "Wrong json format, check docs for further info /api-doc"})
+                                console.log(e)
+                            })
                     }
                 );
         }
@@ -288,7 +299,14 @@ let create_service = async (req, res, next) => {
                 price: req.body.price
             })
             await service.save()
-            res.status(201).send(service)
+                .then(() => {
+                        res.status(201).send(service)
+                    }
+                ).catch((e) => {
+                    res.status(405)
+                    res.send({error: "Wrong json format, check docs for further info /api-doc"})
+                    console.log(e)
+                })
         }
     } catch {
         res.status(405)

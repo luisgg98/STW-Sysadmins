@@ -81,7 +81,11 @@ let write_opinion = async (req, res, next) => {
                                         });
                                         opinion.save().then(() => {
                                             res.status(201).send(opinion)
-                                        });
+                                        }).catch((e) => {
+                                            res.status(405)
+                                            res.send({error: "Wrong json format, check docs for further info /api-doc"})
+                                            console.log(e)
+                                        })
                                     } else {
                                         res.status(404);
                                         console.log("Error while finding a user to give their opinion");
@@ -179,8 +183,16 @@ let vote_opinion = async (req, res, next) => {
                                                         "liked": true
                                                     }
                                                     res.send(new_opinion);
+                                                }).catch((e) => {
+                                                    res.status(405)
+                                                    res.send({error: "Wrong json format, check docs for further info /api-doc"})
+                                                    console.log(e)
                                                 });
-                                        })
+                                        }).catch((e) => {
+                                            res.status(405)
+                                            res.send({error: "Wrong json format, check docs for further info /api-doc"})
+                                            console.log(e)
+                                        });
                                     } else {
                                         res.status(401);
                                         console.log("Error while voting an Opinion, YOU HAVE ALREADY VOTE");

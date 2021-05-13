@@ -31,7 +31,14 @@ let register = async (req, res) => {
                         security_level: 1
                     })
                     await user.save()
-                    res.status(201).send(user)
+                        .then(() => {
+                            res.status(201).send(user)
+                        })
+                        .catch((e) => {
+                            res.status(405)
+                            res.send({error: "Wrong json format, check docs for further info /api-doc"})
+                            console.log(e)
+                        });
                 } else {
                     res.status(405)
                     res.send({error: "Wrong email format!"})

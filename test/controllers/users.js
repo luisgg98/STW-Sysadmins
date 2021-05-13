@@ -77,6 +77,24 @@ describe('Testing User API', () => {
             })
     }));
 
+    //router.post("/", ControllerUser.register)
+    it('it should not create the same user using POST, missing parameters', (done => {
+        let user_no_required = {
+            "first_name": "string",
+            "email": "user@example.com",
+            "password": "string",
+            "phone": 993886789
+        };
+        chai.request(server)
+            .post(url)
+            .send(user_no_required)
+            .end((err, res) => {
+                if (err) throw err;
+                res.should.have.status(405);
+                done();
+            })
+    }));
+
     //wrong_user
 
     it('it should not create the same user using POST, WRONG FORMAT', (done => {

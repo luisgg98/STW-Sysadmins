@@ -161,6 +161,35 @@ describe('Testing Company API', () => {
             })
     }));
 
+    it('It should  not create a new company using POST,missing parameter', (done => {
+        let company_noparameters = {
+            "nif": "B99995678",
+            "name": "Cafetería Lamarula",
+            "email": "user@example.com",
+            "password": "string",
+            "street": "Calle Francisco de Vitoria",
+            'schedule': {
+                'monday': {'open_1': '9:00', 'close_1': '21:00'},
+                'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                'sunday': {'open_1': '9:00', 'close_1': '21:00'}
+            },
+            "zipcode": 50008,
+            "category": "Ocio",
+        };
+        chai.request(server)
+            .post(url)
+            .send(company_noparameters)
+            .end((err, res) => {
+                if (err) throw err;
+                res.should.have.status(405);
+                done();
+            })
+    }));
+
 
     it('It should  not create a new company using POST, wrong Category', (done => {
         chai.request(server)

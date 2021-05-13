@@ -41,11 +41,24 @@ let create_booking = async (req, res) => {
                                         throw err;
                                     } else {
                                         company.bookings = parseInt(company.bookings) + 1;
-                                        await company.save();
-                                        await booking.save();
-                                        res.status(201).send(booking)
-                                        // Send email
-                                        sendReminder(user, booking, company);
+                                        await company.save()
+                                            .then(async () => {
+                                                await booking.save()
+                                                    .catch((e) => {
+                                                        res.status(405)
+                                                        res.send({error: "Wrong json format, check docs for further info /api-doc"})
+                                                        console.log(e)
+                                                    });
+                                                res.status(201).send(booking)
+                                                // Send email
+                                                sendReminder(user, booking, company);
+                                            })
+                                            .catch((e) => {
+                                                res.status(405)
+                                                res.send({error: "Wrong json format, check docs for further info /api-doc"})
+                                                console.log(e)
+                                            });
+
                                     }
                                 });
                             }
@@ -146,20 +159,23 @@ let update_bookings = async (req, res) => {
                                         throw err;
                                     } else {
                                         if (company) {
-                                            await booking.save();
-                                            res.status(200).send(booking)
-                                            // Send email
-                                            sendReminder(user, booking, company);
+                                            await booking.save()
+                                                .then(() => {
+                                                    res.status(200).send(booking)
+                                                    // Send email
+                                                    sendReminder(user, booking, company);
+                                                })
+                                                .catch((e) => {
+                                                    res.status(405)
+                                                    res.send({error: "Wrong json format, check docs for further info /api-doc"})
+                                                    console.log(e)
+                                                })
                                         }
                                     }
-
                                 })
-
                             }
                         }
-
                     })
-
                 } else {
                     res.status(404)
                     res.send({error: "Booking not found"})
@@ -187,8 +203,13 @@ let delete_booking = async (req, res) => {
                 if (booking) {
                     Company.findOne({nif: booking.company_nif}, async function (err, company) {
                         company.bookings -= 1
-                        await company.save()
-                        res.status(204).send()
+                        await company.save().then(() => {
+                            res.status(204).send()
+                        }).catch((e) => {
+                            res.status(405)
+                            res.send({error: "Wrong json format, check docs for further info /api-doc"})
+                            console.log(e)
+                        })
                     })
                 } else {
                     res.status(404)
