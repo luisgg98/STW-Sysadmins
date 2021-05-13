@@ -9,7 +9,7 @@ chai.use(chaiHttp);
 const company = {
     "nif": "Y12345678",
     "name": "Cafetería Lamarula",
-    "email": "user@example.com",
+    "email": "yohaciendotesting@example.com",
     "password": "string",
     "street": "Calle Francisco de Vitoria",
     "streetnumber": 30,
@@ -31,7 +31,7 @@ const company = {
 const user = {
     "first_name": "string",
     "last_name": "string",
-    "email": "user@example.com",
+    "email": "yohaciendotesting@example.com",
     "password": "string",
     "phone": 823456789
 }
@@ -55,11 +55,13 @@ describe('Testing Opinion API', () => {
             .send(company)
             .end((err, res) => {
                 if (err) throw err;
+                console.log(res.body)
                 chai.request(server)
                     .post(url_user)
                     .send(user)
                     .end((err, res) => {
                         if (err) throw err;
+                        console.log(res.body)
                         opinion.user_id = res.body._id;
                         done();
                     })
@@ -90,6 +92,7 @@ describe('Testing Opinion API', () => {
                             console.log(err);
                             throw err;
                         } else {
+                            console.log(res.body)
                             res.should.have.status(201);
                             opinion_id = res.body._id;
                             done();
@@ -130,7 +133,7 @@ describe('Testing Opinion API', () => {
                 if (err) {
                     throw err;
                 } else {
-                    res.should.have.status(401);
+                    res.should.not.have.status(200);
                     done();
                 }
             });

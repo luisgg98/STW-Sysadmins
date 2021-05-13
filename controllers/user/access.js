@@ -3,7 +3,6 @@ const validate_email = require('../../services/validate_email')
 const User = require('../../models/user')
 const jwt_login_strategy = require('../../config/passport');
 
-// TODO can't be two users with same phone number
 /**
  *
  * @param req
@@ -11,46 +10,39 @@ const jwt_login_strategy = require('../../config/passport');
  * @returns {Promise<void>}
  */
 let register = async (req, res) => {
-    try {
-        // Test if exists another user with the same phone
-        User.count({phone: req.body.phone}, async function (err, count) {
-            if (count > 0) {
-                res.status(409)
-                res.send({error: "User already exists"})
-            } else {
-                // Hash password with a salt
-                let password = utils.genPassword(req.body.password)
-                if (validate_email.validateEmail(req.body.email)) {
-                    const user = new User({
-                        first_name: req.body.first_name,
-                        last_name: req.body.last_name,
-                        phone: req.body.phone,
-                        email: req.body.email,
-                        password: password.hash,
-                        salt: password.salt,
-                        security_level: 1
+    // Test if exists another user with the same phone
+    User.count({email: req.body.email}).then((count) => {
+        if (count > 0) {
+            res.status(409).send({error: "User already exists"})
+        } else {
+            // Hash password with a salt
+            let password = utils.genPassword(req.body.password)
+            if (validate_email.validateEmail(req.body.email)) {
+                const user = new User({
+                    first_name: req.body.first_name,
+                    last_name: req.body.last_name,
+                    phone: req.body.phone,
+                    email: req.body.email,
+                    password: password.hash,
+                    salt: password.salt,
+                    security_level: 1
+                });
+                user.save()
+                    .then(() => {
+                        res.status(201).send(user)
                     })
-                    await user.save()
-                        .then(() => {
-                            res.status(201).send(user)
-                        })
-                        .catch((e) => {
-                            res.status(405)
-                            res.send({error: "Wrong json format, check docs for further info /api-doc"})
-                            console.log(e)
-                        });
-                } else {
-                    res.status(405)
-                    res.send({error: "Wrong email format!"})
-                }
+                    .catch((e) => {
+                        res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
+                        console.log(e)
+                    });
+            } else {
+                res.status(405).send({error: "Wrong email format!"})
             }
-        })
+        }
+    }).catch((e) => {
+        res.status(422).send({error: "Wrong json format, check docs for further info /api-docs"})
+    })
 
-    }
-        /* istanbul ignore file */ catch {
-        res.status(422)
-        res.send({error: "Wrong json format, check docs for further info /api-docs"})
-    }
 }
 
 /**
@@ -60,15 +52,15 @@ let register = async (req, res) => {
  * @returns {Promise<void>}
  */
 let fetchUser = async (req, res) => {
-    try {
-        const user = await User.findOne({phone: req.params.phone})
-        res.status(200)
-        // TODO return user's email??
-        res.send({first_name: user.first_name, last_name: user.last_name})
-    } catch {
-        res.status(404)
-        res.send({error: "User not found"})
-    }
+    User.find({email: req.params.email}).then((user) => {
+        if (user) {
+            res.status(200).send(user)
+        } else {
+            res.status(404).send({error: "User not found"})
+        }
+    }).catch(() => {
+        res.status(500).send({error: "Internal error server"})
+    })
 }
 
 /**
@@ -78,28 +70,23 @@ let fetchUser = async (req, res) => {
  * @returns {Promise<void>}
  */
 let login = async (req, res) => {
-    try {
-        const user = await User.findOne({email: req.body.email})
-        if (utils.validPassword(req.body.password, user.password, user.salt)) {
-            res.status(200)
-            const tokenObject = utils.issueJWT(user);
-            res.send({
-                user: {
-                    "first_name": user.first_name,
-                    "last_name": user.last_name,
-                    "phone": user.phone,
-                    "email": user.email,
-                    "id": user._id
-                }, token: tokenObject.token, expiresIn: tokenObject.expires
-            })
+    User.findOne({email: req.body.email}).then((user) => {
+        if (user) {
+            if (utils.validPassword(req.body.password, user.password, user.salt)) {
+                const tokenObject = utils.issueJWT(user);
+                res.status(200).send({
+                    user: user, token: tokenObject.token, expiresIn: tokenObject.expires
+                })
+            } else {
+                res.status(401).send({error: "Incorrect login"})
+            }
         } else {
-            res.status(401)
-            res.send({error: "Incorrect login"})
+            res.status(404).send({error: "User not found"})
         }
-    } catch {
-        res.status(404)
-        res.send({error: "User not found"})
-    }
+    }).catch((e) => {
+        console.log(e)
+        res.status(500).send({error: "Internal error server"})
+    })
 }
 
 /**
@@ -111,8 +98,7 @@ let login = async (req, res) => {
 let update = async (req, res) => {
     try {
         if (!jwt_login_strategy.security(req.params.id, req.result)) {
-            res.status(401)
-            res.send({error: "Wrong User Access denied"})
+            res.status(401).send({error: "Wrong User Access denied"})
         } else {
             let user;
             if (req.result.security_level !== undefined && req.result.security_level > 1) {
@@ -131,17 +117,16 @@ let update = async (req, res) => {
                 user.password = password.hash
                 user.salt = password.salt
             }
-
-            await user.save()
-            res.send(user)
+            await user.save().then(() => {
+                res.send(user)
+            }).catch(() => {
+                res.status(500).send({error: "Internal error"})
+            })
         }
-
     } catch {
-        res.status(404)
-        res.send({error: "User not found"})
+        res.status(404).send({error: "User not found"})
     }
 }
-
 /**
  *
  * @param req
@@ -149,18 +134,14 @@ let update = async (req, res) => {
  * @returns {Promise<void>}
  */
 let delete_user = async (req, res) => {
-    try {
-        if (!jwt_login_strategy.security(req.params.id, req.result)) {
-            res.status(401)
-            res.send({error: "Wrong User Access denied"})
-        } else {
-            await User.deleteOne({_id: req.params.id})
+    if (!jwt_login_strategy.security(req.params.id, req.result)) {
+        res.status(401).send({error: "Wrong User Access denied"})
+    } else {
+        User.deleteOne({_id: req.params.id}).then(() => {
             res.status(204).send()
-        }
-
-    } catch {
-        res.status(404)
-        res.send({error: "User not found"})
+        }).catch((e) => {
+            res.status(404).send({error: "User not found"})
+        })
     }
 }
 
@@ -171,14 +152,15 @@ let delete_user = async (req, res) => {
  * @returns {Promise<void>}
  */
 let getAllUsers = async (req, res) => {
-    try {
-        const users = await User.find({}, {first_name: true, last_name: true})
-        res.send(users)
-    }
-        /* istanbul ignore file */ catch {
-        res.status(500)
-        res.send({error: "Internal server error"})
-    }
+    User.find({}).then((users) => {
+        if (users) {
+            res.send(users)
+        } else {
+            res.status(404).send({error: "Users not found"})
+        }
+    }).catch(() => {
+        res.status(500).send({error: "Internal server error"})
+    })
 }
 
 exports.register = register

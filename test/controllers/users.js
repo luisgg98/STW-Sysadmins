@@ -8,18 +8,18 @@ chai.use(chaiHttp);
 let user = {
     "first_name": "string",
     "last_name": "string",
-    "email": "user@example.com",
+    "email": "usertesting12345@example.com",
     "password": "string",
-    "phone": 123456789
+    "phone": 773456789
 };
 
 
 let user_update = {
     "first_name": "This is a test",
     "last_name": "This is a test",
-    "email": "user@example.com",
+    "email": "usertesting12345@example.com",
     "password": "string",
-    "phone": 123456789
+    "phone": 773456789
 };
 
 
@@ -90,7 +90,7 @@ describe('Testing User API', () => {
             .send(user_no_required)
             .end((err, res) => {
                 if (err) throw err;
-                res.should.have.status(405);
+                res.should.have.status(409);
                 done();
             })
     }));
@@ -146,7 +146,7 @@ describe('Testing User API', () => {
                 res.should.have.status(200);
                 let bearer = res.body.token;
                 token_user = bearer;
-                id_user = res.body.user.id;
+                id_user = res.body.user._id;
                 chai.request(server)
                     .patch(url + id_user)
                     .send({"last_name": "This is a test"})
@@ -186,26 +186,15 @@ describe('Testing User API', () => {
     }))
 
     //router.get("/:phone", ControllerUser.fetchUser)
-    it('Ir should fetch a user by their phone', (done => {
+    it('Ir should fetch a user by their email', (done => {
         chai.request(server)
-            .get(url + user.phone.toString())
+            .get(url + user.email.toString())
             .end((err, res) => {
                 res.should.have.status(200);
                 done();
             });
 
     }));
-
-
-    it('Ir should fetch a user by their phone', (done => {
-        chai.request(server)
-            .get(url + "wrong")
-            .end((err, res) => {
-                res.should.have.status(404);
-                done();
-            });
-
-    }))
 
     it('It should delete a new user using DELETE', (done => {
         chai.request(server)

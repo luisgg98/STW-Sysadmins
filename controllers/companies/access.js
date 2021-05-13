@@ -18,11 +18,15 @@ let get = async (req, res, next) => {
         if (req.query.name) {
             // Fetch just one company
             let name = req.query.name
-            Company.find({name:name}).then((company)=>{
-                res.send(company)
-            }).catch((err)=>{
-                res.status(404)
-                res.send({error: "Not found company"})
+            Company.find({name: name}).then((company) => {
+                if (company) {
+                    res.send(company)
+                } else {
+                    res.status(404).send({error: "Not found company"})
+                }
+            }).catch((err) => {
+                console.log(err)
+                res.status(500).send({error: "Internal error server"})
             })
         } else {
             // Fetch all companies
@@ -37,9 +41,9 @@ let get = async (req, res, next) => {
             })
             res.send(companies)
         }
-    } catch {
         /* istanbul ignore next */
-
+    } catch {
+        res.status(500).send({error: "Internal error server"})
     }
 }
 //  TODO FILTRAR POR CATEGORIA
@@ -51,9 +55,14 @@ let get = async (req, res, next) => {
  */
 let fetchCompany = async (req, res) => {
     Company.findOne({nif: req.params.nif}).catch((err) => {
-        res.status(404).send({error: "Company not found"})
+        res.status(500).send({error: "Internal error server"})
+        console.log(err)
     }).then((company) => {
-        res.status(200).send(company);
+        if (company) {
+            res.status(200).send(company);
+        } else {
+            res.status(404).send({error: "Company not found"})
+        }
     })
 }
 
@@ -130,20 +139,24 @@ let register = async (req, res) => {
  */
 let login = async (req, res) => {
     Company.findOne({email: req.body.email}).then((company) => {
-        if (utils.validPassword(req.body.password, company.password, company.salt)) {
-            const tokenObject = utils.issueJWT(company);
-            res.send({
-                company: company,
-                token: tokenObject.token, expiresIn: tokenObject.expires
-            })
-        } else {
-            res.status(401)
-            res.send({error: "Incorrect login"})
-        }
+        if (company) {
+            if (utils.validPassword(req.body.password, company.password, company.salt)) {
+                const tokenObject = utils.issueJWT(company);
+                res.send({
+                    company: company,
+                    token: tokenObject.token, expiresIn: tokenObject.expires
+                })
+            } else {
+                res.status(401)
+                res.send({error: "Incorrect login"})
+            }
 
+        } else {
+            res.status(404).send({error: "Company not found"})
+        }
     }).catch((e) => {
         console.log(e)
-        res.status(404).send({error: "Company not found"})
+        res.status(500).send({error: "Internal error server"})
     })
 }
 
@@ -265,25 +278,27 @@ let delete_company = async (req, res) => {
 let create_service = async (req, res, next) => {
     // Check if company exists
     Company.findOne({nif: req.params.nif}).then((company) => {
-        const service = new Service({
-            company: req.params.nif,
-            description: req.body.description,
-            price: req.body.price
-        })
-        service.save()
-            .then(() => {
-                    res.status(201).send(service)
-                }
-            ).catch((e) => {
-            res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
-            console.log(e)
-        })
-
+        if (company) {
+            const service = new Service({
+                company: req.params.nif,
+                description: req.body.description,
+                price: req.body.price
+            })
+            service.save()
+                .then(() => {
+                        res.status(201).send(service)
+                    }
+                ).catch((e) => {
+                res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
+                console.log(e)
+            })
+        } else {
+            res.status(404).send({error: "Company not found"})
+        }
     }).catch((e) => {
         console.log(e)
-        res.status(404).send({error: "Company not found"})
+        res.status(500).send({error: "Internal error server"})
     })
-
 }
 
 /**
@@ -294,19 +309,24 @@ let create_service = async (req, res, next) => {
  * @returns {Promise<void>}
  */
 let get_services = async (req, res, next) => {
+    console.log("a")
     if (req.query.id) {
+        console.log("b")
         // Fetch just one service
         let id = req.query.id
         Company.findOne({nif: req.params.nif}).catch((e) => {
             res.status(404).send({error: "Company not found"})
-            console.log(e)
         }).then((company) => {
-            Service.findOne({_id: id}).then((service) => {
-                res.send({services: service, time_slots: company.time_slots})
-            }).catch((e) => {
-                res.status(404).send({error: "Service not found"})
-                console.log(e)
-            })
+            if (company) {
+                Service.findOne({_id: id}).then((service) => {
+                    res.send({services: service, time_slots: company.time_slots})
+                }).catch((e) => {
+                    res.status(404).send({error: "Service not found"})
+                    console.log(e)
+                })
+            } else {
+                res.status(404).send({error: "Company not found"})
+            }
         })
     } else if (req.params.nif != "," || req.params.nif != undefined) {
         // Fetch all services from a company
@@ -315,14 +335,22 @@ let get_services = async (req, res, next) => {
             res.status(404).send({error: "Company not found"})
             console.log(err)
         }).then((company) => {
-            Service.find({company: req.params.nif}).catch((err) => {
-                res.status(404).send({error: "Service not found"})
-                console.log(err)
-            }).then((services) => {
-                res.send({services: services, time_slots: company.time_slots})
-            })
+            if (company) {
+                Service.find({company: req.params.nif})
+                    .catch((err) => {
+                        res.status(500).send({error: "Internal error server"})
+                        console.log(err)
+                    }).then((services) => {
+                    if (services) {
+                        res.send({services: services, time_slots: company.time_slots})
+                    } else {
+                        res.status(404).send({error: "Service not found"})
+                    }
+                })
+            } else {
+                res.status(404).send({error: "Company not found"})
+            }
         })
-
     } else {
         res.status(405)
         res.send({error: "Wrong request, check docs for further info /api-doc"})
@@ -340,25 +368,28 @@ let update_service = async (req, res, next) => {
     Service.findOne({_id: req.params.id})
         .catch((err) => {
             console.log(err)
-            res.status(404).send({error: "Company not found"})
+            res.status(500).send({error: "Internal error server"})
         }).then((service) => {
-        if (req.body.description) {
-            service.description = req.body.description
-        }
-        if (req.body.capacity) {
-            service.capacity = req.body.capacity
-        }
-        if (req.body.price) {
-            service.price = req.body.price
-        }
-        service.save().then(
-            () => {
-                res.send(service)
+        if (service) {
+            if (req.body.description) {
+                service.description = req.body.description
             }
-        ).catch(() => {
-            res.status(405).send({error: "Error updating"})
-        })
-
+            if (req.body.capacity) {
+                service.capacity = req.body.capacity
+            }
+            if (req.body.price) {
+                service.price = req.body.price
+            }
+            service.save().then(
+                () => {
+                    res.send(service)
+                }
+            ).catch(() => {
+                res.status(405).send({error: "Error updating"})
+            })
+        } else {
+            res.status(404).send({error: "Service not found"})
+        }
     })
 }
 

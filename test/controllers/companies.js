@@ -404,7 +404,7 @@ describe('Testing Company API', () => {
             .set({"Authorization": `${token_company}`})
             .end((err, res) => {
                 if (err) throw err;
-                res.should.have.status(404);
+                res.should.not.have.status(200);
                 done();
             });
     });
@@ -421,7 +421,7 @@ describe('Testing Company API', () => {
             .set({"Authorization": `${token_company}`})
             .end((err, res) => {
                 if (err) throw err;
-                res.should.have.status(404);
+                res.should.not.have.status(200);
                 done();
             });
     });
@@ -435,7 +435,6 @@ describe('Testing Company API', () => {
                 if (err) throw err;
                 res.should.have.status(404);
                 done();
-
             });
     }));
 
