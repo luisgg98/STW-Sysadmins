@@ -82,6 +82,7 @@ let create_booking = async (req, res) => {
  */
 let get_bookings = async (req, res) => {
     try {
+        console.log(req)
         // if the url contains a query, just search for one booking
         if (req.query.id) {
             let id = req.query.id

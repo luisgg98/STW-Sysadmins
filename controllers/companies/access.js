@@ -18,9 +18,12 @@ let get = async (req, res, next) => {
         if (req.query.name) {
             // Fetch just one company
             let name = req.query.name
-            const company = await Company.find({name: {"$regex": name, "$options": "i"}}, function (err, docs) {
-            }).select('name nif email category description service_duration time_slots schedule capacity location')
-            res.send(company)
+            Company.find({name:name}).then((company)=>{
+                res.send(company)
+            }).catch((err)=>{
+                res.status(404)
+                res.send({error: "Not found company"})
+            })
         } else {
             // Fetch all companies
             const companies = await Company.find({}, {
@@ -36,8 +39,7 @@ let get = async (req, res, next) => {
         }
     } catch {
         /* istanbul ignore next */
-        res.status(500)
-        res.send({error: "Internal server error"})
+
     }
 }
 //  TODO FILTRAR POR CATEGORIA
@@ -48,25 +50,11 @@ let get = async (req, res, next) => {
  * @returns {Promise<void>}
  */
 let fetchCompany = async (req, res) => {
-    try {
-        Company.findOne({nif: req.params.nif}, async function (err, company) {
-            if (err) {
-                throw  err
-            } else {
-                if (company) {
-                    res.status(200)
-                    res.send(company);
-                } else {
-                    res.status(404)
-                    res.send({error: "Company not found"})
-                }
-            }
-        })
-        /* istanbul ignore next */
-    } catch {
-        res.status(404)
-        res.send({error: "Company not found"})
-    }
+    Company.findOne({nif: req.params.nif}).catch((err) => {
+        res.status(404).send({error: "Company not found"})
+    }).then((company) => {
+        res.status(200).send(company);
+    })
 }
 
 
@@ -77,67 +65,61 @@ let fetchCompany = async (req, res) => {
  * @returns {Promise<void>}
  */
 let register = async (req, res) => {
-    try {
-        // Test if exists another company with the same nif
-        Company.count({nif: req.body.nif}, async function (err, count) {
-            if (count > 0) {
-                res.status(409)
-                res.send({error: "Company already exists"})
+    // Test if exists another company with the same nif
+    Company.count({nif: req.body.nif}).then((count) => {
+        if (count > 0) {
+            res.status(409).send({error: "Company already exists"})
+        } else {
+            let password = utils.genPassword(req.body.password)
+            if (!validate.validateCategory(req.body.category)) {
+                res.status(422).send({error: "Wrong category, check docs for further info /api-doc"})
             } else {
-                let password = utils.genPassword(req.body.password)
-                if (!validate.validateCategory(req.body.category)) {
-                    res.status(422)
-                    res.send({error: "Wrong category, check docs for further info /api-doc"})
+                if (validate.validateEmail(req.body.email)) {
+                    geolo.findCoordenates(req.body.name, req.body.streetnumber, req.body.street, req.body.zipcode)
+                        .then(async (coordinates) => {
+                                const company = new Company({
+                                    name: req.body.name,
+                                    nif: req.body.nif,
+                                    email: req.body.email,
+                                    password: password.hash,
+                                    salt: password.salt,
+                                    category: req.body.category,
+                                    streetnumber: req.body.streetnumber,
+                                    street: req.body.street,
+                                    zipcode: req.body.zipcode,
+                                    schedule: req.body.schedule,
+                                    capacity: req.body.capacity,
+                                    bookings: 0,
+                                    service_duration: req.body.service_duration,
+                                    location: {
+                                        type: "Point",
+                                        coordinates: [coordinates.latitude, coordinates.longitude]
+                                    },
+                                    // Default description and service duration
+                                    description: "null",
+                                    security_level: 1,
+                                })
+                                company.time_slots = update_time_slots.update_time_slots(company),
+                                    await company.save()
+                                        .then(() => {
+                                                res.status(201).send(company)
+                                            }
+                                        ).catch((e) => {
+                                            res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
+                                            console.log(e)
+                                        })
+                            }
+                        );
                 } else {
-                    if (validate.validateEmail(req.body.email)) {
-                        geolo.findCoordenates(req.body.name, req.body.streetnumber, req.body.street, req.body.zipcode)
-                            .then(async (coordinates) => {
-                                    const company = new Company({
-                                        name: req.body.name,
-                                        nif: req.body.nif,
-                                        email: req.body.email,
-                                        password: password.hash,
-                                        salt: password.salt,
-                                        category: req.body.category,
-                                        streetnumber: req.body.streetnumber,
-                                        street: req.body.street,
-                                        zipcode: req.body.zipcode,
-                                        schedule: req.body.schedule,
-                                        capacity: req.body.capacity,
-                                        bookings: 0,
-                                        service_duration: req.body.service_duration,
-                                        location: {
-                                            type: "Point",
-                                            coordinates: [coordinates.latitude, coordinates.longitude]
-                                        },
-                                        // Default description and service duration
-                                        description: "null",
-                                        security_level: 1,
-                                    })
-                                    company.time_slots = update_time_slots.update_time_slots(company),
-                                        await company.save()
-                                            .then(() => {
-                                                    res.status(201).send(company)
-                                                }
-                                            ).catch((e) => {
-                                                res.status(405)
-                                                res.send({error: "Wrong json format, check docs for further info /api-doc"})
-                                                console.log(e)
-                                            })
-                                }
-                            );
-                    } else {
-                        /* istanbul ignore next */
-                        res.status(422)
-                        res.send({error: "Not an email address"})
-                    }
+                    /* istanbul ignore next */
+                    res.status(422).send({error: "Not an email address"})
                 }
             }
-        });
-    } catch {
-        res.status(405)
-        res.send({error: "Wrong json format, check docs for further info /api-doc"})
-    }
+        }
+    }).catch((err) => {
+        res.status(500).send({error: "Internal error"})
+        console.log(err)
+    })
 }
 
 /**
@@ -147,8 +129,7 @@ let register = async (req, res) => {
  * @returns {Promise<void>}
  */
 let login = async (req, res) => {
-    try {
-        const company = await Company.findOne({email: req.body.email})
+    Company.findOne({email: req.body.email}).then((company) => {
         if (utils.validPassword(req.body.password, company.password, company.salt)) {
             const tokenObject = utils.issueJWT(company);
             res.send({
@@ -159,10 +140,11 @@ let login = async (req, res) => {
             res.status(401)
             res.send({error: "Incorrect login"})
         }
-    } catch {
-        res.status(404)
-        res.send({error: "Company not found"})
-    }
+
+    }).catch((e) => {
+        console.log(e)
+        res.status(404).send({error: "Company not found"})
+    })
 }
 
 /**
@@ -259,21 +241,17 @@ let update = async (req, res) => {
 let delete_company = async (req, res) => {
     try {
         if (!jwt_login_strategy.security(req.params.id, req.result)) {
-            res.status(401)
-            res.send({error: "Wrong User Access denied"})
+            res.status(401).send({error: "Wrong User Access denied"})
         } else {
-            await Company.deleteOne({_id: req.params.id},{},function (err) {
-                if(err){
-                    throw err
-                }
-                else{
-                    res.status(204).send()
-                }
+            Company.deleteOne({_id: req.params.id}).then(() => {
+                res.status(204).send()
+            }).catch((e) => {
+                console.log(e)
+                res.status(404).send({error: "Company not found"})
             })
         }
     } catch {
-        res.status(404)
-        res.send({error: "Company not found"})
+        res.status(404).send({error: "Company not found"})
     }
 }
 
@@ -285,39 +263,27 @@ let delete_company = async (req, res) => {
  * @returns {Promise<void>}
  */
 let create_service = async (req, res, next) => {
-    try {
-        let found = true
-        // Check if company exists
-        Company.count({nif: req.params.nif}, async function (err, count) {
-            if (count === 0) {
-                // Company does not exist
-                found = false
-                res.status(404)
-                res.send({error: "Company not found"})
-                found = false
-            }
+    // Check if company exists
+    Company.findOne({nif: req.params.nif}).then((company) => {
+        const service = new Service({
+            company: req.params.nif,
+            description: req.body.description,
+            price: req.body.price
         })
-        if (found) {
-            // Company exists
-            const service = new Service({
-                company: req.params.nif,
-                description: req.body.description,
-                price: req.body.price
-            })
-            await service.save()
-                .then(() => {
-                        res.status(201).send(service)
-                    }
-                ).catch((e) => {
-                    res.status(405)
-                    res.send({error: "Wrong json format, check docs for further info /api-doc"})
-                    console.log(e)
-                })
-        }
-    } catch {
-        res.status(405)
-        res.send({error: "Wrong json format, check docs for further info /api-doc"})
-    }
+        service.save()
+            .then(() => {
+                    res.status(201).send(service)
+                }
+            ).catch((e) => {
+            res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
+            console.log(e)
+        })
+
+    }).catch((e) => {
+        console.log(e)
+        res.status(404).send({error: "Company not found"})
+    })
+
 }
 
 /**
@@ -328,74 +294,38 @@ let create_service = async (req, res, next) => {
  * @returns {Promise<void>}
  */
 let get_services = async (req, res, next) => {
-    try {
-        if (req.query.id) {
-            // Fetch just one service
-            let id = req.query.id
-            Company.findOne({nif: req.params.nif}, {},{},
-                async function (err, company) {
-                if (err) {
-                    throw err
-                } else {
-                    if (company) {
-                         await Service.findOne({_id: id},{},{},
-                             function (err,service) {
-                                if(err){
-                                    throw err
-                                }
-                                else{
-                                    if(service){
-                                        res.send({services: service, time_slots: company.time_slots})
-                                    }
-                                    else{
-                                        res.status(404).send({error: "Service not found"})
-                                    }
-
-                                }
-
-                        })
-
-                    } else {
-                        res.status(404)
-                        res.send({error: "Company not found"})
-                    }
-                }
+    if (req.query.id) {
+        // Fetch just one service
+        let id = req.query.id
+        Company.findOne({nif: req.params.nif}).catch((e) => {
+            res.status(404).send({error: "Company not found"})
+            console.log(e)
+        }).then((company) => {
+            Service.findOne({_id: id}).then((service) => {
+                res.send({services: service, time_slots: company.time_slots})
+            }).catch((e) => {
+                res.status(404).send({error: "Service not found"})
+                console.log(e)
             })
-        } else if (req.params.nif != "," || req.params.nif != undefined) {
-            // Fetch all services from a company
-            // Check if company exists
-            Company.findOne({nif: req.params.nif}, async function (err, company) {
-                if (err) {
-                    throw err
-                } else {
-                    if (company) {
-                            Service.find({company: req.params.nif},{},{},
-                            function (err,services){
-                                if(err){
-                                    throw err
-                                }
-                                if(services){
-                                    res.send({services: services, time_slots: company.time_slots})
-                                }
-                                else {
-                                    res.status(404).send({error: "Service not found"})
-                                }
-
-                            })
-
-                    } else {
-                        res.status(404)
-                        res.send({error: "Company not found"})
-                    }
-                }
+        })
+    } else if (req.params.nif != "," || req.params.nif != undefined) {
+        // Fetch all services from a company
+        // Check if company exists
+        Company.findOne({nif: req.params.nif}).catch((err) => {
+            res.status(404).send({error: "Company not found"})
+            console.log(err)
+        }).then((company) => {
+            Service.find({company: req.params.nif}).catch((err) => {
+                res.status(404).send({error: "Service not found"})
+                console.log(err)
+            }).then((services) => {
+                res.send({services: services, time_slots: company.time_slots})
             })
-        } else {
-            res.status(405)
-            res.send({error: "Wrong request, check docs for further info /api-doc"})
-        }
-    } catch {
-        res.status(500)
-        res.send({error: "Internal server error"})
+        })
+
+    } else {
+        res.status(405)
+        res.send({error: "Wrong request, check docs for further info /api-doc"})
     }
 }
 
@@ -407,9 +337,11 @@ let get_services = async (req, res, next) => {
  * @returns {Promise<void>}
  */
 let update_service = async (req, res, next) => {
-    try {
-        const service = await Service.findOne({_id: req.params.id});
-
+    Service.findOne({_id: req.params.id})
+        .catch((err) => {
+            console.log(err)
+            res.status(404).send({error: "Company not found"})
+        }).then((service) => {
         if (req.body.description) {
             service.description = req.body.description
         }
@@ -419,12 +351,15 @@ let update_service = async (req, res, next) => {
         if (req.body.price) {
             service.price = req.body.price
         }
-        await service.save()
-        res.send(service)
-    } catch {
-        res.status(404)
-        res.send({error: "Company not found"})
-    }
+        service.save().then(
+            () => {
+                res.send(service)
+            }
+        ).catch(() => {
+            res.status(405).send({error: "Error updating"})
+        })
+
+    })
 }
 
 /**
@@ -435,13 +370,13 @@ let update_service = async (req, res, next) => {
  * @returns {Promise<void>}
  */
 let delete_service = async (req, res, next) => {
-    try {
-        await Service.deleteOne({_id: req.params.id})
+    await Service.deleteOne({_id: req.params.id}).then(() => {
         res.status(204).send()
-    } catch {
-        res.status(404)
-        res.send({error: "Service not found"})
-    }
+    }).catch(
+        () => {
+            res.status(404)
+            res.send({error: "Service not found"})
+        })
 }
 
 exports.get = get
