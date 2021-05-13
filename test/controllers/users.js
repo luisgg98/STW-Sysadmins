@@ -59,7 +59,7 @@ describe('Testing User API', () => {
             .send(user)
             .end((err, res) => {
                 if (err) throw err;
-                res.should.have.status(200);
+                res.should.have.status(201);
                 done();
             })
     }));

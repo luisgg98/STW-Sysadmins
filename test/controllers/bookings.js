@@ -81,10 +81,12 @@ let service_new =
 const url_company = '/api/companies/'
 const url_user = '/api/users/'
 const url_service = '/services';
-let user_id
+
 describe('Testing Booking API', () => {
     let id_service = '';
     let id_company = '';
+    let user_id = '';
+    let token = '';
 
     before(function (done) {
         chai.request(server)
@@ -97,6 +99,7 @@ describe('Testing Booking API', () => {
                     .send(user)
                     .end((err, res) => {
                         if (err) throw err;
+                        console.log(res.body);
                         user_id = res.body._id;
                         chai.request(server)
                             .post(url_company + 'login/')
@@ -104,16 +107,15 @@ describe('Testing Booking API', () => {
                             .end((err, res) => {
                                 if (err) throw err;
                                 res.should.have.status(200);
-                                let bearer = res.body.token;
+                                token = res.body.token;
                                 id_company = res.body.company.nif;
-
                                 chai.request(server)
                                     .post(url_company + company.nif + url_service)
                                     .send(service_new)
-                                    .set({"Authorization": `${bearer}`})
+                                    .set({"Authorization": `${token}`})
                                     .end((err, res) => {
                                         if (err) throw err;
-                                        res.should.have.status(200);
+                                        res.should.have.status(201);
                                         console.log(res.body)
                                         id_service = res.body._id;
                                         done();
@@ -122,40 +124,152 @@ describe('Testing Booking API', () => {
                     })
             });
     });
+    let bookings_id = '';
 
-//'/users/:id/bookings
+
+    //router.post("/:id/bookings", ControllerBooking.create_booking)
+    it('It should not create a new booking, USER NOT FOUND', function (done) {
+        let booking = {
+            service: id_service,
+            company: id_company,
+            date: '2020-05-12',
+            time: '9:00'
+        }
+        chai.request(server).post('/api/users/' + user_id + 'WRONGNOTFOUND' + '/bookings')
+            .send(booking)
+            .timeout(5000)
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(404)
+                bookings_id = res.body._id;
+                done();
+            })
+    });
+
+    //router.post("/:id/bookings", ControllerBooking.create_booking)
+    it('It should not create a new booking, SERVICE NOT FOUND', function (done) {
+        let no_service = {
+            company: id_company,
+            date: '2020-05-12',
+            time: '9:00'
+        }
+        chai.request(server).post('/api/users/' + user_id + '/bookings')
+            .send(no_service)
+            .timeout(5000)
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(404)
+                done();
+            })
+    });
+
     //router.post("/:id/bookings", ControllerBooking.create_booking)
     it('It should create a new booking', function (done) {
         let booking = {
             user_id: user_id,
-            service_id: id_service,
-            company_nif: id_company,
+            service: id_service,
+            company: id_company,
             date: '2020-05-12',
             time: '9:00'
         }
-        chai.request(server).post('/api/users/'+user_id+'/bookings').send(booking).end((err, res) => {
-            if(err)throw err
-            res.should.have.status(200)
-            done();
-        })
+        chai.request(server).post('/api/users/' + user_id + '/bookings')
+            .send(booking)
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(201)
+                bookings_id = res.body._id;
+                done();
+            })
     });
 
     //router.get("/:id/bookings", ControllerBooking.get_bookings)
     it('It should get aLL bookings', function (done) {
-        chai.request(server).get("/api/users/"+user_id+"/bookings").end((err, res)=>{
-            res.should.have.status(200)
-            res.body.should.be.a('array')
-            done()
-        })
+        chai.request(server).get("/api/users/" + user_id + "/bookings")
+            .end((err, res) => {
+                res.should.have.status(200)
+                res.body.should.be.a('array')
+                done()
+            })
     });
+
 
     //router.patch("/:id/bookings/:booking_id", ControllerBooking.update_bookings)
     it('It should update a booking', function (done) {
-        done();
+        let updated = {
+            date: '2020-05-12',
+            time: '10:30'
+        }
+        chai.request(server)
+            .patch('/api/users/' + user_id + '/bookings/' + bookings_id)
+            .set({"Authorization": `${token}`})
+            .send(updated)
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(200)
+                done();
+            });
     });
+
+    //router.get("/:nif/services/:id/bookings", ControllerBooking.services_bookings)
+    it('It should get all booking from a service', function (done) {
+        ///companies/{nif}/services/{id}/bookings
+        chai.request(server)
+            .get('/api/companies/' + id_company + '/services/' + id_service + '/bookings/')
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(200)
+                res.body.should.be.a('array')
+                done();
+            });
+    });
+
+    //router.get("/:nif/bookings", ControllerBooking.company_bookings)
+    it('It should get all booking from a company', function (done) {
+        chai.request(server)
+            .get('/api/companies/' + id_company + '/bookings/')
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(200)
+                res.body.should.be.a('array')
+                done();
+            });
+    });
+
+    //router.get("/:nif/bookings/capacity", ControllerBooking.remaining_space_by_date)
+    it('It should get capacity of booking from a company', function (done) {
+        let date = {
+            date: '2020-05-12',
+            time: '10:30'
+        }
+        chai.request(server)
+            .get('/api/companies/' + id_company + '/bookings/capacity/?date=' + date.date + '&?time=' + date.time)
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(200)
+                done();
+            });
+    });
+
+
     //router.delete("/:id/bookings/:booking_id", ControllerBooking.delete_booking)
     it('It should delete a new booking', function (done) {
-        done();
+        chai.request(server)
+            .delete('/api/users/' + user_id + '/bookings/' + bookings_id)
+            .set({"Authorization": `${token}`})
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(204)
+                done();
+            });
     });
+
 
 });

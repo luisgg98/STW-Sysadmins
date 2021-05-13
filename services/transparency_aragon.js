@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 const fs = require('fs');
 const https = require('https');
 const moment = require('moment');
@@ -147,7 +148,6 @@ async function getCasesFile() {
  * Update the previous information about the covid cases of the health zones
  */
 
-/* istanbul ignore next */
 function updateDatabase(date) {
     let workbook = new Excel.Workbook();
     try {
@@ -202,8 +202,6 @@ function updateDatabase(date) {
  * Random way to get the value of the radius
  * @param cases
  */
-
-/* istanbul ignore next */
 function updateRadius(cases) {
     let radius = (cases * 15);
     if (radius < 50) {

@@ -80,7 +80,7 @@ let write_opinion = async (req, res, next) => {
                                             votes: 0
                                         });
                                         opinion.save().then(() => {
-                                            res.send(opinion)
+                                            res.status(201).send(opinion)
                                         });
                                     } else {
                                         res.status(404);

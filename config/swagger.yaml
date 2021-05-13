@@ -63,7 +63,7 @@ paths:
             schema:
               $ref: "#/components/schemas/User_register"
       responses:
-        "200":
+        "201":
           description: "User created"
           content:
             application/json:
@@ -208,7 +208,7 @@ paths:
             schema:
               $ref: "#/components/schemas/Company_register"
       responses:
-        "200":
+        "201":
           description: "Company created"
           content:
             application/json:
@@ -337,7 +337,7 @@ paths:
             schema:
               $ref: "#/components/schemas/Booking_create"
       responses:
-        "200":
+        "201":
           description: "Booking added to database"
         "405":
           description: "Wrong request body"
@@ -346,6 +346,8 @@ paths:
       tags:
         - "User"
       summary: "Update a booking schedule"
+      security:
+        - bearerAuth: [ ]
       parameters:
         - in: path
           name: "id"
@@ -382,6 +384,8 @@ paths:
       tags:
         - "User"
       summary: "Delete a booking"
+      security:
+        - bearerAuth: [ ]
       parameters:
         - in: path
           name: "id"
@@ -473,7 +477,7 @@ paths:
             schema:
               $ref: "#/components/schemas/Service_register"
       responses:
-        "200":
+        "201":
           description: "Company created"
           content:
             application/json:
@@ -486,6 +490,8 @@ paths:
   /companies/{nif}/services/{id}:
     patch:
       operationId: updateService
+      security:
+        - bearerAuth: [ ]
       tags:
         - "Services"
       summary: "Update service data"
@@ -522,6 +528,8 @@ paths:
           description: "Company not found"
     delete:
       operationId: deleteService
+      security:
+        - bearerAuth: [ ]
       tags:
         - "Services"
       summary: "Delete a service"
@@ -737,7 +745,7 @@ paths:
             schema:
               $ref: "#/components/schemas/Opinion_new"
       responses:
-        "200":
+        "201":
           description: "Company created"
           content:
             application/json:

@@ -31,7 +31,7 @@ let register = async (req, res) => {
                         security_level: 1
                     })
                     await user.save()
-                    res.send(user)
+                    res.status(201).send(user)
                 } else {
                     res.status(405)
                     res.send({error: "Wrong email format!"})

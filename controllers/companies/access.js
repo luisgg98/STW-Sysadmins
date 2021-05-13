@@ -115,11 +115,11 @@ let register = async (req, res) => {
                                         security_level: 1,
                                     })
                                     company.time_slots = update_time_slots.update_time_slots(company),
-                                    await company.save()
-                                        .then(() => {
-                                                res.send(company)
-                                            }
-                                        )
+                                        await company.save()
+                                            .then(() => {
+                                                    res.status(201).send(company)
+                                                }
+                                            )
                                 }
                             );
                     } else {
@@ -130,7 +130,6 @@ let register = async (req, res) => {
                 }
             }
         });
-        console.log("B")
     } catch {
         res.status(405)
         res.send({error: "Wrong json format, check docs for further info /api-doc"})
@@ -184,7 +183,7 @@ let update = async (req, res) => {
             if (req.body.name) {
                 company.name = req.body.name
             }
-            //TODO it must be changed
+
             if (req.body.password) {
                 company.password = req.body.password
             }
@@ -289,7 +288,7 @@ let create_service = async (req, res, next) => {
                 price: req.body.price
             })
             await service.save()
-            res.send(service)
+            res.status(201).send(service)
         }
     } catch {
         res.status(405)

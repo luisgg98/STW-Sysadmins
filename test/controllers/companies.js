@@ -13,8 +13,16 @@ let company = {
     "street": "Calle Francisco de Vitoria",
     "streetnumber": 30,
     "capacity": 3,
-    "service_duration" : 15,
-    'schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}},
+    "service_duration": 15,
+    'schedule': {
+        'monday': {'open_1': '9:00', 'close_1': '21:00'},
+        'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+        'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+        'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+        'friday': {'open_1': '9:00', 'close_1': '21:00'},
+        'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+        'sunday': {'open_1': '9:00', 'close_1': '21:00'}
+    },
     "zipcode": 50008,
     "category": "Ocio",
 };
@@ -27,8 +35,16 @@ let company_wrong_email = {
     "street": "Calle Francisco de Vitoria",
     "streetnumber": 30,
     "capacity": 3,
-    "service_duration" : 15,
-    'schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}},
+    "service_duration": 15,
+    'schedule': {
+        'monday': {'open_1': '9:00', 'close_1': '21:00'},
+        'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+        'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+        'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+        'friday': {'open_1': '9:00', 'close_1': '21:00'},
+        'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+        'sunday': {'open_1': '9:00', 'close_1': '21:00'}
+    },
     "zipcode": 50008,
     "category": "Ocio",
 };
@@ -41,8 +57,16 @@ let company_category = {
     "street": "Calle Francisco de Vitoria",
     "streetnumber": 30,
     "capacity": 3,
-    "service_duration" : 15,
-    'schedule': {'monday': {'open_1': '9:00','close_1': '21:00'},'tuesday': {'open_1': '9:00','close_1': '21:00'},'wednesday': {'open_1': '9:00','close_1': '21:00'},'thursday': {'open_1': '9:00','close_1': '21:00'},'friday': {'open_1': '9:00','close_1': '21:00'},'saturday': {'open_1': '9:00','close_1': '21:00'},'sunday': {'open_1': '9:00','close_1': '21:00'}},
+    "service_duration": 15,
+    'schedule': {
+        'monday': {'open_1': '9:00', 'close_1': '21:00'},
+        'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+        'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+        'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+        'friday': {'open_1': '9:00', 'close_1': '21:00'},
+        'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+        'sunday': {'open_1': '9:00', 'close_1': '21:00'}
+    },
     "zipcode": 50008,
     "category": "WRONG CATEGORY",
 };
@@ -121,7 +145,7 @@ describe('Testing Company API', () => {
             .send(company)
             .end((err, res) => {
                 if (err) throw err;
-                res.should.have.status(200);
+                res.should.have.status(201);
                 done();
             })
     }));
@@ -260,7 +284,7 @@ describe('Testing Company API', () => {
             .set({"Authorization": `${token_company}`})
             .end((err, res) => {
                 if (err) throw err;
-                res.should.have.status(200);
+                res.should.have.status(201);
                 let id_service = res.body._id;
                 //PATCH //companies/{nif}/services/{id}
                 chai.request(server)

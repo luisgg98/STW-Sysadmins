@@ -90,7 +90,7 @@ describe('Testing Opinion API', () => {
                             console.log(err);
                             throw err;
                         } else {
-                            res.should.have.status(200);
+                            res.should.have.status(201);
                             opinion_id = res.body._id;
                             done();
                         }
