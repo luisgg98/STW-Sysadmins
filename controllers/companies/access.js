@@ -262,8 +262,14 @@ let delete_company = async (req, res) => {
             res.status(401)
             res.send({error: "Wrong User Access denied"})
         } else {
-            await Company.deleteOne({_id: req.params.id})
-            res.status(204).send()
+            await Company.deleteOne({_id: req.params.id},{},function (err) {
+                if(err){
+                    throw err
+                }
+                else{
+                    res.status(204).send()
+                }
+            })
         }
     } catch {
         res.status(404)
@@ -326,14 +332,29 @@ let get_services = async (req, res, next) => {
         if (req.query.id) {
             // Fetch just one service
             let id = req.query.id
-            Company.findOne({nif: req.params.nif}, async function (err, company) {
+            Company.findOne({nif: req.params.nif}, {},{},
+                async function (err, company) {
                 if (err) {
                     throw err
                 } else {
                     if (company) {
-                        const service = await Service.findOne({_id: id})
-                        const company = await Company.findOne({nif: req.params.nif})
-                        res.send({services: service, time_slots: company.time_slots})
+                         await Service.findOne({_id: id},{},{},
+                             function (err,service) {
+                                if(err){
+                                    throw err
+                                }
+                                else{
+                                    if(service){
+                                        res.send({services: service, time_slots: company.time_slots})
+                                    }
+                                    else{
+                                        res.status(404).send({error: "Service not found"})
+                                    }
+
+                                }
+
+                        })
+
                     } else {
                         res.status(404)
                         res.send({error: "Company not found"})
@@ -348,8 +369,20 @@ let get_services = async (req, res, next) => {
                     throw err
                 } else {
                     if (company) {
-                        const service = await Service.find({company: req.params.nif})
-                        res.send({services: service, time_slots: company.time_slots})
+                            Service.find({company: req.params.nif},{},{},
+                            function (err,services){
+                                if(err){
+                                    throw err
+                                }
+                                if(services){
+                                    res.send({services: services, time_slots: company.time_slots})
+                                }
+                                else {
+                                    res.status(404).send({error: "Service not found"})
+                                }
+
+                            })
+
                     } else {
                         res.status(404)
                         res.send({error: "Company not found"})
