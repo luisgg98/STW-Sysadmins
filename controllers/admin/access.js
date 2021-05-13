@@ -19,13 +19,13 @@ let register = async (req, res) => {
                         first_name: 'Admin',
                         last_name: 'Mighty',
                         phone: 123456789,
-                        email: 'zitation-stw@unizar.es',
+                        email: 'zitationstw@unizar.es',
                         password: password.hash,
                         salt: password.salt,
                         security_level: 2
                     })
-                    await user.save()
-                    res.send(user)
+                    await user.save();
+                    res.status(201).send(user)
                 } else {
                     res.status(403)
                     res.send({error: "Heresy, There is only one true Admin"})
