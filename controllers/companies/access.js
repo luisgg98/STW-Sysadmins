@@ -28,7 +28,22 @@ let get = async (req, res, next) => {
                 console.log(err)
                 res.status(500).send({error: "Internal error server"})
             })
-        } else {
+        }
+        else if(req.query.category){
+            let category = req.query.category
+            Company.find({category: category}).then((company) => {
+                if (company) {
+                    res.send(company)
+                } else {
+                    res.status(404).send({error: "Not found company"})
+                }
+            }).catch((err) => {
+                console.log(err)
+                res.status(500).send({error: "Internal error server"})
+            })
+
+        }
+        else {
             // Fetch all companies
             const companies = await Company.find({}, {
                 name: true,

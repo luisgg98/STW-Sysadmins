@@ -187,6 +187,11 @@ paths:
           description: "name of company to retrieve"
           schema:
             type: string
+        - in: query
+          name: "category"
+          description: "category of company to retrieve"
+          schema:
+            type: string
       responses:
         "200":
           description: "All right"
@@ -807,6 +812,8 @@ components:
         services:
           type: object
           properties:
+            _id:
+              type: string
             company:
               type: string
             description:
@@ -849,6 +856,8 @@ components:
     Get_users:
       type: object
       properties:
+        _id:
+          type: string
         first_name:
           type: string
         last_name:
@@ -876,6 +885,8 @@ components:
     User_registered:
       type: object
       properties:
+        _id:
+          type: string
         phone:
           type: integer
         first_name:
@@ -912,6 +923,8 @@ components:
         user:
           type: object
           properties:
+            _id:
+              type: string
             first_name:
               type: string
             last_name:
@@ -937,9 +950,18 @@ components:
     User_fetched:
       type: object
       properties:
+        _id:
+          type: string
+        phone:
+          type: integer
         first_name:
           type: string
         last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
           type: string
     Booking_create:
       type: object
@@ -975,6 +997,8 @@ components:
       items:
         type: object
         properties:
+          _id:
+            type: string
           name:
             type: string
           location:
@@ -1112,6 +1136,8 @@ components:
           type: number
         capacity:
           type: number
+        service_duration:
+          type: number
         schedule:
           type: object
           properties:
@@ -1185,6 +1211,8 @@ components:
     Company_registered:
       type: object
       properties:
+        _id:
+          type: string
         nif:
           type: string
         name:
@@ -1202,6 +1230,8 @@ components:
         zipcode:
           type: number
         bookings:
+          type: number
+        service_duration:
           type: number
         capacity:
           type: number
@@ -1289,6 +1319,8 @@ components:
     Company_fetched:
       type: object
       properties:
+        _id:
+          type: string
         name:
           type: string
         email:
@@ -1311,7 +1343,7 @@ components:
         description:
           type: string
         service_duration:
-          type: string
+          type: number
         bookings:
           type: number
         time_slots:
@@ -1418,6 +1450,8 @@ components:
     Company_update:
       type: object
       properties:
+        _id:
+          type: string
         name:
           type: string
         email:
@@ -1435,7 +1469,7 @@ components:
         description:
           type: string
         service_duration:
-          type: string
+          type: number
         capacity:
           type: number
         schedule:
@@ -1531,6 +1565,8 @@ components:
         company:
           type: object
           properties:
+            _id:
+              type: string
             name:
               type: string
             nif:
@@ -1689,6 +1725,8 @@ components:
     Opinion_created:
       type: object
       properties:
+        _id:
+          type: string
         comment:
           type: string
         user_id:
@@ -1708,6 +1746,8 @@ components:
     Opinion_updated:
       type: object
       properties:
+        _id:
+          type: string
         comment:
           type: string
         user_id:
@@ -1736,6 +1776,8 @@ components:
       items:
         type: object
         properties:
+          _id:
+            type: string
           comment:
             type: string
           user_id:
