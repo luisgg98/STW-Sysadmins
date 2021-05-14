@@ -1,5 +1,6 @@
 import json
 import requests
+import datetime
 
 
 def create_company(payload):
@@ -56,20 +57,19 @@ def create_service(nif, service, bearer):
     return r.json()['_id']
 
 
-def create_booking(user_id, booking):
-    url = 'https://stw-zitation.herokuapp.com/api/users/login'
-    headers = {'content-type': 'application/json'}
-    r = requests.post(url, data=json.dumps(company), headers=headers)
-    if r.status_code != 201:
-        print('Error login: {}'.format(company['email']))
-    bearer = r.json()['token']
-
+def create_booking(user_id, services, times, bearer):
     url = 'https://stw-zitation.herokuapp.com/api/users/' + user_id + '/bookings'
     headers = {'content-type': 'application/json', 'Authorization': bearer}
-    r = requests.post(url, data=json.dumps(booking), headers=headers)
-    if r.status_code != 201:
-        print('Error creating booking')
-    return r.json()['_id']
+    x = str(datetime.datetime.now()).split()
+    x = x[0]
+    for i in services:
+        for t in times:
+            payload = {'service': i, 'date': x, 'time': t}
+            r = requests.post(url, data=json.dumps(payload), headers=headers)
+            if r.status_code != 201:
+                print(r.status_code)
+                print(r.body)
+                print('Error creating booking')
 
 
 def create_master():
@@ -91,13 +91,14 @@ def populate_opinions(companies, users, tokens):
         {'comment': 'Me turbo flipa.', 'user_id': users[3], 'stars': 5},
     ]
     for x in companies:
-        url = 'https://stw-zitation.herokuapp.com/api/companies/' + x.nif + '/opinions'
+        url = 'https://stw-zitation.herokuapp.com/api/companies/' + x + '/opinions'
         for i in range(len(opinions)):
             headers = {'content-type': 'application/json', 'Authorization': tokens[i]}
-            r = requests.patch(url, data=json.dumps(opinions[i]), headers=headers)
+            r = requests.post(url, data=json.dumps(opinions[i]), headers=headers)
             if r.status_code != 201:
+                print(opinions[i])
+                print(r.status_code)
                 print('Error updating: commenting')
-            print(i)
 
 
 # Create master
@@ -130,6 +131,10 @@ miguel_id = create_user(miguel)
 miguel_token = log_user(miguel)
 
 print('Users created!')
+barberia = {'nif': 'A23456789', 'name': 'Hayk EMpresa', 'email': 'haykempresa@gmail.com',
+              'password': 'deportivo1234', 'street': 'Calle poeta jorge manrique', 'streetnumber': '2', 'zipcode': '50018',
+              'category': 'Salud y Belleza', 'service_duration': 30, 'capacity': 2}
+create_company(barberia)
 ## Populate COMPANIES collection
 print('Creating companies...')
 deportivo1 = {'nif': 'A12345678', 'name': 'Centro Deportivo Municipal Alberto Maestro', 'email': 'deportivo1@gmail.com',
@@ -267,7 +272,7 @@ update = {'service_duration': 15, 'capacity': 3, 'schedule': {'monday': {'open_1
                                                               'friday': {'open_1': '9:00', 'close_1': '21:00'},
                                                               'saturday': {'open_1': '9:00', 'close_1': '21:00'},
                                                               'sunday': {'open_1': '9:00', 'close_1': '21:00'}}}
-admin2_token = update_company_return_token(company, update)
+salud1_token = update_company_return_token(company, update)
 
 ## Collect Bearer token in order to be able to authentificate
 company = {'email': salud2['email'], 'password': salud2['password']}
@@ -375,16 +380,16 @@ print('Creating Opinions...')
 
 print('Opinions created!')
 companies = [
-    ocio1.nif,
-    ocio2.nif,
-    deportivo1.nif,
-    deportivo2.nif,
-    salud1.nif,
-    salud2.nif,
-    comercio1.nif,
-    comercio2.nif,
-    admin1.nif,
-    admino2.nif,
+    ocio1['nif'],
+    ocio2['nif'],
+    deportivo1['nif'],
+    deportivo2['nif'],
+    salud1['nif'],
+    salud2['nif'],
+    comercio1['nif'],
+    comercio2['nif'],
+    admin1['nif'],
+    admin2['nif']
 ]
 
 users = [
@@ -403,5 +408,23 @@ tokens = [
 
 populate_opinions(companies, users, tokens)
 print('Opinions populated!')
+
+times = [
+    '9:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00'
+]
+
+print('Creating bookings!')
+create_booking(miguel_id, services_deportivo1_id, times, miguel_token)
+
+create_booking(facundo_id, services_deportivo1_id, times, facundo_token)
+
+create_booking(isabel_id, services_comercio1_id, times, isabel_token)
+
+create_booking(borja_id, services_admin1_id, times, borja_token)
+print('Bookings done!')
 
 ##BOOKING

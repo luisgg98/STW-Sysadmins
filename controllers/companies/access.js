@@ -108,15 +108,14 @@ let register = async (req, res) => {
                                     description: "null",
                                     security_level: 1,
                                 })
-                                company.time_slots = update_time_slots.update_time_slots(company),
-                                    await company.save()
-                                        .then(() => {
-                                                res.status(201).send(company)
-                                            }
-                                        ).catch((e) => {
-                                            res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
-                                            console.log(e)
-                                        })
+                                company.time_slots = update_time_slots.update_time_slots(company);
+                                await company.save()
+                                    .then(() => {
+                                        res.status(201).send(company)
+                                    }).catch((e) => {
+                                        res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
+                                        console.log(e)
+                                    })
                             }
                         );
                 } else {
