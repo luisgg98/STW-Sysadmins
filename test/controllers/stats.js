@@ -11,15 +11,15 @@ chai.use(chaiHttp);
 
 
 
-router.use('/statsCompanies', StatsCRouter)*/
+ router.use('/statsCompanies', StatsCRouter)*/
 
 describe('Testing Stats API', () => {
-    
+
     it('Updatind stats', function (done) {
         upDateStats();
         done();
     })
-    
+
     it('Getting Booking Stats ', function (done) {
         const url = '/api/statsBooking/';
         chai.request(server)

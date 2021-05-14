@@ -134,9 +134,9 @@ async function upDateStats() {
         })
     }).catch((e) => {
         console.log("Error updating company  stats")
-        console.log(e)})
+        console.log(e)
+    })
 }
-
 
 
 module.exports.upDateStats = upDateStats

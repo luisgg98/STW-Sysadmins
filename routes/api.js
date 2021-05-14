@@ -39,7 +39,6 @@ router.use('/captcha', captchaRouter)
 router.use('/statsBooking', StatsBRouter)
 
 
-
 /**
  *
  */

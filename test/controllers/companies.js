@@ -282,7 +282,7 @@ describe('Testing Company API', () => {
     //router.get("/", ControllerCompany.get)
     it('It should  get a company by its category', (done => {
         chai.request(server)
-            .get(url + '/?category='+company.category)
+            .get(url + '/?category=' + company.category)
             .end((err, res) => {
                 if (err) throw err;
                 res.should.have.status(200);
