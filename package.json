@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node config/settings",
-    "test": "nyc mocha test --recursive --exit"
+    "test": "nyc mocha test --recursive --timeout 10000 --exit"
   },
   "engines": {
     "node": ">=14.15.5",

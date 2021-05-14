@@ -17,50 +17,50 @@ const company = {
     "zipcode": 50008,
     "category": "Ocio",
     "description": "Es un servicio maravilloso nadie deberia quejarse porque es una maravilla",
-    "service_duration": 45,
+    "service_duration": 30,
     "capacity": 4,
     "schedule": {
         "monday": {
             "open_1": "06:00",
-            "close_1": "20:00",
-            "open_2": "00:00",
-            "close_2": "00:00"
+            "close_1": "12:00",
+            "open_2": "14:00",
+            "close_2": "20:00"
         },
         "tuesday": {
             "open_1": "06:00",
-            "close_1": "20:00",
-            "open_2": "00:00",
-            "close_2": "00:00"
+            "close_1": "12:00",
+            "open_2": "14:00",
+            "close_2": "20:00"
         },
         "wednesday": {
             "open_1": "06:00",
-            "close_1": "20:00",
-            "open_2": "00:00",
-            "close_2": "00:00"
+            "close_1": "12:00",
+            "open_2": "14:00",
+            "close_2": "20:00"
         },
         "thursday": {
             "open_1": "06:00",
-            "close_1": "20:00",
-            "open_2": "00:00",
-            "close_2": "00:00"
+            "close_1": "12:00",
+            "open_2": "14:00",
+            "close_2": "20:00"
         },
         "friday": {
             "open_1": "06:00",
-            "close_1": "20:00",
-            "open_2": "00:00",
-            "close_2": "00:00"
+            "close_1": "12:00",
+            "open_2": "14:00",
+            "close_2": "20:00"
         },
         "saturday": {
             "open_1": "06:00",
-            "close_1": "20:00",
-            "open_2": "00:00",
-            "close_2": "00:00"
+            "close_1": "12:00",
+            "open_2": "14:00",
+            "close_2": "20:00"
         },
         "sunday": {
             "open_1": "06:00",
-            "close_1": "20:00",
-            "open_2": "00:00",
-            "close_2": "00:00"
+            "close_1": "12:00",
+            "open_2": "14:00",
+            "close_2": "20:00"
         }
     },
 };
@@ -83,10 +83,11 @@ const url_user = '/api/users/'
 const url_service = '/services';
 
 describe('Testing Booking API', () => {
-    let id_service = '';
-    let id_company = '';
-    let user_id = '';
-    let token = '';
+    let id_service = null;
+    let id_company = null;
+    let bookings_id = null;
+    let user_id = null;
+    let token = null;
 
     before(function (done) {
         chai.request(server)
@@ -124,14 +125,11 @@ describe('Testing Booking API', () => {
                     })
             });
     });
-    let bookings_id = '';
-
 
     //router.post("/:id/bookings", ControllerBooking.create_booking)
     it('It should not create a new booking, USER NOT FOUND', function (done) {
         let booking = {
             service: id_service,
-            company: id_company,
             date: '2020-05-12',
             time: '9:00'
         }
@@ -141,7 +139,7 @@ describe('Testing Booking API', () => {
             .end((err, res) => {
                 if (err) throw err
                 console.log(res.body)
-                res.should.have.status(404)
+                res.should.have.status(405)
                 bookings_id = res.body._id;
                 done();
             })
@@ -150,7 +148,6 @@ describe('Testing Booking API', () => {
     //router.post("/:id/bookings", ControllerBooking.create_booking)
     it('It should not create a new booking, SERVICE NOT FOUND', function (done) {
         let no_service = {
-            company: id_company,
             date: '2020-05-12',
             time: '9:00'
         }
@@ -160,7 +157,7 @@ describe('Testing Booking API', () => {
             .end((err, res) => {
                 if (err) throw err
                 console.log(res.body)
-                res.should.have.status(404)
+                res.should.have.status(405)
                 done();
             })
     });
@@ -168,14 +165,12 @@ describe('Testing Booking API', () => {
     //router.post("/:id/bookings", ControllerBooking.create_booking)
     it('It should create a new booking', function (done) {
         let booking = {
-            user_id: user_id,
             service: id_service,
-            company: id_company,
             date: '2020-05-12',
             time: '9:00'
         }
         chai.request(server).post('/api/users/' + user_id + '/bookings')
-            .send(booking)
+            .send(booking).timeout(5000)
             .end((err, res) => {
                 if (err) throw err
                 console.log(res.body)
@@ -228,6 +223,44 @@ describe('Testing Booking API', () => {
             });
     });
 
+    it('It should get all booking from a service BY TIME', function (done) {
+        ///companies/{nif}/services/{id}/bookings
+        chai.request(server)
+            .get('/api/companies/' + id_company + '/services/' + id_service + '/bookings?time=10:30')
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(200)
+                res.body.should.be.a('array')
+                done();
+            });
+    });
+
+    it('It should get all booking from a service BY DATE', function (done) {
+        ///companies/{nif}/services/{id}/bookings
+        chai.request(server)
+            .get('/api/companies/' + id_company + '/services/' + id_service + '/bookings?date=2020-05-12')
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(200)
+                res.body.should.be.a('array')
+                done();
+            });
+    });
+
+    it('It should get all booking from a service BY TIME AND DATE', function (done) {
+        ///companies/{nif}/services/{id}/bookings
+        chai.request(server)
+            .get('/api/companies/' + id_company + '/services/' + id_service + '/bookings?date=2021-05-12&time=10:30')
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(200)
+                done();
+            });
+    });
+
     //router.get("/:nif/bookings", ControllerBooking.company_bookings)
     it('It should get all booking from a company', function (done) {
         chai.request(server)
@@ -241,14 +274,9 @@ describe('Testing Booking API', () => {
             });
     });
 
-    //router.get("/:nif/bookings/capacity", ControllerBooking.remaining_space_by_date)
-    it('It should get capacity of booking from a company', function (done) {
-        let date = {
-            date: '2020-05-12',
-            time: '10:30'
-        }
+    it('It should get all booking from a company BY DATE AND TIME', function (done) {
         chai.request(server)
-            .get('/api/companies/' + id_company + '/bookings/capacity/?date=' + date.date + '&?time=' + date.time)
+            .get('/api/companies/' + id_company + '/bookings?date=2021-05-12&time=10:30')
             .end((err, res) => {
                 if (err) throw err
                 console.log(res.body)
@@ -257,6 +285,149 @@ describe('Testing Booking API', () => {
             });
     });
 
+    it('It should get all booking from a company BY DATE', function (done) {
+        chai.request(server)
+            .get('/api/companies/' + id_company + '/bookings?date=2021-05-12')
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(200)
+                done();
+            });
+    });
+
+    it('It should get all booking from a company BY TIME', function (done) {
+        chai.request(server)
+            .get('/api/companies/' + id_company + '/bookings?time=10:30')
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(200)
+                res.body.should.be.a('array')
+                done();
+            });
+    });
+
+    //router.get("/:nif/bookings/capacity", ControllerBooking.remaining_space_by_date)
+    it('It should get capacity of booking from a company MONDAY', function (done) {
+        let date = {
+            date: '2021-05-10'
+        }
+        chai.request(server)
+            .get('/api/companies/' + id_company + '/bookings/capacity?date=' + date.date)
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(200)
+                done();
+            });
+    });
+
+    it('It should get capacity of booking from a company TUESDAY', function (done) {
+        let date = {
+            date: '2021-05-11'
+        }
+        chai.request(server)
+            .get('/api/companies/' + id_company + '/bookings/capacity?date=' + date.date)
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(200)
+                done();
+            });
+    });
+
+    it('It should get capacity of booking from a company WEDNESDAY', function (done) {
+        let date = {
+            date: '2021-05-12'
+        }
+        chai.request(server)
+            .get('/api/companies/' + id_company + '/bookings/capacity?date=' + date.date)
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(200)
+                done();
+            });
+    });
+
+    it('It should get capacity of booking from a company THURSDAY', function (done) {
+        let date = {
+            date: '2021-05-13'
+        }
+        chai.request(server)
+            .get('/api/companies/' + id_company + '/bookings/capacity?date=' + date.date)
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(200)
+                done();
+            });
+    });
+
+    it('It should get capacity of booking from a company FRIDAY', function (done) {
+        let date = {
+            date: '2021-05-14'
+        }
+        chai.request(server)
+            .get('/api/companies/' + id_company + '/bookings/capacity?date=' + date.date)
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(200)
+                done();
+            });
+    });
+
+    it('It should get capacity of booking from a company SATURDAY', function (done) {
+        let date = {
+            date: '2021-05-15'
+        }
+        chai.request(server)
+            .get('/api/companies/' + id_company + '/bookings/capacity?date=' + date.date)
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(200)
+                done();
+            });
+    });
+
+    it('It should get capacity of booking from a company SUNDAY', function (done) {
+        let date = {
+            date: '2021-05-16'
+        }
+        chai.request(server)
+            .get('/api/companies/' + id_company + '/bookings/capacity?date=' + date.date)
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(200)
+                done();
+            });
+    });
+
+    it('It should get capacity of booking from a company WITHOUT DATE', function (done) {
+        chai.request(server)
+            .get('/api/companies/' + id_company + '/bookings/capacity')
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(405)
+                done();
+            });
+    });
+
+    it('It should get capacity of booking from a company WITHOUT COMPANY NIF', function (done) {
+        chai.request(server)
+            .get('/api/companies/' + 'bookings/capacity')
+            .end((err, res) => {
+                if (err) throw err
+                console.log(res.body)
+                res.should.have.status(404)
+                done();
+            });
+    });
 
     //router.delete("/:id/bookings/:booking_id", ControllerBooking.delete_booking)
     it('It should delete a new booking', function (done) {
@@ -270,6 +441,4 @@ describe('Testing Booking API', () => {
                 done();
             });
     });
-
-
 });

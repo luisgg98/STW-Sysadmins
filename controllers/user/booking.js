@@ -17,18 +17,9 @@ const {sendReminder} = require("../../scripts/email");
  * @returns {Promise<void>}
  */
 let create_booking = async (req, res) => {
-    try {
-        Service.findOne({_id: req.body.service}, async function (err, service) {
-            if (err) {
-                throw err
-            } else {
-                if (service) {
+        Service.findOne({_id: req.body.service}).then((service) =>{
                     //Check if user exists
-                    User.findOne({_id: req.params.id}, async function (err, user) {
-                            if (err) {
-                                res.status(404).send({error: "User not found"})
-                                throw err;
-                            } else {
+                    User.findOne({_id: req.params.id}).then((user)=> {
                                 const booking = new Booking({
                                     user_id: req.params.id,
                                     service_id: req.body.service,
@@ -36,12 +27,9 @@ let create_booking = async (req, res) => {
                                     date: req.body.date,
                                     time: req.body.time
                                 })
-                                Company.findOne({nif: service.company}, {}, {}, async function (err, company) {
-                                    if (err) {
-                                        throw err;
-                                    } else {
+                                Company.findOne({nif: service.company}).then((company)=> {
                                         company.bookings = parseInt(company.bookings) + 1;
-                                        await company.save()
+                                        company.save()
                                             .then(async () => {
                                                 await booking.save()
                                                     .catch((e) => {
@@ -58,20 +46,15 @@ let create_booking = async (req, res) => {
                                                 res.send({error: "Company was not found"})
                                                 console.log(e)
                                             });
-
-                                    }
-                                });
-                            }
-                        }
-                    )
-                } else {
-                    res.status(404).send({error: "Service not found"})
-                }
-            }
-        });
-    } catch {
+                                }).catch((e)=>{
+                                    res.status(405).send({error: "Wrong body format, check docs for further info /api-docs"})
+                        })
+        }).catch((e) =>{
+            res.status(405).send({error: "Wrong body format, check docs for further info /api-docs"})
+        })
+    }).catch((e) =>  {
         res.status(405).send({error: "Wrong body format, check docs for further info /api-docs"})
-    }
+    })
 }
 
 /**
@@ -86,42 +69,37 @@ let get_bookings = async (req, res) => {
         // if the url contains a query, just search for one booking
         if (req.query.id) {
             let id = req.query.id
-            Booking.findOne({_id: id}, function (err, booking) {
-                if (err) {
-                    throw err;
+            Booking.findOne({_id: id}).then( (booking) => {
+                if (booking) {
+                    res.status(200)
+                    res.send(booking)
                 } else {
-                    if (booking) {
-                        res.status(200)
-                        res.send(booking)
-                    } else {
-                        res.status(404)
-                        res.send({error: "Booking not found"})
-                    }
+                    res.status(404)
+                    res.send({error: "Booking not found"})
                 }
+            }).catch((e) =>{
+                res.status(405).send({error:"Wrong id format"})
+                console.log("Error: " + e)
             })
         } else if (req.query.date) {
-            Booking.find({user_id: req.params.id, date: req.query.date}, function (err, bookings) {
-                if (err) {
-                    throw err
-                } else {
-                    res.status(200).send(bookings)
-                }
+            Booking.find({user_id: req.params.id, date: req.query.date}).then((bookings) => {
+                res.status(200).send(bookings)
+            }).catch((e) =>{
+                res.status(405).send({error: "Wrong format for Date or user_id"})
             })
         } else {
             // Fetch all bookings
-            Booking.find({user_id: req.params.id}, function (err, bookings) {
-                if (err) {
-                    throw err;
+            Booking.find({user_id: req.params.id}).then((bookings) => {
+                if (bookings) {
+                    res.status(200)
+                    res.send(bookings)
                 } else {
-                    if (bookings) {
-                        console.log(bookings)
-                        res.status(200)
-                        res.send(bookings)
-                    } else {
-                        res.status(404)
-                        res.send({error: "No bookings were found"})
-                    }
+                    res.status(404)
+                    res.send({error: "No bookings were found"})
                 }
+            }).catch((e) =>{
+                res.status(405).send({error: "Wrong user_format"})
+                console.log("Error: " + e)
             })
         }
     } catch {
@@ -137,11 +115,7 @@ let get_bookings = async (req, res) => {
  * @returns {Promise<void>}
  */
 let update_bookings = async (req, res) => {
-    try {
-        Booking.findOne({_id: req.params.booking_id}, async function (err, booking) {
-            if (err) {
-                throw err
-            } else {
+        Booking.findOne({_id: req.params.booking_id}).then( (booking) => {
                 if (booking) {
                     if (req.body.date) {
                         booking.date = req.body.date
@@ -150,43 +124,39 @@ let update_bookings = async (req, res) => {
                         booking.time = req.body.time
                     }
 
-                    User.findOne({_id: booking.user_id}, {}, {}, async function (err, user) {
-                        if (err) {
-                            throw err
-                        } else {
-                            if (user) {
-                                Company.findOne({nif: booking.company_nif}, {}, {}, async function (err, company) {
-                                    if (err) {
-                                        throw err;
-                                    } else {
-                                        if (company) {
-                                            await booking.save()
-                                                .then(() => {
-                                                    res.status(200).send(booking)
-                                                    // Send email
-                                                    sendReminder(user, booking, company);
-                                                })
-                                                .catch((e) => {
-                                                    res.status(405)
-                                                    res.send({error: "Wrong json format, check docs for further info /api-doc"})
-                                                    console.log(e)
-                                                })
-                                        }
-                                    }
-                                })
-                            }
+                    User.findOne({_id: booking.user_id}).then((user) => {
+                        if (user) {
+                            Company.findOne({nif: booking.company_nif}).then((company) => {
+                                if (company) {
+                                    booking.save()
+                                        .then(() => {
+                                            res.status(200).send(booking)
+                                            // Send email
+                                            sendReminder(user, booking, company);
+                                        })
+                                        .catch((e) => {
+                                            res.status(405)
+                                            res.send({error: "Wrong json format, check docs for further info /api-doc"})
+                                            console.log("Error: " + e)
+                                        })
+                                }
+                            }).catch((e)=>{
+                                res.status(405).send({error:"Wrong user_id format"})
+                                console.log(e)
+                            })
                         }
+                    }).catch((e) =>{
+                        res.status(405).send({error:"Wrong user_id format"})
+                        console.log("Error: " + e)
                     })
                 } else {
                     res.status(404)
                     res.send({error: "Booking not found"})
                 }
-            }
+        }).catch((e) =>{
+            res.status(405).send({error:"Wrong booking_id format"})
+            console.log("Error: " + e)
         })
-    } catch {
-        res.status(500)
-        res.send({error: "Internal server error"})
-    }
 }
 
 /**
@@ -196,32 +166,23 @@ let update_bookings = async (req, res) => {
  * @returns {Promise<void>}
  */
 let delete_booking = async (req, res) => {
-    try {
-        Booking.findOneAndDelete({_id: req.params.booking_id}, async function (err, booking) {
-            if (err) {
-                throw err
-            } else {
-                if (booking) {
-                    Company.findOne({nif: booking.company_nif}, async function (err, company) {
-                        company.bookings -= 1
-                        await company.save().then(() => {
-                            res.status(204).send()
-                        }).catch((e) => {
-                            res.status(405)
-                            res.send({error: "Wrong json format, check docs for further info /api-doc"})
-                            console.log(e)
-                        })
+        Booking.findOneAndDelete({_id: req.params.booking_id}).then( (booking) => {
+                Company.findOne({nif: booking.company_nif}).then((company) => {
+                    company.bookings -= 1
+                    company.save().then(() => {
+                        res.status(204).send()
+                    }).catch((e) => {
+                        res.status(405)
+                        res.send({error: "Wrong json format, check docs for further info /api-doc"})
+                        console.log(e)
                     })
-                } else {
-                    res.status(404)
-                    res.send({error: "Booking not found"})
-                }
-            }
+                }).catch((e) => {
+                    res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
+                })
+        }).catch((e) => {
+            res.status(405).send({error: "Wrong booking id format"})
+            console.log(e)
         })
-    } catch {
-        res.status(404)
-        res.send({error: "Booking not found"})
-    }
 }
 
 /////////////////////////////////////////////////////
@@ -229,60 +190,49 @@ let delete_booking = async (req, res) => {
 /////////////////////////////////////////////////////
 
 let services_bookings = async (req, res) => {
-    try {
         if (req.query.date && req.query.time) {
             Booking.find({
                 service_id: req.params.id,
                 date: req.query.date,
                 time: req.query.time
-            }, async function (err, booking) {
-                if (err) {
-                    throw err
-                } else {
-                    Company.findOne({nif: req.params.nif}, async function (err, company) {
-                        let capacity = company.capacity + booking.length
-                        let result = {}
-                        result.capacity = capacity
-                        result.bookings = booking
-                        res.send(result)
-                    })
-                }
+            }).then((booking) => {
+                Company.findOne({nif: req.params.nif}).then((company) =>{
+                    let capacity = company.capacity + booking.length
+                    let result = {}
+                    result.capacity = capacity
+                    result.bookings = booking
+                    res.send(result)
+                }).catch((e) => {
+                    res.status(405).send("Wrong json format, check docs for further info /api-doc")
+                    console.log("Error: "+e)
+                })
+            }).catch((e) => {
+                res.status(405).send("Wrong json format, check docs for further info /api-doc")
+                console.log("Error: "+e)
             })
         } else if (req.query.date) {
-            Booking.find({service_id: req.params.id, date: req.query.date}, async function (err, booking) {
-                if (err) {
-                    throw err
-                } else {
-                    res.send(booking)
-                }
+            Booking.find({service_id: req.params.id, date: req.query.date}).then((booking) =>{
+                res.send(booking)
+            }).catch((e) => {
+                res.status(405).send("Wrong json format, check docs for further info /api-doc")
+                console.log("Error: "+e)
             })
         } else if (req.query.time) {
-            Booking.find({service_id: req.params.id, time: req.query.time}, async function (err, booking) {
-                if (err) {
-                    throw err
-                } else {
-                    res.send(booking)
-                }
+            Booking.find({service_id: req.params.id, time: req.query.time}).then((booking) =>{
+                res.send(booking)
+            }).catch((e) => {
+                res.status(405).send("Wrong json format, check docs for further info /api-doc")
+                console.log("Error: "+e)
             })
         } else {
-            Booking.find({service_id: req.params.id}, async function (err, booking) {
-                if (err) {
-                    throw err
-                } else {
-                    if (booking) {
-                        res.status(200)
-                        res.send(booking)
-                    } else {
-                        res.status(404)
-                        res.send({error: "No bookings found"})
-                    }
-                }
+            Booking.find({service_id: req.params.id}).then((booking) =>{
+                res.status(200)
+                res.send(booking)
+            }).catch((e) => {
+                res.status(405).send("Wrong json format, check docs for further info /api-doc")
+                console.log("Error: "+e)
             })
         }
-    } catch {
-        res.status(500)
-        res.send({error: "Internal server error"})
-    }
 }
 
 /////////////////////////////////////////////////////
@@ -290,71 +240,59 @@ let services_bookings = async (req, res) => {
 /////////////////////////////////////////////////////
 
 let company_bookings = async (req, res) => {
-    try {
         if (req.query.date && req.query.time) {
             Booking.find({
                 company_nif: req.params.nif,
                 date: req.query.date,
                 time: req.query.time
-            }, async function (err, booking) {
-                if (err) {
-                    throw err
-                } else {
-                    Company.findOne({nif: req.params.nif}, async function (err, company) {
-                        // Get remaining places in that date and time
+            }).then((booking)=> {
+                Company.findOne({nif: req.params.nif}).then((company)=> {
+                    // Get remaining places in that date and time
+                    let remaining_capacity = company.capacity - booking.length
+                    let result = {}
+                    result.capacity = remaining_capacity
+                    result.bookings = booking
+                    res.send(result)
+                }).catch((e) => {
+                    res.status(405).send("Wrong json format, check docs for further info /api-doc")
+                    console.log("Error in company: "+e)
+                })
+            }).catch((e) => {
+                res.status(405).send("Wrong json format, check docs for further info /api-doc")
+                console.log("Error in booking: "+e)
+            })
+        } else if (req.query.date) {
+            Company.findOne({nif: req.params.nif}).then((company)=> {
+                Booking.find({company_nif: req.params.nif, date: req.query.date}).then((booking) =>{
                         let remaining_capacity = company.capacity - booking.length
                         let result = {}
                         result.capacity = remaining_capacity
                         result.bookings = booking
                         res.send(result)
-                    })
-                }
+                }).catch((e)=>{
+                    send.status(405).send({error:"Wrong json format, check docs for further info /api-doc"})
+                    console.log("NOSE: "+e)
             })
-        } else if (req.query.date) {
-            Company.findOne({nif: req.params.nif}, async function (err, company) {
-                if (err) {
-                    throw err
-                } else {
-                    Booking.find({company_nif: req.params.nif, date: req.query.date}, async function (err, booking) {
-                        if (err) {
-                            throw err
-                        } else {
-                            let remaining_capacity = company.capacity - booking.length
-                            let result = {}
-                            result.capacity = remaining_capacity
-                            result.bookings = booking
-                            res.send(result)
-                        }
-                    })
-                }
+            }).catch((e) => {
+                res.status(405).send("Wrong json format, check docs for further info /api-doc")
+                console.log("Error en solo date: "+e)
             })
         } else if (req.query.time) {
-            Booking.find({company_nif: req.params.nif, time: req.query.time}, async function (err, booking) {
-                if (err) {
-                    throw err
-                } else {
-                    res.send(booking)
-                }
+            Booking.find({company_nif: req.params.nif, time: req.query.time}).then((booking)=> {
+                res.send(booking)
+            }).catch((e) => {
+                res.status(405).send("Wrong json format, check docs for further info /api-doc")
+                console.log("Error en solo time: "+e)
             })
         } else {
-            Booking.find({company_nif: req.params.nif}, async function (err, booking) {
-                if (err) {
-                    throw err
-                } else {
-                    if (booking) {
-                        res.status(200)
-                        res.send(booking)
-                    } else {
-                        res.status(404)
-                        res.send({error: "No bookings found"})
-                    }
-                }
+            Booking.find({company_nif: req.params.nif}).then((booking)=> {
+                    res.status(200)
+                    res.send(booking)
+            }).catch((e) => {
+                res.status(405).send("Wrong json format, check docs for further info /api-doc")
+                console.log("Error en no queries: "+e)
             })
         }
-    } catch {
-        res.status(500)
-        res.send({error: "Internal server error"})
-    }
 }
 
 /////////////////////////////////////////////////////
@@ -362,12 +300,8 @@ let company_bookings = async (req, res) => {
 /////////////////////////////////////////////////////
 
 let remaining_space_by_date = async (req, res) => {
-    try {
         if (req.query.date) {
-            Company.findOne({nif: req.params.nif}, function (err, company) {
-                if (err) {
-                    throw err
-                } else {
+            Company.findOne({nif: req.params.nif}).then((company) => {
                     // Parse date
                     let array_date = req.query.date.split("-")
                     let year = parseInt(array_date[0])
@@ -564,15 +498,13 @@ let remaining_space_by_date = async (req, res) => {
                         }
                     }
                     res.send(result)
-                }
+            }).catch((e) => {
+                res.status(405).send("Wrong json format, check docs for further info /api-doc")
+                console.log("Error: "+e)
             })
         } else {
             res.status(405).send({error: "Date missing"})
         }
-    } catch {
-        res.status(500)
-        res.send({error: "Internal server error"})
-    }
 }
 
 exports.create_booking = create_booking

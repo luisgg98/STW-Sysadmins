@@ -1,4 +1,4 @@
-//Require the dev-dependencies
+/*//Require the dev-dependencies
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 chai.use(chaiHttp);
@@ -55,4 +55,4 @@ describe('Testing Health Zones ', function () {
 
     });
 
-})
+})*/

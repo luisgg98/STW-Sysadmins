@@ -1,4 +1,4 @@
-populate_database.pyimport requests
+import requests
 import json
 
 from pymongo import MongoClient
@@ -8,6 +8,8 @@ db.companies.delete_many({})
 db.users.delete_many({})
 db.services.delete_many({})
 db.bookings.delete_many({})
+db.opinions.delete_many({})
+db.votes.delete_many({})
 '''
 
 ## Populate USERS collection
