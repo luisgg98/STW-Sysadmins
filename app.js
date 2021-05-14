@@ -45,17 +45,17 @@ app.use(cookieParser());
 app.use(cors());
 
 const loadDistrict = require('./scripts/loadDistrict');
+const {upDateStats} = require("./services/stats");
 
 //  In order not to duplicate the information about the
 // health zones is required to delete first the whole collection
 loadDistrict.loadCouncilInfo();
-
 // Schedule tasks to be run on the server.
 // Two in the morning '*/25 * * * *'
 // Due to covid most business close at the hour
 cron.schedule('*/25 * * * *', async function () {
     console.log('Starting to update Health Zone information');
-    await ta.getCasesFile().then(r => {
+    await ta.getCasesFile().then(() => {
         console.log('Information updated working correctly');
     }).catch((error) => {
         console.log('Updating error, something goes wrong');
@@ -63,14 +63,10 @@ cron.schedule('*/25 * * * *', async function () {
     });
 });
 
-const {exec} = require('child_process');
-// Updating our keys
-cron.schedule('11 23 * * *', async function () {
-    exec('node ./scripts/getKeys.js ', (err, stdout, stderr) => {
-        // the *entire* stdout and stderr (buffered)
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderr: ${stderr}`);
-    });
+cron.schedule('*/25 * * * *', async function () {
+    console.log('Starting to update Stats about Database');
+    await upDateStats();
+    console.log('Finishing to update Health Zone information');
 });
 
 app.use('/', indexRouter);

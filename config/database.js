@@ -28,7 +28,8 @@ require('../models/company');
 require('../models/healthzone');
 require('../models/vote');
 require('../models/opinions');
-
+require('../models/stats_companies');
+require('../models/stats_bookings');
 // Monitored some Node process events so that we can close the Mongoose connection when the application ends
 const gracefulShutdown = (msg, callback) => {
     mongoose.connection.close(() => {
