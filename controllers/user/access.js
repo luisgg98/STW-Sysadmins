@@ -2,6 +2,7 @@ const utils = require('../../services/utils')
 const validate_email = require('../../services/validate_email')
 const User = require('../../models/user')
 const jwt_login_strategy = require('../../config/passport');
+const {deletingOpinions} = require("../../services/deletingService");
 
 /**
  *
@@ -137,11 +138,17 @@ let delete_user = async (req, res) => {
     if (!jwt_login_strategy.security(req.params.id, req.result)) {
         res.status(401).send({error: "Wrong User Access denied"})
     } else {
-        User.deleteOne({_id: req.params.id}).then(() => {
-            res.status(204).send()
+        deletingOpinions(req.params.id).then(()=>{
+            User.deleteOne({_id: req.params.id}).then(() => {
+                res.status(204).send()
+            }).catch((e) => {
+                res.status(404).send({error: "User not found"})
+            })
         }).catch((e) => {
-            res.status(404).send({error: "User not found"})
+            res.status(404).send({error: "Error while deleting user"})
+            console.log(e)
         })
+
     }
 }
 

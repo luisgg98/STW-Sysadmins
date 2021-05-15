@@ -5,6 +5,8 @@ const Service = require('../../models/service')
 const geolo = require('../../services/geocoding')
 const jwt_login_strategy = require('../../config/passport');
 const update_time_slots = require('../../services/update_time_slots')
+const {deleteBookings} = require("../../services/deletingService");
+const {deleteService} = require("../../services/deletingService");
 
 /**
  *
@@ -268,11 +270,16 @@ let delete_company = async (req, res) => {
         if (!jwt_login_strategy.security(req.params.id, req.result)) {
             res.status(401).send({error: "Wrong User Access denied"})
         } else {
-            Company.deleteOne({_id: req.params.id}).then(() => {
-                res.status(204).send()
+            deleteService(req.result.nif).then(()=>{
+                Company.deleteOne({_id: req.params.id}).then(() => {
+                    res.status(204).send()
+                }).catch((e) => {
+                    console.log(e)
+                    res.status(404).send({error: "Company not found"})
+                })
             }).catch((e) => {
                 console.log(e)
-                res.status(404).send({error: "Company not found"})
+                res.status(404).send({error: "Error while deleting company"})
             })
         }
     } catch {
@@ -413,12 +420,18 @@ let update_service = async (req, res, next) => {
  * @returns {Promise<void>}
  */
 let delete_service = async (req, res, next) => {
-    await Service.deleteOne({_id: req.params.id}).then(() => {
-        res.status(204).send()
+    deleteBookings(req.params.id).then(async ()=>{
+        await Service.deleteOne({_id: req.params.id}).then(() => {
+            res.status(204).send()
+        }).catch(
+            () => {
+                res.status(404)
+                res.send({error: "Service not found"})
+            })
     }).catch(
         () => {
             res.status(404)
-            res.send({error: "Service not found"})
+            res.send({error: "Error while deleting a service"})
         })
 }
 
