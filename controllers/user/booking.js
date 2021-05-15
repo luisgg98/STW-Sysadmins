@@ -57,9 +57,6 @@ let create_booking = async (req, res) => {
                 res.status(405).send({error: "Wrong body format, check docs for further info /api-docs, Company not found"})
             })
         }).catch((e) => {
-            console.log("User: " + req.params.id)
-            console.log("Company " + service.company)
-            console.log("Service " + req.body.service)
             res.status(405).send({error: "Wrong body format, check docs for further info /api-docs, user not found"})
         })
     }).catch((e) => {
