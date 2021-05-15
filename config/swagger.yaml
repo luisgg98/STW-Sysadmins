@@ -1846,34 +1846,28 @@ components:
         user_id:
           type: string
     StatsCompanies:
-      type: array
-        items:
-          type: object
-          properties:
-            nif:
-              type: string
-            name:
-              type: string
-            bookings:
-              type: number
+      type: object
+      properties:
+          nif:
+            type: string
+          name:
+            type: string
+          bookings:
+            type: number
     StatsBookings:
-      type: array
-        items:
-          type: object
-          properties:
-            time:
-              type: string
-            bookings:
-              type: number
+      type: object
+      properties:
+        time:
+          type: string
+        bookings:
+          type: number
     StatsCategories:
-      type: array
-        items:
-          type: object
-          properties:
-            category:
-              type: string
-            bookings:
-              type: number
+        type: object
+        properties:
+          category:
+            type: string
+          bookings:
+            type: number
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

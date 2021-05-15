@@ -35,7 +35,10 @@ let create_booking = async (req, res) => {
                             .catch((e) => {
                                 res.status(405)
                                 res.send({error: "It was no possible to book it, something is missing"})
-                                console.log(e)
+                                console.log("It was no possible to book it, something is missing")
+                                console.log("User: "+ user.first_name+ ' ' + user.last_name)
+                                console.log("Company "+ company.name)
+                                console.log("Service " + service._id)
                             });
                         res.status(201).send(booking)
                         // Send email
@@ -44,16 +47,19 @@ let create_booking = async (req, res) => {
                     .catch((e) => {
                         res.status(404)
                         res.send({error: "Company was not found"})
-                        console.log(e)
+                        console.log("Company was not found")
+                        console.log("User: "+ user.first_name+ ' ' + user.last_name)
+                        console.log("Company "+ company.name)
+                        console.log("Service " + service.service_id)
                     });
             }).catch((e) => {
-                res.status(405).send({error: "Wrong body format, check docs for further info /api-docs"})
+                res.status(405).send({error: "Wrong body format, check docs for further info /api-docs, Company not found"})
             })
         }).catch((e) => {
-            res.status(405).send({error: "Wrong body format, check docs for further info /api-docs"})
+            res.status(405).send({error: "Wrong body format, check docs for further info /api-docs, user not found"})
         })
     }).catch((e) => {
-        res.status(405).send({error: "Wrong body format, check docs for further info /api-docs"})
+        res.status(405).send({error: "Wrong body format, check docs for further info /api-docs, service not found"})
     })
 }
 
