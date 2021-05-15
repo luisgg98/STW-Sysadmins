@@ -45,9 +45,8 @@ app.use(cookieParser());
 app.use(cors());
 
 const loadDistrict = require('./scripts/loadDistrict');
-const {bestCategories} = require("./services/stats");
 const {upDateStats} = require("./services/stats");
-bestCategories()
+
 //  In order not to duplicate the information about the
 // health zones is required to delete first the whole collection
 loadDistrict.loadCouncilInfo();

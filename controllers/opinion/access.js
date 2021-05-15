@@ -150,6 +150,7 @@ let vote_opinion = async (req, res, next) => {
                                 await opinion.save()
                                     .then(() => {
                                         let new_opinion = {
+                                            "_id": opinion._id,
                                             "comment": opinion.comment,
                                             "user_id": opinion.user_id,
                                             "stars": opinion.stars,
@@ -224,6 +225,7 @@ let get_opinion = async (req, res, next) => {
                 }
                 console.log(opinions[i])
                 new_opinions[i] = {
+                    "_id": opinions[i]._id,
                     "comment": opinions[i].comment,
                     "user_id": opinions[i].user_id,
                     "stars": opinions[i].stars,
