@@ -18,7 +18,6 @@ const {sendReminder} = require("../../scripts/email");
  */
 let create_booking = async (req, res) => {
     Service.findOne({_id: req.body.service}).then((service) => {
-        console.log(req.body)
         //Check if user exists
         User.findOne({_id: req.params.id}).then((user) => {
             const booking = new Booking({
@@ -34,24 +33,16 @@ let create_booking = async (req, res) => {
                     .then(async () => {
                         await booking.save()
                             .catch((e) => {
-                                res.status(405)
-                                res.send({error: "It was no possible to book it, something is missing"})
+                                res.status(405).send({error: "It was no possible to book it, something is missing"})
                                 console.log("It was no possible to book it, something is missing")
-                                console.log("User: " + user.first_name + ' ' + user.last_name)
-                                console.log("Company " + company.name)
-                                console.log("Service " + service._id)
                             });
                         res.status(201).send(booking)
                         // Send email
                         sendReminder(user, booking, company);
                     })
                     .catch((e) => {
-                        res.status(404)
-                        res.send({error: "Company was not found"})
+                        res.status(404).send({error: "Company was not found"})
                         console.log("Company was not found")
-                        console.log("User: " + user.first_name + ' ' + user.last_name)
-                        console.log("Company " + company.name)
-                        console.log("Service " + service.service_id)
                     });
             }).catch((e) => {
                 res.status(405).send({error: "Wrong body format, check docs for further info /api-docs, Company not found"})
@@ -78,11 +69,9 @@ let get_bookings = async (req, res) => {
             let id = req.query.id
             Booking.findOne({_id: id}).then((booking) => {
                 if (booking) {
-                    res.status(200)
-                    res.send(booking)
+                    res.status(200).send(booking)
                 } else {
-                    res.status(404)
-                    res.send({error: "Booking not found"})
+                    res.status(404).send({error: "Booking not found"})
                 }
             }).catch((e) => {
                 res.status(405).send({error: "Wrong id format"})
@@ -98,11 +87,9 @@ let get_bookings = async (req, res) => {
             // Fetch all bookings
             Booking.find({user_id: req.params.id}).then((bookings) => {
                 if (bookings) {
-                    res.status(200)
-                    res.send(bookings)
+                    res.status(200).send(bookings)
                 } else {
-                    res.status(404)
-                    res.send({error: "No bookings were found"})
+                    res.status(404).send({error: "No bookings were found"})
                 }
             }).catch((e) => {
                 res.status(405).send({error: "Wrong user_format"})
@@ -110,8 +97,7 @@ let get_bookings = async (req, res) => {
             })
         }
     } catch {
-        res.status(500)
-        res.send({error: "Internal server error"})
+        res.status(500).send({error: "Internal server error"})
     }
 }
 
@@ -179,8 +165,7 @@ let delete_booking = async (req, res) => {
             company.save().then(() => {
                 res.status(204).send()
             }).catch((e) => {
-                res.status(405)
-                res.send({error: "Wrong json format, check docs for further info /api-doc"})
+                res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
                 console.log(e)
             })
         }).catch((e) => {
@@ -195,7 +180,12 @@ let delete_booking = async (req, res) => {
 /////////////////////////////////////////////////////
 //             BOOKINGS FROM SERVICE               //
 /////////////////////////////////////////////////////
-
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let services_bookings = async (req, res) => {
     if (req.query.date && req.query.time) {
         Booking.find({
@@ -233,8 +223,7 @@ let services_bookings = async (req, res) => {
         })
     } else {
         Booking.find({service_id: req.params.id}).then((booking) => {
-            res.status(200)
-            res.send(booking)
+            res.status(200).send(booking)
         }).catch((e) => {
             res.status(405).send("Wrong json format, check docs for further info /api-doc")
             console.log("Error: " + e)
@@ -245,7 +234,12 @@ let services_bookings = async (req, res) => {
 /////////////////////////////////////////////////////
 //             BOOKINGS FROM COMPANY               //
 /////////////////////////////////////////////////////
-
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let company_bookings = async (req, res) => {
     if (req.query.date && req.query.time) {
         Booking.find({
@@ -277,7 +271,7 @@ let company_bookings = async (req, res) => {
                 result.bookings = booking
                 res.send(result)
             }).catch((e) => {
-                send.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
+                res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
                 console.log("NOSE: " + e)
             })
         }).catch((e) => {
@@ -293,8 +287,7 @@ let company_bookings = async (req, res) => {
         })
     } else {
         Booking.find({company_nif: req.params.nif}).then((booking) => {
-            res.status(200)
-            res.send(booking)
+            res.status(200).send(booking)
         }).catch((e) => {
             res.status(405).send("Wrong json format, check docs for further info /api-doc")
             console.log("Error en no queries: " + e)
@@ -306,6 +299,12 @@ let company_bookings = async (req, res) => {
 //     REMAINING SPACE IN A DATE FROM COMPANY      //
 /////////////////////////////////////////////////////
 
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let remaining_space_by_date = async (req, res) => {
     if (req.query.date) {
         Company.findOne({nif: req.params.nif}).then((company) => {
