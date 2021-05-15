@@ -18,6 +18,7 @@ const {sendReminder} = require("../../scripts/email");
  */
 let create_booking = async (req, res) => {
     Service.findOne({_id: req.body.service}).then((service) => {
+        console.log(req.body)
         //Check if user exists
         User.findOne({_id: req.params.id}).then((user) => {
             const booking = new Booking({

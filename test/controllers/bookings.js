@@ -148,6 +148,7 @@ describe('Testing Booking API', () => {
     //router.post("/:id/bookings", ControllerBooking.create_booking)
     it('It should not create a new booking, SERVICE NOT FOUND', function (done) {
         let no_service = {
+            service:'',
             date: '2020-05-12',
             time: '9:00'
         }
