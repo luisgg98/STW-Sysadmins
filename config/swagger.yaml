@@ -799,6 +799,50 @@ paths:
         "500":
           description: "Internal server error, something went wrong while searching for Health Zones"
 
+  /statsBookings:
+    get:
+      operationId: getAllBookingStats
+      tags:
+        - "Stats"
+      responses:
+        "200":
+          description: "Receive the top ten best booking times"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatsBookings'
+        "500":
+          description: "Internal server error, something went wrong while updating stats"
+  /statsCompanies:
+    get:
+      operationId: getAllCompaniesStats
+      tags:
+        - "Stats"
+      responses:
+        "200":
+          description: "Receive the top ten best companies"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatsCompanies'
+        "500":
+          description: "Internal server error, something went wrong while updating stats"
+  /statsCategories:
+    get:
+      operationId: getAllCategoriesStats
+      tags:
+        - "Stats"
+      responses:
+        "200":
+          description: "Receive the top ten best categories"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatsCategories'
+        "500":
+          description: "Internal server error, something went wrong while updating stats"
+
+
 components:
   securitySchemes:
     bearerAuth:
@@ -1801,6 +1845,35 @@ components:
       properties:
         user_id:
           type: string
+    StatsCompanies:
+      type: array
+        items:
+          type: object
+          properties:
+            nif:
+              type: string
+            name:
+              type: string
+            bookings:
+              type: number
+    StatsBookings:
+      type: array
+        items:
+          type: object
+          properties:
+            time:
+              type: string
+            bookings:
+              type: number
+    StatsCategories:
+      type: array
+        items:
+          type: object
+          properties:
+            category:
+              type: string
+            bookings:
+              type: number
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

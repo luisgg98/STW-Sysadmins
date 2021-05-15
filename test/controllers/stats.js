@@ -6,13 +6,6 @@ const {upDateStats} = require("../../services/stats");
 let should = chai.should();
 chai.use(chaiHttp);
 
-/**router.use('/statsBooking', StatsBRouter)
-
-
-
-
- router.use('/statsCompanies', StatsCRouter)*/
-
 describe('Testing Stats API', () => {
 
     it('Updatind stats', function (done) {
@@ -21,7 +14,7 @@ describe('Testing Stats API', () => {
     })
 
     it('Getting Booking Stats ', function (done) {
-        const url = '/api/statsBooking/';
+        const url = '/api/statsBookings/';
         chai.request(server)
             .get(url)
             .end((err, res) => {
@@ -40,4 +33,14 @@ describe('Testing Stats API', () => {
             });
     });
 
+
+    it('Getting Categories Stats ', function (done) {
+        const url = '/api/statsCategories/';
+        chai.request(server)
+            .get(url)
+            .end((err, res) => {
+                res.should.have.status(200);
+                done();
+            });
+    });
 })

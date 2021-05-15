@@ -7,6 +7,7 @@ const adminRouter = require('./admin')
 const captchaRouter = require('./captcha')
 const StatsBRouter = require('./statsBooking')
 const StatsCRouter = require('./statsCompany')
+const StatsCARouter = require('./statsCategory')
 /**
  *
  */
@@ -36,12 +37,18 @@ router.use('/captcha', captchaRouter)
 /**
  *
  */
-router.use('/statsBooking', StatsBRouter)
+router.use('/statsBookings', StatsBRouter)
 
 
 /**
  *
  */
 router.use('/statsCompanies', StatsCRouter)
+
+
+/**
+ *
+ */
+router.use('/statsCategories', StatsCARouter)
 
 module.exports = router;
