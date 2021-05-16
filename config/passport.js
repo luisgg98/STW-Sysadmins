@@ -103,5 +103,24 @@ module.exports = {
             }
         }
         return accessGranted;
+    },
+
+    owner_booking: function (booking, result) {
+        let accessGranted = false
+        if (result.security_level !== undefined && result.security_level > 1) {
+            accessGranted = true
+        } else {
+            if (booking.user_id == result._id) {
+                accessGranted = true
+            } else {
+                if (result instanceof Company) {
+                    if (result.nif == booking.company_nif) {
+                        accessGranted = true
+                    }
+                }
+            }
+        }
+        return accessGranted;
+
     }
 };

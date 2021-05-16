@@ -4,6 +4,7 @@ const User = require('../../models/user')
 const Company = require('../../models/company')
 const {sendCancellation} = require("../../services/email");
 const {sendReminder} = require("../../services/email");
+const jwt_login_strategy = require('../../config/passport');
 
 // /users/{ID}/bookings
 // GET (get all bookings or filter by id
@@ -124,17 +125,22 @@ let update_bookings = async (req, res) => {
                 if (user) {
                     Company.findOne({nif: booking.company_nif}).then((company) => {
                         if (company) {
-                            booking.save()
-                                .then((new_booking) => {
-                                    res.status(200).send(new_booking)
-                                    // Send email
-                                    sendReminder(user, new_booking, company);
-                                })
-                                .catch((e) => {
-                                    res.status(405)
-                                    res.send({error: "Wrong json format, check docs for further info /api-doc"})
-                                    console.log("Error: " + e)
-                                })
+                            if(jwt_login_strategy.owner_booking(booking,req.result)){
+                                booking.save()
+                                    .then((new_booking) => {
+                                        res.status(200).send(new_booking)
+                                        // Send email
+                                        sendReminder(user, new_booking, company);
+                                    })
+                                    .catch((e) => {
+                                        res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
+                                        console.log("Error: " + e)
+                                    })
+                            }
+                            else{
+                                res.status(401).send({error: "Access denied"})
+                            }
+
                         }
                     }).catch((e) => {
                         res.status(405).send({error: "Wrong user_id format"})
@@ -165,14 +171,19 @@ let delete_booking = async (req, res) => {
     Booking.findOneAndDelete({_id: req.params.booking_id}).then((booking) => {
         User.findOne({_id: booking.user_id}).then((user) => {
             Company.findOne({nif: booking.company_nif}).then((company) => {
-                company.bookings -= 1
-                company.save().then(() => {
-                    sendCancellation(user, booking, company);
-                    res.status(204).send()
-                }).catch((e) => {
-                    res.status(405).send({error: "Wrong json format, check docs for further info /api-doc, ERROR SAVING"})
-                    console.log(e)
-                })
+                if(jwt_login_strategy.owner_booking(booking,req.result)) {
+                    company.bookings -= 1
+                    company.save().then(() => {
+                        sendCancellation(user, booking, company);
+                        res.status(204).send()
+                    }).catch((e) => {
+                        res.status(405).send({error: "Wrong json format, check docs for further info /api-doc, ERROR SAVING"})
+                        console.log(e)
+                    })
+                }
+                else{
+                    res.status(401).send({error: "Access denied"})
+                }
             }).catch((e) => {
                 res.status(405).send({error: "Wrong json format, check docs for further info /api-doc, COMPANY NOT FOUND"})
             })
