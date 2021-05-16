@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 const company = {
     "nif": "012345678",
     "name": "Cafetería Lamarula",
-    "email": "user@example.com",
+    "email": "user1@example.com",
     "password": "string",
     "street": "Calle Francisco de Vitoria",
     "streetnumber": 30,
@@ -67,7 +67,7 @@ const company = {
 let user = {
     "first_name": "string",
     "last_name": "string",
-    "email": "user@example.com",
+    "email": "user2@example.com",
     "password": "string",
     "phone": 523456789
 };

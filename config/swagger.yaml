@@ -86,7 +86,7 @@ paths:
           description: "Wrong json format, check docs for further info /api-docs"
         "409":
           description: "User already exists"
-  /users/{phone}:
+  /users/{email}:
     get:
       operationId: getUser
       tags:
@@ -94,7 +94,7 @@ paths:
       summary: "Get all public data of an user"
       parameters:
         - in: path
-          name: "phone"
+          name: "email"
           description: "Phone number of user to retrieve"
           required: true
           schema:

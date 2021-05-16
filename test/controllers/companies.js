@@ -8,7 +8,7 @@ chai.use(chaiHttp);
 let company = {
     "nif": "B12345678",
     "name": "Cafetería Lamarula",
-    "email": "user@example.com",
+    "email": "user3@example.com",
     "password": "string",
     "street": "Calle Francisco de Vitoria",
     "streetnumber": 30,
@@ -52,7 +52,7 @@ let company_wrong_email = {
 let company_category = {
     "nif": "B12345675",
     "name": "Cafetería Lamarula",
-    "email": "user@example.com",
+    "email": "user4@example.com",
     "password": "string",
     "street": "Calle Francisco de Vitoria",
     "streetnumber": 30,

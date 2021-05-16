@@ -61,7 +61,6 @@ let get = async (req, res, next) => {
         res.status(500).send({error: "Internal error server"})
     }
 }
-//  TODO FILTRAR POR CATEGORIA
 /**
  *
  * @param req
@@ -90,7 +89,8 @@ let fetchCompany = async (req, res) => {
  */
 let register = async (req, res) => {
     // Test if exists another company with the same nif
-    Company.count({nif: req.body.nif}).then((count) => {
+    //{ $or:[ {nif: req.body.nif} {'email':req.body.email} ]}
+    Company.count({ $or:[ {nif: req.body.nif}, {email:req.body.email}]}).then((count) => {
         if (count > 0) {
             res.status(409).send({error: "Company already exists"})
         } else {

@@ -99,7 +99,7 @@ describe('Testing User API', () => {
     it('it should not create the same user using POST, missing parameters', (done => {
         let user_no_required = {
             "first_name": "string",
-            "email": "user@example.com",
+            "email": "usertesting12345@example.com",
             "password": "string",
             "phone": 993886789
         };
