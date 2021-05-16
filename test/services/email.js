@@ -1,4 +1,5 @@
-const {sendReminder} = require("../../scripts/email");
+const {sendCancellation} = require("../../services/email");
+const {sendReminder} = require("../../services/email");
 
 
 describe('Testing email service', function () {
@@ -8,7 +9,7 @@ describe('Testing email service', function () {
         "last_name": "string",
         "email": "739202@unizar.es",
         "password": "string",
-        "phone": 123456789
+        "phone": 103006089
     };
 
     let company = {
@@ -26,8 +27,15 @@ describe('Testing email service', function () {
         "date": "lunes, 10 de mayo de 2021 ",
         "time": "9:30 - 10:00"
     }
-    it('Sending emails', function (done) {
+
+
+    it('Sending reminder emails', function (done) {
         sendReminder(user, booking, company);
+        done();
+    })
+
+    it('Sending cancellation emails',function (done) {
+        sendCancellation(user, booking, company);
         done();
     })
 

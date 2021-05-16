@@ -2,7 +2,8 @@ const Booking = require('../../models/booking')
 const Service = require('../../models/service')
 const User = require('../../models/user')
 const Company = require('../../models/company')
-const {sendReminder} = require("../../scripts/email");
+const {sendCancellation} = require("../../services/email");
+const {sendReminder} = require("../../services/email");
 
 // /users/{ID}/bookings
 // GET (get all bookings or filter by id
@@ -160,19 +161,25 @@ let update_bookings = async (req, res) => {
  */
 let delete_booking = async (req, res) => {
     Booking.findOneAndDelete({_id: req.params.booking_id}).then((booking) => {
-        Company.findOne({nif: booking.company_nif}).then((company) => {
-            company.bookings -= 1
-            company.save().then(() => {
-                res.status(204).send()
+        User.findOne({_id: booking.user_id}).then((user) => {
+            Company.findOne({nif: booking.company_nif}).then((company) => {
+                company.bookings -= 1
+                company.save().then(() => {
+                    sendCancellation(user, booking, company);
+                    res.status(204).send()
+                }).catch((e) => {
+                    res.status(405).send({error: "Wrong json format, check docs for further info /api-doc, ERROR SAVING"})
+                    console.log(e)
+                })
             }).catch((e) => {
-                res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
-                console.log(e)
+                res.status(405).send({error: "Wrong json format, check docs for further info /api-doc, COMPANY NOT FOUND"})
             })
+
         }).catch((e) => {
-            res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
+            res.status(405).send({error: "Wrong json format, check docs for further info /api-doc, USER NOT FOUND"})
         })
     }).catch((e) => {
-        res.status(405).send({error: "Wrong booking id format"})
+        res.status(405).send({error: "Wrong booking id format,BOOKING NOT FOUND"})
         console.log(e)
     })
 }
