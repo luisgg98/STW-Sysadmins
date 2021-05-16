@@ -328,9 +328,7 @@ let create_service = async (req, res, next) => {
  * @returns {Promise<void>}
  */
 let get_services = async (req, res, next) => {
-    console.log("a")
     if (req.query.id) {
-        console.log("b")
         // Fetch just one service
         let id = req.query.id
         Company.findOne({nif: req.params.nif}).catch((e) => {

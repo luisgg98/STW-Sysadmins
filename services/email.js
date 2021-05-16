@@ -12,8 +12,8 @@ module.exports.sendCancellation = function (user, booking, company) {
                 type: 'OAuth2',
                 user: zitation_email,
                 pass: password,
-                clientId: '275023920745-3coq4f07847160cb0hv5lop7cgq8p9u0.apps.googleusercontent.com',
-                clientSecret: 'rXbtH9UQqpnB9eumL7FWV2aL'
+                clientId: '',
+                clientSecret: ''
             }
         });
         const email = new Email({
@@ -36,7 +36,8 @@ module.exports.sendCancellation = function (user, booking, company) {
                 locals: {
                     name: user.first_name + ' ' + user.last_name,
                     date: booking.date+' a las  '+booking.time + ' en ' + company.name,
-                    place: company.street + ' , ' + number + ', ' + company.zipcode
+                    place: company.street + ' , ' + number + ', ' + company.zipcode,
+                    company: company.name
                 }
             })
             .then(console.log)
@@ -60,8 +61,8 @@ module.exports.sendReminder = async function (user, booking, company) {
                 type: 'OAuth2',
                 user: zitation_email,
                 pass: password,
-                clientId: '275023920745-3coq4f07847160cb0hv5lop7cgq8p9u0.apps.googleusercontent.com',
-                clientSecret: 'rXbtH9UQqpnB9eumL7FWV2aL'
+                clientId: '',
+                clientSecret: ''
             }
         });
         const email = new Email({
@@ -88,7 +89,8 @@ module.exports.sendReminder = async function (user, booking, company) {
                     date: booking.date + ' a las  ' + booking.time + ' en ' + company.name,
                     place: company.street + ' , ' + number + ', ' + company.zipcode,
                     image: img,
-                    linkWeb: text
+                    linkWeb: text,
+                    company: company.name
                 }
             })
             .then(console.log)

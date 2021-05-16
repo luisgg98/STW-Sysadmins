@@ -105,7 +105,7 @@ async function bestBookings() {
  */
 async function bestCategories() {
     return new Promise((resolve, reject) => {
-        Company.find({bookings: {$gt: 0}}).then((companies) => {
+        Company.find({}).then((companies) => {
             let groups = companies.reduce((groups, item) => {
                 const group = (groups[item.category] || []);
                 group.push(item);
@@ -148,32 +148,37 @@ async function upDateStats() {
     bestCategories().then((stats_category) => {
         findBestCompanies().then((stats_companies) => {
             bestBookings().then((stats_booking) => {
-                StatsBookings.deleteMany({}).then(() => {
-                    StatsCompanies.deleteMany({}).then(() => {
-                        StatsCompanies.insertMany(stats_companies).then(() => {
-                            StatsBookings.insertMany(stats_booking).then(() => {
-                                StatsCategory.insertMany(stats_category).then(() => {
-                                    console.log("Success updating stats")
+                StatsCategory.deleteMany({}).then(()=>{
+                    StatsBookings.deleteMany({}).then(() => {
+                        StatsCompanies.deleteMany({}).then(() => {
+                            StatsCompanies.insertMany(stats_companies).then(() => {
+                                StatsBookings.insertMany(stats_booking).then(() => {
+                                    StatsCategory.insertMany(stats_category).then(() => {
+                                        console.log("Success updating stats")
+                                    }).catch((e) => {
+                                        console.log("Error saving new category stats")
+                                        console.log(e)
+                                    })
                                 }).catch((e) => {
-                                    console.log("Error saving new category stats")
+                                    console.log("Error saving new bookings stats")
                                     console.log(e)
                                 })
                             }).catch((e) => {
-                                console.log("Error saving new bookings stats")
+                                console.log("Error saving new companies stats")
                                 console.log(e)
                             })
                         }).catch((e) => {
-                            console.log("Error saving new companies stats")
+                            console.log("Error deleting  companies old stats")
                             console.log(e)
                         })
                     }).catch((e) => {
-                        console.log("Error deleting  companies old stats")
+                        console.log("Error deleting booking old stats")
                         console.log(e)
                     })
-                }).catch((e) => {
-                    console.log("Error deleting booking old stats")
-                    console.log(e)
+                }).catch((e)=>{
+                    console.log("Error while deleting old category stats")
                 })
+
             }).catch((e) => {
                 console.log("Error updating booking  stats")
                 console.log(e)
