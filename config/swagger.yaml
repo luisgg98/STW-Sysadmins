@@ -42,6 +42,17 @@ paths:
       tags:
         - "User"
       summary: "Get all users"
+      parameters:
+        - in: query
+          name: "name"
+          description: name of user
+          schema:
+            type: string
+        - in: query
+          name: "last name"
+          description: last name of user
+          schema:
+            type: string
       responses:
         "200":
           description: "All users correctly fetched"
@@ -1848,12 +1859,12 @@ components:
     StatsCompanies:
       type: object
       properties:
-          nif:
-            type: string
-          name:
-            type: string
-          bookings:
-            type: number
+        nif:
+          type: string
+        name:
+          type: string
+        bookings:
+          type: number
     StatsBookings:
       type: object
       properties:
@@ -1862,12 +1873,12 @@ components:
         bookings:
           type: number
     StatsCategories:
-        type: object
-        properties:
-          category:
-            type: string
-          bookings:
-            type: number
+      type: object
+      properties:
+        category:
+          type: string
+        bookings:
+          type: number
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"

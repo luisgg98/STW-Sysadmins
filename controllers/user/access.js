@@ -54,11 +54,7 @@ let register = async (req, res) => {
  */
 let fetchUser = async (req, res) => {
     User.find({email: req.params.email}).then((user) => {
-        if (user) {
-            res.status(200).send(user)
-        } else {
-            res.status(404).send({error: "User not found"})
-        }
+        res.status(200).send(user)
     }).catch(() => {
         res.status(500).send({error: "Internal error server"})
     })
@@ -72,21 +68,17 @@ let fetchUser = async (req, res) => {
  */
 let login = async (req, res) => {
     User.findOne({email: req.body.email}).then((user) => {
-        if (user) {
-            if (utils.validPassword(req.body.password, user.password, user.salt)) {
-                const tokenObject = utils.issueJWT(user);
-                res.status(200).send({
-                    user: user, token: tokenObject.token, expiresIn: tokenObject.expires
-                })
-            } else {
-                res.status(401).send({error: "Incorrect login"})
-            }
+        if (utils.validPassword(req.body.password, user.password, user.salt)) {
+            const tokenObject = utils.issueJWT(user);
+            res.status(200).send({
+                user: user, token: tokenObject.token, expiresIn: tokenObject.expires
+            })
         } else {
-            res.status(404).send({error: "User not found"})
+            res.status(401).send({error: "Incorrect login"})
         }
     }).catch((e) => {
         console.log(e)
-        res.status(500).send({error: "Internal error server"})
+        res.status(404).send({error: "Wrong user"})
     })
 }
 
@@ -159,15 +151,34 @@ let delete_user = async (req, res) => {
  * @returns {Promise<void>}
  */
 let getAllUsers = async (req, res) => {
-    User.find({}).then((users) => {
-        if (users) {
+    if (req.query.id){
+        User.find({_id:req.query.id}).then((user) => {
+            res.send(user)
+        }).catch(() => {
+            res.status(500).send({error: "Internal server error"})
+        })
+    }
+    else if (req.query.name){
+        User.find({first_name: new RegExp(req.query.name)}).then((users) => {
             res.send(users)
-        } else {
-            res.status(404).send({error: "Users not found"})
-        }
-    }).catch(() => {
-        res.status(500).send({error: "Internal server error"})
-    })
+        }).catch(() => {
+            res.status(500).send({error: "Internal server error"})
+        })
+    }
+    else if (req.query.last_name){
+        User.find({first_name: new RegExp(req.query.last_name)}).then((users) => {
+            res.send(users)
+        }).catch(() => {
+            res.status(500).send({error: "Internal server error"})
+        })
+    }
+    else{
+        User.find({}).then((users) => {
+            res.send(users)
+        }).catch(() => {
+            res.status(500).send({error: "Internal server error"})
+        })
+    }
 }
 
 exports.register = register

@@ -13,7 +13,6 @@ let user = {
     "phone": 773456789
 };
 
-
 let user_update = {
     "first_name": "This is a test",
     "last_name": "This is a test",
@@ -21,7 +20,6 @@ let user_update = {
     "password": "string",
     "phone": 773456789
 };
-
 
 let wrong_user = {
     "first_name": "string",
@@ -45,6 +43,26 @@ describe('Testing User API', () => {
     it('it should GET all the users', (done) => {
         chai.request(server)
             .get(url)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('array');
+                done();
+            });
+    });
+
+    it('it should GET all the users WITH a name', (done) => {
+        chai.request(server)
+            .get(url+'?name=test')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('array');
+                done();
+            });
+    });
+
+    it('it should GET all the users WITH a surname', (done) => {
+        chai.request(server)
+            .get(url+'?last_name=test')
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('array');
@@ -159,6 +177,27 @@ describe('Testing User API', () => {
             })
     }));
 
+    it('It should NOT update a new user using PATCH', (done => {
+        chai.request(server)
+            .patch(url + id_user)
+            .send({"last_name": "This is a test"})
+            .set({"Authorization": `aasdf`})
+            .end((err, res) => {
+                if (err) throw err;
+                res.should.have.status(401);
+                done();
+            })
+    }));
+
+    it('it should GET all the users WITH a id', (done) => {
+        chai.request(server)
+            .get(url+'?id='+id_user)
+            .end((err, res) => {
+                res.should.have.status(200);
+                done();
+            });
+    });
+
     //WRONG UPDATE NO CREDENTIALS
     it('It should NOT update a new user using PATCH, NO CREDENTIALS', (done => {
         chai.request(server)
@@ -205,7 +244,17 @@ describe('Testing User API', () => {
                 res.should.have.status(204);
                 done();
             })
+    }));
 
+    it('It should NOT delete a new user using DELETE', (done => {
+        chai.request(server)
+            .delete(url + id_user)
+            .set({"Authorization": `asdfasdf`})
+            .end((err, res) => {
+                if (err) throw err;
+                res.should.have.status(401);
+                done();
+            })
     }));
 
 });
