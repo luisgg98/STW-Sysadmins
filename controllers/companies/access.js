@@ -270,7 +270,7 @@ let delete_company = async (req, res) => {
         if (!jwt_login_strategy.security(req.params.id, req.result)) {
             res.status(401).send({error: "Wrong User Access denied"})
         } else {
-            deleteService(req.result.nif).then(()=>{
+            deleteService(req.result.nif).then(() => {
                 Company.deleteOne({_id: req.params.id}).then(() => {
                     res.status(204).send()
                 }).catch((e) => {
@@ -420,7 +420,7 @@ let update_service = async (req, res, next) => {
  * @returns {Promise<void>}
  */
 let delete_service = async (req, res, next) => {
-    deleteBookings(req.params.id).then(async ()=>{
+    deleteBookings(req.params.id).then(async () => {
         await Service.deleteOne({_id: req.params.id}).then(() => {
             res.status(204).send()
         }).catch(

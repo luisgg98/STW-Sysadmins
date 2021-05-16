@@ -36,10 +36,12 @@ let create_booking = async (req, res) => {
                             .catch((e) => {
                                 res.status(405).send({error: "It was no possible to book it, something is missing"})
                                 console.log("It was no possible to book it, something is missing")
+                            }).then(async (new_booking)=>{
+                                res.status(201).send(new_booking)
+                                // Send email
+                                await sendReminder(user, new_booking, company);
                             });
-                        res.status(201).send(booking)
-                        // Send email
-                        sendReminder(user, booking, company);
+
                     })
                     .catch((e) => {
                         res.status(404).send({error: "Company was not found"})
@@ -123,10 +125,10 @@ let update_bookings = async (req, res) => {
                     Company.findOne({nif: booking.company_nif}).then((company) => {
                         if (company) {
                             booking.save()
-                                .then(() => {
-                                    res.status(200).send(booking)
+                                .then((new_booking) => {
+                                    res.status(200).send(new_booking)
                                     // Send email
-                                    sendReminder(user, booking, company);
+                                    sendReminder(user, new_booking, company);
                                 })
                                 .catch((e) => {
                                     res.status(405)

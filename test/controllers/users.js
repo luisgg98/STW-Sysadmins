@@ -52,7 +52,7 @@ describe('Testing User API', () => {
 
     it('it should GET all the users WITH a name', (done) => {
         chai.request(server)
-            .get(url+'?name=test')
+            .get(url + '?name=test')
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('array');
@@ -62,7 +62,7 @@ describe('Testing User API', () => {
 
     it('it should GET all the users WITH a surname', (done) => {
         chai.request(server)
-            .get(url+'?last_name=test')
+            .get(url + '?last_name=test')
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('array');
@@ -191,7 +191,7 @@ describe('Testing User API', () => {
 
     it('it should GET all the users WITH a id', (done) => {
         chai.request(server)
-            .get(url+'?id='+id_user)
+            .get(url + '?id=' + id_user)
             .end((err, res) => {
                 res.should.have.status(200);
                 done();

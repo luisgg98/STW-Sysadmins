@@ -130,7 +130,7 @@ let delete_user = async (req, res) => {
     if (!jwt_login_strategy.security(req.params.id, req.result)) {
         res.status(401).send({error: "Wrong User Access denied"})
     } else {
-        deletingOpinions(req.params.id).then(()=>{
+        deletingOpinions(req.params.id).then(() => {
             User.deleteOne({_id: req.params.id}).then(() => {
                 res.status(204).send()
             }).catch((e) => {
@@ -151,28 +151,25 @@ let delete_user = async (req, res) => {
  * @returns {Promise<void>}
  */
 let getAllUsers = async (req, res) => {
-    if (req.query.id){
-        User.find({_id:req.query.id}).then((user) => {
+    if (req.query.id) {
+        User.find({_id: req.query.id}).then((user) => {
             res.send(user)
         }).catch(() => {
             res.status(500).send({error: "Internal server error"})
         })
-    }
-    else if (req.query.name){
+    } else if (req.query.name) {
         User.find({first_name: new RegExp(req.query.name)}).then((users) => {
             res.send(users)
         }).catch(() => {
             res.status(500).send({error: "Internal server error"})
         })
-    }
-    else if (req.query.last_name){
+    } else if (req.query.last_name) {
         User.find({first_name: new RegExp(req.query.last_name)}).then((users) => {
             res.send(users)
         }).catch(() => {
             res.status(500).send({error: "Internal server error"})
         })
-    }
-    else{
+    } else {
         User.find({}).then((users) => {
             res.send(users)
         }).catch(() => {
