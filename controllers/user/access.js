@@ -53,7 +53,7 @@ let register = async (req, res) => {
  * @returns {Promise<void>}
  */
 let fetchUser = async (req, res) => {
-    User.find({email: req.params.email}).then((user) => {
+    User.findOne({email: req.params.email}).then((user) => {
         res.status(200).send(user)
     }).catch(() => {
         res.status(500).send({error: "Internal error server"})

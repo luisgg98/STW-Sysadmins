@@ -16,7 +16,7 @@ router.post("/login", ControllerUser.login)
 
 /*
  */
-router.get("/:phone", ControllerUser.fetchUser)
+router.get("/:email", ControllerUser.fetchUser)
 
 router.patch("/:id", jwt_login_strategy.authenticate, ControllerUser.update);
 
