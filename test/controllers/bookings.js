@@ -131,7 +131,8 @@ describe('Testing Booking API', () => {
         let booking = {
             service: id_service,
             date: '2020-05-12',
-            time: '9:00'
+            time: '9:00',
+            testing: true
         }
         chai.request(server).post('/api/users/' + user_id + 'WRONGNOTFOUND' + '/bookings')
             .send(booking)
@@ -150,7 +151,8 @@ describe('Testing Booking API', () => {
         let no_service = {
             service: '',
             date: '2020-05-12',
-            time: '9:00'
+            time: '9:00',
+            testing: true
         }
         chai.request(server).post('/api/users/' + user_id + '/bookings')
             .send(no_service)
@@ -168,7 +170,8 @@ describe('Testing Booking API', () => {
         let booking = {
             service: id_service,
             date: '2020-05-12',
-            time: '9:00'
+            time: '9:00',
+            testing: true
         }
         chai.request(server).post('/api/users/' + user_id + '/bookings')
             .send(booking).timeout(5000)
@@ -196,7 +199,8 @@ describe('Testing Booking API', () => {
     it('It should update a booking', function (done) {
         let updated = {
             date: '2020-05-12',
-            time: '10:30'
+            time: '10:30',
+            testing: true
         }
         chai.request(server)
             .patch('/api/users/' + user_id + '/bookings/' + bookings_id)
@@ -312,7 +316,8 @@ describe('Testing Booking API', () => {
     //router.get("/:nif/bookings/capacity", ControllerBooking.remaining_space_by_date)
     it('It should get capacity of booking from a company MONDAY', function (done) {
         let date = {
-            date: '2021-05-10'
+            date: '2021-05-10',
+            testing: true
         }
         chai.request(server)
             .get('/api/companies/' + id_company + '/bookings/capacity?date=' + date.date)
@@ -326,7 +331,8 @@ describe('Testing Booking API', () => {
 
     it('It should get capacity of booking from a company TUESDAY', function (done) {
         let date = {
-            date: '2021-05-11'
+            date: '2021-05-11',
+            testing: true
         }
         chai.request(server)
             .get('/api/companies/' + id_company + '/bookings/capacity?date=' + date.date)
@@ -340,7 +346,8 @@ describe('Testing Booking API', () => {
 
     it('It should get capacity of booking from a company WEDNESDAY', function (done) {
         let date = {
-            date: '2021-05-12'
+            date: '2021-05-12',
+            testing: true
         }
         chai.request(server)
             .get('/api/companies/' + id_company + '/bookings/capacity?date=' + date.date)
@@ -354,7 +361,8 @@ describe('Testing Booking API', () => {
 
     it('It should get capacity of booking from a company THURSDAY', function (done) {
         let date = {
-            date: '2021-05-13'
+            date: '2021-05-13',
+            testing: true
         }
         chai.request(server)
             .get('/api/companies/' + id_company + '/bookings/capacity?date=' + date.date)
@@ -368,7 +376,8 @@ describe('Testing Booking API', () => {
 
     it('It should get capacity of booking from a company FRIDAY', function (done) {
         let date = {
-            date: '2021-05-14'
+            date: '2021-05-14',
+            testing: true
         }
         chai.request(server)
             .get('/api/companies/' + id_company + '/bookings/capacity?date=' + date.date)
@@ -382,7 +391,8 @@ describe('Testing Booking API', () => {
 
     it('It should get capacity of booking from a company SATURDAY', function (done) {
         let date = {
-            date: '2021-05-15'
+            date: '2021-05-15',
+            testing: true
         }
         chai.request(server)
             .get('/api/companies/' + id_company + '/bookings/capacity?date=' + date.date)
@@ -396,7 +406,8 @@ describe('Testing Booking API', () => {
 
     it('It should get capacity of booking from a company SUNDAY', function (done) {
         let date = {
-            date: '2021-05-16'
+            date: '2021-05-16',
+            testing: true
         }
         chai.request(server)
             .get('/api/companies/' + id_company + '/bookings/capacity?date=' + date.date)
@@ -434,6 +445,7 @@ describe('Testing Booking API', () => {
     it('It should delete a new booking', function (done) {
         chai.request(server)
             .delete('/api/users/' + user_id + '/bookings/' + bookings_id)
+            .send({ testing: true})
             .set({"Authorization": `${token}`})
             .end((err, res) => {
                 if (err) throw err

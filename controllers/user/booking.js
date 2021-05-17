@@ -37,10 +37,12 @@ let create_booking = async (req, res) => {
                             .catch((e) => {
                                 res.status(405).send({error: "It was no possible to book it, something is missing"})
                                 console.log("It was no possible to book it, something is missing")
-                            }).then(async (new_booking)=>{
+                            }).then(async (new_booking) => {
                                 res.status(201).send(new_booking)
                                 // Send email
-                                await sendReminder(user, new_booking, company);
+                                if (req.body.testing == undefined && req.body.testing != true) {
+                                    await sendReminder(user, new_booking, company);
+                                }
                             });
 
                     })
@@ -120,24 +122,24 @@ let update_bookings = async (req, res) => {
             if (req.body.time) {
                 booking.time = req.body.time
             }
-
             User.findOne({_id: booking.user_id}).then((user) => {
                 if (user) {
                     Company.findOne({nif: booking.company_nif}).then((company) => {
                         if (company) {
-                            if(jwt_login_strategy.owner_booking(booking,req.result)){
+                            if (jwt_login_strategy.owner_booking(booking, req.result)) {
                                 booking.save()
                                     .then((new_booking) => {
                                         res.status(200).send(new_booking)
                                         // Send email
-                                        sendReminder(user, new_booking, company);
+                                        if (req.body.testing == undefined && req.body.testing != true) {
+                                            sendReminder(user, new_booking, company);
+                                        }
                                     })
                                     .catch((e) => {
                                         res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
                                         console.log("Error: " + e)
                                     })
-                            }
-                            else{
+                            } else {
                                 res.status(401).send({error: "Access denied"})
                             }
 
@@ -171,17 +173,18 @@ let delete_booking = async (req, res) => {
     Booking.findOneAndDelete({_id: req.params.booking_id}).then((booking) => {
         User.findOne({_id: booking.user_id}).then((user) => {
             Company.findOne({nif: booking.company_nif}).then((company) => {
-                if(jwt_login_strategy.owner_booking(booking,req.result)) {
+                if (jwt_login_strategy.owner_booking(booking, req.result)) {
                     company.bookings -= 1
                     company.save().then(() => {
-                        sendCancellation(user, booking, company);
+                        if (req.body.testing == undefined && req.body.testing != true) {
+                            sendCancellation(user, booking, company);
+                        }
                         res.status(204).send()
                     }).catch((e) => {
                         res.status(405).send({error: "Wrong json format, check docs for further info /api-doc, ERROR SAVING"})
                         console.log(e)
                     })
-                }
-                else{
+                } else {
                     res.status(401).send({error: "Access denied"})
                 }
             }).catch((e) => {

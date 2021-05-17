@@ -148,7 +148,7 @@ async function upDateStats() {
     bestCategories().then((stats_category) => {
         findBestCompanies().then((stats_companies) => {
             bestBookings().then((stats_booking) => {
-                StatsCategory.deleteMany({}).then(()=>{
+                StatsCategory.deleteMany({}).then(() => {
                     StatsBookings.deleteMany({}).then(() => {
                         StatsCompanies.deleteMany({}).then(() => {
                             StatsCompanies.insertMany(stats_companies).then(() => {
@@ -175,7 +175,7 @@ async function upDateStats() {
                         console.log("Error deleting booking old stats")
                         console.log(e)
                     })
-                }).catch((e)=>{
+                }).catch((e) => {
                     console.log("Error while deleting old category stats")
                 })
 

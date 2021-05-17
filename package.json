@@ -19,7 +19,6 @@
     "cross-fetch": "^3.1.4",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
-    "email-templates": "^8.0.4",
     "exceljs": "^4.2.1",
     "express": "~4.16.1",
     "googleapis": "^39.2.0",

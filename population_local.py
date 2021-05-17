@@ -64,7 +64,7 @@ def create_booking(user_id, services, times, bearer):
     x = x[0]
     for i in services:
         for t in times:
-            payload = {'service': i, 'date': x, 'time': t}
+            payload = {'service': i, 'date': x, 'time': t,'testing': true}
             r = requests.post(url, data=json.dumps(payload), headers=headers)
             if r.status_code != 201:
                 print(r.status_code)

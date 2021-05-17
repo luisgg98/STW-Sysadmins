@@ -91,7 +91,7 @@ let fetchCompany = async (req, res) => {
 let register = async (req, res) => {
     // Test if exists another company with the same nif
     //{ $or:[ {nif: req.body.nif} {'email':req.body.email} ]}
-    Company.count({ $or:[ {nif: req.body.nif}, {email:req.body.email}]}).then((count) => {
+    Company.count({$or: [{nif: req.body.nif}, {email: req.body.email}]}).then((count) => {
         if (count > 0) {
             res.status(409).send({error: "Company already exists"})
         } else {
