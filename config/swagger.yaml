@@ -54,6 +54,11 @@ paths:
       summary: "Get all users"
       parameters:
         - in: query
+          name: "id"
+          description: id of user
+          schema:
+            type: string
+        - in: query
           name: "name"
           description: name of user
           schema:
