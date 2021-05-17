@@ -114,7 +114,8 @@ let get_bookings = async (req, res) => {
  * @returns {Promise<void>}
  */
 let fetchBooking = async (req, res) => {
-    Booking.find({_id: req.params.id}).then((booking) => {
+    console.log(req.params.id)
+    Booking.findOne({_id: req.params.id}).then((booking) => {
         if (booking) {
             res.status(200).send(booking)
         } else {
