@@ -20,7 +20,7 @@ let get = async (req, res, next) => {
         if (req.query.name) {
             // Fetch just one company
             let name = req.query.name
-            Company.find({name: name}).then((company) => {
+            Company.find(new RegExp({name: name})).then((company) => {
                 if (company) {
                     res.send(company)
                 } else {
