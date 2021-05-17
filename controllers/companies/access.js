@@ -16,24 +16,13 @@ const {deleteService} = require("../../services/deletingService");
  */
 let get = async (req, res, next) => {
     try {
-        // If the url contains a query, search just for the company of the query
-        if (req.query.name) {
-            // Fetch just one company
-            let name = req.query.name
-            //{first_name: new RegExp(req.query.name)}
-            Company.find({name: new RegExp(name)}).then((company) => {
-                if (company) {
-                    res.send(company)
-                } else {
-                    res.status(404).send({error: "Not found company"})
-                }
-            }).catch((err) => {
-                console.log(err)
-                res.status(500).send({error: "Internal error server"})
-            })
-        } else if (req.query.category) {
-            let category = req.query.category
-            Company.find({category: category}).then((company) => {
+        if (req.query.name || req.query.category) {
+            Company.find({
+                $or: [
+                    {name: new RegExp(req.query.name, "i")},
+                    {category: req.query.category}
+                ]
+            }).then((company) => {
                 if (company) {
                     res.send(company)
                 } else {

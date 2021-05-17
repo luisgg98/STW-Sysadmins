@@ -150,6 +150,7 @@ let delete_user = async (req, res) => {
  * @param res
  * @returns {Promise<void>}
  */
+
 let getAllUsers = async (req, res) => {
     if (req.query.id) {
         User.find({_id: req.query.id}).then((user) => {
@@ -157,14 +158,11 @@ let getAllUsers = async (req, res) => {
         }).catch(() => {
             res.status(500).send({error: "Internal server error"})
         })
-    } else if (req.query.name) {
-        User.find({first_name: new RegExp(req.query.name)}).then((users) => {
-            res.send(users)
-        }).catch(() => {
-            res.status(500).send({error: "Internal server error"})
-        })
-    } else if (req.query.last_name) {
-        User.find({first_name: new RegExp(req.query.last_name)}).then((users) => {
+    } else if (req.query.name || req.query.last_name) {
+        User.find({
+            $or: [{first_name: new RegExp(req.query.name, "i")},
+                {last_name: new RegExp(req.query.last_name, "i")}]
+        }).then((users) => {
             res.send(users)
         }).catch(() => {
             res.status(500).send({error: "Internal server error"})
