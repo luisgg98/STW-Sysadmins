@@ -25,7 +25,7 @@ router.patch("/:id", jwt_login_strategy.authenticate, ControllerUser.update);
  */
 router.delete("/:id", jwt_login_strategy.authenticate, ControllerUser.delete)
 
-router.post("/:id/bookings",jwt_login_strategy.authenticate, ControllerBooking.create_booking)
+router.post("/:id/bookings", jwt_login_strategy.authenticate, ControllerBooking.create_booking)
 router.get("/:id/bookings", ControllerBooking.get_bookings)
 router.patch("/:id/bookings/:booking_id", jwt_login_strategy.authenticate, ControllerBooking.update_bookings)
 router.delete("/:id/bookings/:booking_id", jwt_login_strategy.authenticate, ControllerBooking.delete_booking)

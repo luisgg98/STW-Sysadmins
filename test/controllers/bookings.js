@@ -206,7 +206,6 @@ describe('Testing Booking API', () => {
     });
 
 
-
     //router.patch("/:id/bookings/:booking_id", ControllerBooking.update_bookings)
     it('It should update a booking', function (done) {
         let updated = {
@@ -458,7 +457,7 @@ describe('Testing Booking API', () => {
         chai.request(server)
             .delete('/api/users/' + user_id + '/bookings/' + bookings_id)
             .set({"Authorization": `${token}`})
-            .send({ testing: true})
+            .send({testing: true})
             .set({"Authorization": `${token}`})
             .end((err, res) => {
                 if (err) throw err
