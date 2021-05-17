@@ -136,12 +136,12 @@ describe('Testing Booking API', () => {
         }
         chai.request(server).post('/api/users/' + user_id + 'WRONGNOTFOUND' + '/bookings')
             .send(booking)
+            .set({"Authorization": `${token}`})
             .timeout(5000)
             .end((err, res) => {
                 if (err) throw err
                 console.log(res.body)
                 res.should.have.status(405)
-                bookings_id = res.body._id;
                 done();
             })
     });
@@ -157,6 +157,7 @@ describe('Testing Booking API', () => {
         chai.request(server).post('/api/users/' + user_id + '/bookings')
             .send(no_service)
             .timeout(5000)
+            .set({"Authorization": `${token}`})
             .end((err, res) => {
                 if (err) throw err
                 console.log(res.body)
@@ -175,6 +176,7 @@ describe('Testing Booking API', () => {
         }
         chai.request(server).post('/api/users/' + user_id + '/bookings')
             .send(booking).timeout(5000)
+            .set({"Authorization": `${token}`})
             .end((err, res) => {
                 if (err) throw err
                 console.log(res.body)
@@ -193,6 +195,16 @@ describe('Testing Booking API', () => {
                 done()
             })
     });
+
+    //router.get("/:id/bookings", ControllerBooking.get_bookings)
+    it('It should get a booking by its id', function (done) {
+        chai.request(server).get("/api/booking/" + bookings_id)
+            .end((err, res) => {
+                res.should.have.status(200)
+                done()
+            })
+    });
+
 
 
     //router.patch("/:id/bookings/:booking_id", ControllerBooking.update_bookings)
@@ -445,6 +457,7 @@ describe('Testing Booking API', () => {
     it('It should delete a new booking', function (done) {
         chai.request(server)
             .delete('/api/users/' + user_id + '/bookings/' + bookings_id)
+            .set({"Authorization": `${token}`})
             .send({ testing: true})
             .set({"Authorization": `${token}`})
             .end((err, res) => {

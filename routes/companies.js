@@ -42,7 +42,7 @@ router.get("/:nif/bookings/capacity", ControllerBooking.remaining_space_by_date)
 //      SERVICES
 //==============================
 router.get("/:nif/services", ControllerCompany.get_services)
-router.post("/:nif/services", ControllerCompany.create_service)
+router.post("/:nif/services",jwt_login_strategy.authenticate, ControllerCompany.create_service)
 router.patch("/:nif/services/:id", jwt_login_strategy.authenticate, ControllerCompany.update_service)
 router.delete("/:nif/services/:id", jwt_login_strategy.authenticate, ControllerCompany.delete_service)
 

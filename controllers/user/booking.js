@@ -561,3 +561,4 @@ exports.delete_booking = delete_booking
 exports.services_bookings = services_bookings
 exports.company_bookings = company_bookings
 exports.remaining_space_by_date = remaining_space_by_date
+exports.fetchBooking = fetchBooking

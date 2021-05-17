@@ -20,7 +20,33 @@ tags:
     description: "Operations about services from a company"
   - name: "Opinion"
     description: "Operations about opinion"
+  - name: "Booking"
+    description: "Operations about bookings"
 paths:
+  /booking/{id}:
+    get:
+      operationId: getBooking
+      tags:
+        - "Booking"
+      summary: "Get information of a booking"
+      parameters:
+        - in: path
+          name: "id"
+          description: "Id of the booking"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Booking correctly retrieved"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking_retrieved'
+        "404":
+          description: "Booking was not found"
+        "500":
+          description: "Internal server error"
   /users:
     get:
       tags:
@@ -322,6 +348,8 @@ paths:
       tags:
         - "User"
       summary: "Add a new booking to the database"
+      security:
+        - bearerAuth: [ ]
       parameters:
         - in: path
           name: "id"
@@ -462,6 +490,8 @@ paths:
       tags:
         - "Services"
       summary: "Add a new service to the database"
+      security:
+        - bearerAuth: [ ]
       parameters:
         - in: path
           name: "nif"
