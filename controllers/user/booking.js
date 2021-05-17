@@ -250,15 +250,13 @@ let services_bookings = async (req, res) => {
             res.status(405).send("Wrong json format, check docs for further info /api-doc")
             console.log("Error: " + e)
         })
-    } else if (req.query.date) {
-        Booking.find({service_id: req.params.id, date: req.query.date}).then((booking) => {
-            res.send(booking)
-        }).catch((e) => {
-            res.status(405).send("Wrong json format, check docs for further info /api-doc")
-            console.log("Error: " + e)
-        })
-    } else if (req.query.time) {
-        Booking.find({service_id: req.params.id, time: req.query.time}).then((booking) => {
+    } else if (req.query.date || req.query.time) {
+        Booking.find({
+            $or: [{service_id: req.params.id, time: req.query.time}, {
+                service_id: req.params.id,
+                date: req.query.date
+            }]
+        }).then((booking) => {
             res.send(booking)
         }).catch((e) => {
             res.status(405).send("Wrong json format, check docs for further info /api-doc")
