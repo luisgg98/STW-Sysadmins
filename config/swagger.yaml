@@ -18,25 +18,9 @@ tags:
     description: "Operations about health zones from Zaragoza"
   - name: "Services"
     description: "Operations about services from a company"
-  - name: "Captcha"
-    description: "Operations about captcha"
   - name: "Opinion"
     description: "Operations about opinion"
 paths:
-  /captcha:
-    get:
-      tags:
-        - "Captcha"
-      summary: "Get key to load Captcha"
-      response:
-        "200":
-          description: "Captcha key found"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PublicKey'
-        "500":
-          description: "Internal server error"
   /users:
     get:
       tags:
@@ -1759,11 +1743,6 @@ components:
                 type: integer
               long:
                 type: integer
-    PublicKey:
-      type: object
-      properties:
-        key:
-          type: string
     Opinion_new:
       type: object
       properties:

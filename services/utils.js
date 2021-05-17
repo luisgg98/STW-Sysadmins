@@ -54,7 +54,7 @@ function genPassword(password) {
 function issueJWT(user) {
     const _id = user._id;
     // In a day the token will be useless
-    const expiresIn = '1m';
+    const expiresIn = '60s';
     // The payload of the token
     const payload = {
         sub: _id,

@@ -113,6 +113,24 @@ let get_bookings = async (req, res) => {
  * @param res
  * @returns {Promise<void>}
  */
+let fetchBooking = async (req, res) => {
+    Booking.find({_id: req.params.id}).then((booking) => {
+        if (booking) {
+            res.status(200).send(booking)
+        } else {
+            res.status(404).send({error: "Booking not found"})
+        }
+    }).catch(() => {
+        res.status(500).send({error: "Internal error server"})
+    })
+}
+
+/**
+ *
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
 let update_bookings = async (req, res) => {
     Booking.findOne({_id: req.params.booking_id}).then((booking) => {
         if (booking) {
