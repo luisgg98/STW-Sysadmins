@@ -95,9 +95,8 @@ let write_opinion = async (req, res, next) => {
         })
 
     } catch (e) {
-        res.status(500);
+        res.status(500).send({error: "Internal server error"});
         console.log("Error while creating a commet " + e);
-        res.send({error: "Internal server error"});
     }
 }
 

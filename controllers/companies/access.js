@@ -10,29 +10,63 @@ const {deleteService} = require("../../services/deletingService");
 
 /**
  *
+ * @param company
+ * @param res
+ * @constructor
+ */
+
+/* istanbul ignore next */
+function SendCompany(company, res) {
+    if (company) {
+        res.send(company)
+    } else {
+        res.status(404).send({error: "Not found company"})
+    }
+
+}
+
+
+/**
+ *
+ * @param err
+ * @param res
+ * @constructor
+ */
+
+/* istanbul ignore next */
+function InternalServerError(err, res) {
+    console.log(err)
+    res.status(500).send({error: "Internal error server"})
+}
+
+/**
+ *
  * @param req
  * @param res
  * @returns {Promise<void>}
  */
 let get = async (req, res, next) => {
     try {
-        if (req.query.name || req.query.category) {
-            Company.find({
-                $or: [
-                    {name: new RegExp(req.query.name, "i")},
-                    {category: req.query.category}
-                ]
-            }).then((company) => {
-                if (company) {
-                    res.send(company)
-                } else {
-                    res.status(404).send({error: "Not found company"})
-                }
+        if (req.query.name && req.query.category) {
+            Company.find({name: new RegExp(req.query.name, "i"), category: req.query.category}
+            ).then((company) => {
+                SendCompany(company, res)
             }).catch((err) => {
-                console.log(err)
-                res.status(500).send({error: "Internal error server"})
+                InternalServerError(err, res)
             })
-
+        } else if (req.query.name) {
+            Company.find({name: new RegExp(req.query.name, "i")})
+                .then((company) => {
+                    SendCompany(company, res)
+                }).catch((err) => {
+                InternalServerError(err, res)
+            })
+        } else if (req.query.category) {
+            Company.find({category: req.query.category}).then((company) => {
+                SendCompany(company, res)
+            }).catch((err) => {
+                InternalServerError(err, res)
+            })
         } else {
             // Fetch all companies
             const companies = await Company.find({}, {
@@ -46,7 +80,6 @@ let get = async (req, res, next) => {
             })
             res.send(companies)
         }
-        /* istanbul ignore next */
     } catch {
         res.status(500).send({error: "Internal error server"})
     }
@@ -59,14 +92,9 @@ let get = async (req, res, next) => {
  */
 let fetchCompany = async (req, res) => {
     Company.findOne({nif: req.params.nif}).catch((err) => {
-        res.status(500).send({error: "Internal error server"})
-        console.log(err)
+        InternalServerError(err, res)
     }).then((company) => {
-        if (company) {
-            res.status(200).send(company);
-        } else {
-            res.status(404).send({error: "Company not found"})
-        }
+        SendCompany(company, res)
     })
 }
 
@@ -130,8 +158,7 @@ let register = async (req, res) => {
             }
         }
     }).catch((err) => {
-        res.status(500).send({error: "Internal error"})
-        console.log(err)
+        InternalServerError(err, res)
     })
 }
 
@@ -159,8 +186,7 @@ let login = async (req, res) => {
             res.status(404).send({error: "Company not found"})
         }
     }).catch((e) => {
-        console.log(e)
-        res.status(500).send({error: "Internal error server"})
+        InternalServerError(e, res)
     })
 }
 
@@ -173,8 +199,7 @@ let login = async (req, res) => {
 let update = async (req, res) => {
     try {
         if (!jwt_login_strategy.security(req.params.id, req.result)) {
-            res.status(401)
-            res.send({error: "Wrong User Access denied"})
+            res.status(401).send({error: "Wrong User Access denied"})
         } else {
             let company;
             //result.security_level !== undefined &&
@@ -234,8 +259,7 @@ let update = async (req, res) => {
                                     res.status(200).send(company)
                                 }
                             ).catch((e) => {
-                                res.status(405)
-                                res.send({error: "Wrong json format, check docs for further info /api-doc"})
+                                res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
                                 console.log(e)
                             })
                     }
@@ -305,8 +329,7 @@ let create_service = async (req, res, next) => {
             res.status(404).send({error: "Company not found"})
         }
     }).catch((e) => {
-        console.log(e)
-        res.status(500).send({error: "Internal error server"})
+        InternalServerError(e, res)
     })
 }
 
@@ -359,8 +382,7 @@ let get_services = async (req, res, next) => {
             }
         })
     } else {
-        res.status(405)
-        res.send({error: "Wrong request, check docs for further info /api-doc"})
+        res.status(405).send({error: "Wrong request, check docs for further info /api-doc"})
     }
 }
 
@@ -374,8 +396,7 @@ let get_services = async (req, res, next) => {
 let update_service = async (req, res, next) => {
     Service.findOne({_id: req.params.id})
         .catch((err) => {
-            console.log(err)
-            res.status(500).send({error: "Internal error server"})
+            InternalServerError(err, res)
         }).then((service) => {
         if (service) {
             if (req.body.description) {
@@ -413,13 +434,11 @@ let delete_service = async (req, res, next) => {
             res.status(204).send()
         }).catch(
             () => {
-                res.status(404)
-                res.send({error: "Service not found"})
+                res.status(404).send({error: "Service not found"})
             })
     }).catch(
         () => {
-            res.status(404)
-            res.send({error: "Error while deleting a service"})
+            res.status(404).send({error: "Error while deleting a service"})
         })
 }
 
