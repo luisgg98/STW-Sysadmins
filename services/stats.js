@@ -26,6 +26,7 @@ function compare(a, b) {
  * @returns {*}
  */
 function onlyNine(list) {
+    list.sort(compare);
     if (list.length > 9) {
         let tmp_list = []
         for (let i = 0; i < 9; i++) {
@@ -34,7 +35,6 @@ function onlyNine(list) {
         list = tmp_list
     }
     return list
-
 }
 
 /**
@@ -44,7 +44,6 @@ function onlyNine(list) {
 async function findBestCompanies() {
     return new Promise((resolve, reject) => {
         Company.find({bookings: {$gt: 0}}).then((companies) => {
-            companies.sort(compare);
             companies = onlyNine(companies)
             let new_companies = []
             for (let i = 0; i < companies.length; i++) {
@@ -85,9 +84,7 @@ async function bestBookings() {
                     'bookings': value.length
                 }
                 durations.push(new_duration)
-
             }
-            durations.sort(compare);
             durations = onlyNine(durations)
             resolve(durations)
             /* istanbul ignore next */
@@ -96,7 +93,6 @@ async function bestBookings() {
             reject(e)
         })
     })
-
 }
 
 
@@ -125,9 +121,7 @@ async function bestCategories() {
                 }
                 categories.push(new_category)
             }
-            categories.sort(compare);
             categories = onlyNine(categories)
-            console.log(categories)
             resolve(categories)
             /* istanbul ignore next */
         }).catch((e) => {
@@ -136,7 +130,16 @@ async function bestCategories() {
         })
 
     })
+}
 
+/**
+ *
+ * @param message
+ * @param e
+ */
+function errorMessage(message, e) {
+    console.log(message)
+    console.log(e)
 }
 
 /**
@@ -156,42 +159,32 @@ async function upDateStats() {
                                     StatsCategory.insertMany(stats_category).then(() => {
                                         console.log("Success updating stats")
                                     }).catch((e) => {
-                                        console.log("Error saving new category stats")
-                                        console.log(e)
+                                        errorMessage("Error saving new category stats", e)
                                     })
                                 }).catch((e) => {
-                                    console.log("Error saving new bookings stats")
-                                    console.log(e)
+                                    errorMessage("Error saving new bookings stats", e)
                                 })
                             }).catch((e) => {
-                                console.log("Error saving new companies stats")
-                                console.log(e)
+                                errorMessage("Error saving new companies stats", e)
                             })
                         }).catch((e) => {
-                            console.log("Error deleting  companies old stats")
-                            console.log(e)
+                            errorMessage("Error deleting  companies old stats", e)
                         })
                     }).catch((e) => {
-                        console.log("Error deleting booking old stats")
-                        console.log(e)
+                        errorMessage("Error deleting booking old stats", e)
                     })
                 }).catch((e) => {
-                    console.log("Error while deleting old category stats")
+                    errorMessage("Error while deleting old category stats", e)
                 })
-
             }).catch((e) => {
-                console.log("Error updating booking  stats")
-                console.log(e)
+                errorMessage("Error updating booking  stats", e)
             })
         }).catch((e) => {
-            console.log("Error updating company  stats")
-            console.log(e)
+            errorMessage("Error updating company  stats", e)
         })
     }).catch((e) => {
-        console.log("Error updating category stats")
-        console.log(e)
+        errorMessage("Error updating category stats", e)
     })
 }
 
-module.exports.bestCategories = bestCategories
 module.exports.upDateStats = upDateStats
