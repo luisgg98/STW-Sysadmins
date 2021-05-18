@@ -118,7 +118,7 @@ if (r.status_code != 201):
     print('Error creating service')
 print('>> Service')
 print(r.json())
-'''
+
 ## Create booking
 url = 'http://localhost:3000/api/users/login'
 headers = {'content-type': 'application/json', 'accept': 'application/json'}
@@ -134,3 +134,4 @@ payload = {'service':'{}'.format(service_id), 'date':'2021-05-10', 'time':'9:00'
 r = requests.post(url, data=json.dumps(payload), headers=headers)
 if (r.status_code != 201):
     print('Error creating booking')
+'''

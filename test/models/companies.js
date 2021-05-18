@@ -30,7 +30,7 @@ let companiesArray = [
     {
         name: 'Multiverso Bar',
         nif: '2',
-        email: 'ho@hol.com',
+        email: 'ho1@hol.com',
         password: 'aaa',
         streetnumber: 29,
         street: 'Calle La Paz',
@@ -55,7 +55,7 @@ let companiesArray = [
     {
         name: 'Carniceria Maza',
         nif: '3',
-        email: 'ho@hol.com',
+        email: 'ho2@hol.com',
         password: 'aaa',
         streetnumber: 86,
         street: 'Av. Cesáreo Alierta',
