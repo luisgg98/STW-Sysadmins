@@ -25,6 +25,7 @@ let company = {
     },
     "zipcode": 50008,
     "category": "Ocio",
+    "testing": true
 };
 
 let company_wrong_email = {

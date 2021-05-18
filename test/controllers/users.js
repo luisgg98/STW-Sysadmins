@@ -10,7 +10,8 @@ let user = {
     "last_name": "string",
     "email": "usertesting12345@example.com",
     "password": "string",
-    "phone": 773456789
+    "phone": 773456789,
+    "testing": true
 };
 
 let user_update = {

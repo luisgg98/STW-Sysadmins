@@ -63,13 +63,15 @@ const company = {
             "close_2": "20:00"
         }
     },
+    "testing": true
 };
 let user = {
     "first_name": "string",
     "last_name": "string",
     "email": "user2@example.com",
     "password": "string",
-    "phone": 523456789
+    "phone": 523456789,
+    "testing": true
 };
 let service_new =
     {

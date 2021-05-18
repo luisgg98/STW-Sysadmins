@@ -5,6 +5,7 @@ const Service = require('../../models/service')
 const geolo = require('../../services/geocoding')
 const jwt_login_strategy = require('../../config/passport');
 const update_time_slots = require('../../services/update_time_slots')
+const {sendWelcomeCompany} = require("../../services/email");
 const {deleteBookings} = require("../../services/deletingService");
 const {deleteService} = require("../../services/deletingService");
 
@@ -107,7 +108,6 @@ let fetchCompany = async (req, res) => {
  */
 let register = async (req, res) => {
     // Test if exists another company with the same nif
-    //{ $or:[ {nif: req.body.nif} {'email':req.body.email} ]}
     Company.count({$or: [{nif: req.body.nif}, {email: req.body.email}]}).then((count) => {
         if (count > 0) {
             res.status(409).send({error: "Company already exists"})
@@ -145,6 +145,9 @@ let register = async (req, res) => {
                                 await company.save()
                                     .then(() => {
                                         res.status(201).send(company)
+                                        if (req.body.testing == undefined || req.body.testing != true) {
+                                            sendWelcomeCompany(company)
+                                        }
                                     }).catch((e) => {
                                         res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
                                         console.log(e)
@@ -211,7 +214,6 @@ let update = async (req, res) => {
             if (req.body.name) {
                 company.name = req.body.name
             }
-
             if (req.body.password) {
                 company.password = req.body.password
             }
@@ -285,7 +287,7 @@ let delete_company = async (req, res) => {
             res.status(401).send({error: "Wrong User Access denied"})
         } else {
             deleteService(req.result.nif).then(() => {
-                Company.deleteOne({_id: req.params.id}).then(() => {
+                Company.deleteOne({_id: req.params.id}).then((company) => {
                     res.status(204).send()
                 }).catch((e) => {
                     console.log(e)

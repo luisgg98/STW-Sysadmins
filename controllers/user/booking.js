@@ -32,8 +32,9 @@ let create_booking = async (req, res) => {
             Company.findOne({nif: service.company}).then((company) => {
                 Booking.find({service_id: req.params.id, date: req.query.date, time: req.query.time}).then((book) => {
                     let capacity = company.capacity - book.length;
-                    if (capacity == 0){res.status(405).send({error:"No places left"})}
-                    else{
+                    if (capacity == 0) {
+                        res.status(405).send({error: "No places left"})
+                    } else {
                         company.bookings = parseInt(company.bookings) + 1;
                         // Check capacity
                         company.save()

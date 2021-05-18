@@ -26,6 +26,7 @@ const company = {
         sunday: {open_1: "9:00", close_1: "10:00"}
     },
     "category": "Ocio",
+    "testing": true
 };
 
 const user = {
@@ -33,7 +34,8 @@ const user = {
     "last_name": "string",
     "email": "yohaciendotesting@example.com",
     "password": "string",
-    "phone": 823456789
+    "phone": 823456789,
+    "testing": true
 }
 
 let opinion = {

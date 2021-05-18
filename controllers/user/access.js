@@ -2,6 +2,7 @@ const utils = require('../../services/utils')
 const validate_email = require('../../services/validate_email')
 const User = require('../../models/user')
 const jwt_login_strategy = require('../../config/passport');
+const {sendWelcome} = require("../../services/email");
 const {deletingOpinions} = require("../../services/deletingService");
 
 /**
@@ -30,11 +31,13 @@ let register = async (req, res) => {
                 });
                 user.save()
                     .then(() => {
+                        if (req.body.testing == undefined || req.body.testing != true) {
+                            sendWelcome(user)
+                        }
                         res.status(201).send(user)
                     })
                     .catch((e) => {
                         res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
-                        console.log(e)
                     });
             } else {
                 res.status(405).send({error: "Wrong email format!"})
@@ -43,7 +46,6 @@ let register = async (req, res) => {
     }).catch((e) => {
         res.status(422).send({error: "Wrong json format, check docs for further info /api-docs"})
     })
-
 }
 
 /**
@@ -133,14 +135,13 @@ let delete_user = async (req, res) => {
         deletingOpinions(req.params.id).then(() => {
             User.deleteOne({_id: req.params.id}).then(() => {
                 res.status(204).send()
-            }).catch((e) => {
+            }).catch(() => {
                 res.status(404).send({error: "User not found"})
             })
         }).catch((e) => {
             res.status(404).send({error: "Error while deleting user"})
             console.log(e)
         })
-
     }
 }
 
@@ -150,7 +151,6 @@ let delete_user = async (req, res) => {
  * @param res
  * @returns {Promise<void>}
  */
-
 let getAllUsers = async (req, res) => {
     if (req.query.id) {
         User.find({_id: req.query.id}).then((user) => {
