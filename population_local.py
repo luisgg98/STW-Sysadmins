@@ -30,21 +30,13 @@ def log_user(payload):
     return r.json()['token']
 
 
-def update_company_return_token(company, update):
+def log_company(company):
     url = 'http://localhost:3000/api/companies/login'
     headers = {'content-type': 'application/json'}
     r = requests.post(url, data=json.dumps(company), headers=headers)
     if r.status_code != 200:
         print('Error login: {}'.format(company['email']))
     bearer = r.json()['token']
-    company_id = r.json()['company']['_id']
-    ## Update company schedule and service duration in order to generate time_slots
-    headers = {'content-type': 'application/json', 'Authorization': bearer}
-    url = 'http://localhost:3000/api/companies/{}'.format(company_id)
-    r = requests.patch(url, data=json.dumps(update), headers=headers)
-    if r.status_code != 200:
-        print('Error updating: {}'.format(company_id))
-        print(r.text)
     return bearer
 
 
@@ -54,6 +46,7 @@ def create_service(nif, service, bearer):
     r = requests.post(url, data=json.dumps(service), headers=headers)
     if r.status_code != 201:
         print('Error creating service')
+        print(r.json())
     return r.json()['_id']
 
 
@@ -64,7 +57,7 @@ def create_booking(user_id, services, times, bearer):
     x = x[0]
     for i in services:
         for t in times:
-            payload = {'service': i, 'date': x, 'time': t,'testing': true}
+            payload = {'service': i, 'date': x, 'time': t,'testing': 'true'}
             r = requests.post(url, data=json.dumps(payload), headers=headers)
             if r.status_code != 201:
                 print(r.status_code)
@@ -106,207 +99,194 @@ print('Creating users...')
 create_master()
 ## Populate USERS collection
 isabel = {'phone': '676416354', 'first_name': 'Isabel', 'last_name': 'Casado', 'email': 'isabel85Wrong@gmail.es',
-          'password': 'Isabel1234-'}
+          'password': 'Isabel1234-', 'testing': 'true'}
 isabel_id = create_user(isabel)
 isabel_token = log_user(isabel)
 
 facundo = {'phone': '678010101', 'first_name': 'Facundo', 'last_name': 'Diaz', 'email': 'facu90Wrong@gmail.com',
-           'password': 'Facundo1234-'}
+           'password': 'Facundo1234-', 'testing': 'true'}
 facundo_id = create_user(facundo)
 facundo_token = log_user(facundo)
 
 borja = {'phone': '679010101', 'first_name': 'Borja', 'last_name': 'Pavon', 'email': 'pavon90Wrong@gmail.com',
-         'password': 'Borja1234-'}
+         'password': 'Borja1234-', 'testing': 'true'}
 borja_id = create_user(borja)
 borja_token = log_user(borja)
 
 ramon = {'phone': '680010101', 'first_name': 'Ramon', 'last_name': 'Emilio', 'email': 'ramon90Wrong@gmail.com',
-         'password': 'Ramon1234-'}
+         'password': 'Ramon1234-', 'testing': 'true'}
 ramon_id = create_user(ramon)
 ramon_token = log_user(ramon)
 
 miguel = {'phone': '610010101', 'first_name': 'Miguel', 'last_name': 'Maltorres', 'email': 'maltorres90Wrong@gmail.com',
-          'password': 'Maltorres1234-'}
+          'password': 'Maltorres1234-', 'testing': 'true'}
 miguel_id = create_user(miguel)
 miguel_token = log_user(miguel)
 
 print('Users created!')
 barberia = {'nif': 'A23456789', 'name': 'Hayk EMpresa', 'email': 'haykempresa@gmail.com',
               'password': 'deportivo1234', 'street': 'Calle poeta jorge manrique', 'streetnumber': '2', 'zipcode': '50018',
-              'category': 'Salud y Belleza', 'service_duration': 30, 'capacity': 2}
+              'category': 'Salud y Belleza', 'service_duration': 30, 'capacity': 2, 'testing': 'true', 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': 'true'}
 create_company(barberia)
 ## Populate COMPANIES collection
 print('Creating companies...')
 deportivo1 = {'nif': 'A12345678', 'name': 'Centro Deportivo Municipal Alberto Maestro', 'email': 'deportivo1@gmail.com',
               'password': 'deportivo1234', 'street': 'Camino de las Torres', 'streetnumber': '2', 'zipcode': '50002',
-              'category': 'Deporte', 'service_duration': 30, 'capacity': 10}
+              'category': 'Deporte', 'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': 'true'}
 create_company(deportivo1)
 
 deportivo2 = {'nif': 'B12345678', 'name': 'Centro Deportivo Municipal La Granja', 'email': 'deportivo2@gmail.com',
               'password': 'deportivo1234', 'street': 'Camino Cabaldós', 'streetnumber': '45', 'zipcode': '50013',
-              'category': 'Deporte', 'service_duration': 30, 'capacity': 10}
+              'category': 'Deporte', 'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': 'true'}
 create_company(deportivo2)
 
 ocio1 = {'nif': 'C12345678', 'name': 'Warhammer', 'email': 'ocio1@gmail.com', 'password': 'deportivo1234',
          'street': 'Calle Francisco de Vitoria', 'streetnumber': '14', 'zipcode': '50008', 'category': 'Ocio',
-         'service_duration': 30, 'capacity': 10}
+         'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': 'true'}
 create_company(ocio1)
 
 ocio2 = {'nif': 'D12345678', 'name': 'Fox', 'email': 'ocio2@gmail.com', 'password': 'deportivo1234',
          'street': 'Av. Cesáreo Alierta', 'streetnumber': '10', 'zipcode': '50008', 'category': 'Ocio',
-         'service_duration': 30, 'capacity': 10}
+         'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': 'true'}
 create_company(ocio2)
 
 civico1 = {'nif': 'V12345678', 'name': 'Centro Cívico Delicias', 'email': 'civico1@gmail.com',
            'password': 'deportivo1234', 'street': 'Av. Navarra', 'streetnumber': '54', 'zipcode': '50010',
-           'category': 'Administración pública', 'service_duration': 30, 'capacity': 10}
+           'category': 'Administración pública', 'service_duration': 30, 'capacity': 10, 'testing': 'true', 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}}
 create_company(civico1)
 
 admin1 = {'nif': 'F12345678', 'name': 'Ayuntamiento de Zaragoza: Servicio de Educación', 'email': 'admin1@gmail.com',
           'password': 'deportivo1234', 'street': 'Calle de Miguel Servet', 'streetnumber': '57', 'zipcode': '50013',
-          'category': 'Administración pública', 'service_duration': 30, 'capacity': 10}
+          'category': 'Administración pública', 'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': 'true'}
 create_company(admin1)
 
 admin2 = {'nif': 'E12345678', 'name': 'Zaragoza Activa', 'email': 'admin2@gmail.com', 'password': 'deportivo1234',
           'street': 'Calle Mas de las Matas', 'streetnumber': '20', 'zipcode': '50014',
-          'category': 'Administración pública', 'service_duration': 30, 'capacity': 10}
-create_company(admin2)
-
-salud1 = {'nif': 'G12345678', 'name': 'Voga', 'email': 'salud1@gmail.com', 'password': 'deportivo1234',
-          'street': 'Av. Juan Carlos I', 'streetnumber': '43', 'zipcode': '50009', 'category': 'Salud y Belleza'
-    , 'service_duration': 30, 'capacity': 10}
-create_company(salud1)
-
-salud2 = {'nif': 'H12345678', 'name': 'Farmacia', 'email': 'salud2@gmail.com', 'password': 'deportivo1234',
-          'street': 'Calle de Miguel Servet', 'streetnumber': '84', 'zipcode': '50013', 'category': 'Salud y Belleza'
-    , 'service_duration': 30, 'capacity': 10}
-create_company(salud2)
-
-comercio1 = {'nif': 'I12345678', 'name': 'Mercado Central de Zaragoza', 'email': 'comercio1@gmail.com',
-             'password': 'deportivo1234', 'street': 'Av. de César Augusto', 'streetnumber': '110', 'zipcode': '50003',
-             'category': 'Comercio'
-    , 'service_duration': 30, 'capacity': 10}
-create_company(comercio1)
-
-comercio2 = {'nif': 'J12345678', 'name': 'Carrefour', 'email': 'comercio2@gmail.com', 'password': 'deportivo1234',
-             'street': 'Calle de María Zambrano', 'streetnumber': '71', 'zipcode': '50018', 'category': 'Comercio'
-    , 'service_duration': 30, 'capacity': 10}
-create_company(comercio2)
-
-print('Companies created!')
-## Populate SERVICES collection
-## Collect Bearer token in order to be able to authentificate
-
-print('Updating companies...')
-company = {'email': deportivo1['email'], 'password': deportivo1['password']}
-update = {'service_duration': 20, 'capacity': 3, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}}
-deportivo1_token = update_company_return_token(company, update)
-
-## Collect Bearer token in order to be able to authentificate
-company = {'email': ocio1['email'], 'password': ocio1['password']}
-update = {'service_duration': 30, 'capacity': 3, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}}
-ocio1_token = update_company_return_token(company, update)
-
-## Collect Bearer token in order to be able to authentificate
-company = {'email': deportivo2['email'], 'password': deportivo2['password']}
-update = {'service_duration': 15, 'capacity': 3, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}}
-deportivo2_token = update_company_return_token(company, update)
-
-## Collect Bearer token in order to be able to authentificate
-company = {'email': ocio2['email'], 'password': ocio2['password']}
-update = {'service_duration': 15, 'capacity': 3, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}}
-ocio2_token = update_company_return_token(company, update)
-
-## Collect Bearer token in order to be able to authentificate
-company = {'email': admin1['email'], 'password': admin1['password']}
-update = {'service_duration': 15, 'capacity': 3, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}}
-admin1_token = update_company_return_token(company, update)
-
-## Collect Bearer token in order to be able to authentificate
-company = {'email': admin2['email'], 'password': admin2['password']}
-update = {'service_duration': '15', 'capacity': '3', 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+          'category': 'Administración pública', 'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
                                                                   'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
                                                                   'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
                                                                   'thursday': {'open_1': '9:00', 'close_1': '21:00'},
                                                                   'friday': {'open_1': '9:00', 'close_1': '21:00'},
                                                                   'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                                  'sunday': {'open_1': '9:00', 'close_1': '21:00'}}}
-admin2_token = update_company_return_token(company, update)
+                                                                  'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': 'true'}
+create_company(admin2)
 
-## Collect Bearer token in order to be able to authentificate
-company = {'email': salud1['email'], 'password': salud1['password']}
-update = {'service_duration': 15, 'capacity': 3, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+salud1 = {'nif': 'G12345678', 'name': 'Voga', 'email': 'salud1@gmail.com', 'password': 'deportivo1234',
+          'street': 'Av. Juan Carlos I', 'streetnumber': '43', 'zipcode': '50009', 'category': 'Salud y Belleza'
+    , 'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
                                                               'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
                                                               'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
                                                               'thursday': {'open_1': '9:00', 'close_1': '21:00'},
                                                               'friday': {'open_1': '9:00', 'close_1': '21:00'},
                                                               'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}}
-salud1_token = update_company_return_token(company, update)
+                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': 'true'}
+create_company(salud1)
 
-## Collect Bearer token in order to be able to authentificate
-company = {'email': salud2['email'], 'password': salud2['password']}
-update = {'service_duration': 15, 'capacity': 3, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+salud2 = {'nif': 'H12345678', 'name': 'Farmacia', 'email': 'salud2@gmail.com', 'password': 'deportivo1234',
+          'street': 'Calle de Miguel Servet', 'streetnumber': '84', 'zipcode': '50013', 'category': 'Salud y Belleza'
+    , 'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
                                                               'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
                                                               'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
                                                               'thursday': {'open_1': '9:00', 'close_1': '21:00'},
                                                               'friday': {'open_1': '9:00', 'close_1': '21:00'},
                                                               'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}}
-salud2_token = update_company_return_token(company, update)
+                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': 'true'}
+create_company(salud2)
+
+comercio1 = {'nif': 'I12345678', 'name': 'Mercado Central de Zaragoza', 'email': 'comercio1@gmail.com',
+             'password': 'deportivo1234', 'street': 'Av. de César Augusto', 'streetnumber': '110', 'zipcode': '50003',
+             'category': 'Comercio'
+    , 'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': 'true'}
+create_company(comercio1)
+
+comercio2 = {'nif': 'J12345678', 'name': 'Carrefour', 'email': 'comercio2@gmail.com', 'password': 'deportivo1234',
+             'street': 'Calle de María Zambrano', 'streetnumber': '71', 'zipcode': '50018', 'category': 'Comercio'
+    , 'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': 'true'}
+create_company(comercio2)
+
+print('Companies created!')
+
+## Populate SERVICES collection
 
 ## Collect Bearer token in order to be able to authentificate
 company = {'email': comercio1['email'], 'password': comercio1['password']}
-update = {'service_duration': 15, 'capacity': 3, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}}
-comercio1_token = update_company_return_token(company, update)
-
-## Collect Bearer token in order to be able to authentificate
+comercio1_token = log_company(company)
 company = {'email': comercio2['email'], 'password': comercio2['password']}
-update = {'service_duration': 15, 'capacity': 3, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}}
-comercio2_token = update_company_return_token(company, update)
-print('Companies updated!')
+comercio2_token = log_company(company)
+company = {'email': admin1['email'], 'password': admin1['password']}
+admin1_token = log_company(company)
+company = {'email': admin2['email'], 'password': admin2['password']}
+admin2_token = log_company(company)
+company = {'email': salud1['email'], 'password': salud1['password']}
+salud1_token = log_company(company)
+company = {'email': salud2['email'], 'password': salud2['password']}
+salud2_token = log_company(company)
+company = {'email': ocio1['email'], 'password': ocio1['password']}
+ocio1_token = log_company(company)
+company = {'email': ocio2['email'], 'password': ocio2['password']}
+ocio2_token = log_company(company)
+company = {'email': deportivo1['email'], 'password': deportivo1['password']}
+deportivo1_token = log_company(company)
+company = {'email': deportivo2['email'], 'password': deportivo2['password']}
+deportivo2_token = log_company(company)
+#company = {'email': civico1['email'], 'password': civico1['password']}
+#civico1_token = log_company(company)
+
+
 print('Creating services...')
 ##Creating services for 1 company
 services_1 = [{'description': 'Reservar campo de futbol sala', 'price': 11},
