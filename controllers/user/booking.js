@@ -30,26 +30,32 @@ let create_booking = async (req, res) => {
                 time: req.body.time
             })
             Company.findOne({nif: service.company}).then((company) => {
-                company.bookings = parseInt(company.bookings) + 1;
-                company.save()
-                    .then(async () => {
-                        await booking.save()
+                Booking.find({service_id: req.params.id, date: req.query.date, time: req.query.time}).then((book) => {
+                    let capacity = company.capacity - book.length;
+                    if (capacity == 0){res.status(405).send({error:"No places left"})}
+                    else{
+                        company.bookings = parseInt(company.bookings) + 1;
+                        // Check capacity
+                        company.save()
+                            .then(async () => {
+                                await booking.save()
+                                    .catch(() => {
+                                        res.status(405).send({error: "It was no possible to book it, something is missing"})
+                                        console.log("It was no possible to book it, something is missing")
+                                    }).then(async (new_booking) => {
+                                        res.status(201).send(new_booking)
+                                        // Send email
+                                        if (req.body.testing == undefined && req.body.testing != true) {
+                                            await sendReminder(user, new_booking, company);
+                                        }
+                                    });
+                            })
                             .catch((e) => {
-                                res.status(405).send({error: "It was no possible to book it, something is missing"})
-                                console.log("It was no possible to book it, something is missing")
-                            }).then(async (new_booking) => {
-                                res.status(201).send(new_booking)
-                                // Send email
-                                if (req.body.testing == undefined && req.body.testing != true) {
-                                    await sendReminder(user, new_booking, company);
-                                }
+                                res.status(404).send({error: "Company was not found"})
+                                console.log("Company was not found")
                             });
-
-                    })
-                    .catch((e) => {
-                        res.status(404).send({error: "Company was not found"})
-                        console.log("Company was not found")
-                    });
+                    }
+                })
             }).catch((e) => {
                 res.status(405).send({error: "Wrong body format, check docs for further info /api-docs, Company not found"})
             })
@@ -237,7 +243,7 @@ let services_bookings = async (req, res) => {
             time: req.query.time
         }).then((booking) => {
             Company.findOne({nif: req.params.nif}).then((company) => {
-                let capacity = company.capacity + booking.length
+                let capacity = company.capacity - booking.length
                 let result = {}
                 result.capacity = capacity
                 result.bookings = booking
