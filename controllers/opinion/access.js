@@ -2,7 +2,6 @@ const Company = require('../../models/company');
 const Opinion = require('../../models/opinions');
 const User = require('../../models/user');
 const Vote = require('../../models/vote');
-const jwt_login_strategy = require('../../config/passport');
 
 /**
  *
@@ -38,11 +37,18 @@ function findOwner(opinion_id, user_id) {
                         return reject(false)
                     }
                 }
-
             })
     });
+}
 
-
+/**
+ *
+ * @param message
+ * @param e
+ */
+function sendInternalError(message,e,res) {
+    res.status(500).send({error: message});
+    console.log(e);
 }
 
 /**
@@ -76,27 +82,20 @@ let write_opinion = async (req, res, next) => {
                             res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
                             console.log(e)
                         })
-
                     } else {
                         res.status(404).send({error: "Error giving opinion, User not found"});
                     }
-                }).catch((err) => {
-                    res.status(500).send({error: "Internal server error, User not found"});
-                    console.log("Error while finding a user to give their opinion");
+                }).catch(() => {
+                    sendInternalError("Internal server error, User not found","Error while finding a user to give their opinion",res)
                 })
-
             } else {
                 res.status(404).send({error: "Error giving opinion, Company not found"});
             }
-
         }).catch((e) => {
-            res.status(500).send({error: "Error giving opinion, Company not found"});
-            console.log("Error while finding a company to give their opinion");
+            sendInternalError("Error giving opinion, Company not found","Error while finding a company to give their opinion",res);
         })
-
     } catch (e) {
-        res.status(500).send({error: "Internal server error"});
-        console.log("Error while creating a commet " + e);
+        sendInternalError("Internal server error","Error while creating a commet " + e,res)
     }
 }
 
@@ -119,8 +118,7 @@ let delete_opinion = async (req, res, next) => {
                 res.status(404).send({error: "Not found Opinion"});
             })
         }).catch((e) => {
-            res.status(500).send({error: "Internal server error, could not delete an Opinion"});
-            console.log("Error while deleting an Opinion " + e);
+            sendInternalError( "Internal server error, could not delete an Opinion","Error while deleting an Opinion " + e,res);
         })
     }
 }
@@ -176,14 +174,12 @@ let vote_opinion = async (req, res, next) => {
                         res.status(404).send({error: "Internal server error, could find not the Opinion"});
                         console.log("Error while voting an Opinion, could find not the Opinion");
                     })
-
             } else {
                 res.status(404).send({error: "Could find not the Opinion"});
             }
         })
-        .catch((err) => {
-            res.status(500).send({error: "Internal server error, could find not the Opinion"});
-            console.log("Error while voting an Opinion, could find not the Opinion");
+        .catch(() => {
+            sendInternalError( "Internal server error, could find not the Opinion","Error while voting an Opinion, could find not the Opinion",res);
         })
 }
 
