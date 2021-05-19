@@ -463,6 +463,14 @@ let remaining_space_by_date = async (req, res) => {
     }
 }
 
+/**
+ *
+ * @param time_slot
+ * @param company
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 async function get_capacities(time_slot, company, req, res) {
     return new Promise((resolve, reject) => {
         let result = {}
@@ -475,6 +483,11 @@ async function get_capacities(time_slot, company, req, res) {
     })
 }
 
+/**
+ *
+ * @param time12h
+ * @returns {string}
+ */
 const convertTime12to24 = (time12h) => {
     let modifier = time12h.slice(-2);
     let time = time12h.substring(0, time12h.length - 2);

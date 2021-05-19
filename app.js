@@ -53,7 +53,7 @@ loadDistrict.loadCouncilInfo();
 // Schedule tasks to be run on the server.
 // Two in the morning '*/25 * * * *'
 // Due to covid most business close at the hour
-cron.schedule('*/25 * * * *', async function () {
+cron.schedule('15 21 * * *', async function () {
     console.log('Starting to update Health Zone information');
     await ta.getCasesFile().then(() => {
         console.log('Information updated working correctly');
@@ -63,7 +63,7 @@ cron.schedule('*/25 * * * *', async function () {
     });
 });
 
-cron.schedule('*/25 * * * *', async function () {
+cron.schedule('20 21 * * *', async function () {
     console.log('Starting to update Stats about Database');
     await upDateStats();
     console.log('Finishing to update Health Zone information');
