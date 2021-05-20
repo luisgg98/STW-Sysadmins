@@ -64,7 +64,7 @@ cron.schedule('1 */4 * * *',  function () {
     });
 });
 
-cron.schedule('8 */4 * * *',  function () {
+cron.schedule('8 */2 * * *',  function () {
     console.log('Starting to update Stats about Database');
     upDateStats().then(()=>{
         console.log('Finishing to update Health Zone information');

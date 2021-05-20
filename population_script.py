@@ -57,11 +57,10 @@ def create_booking(user_id, services, times, bearer):
     x = x[0]
     for i in services:
         for t in times:
-            payload = {'service': i, 'date': x, 'time': t,'testing': True}
+            payload = {'service': i, 'date': x, 'time': t, 'testing': True}
             r = requests.post(url, data=json.dumps(payload), headers=headers)
             if r.status_code != 201:
                 print(r.status_code)
-                print(r.body)
                 print('Error creating booking')
 
 
@@ -75,7 +74,6 @@ def create_master():
     r = requests.post(url, data=json.dumps(payload), headers=headers)
 
 
-# url = 'http://localhost:3000/api/api/companies/' + company.nif + '/opinions'
 def populate_opinions(companies, users, tokens):
     opinions = [
         {'comment': 'Me gusta este lugar.', 'user_id': users[0], 'stars': 5},
@@ -125,37 +123,41 @@ miguel_token = log_user(miguel)
 
 print('Users created!')
 barberia = {'nif': 'A23456789', 'name': 'Hayk EMpresa', 'email': 'haykempresa@gmail.com',
-              'password': 'deportivo1234', 'street': 'Calle poeta jorge manrique', 'streetnumber': '2', 'zipcode': '50018',
-              'category': 'Salud y Belleza', 'service_duration': 30, 'capacity': 2, 'testing': True, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': True}
+            'password': 'deportivo1234', 'street': 'Calle poeta jorge manrique', 'streetnumber': '2',
+            'zipcode': '50018',
+            'category': 'Salud y Belleza', 'service_duration': 30, 'capacity': 2, 'testing': True,
+            'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+                         'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                         'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                         'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                         'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                         'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                         'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': True}
 create_company(barberia)
 ## Populate COMPANIES collection
 print('Creating companies...')
 deportivo1 = {'nif': 'A12345678', 'name': 'Centro Deportivo Municipal Alberto Maestro', 'email': 'deportivo1@gmail.com',
               'password': 'deportivo1234', 'street': 'Camino de las Torres', 'streetnumber': '2', 'zipcode': '50002',
-              'category': 'Deporte', 'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': True}
+              'category': 'Deporte', 'service_duration': 30, 'capacity': 10,
+              'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+                           'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                           'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                           'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                           'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                           'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                           'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': True}
 create_company(deportivo1)
 
 deportivo2 = {'nif': 'B12345678', 'name': 'Centro Deportivo Municipal La Granja', 'email': 'deportivo2@gmail.com',
               'password': 'deportivo1234', 'street': 'Camino Cabaldós', 'streetnumber': '45', 'zipcode': '50013',
-              'category': 'Deporte', 'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': True}
+              'category': 'Deporte', 'service_duration': 30, 'capacity': 10,
+              'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+                           'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                           'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                           'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                           'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                           'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                           'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': True}
 create_company(deportivo2)
 
 ocio1 = {'nif': 'C12345678', 'name': 'Warhammer', 'email': 'ocio1@gmail.com', 'password': 'deportivo1234',
@@ -166,7 +168,8 @@ ocio1 = {'nif': 'C12345678', 'name': 'Warhammer', 'email': 'ocio1@gmail.com', 'p
                                                               'thursday': {'open_1': '9:00', 'close_1': '21:00'},
                                                               'friday': {'open_1': '9:00', 'close_1': '21:00'},
                                                               'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': True}
+                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}},
+         'testing': True}
 create_company(ocio1)
 
 ocio2 = {'nif': 'D12345678', 'name': 'Fox', 'email': 'ocio2@gmail.com', 'password': 'deportivo1234',
@@ -177,87 +180,108 @@ ocio2 = {'nif': 'D12345678', 'name': 'Fox', 'email': 'ocio2@gmail.com', 'passwor
                                                               'thursday': {'open_1': '9:00', 'close_1': '21:00'},
                                                               'friday': {'open_1': '9:00', 'close_1': '21:00'},
                                                               'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': True}
+                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}},
+         'testing': True}
 create_company(ocio2)
 
 civico1 = {'nif': 'V12345678', 'name': 'Centro Cívico Delicias', 'email': 'civico1@gmail.com',
            'password': 'deportivo1234', 'street': 'Av. Navarra', 'streetnumber': '54', 'zipcode': '50010',
-           'category': 'Administración pública', 'service_duration': 30, 'capacity': 10, 'testing': True, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}}
+           'category': 'Administración pública', 'service_duration': 30, 'capacity': 10, 'testing': True,
+           'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+                        'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                        'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                        'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                        'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                        'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                        'sunday': {'open_1': '9:00', 'close_1': '21:00'}}}
 create_company(civico1)
 
 admin1 = {'nif': 'F12345678', 'name': 'Ayuntamiento de Zaragoza: Servicio de Educación', 'email': 'admin1@gmail.com',
           'password': 'deportivo1234', 'street': 'Calle de Miguel Servet', 'streetnumber': '57', 'zipcode': '50013',
-          'category': 'Administración pública', 'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': True}
+          'category': 'Administración pública', 'service_duration': 30, 'capacity': 10,
+          'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+                       'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                       'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                       'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                       'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                       'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                       'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': True}
 create_company(admin1)
 
 admin2 = {'nif': 'E12345678', 'name': 'Zaragoza Activa', 'email': 'admin2@gmail.com', 'password': 'deportivo1234',
           'street': 'Calle Mas de las Matas', 'streetnumber': '20', 'zipcode': '50014',
-          'category': 'Administración pública', 'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                                  'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                                  'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                                  'thursday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                                  'friday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                                  'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                                  'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': True}
+          'category': 'Administración pública', 'service_duration': 30, 'capacity': 10,
+          'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+                       'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                       'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                       'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                       'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                       'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                       'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': True}
 create_company(admin2)
 
 salud1 = {'nif': 'G12345678', 'name': 'Voga', 'email': 'salud1@gmail.com', 'password': 'deportivo1234',
           'street': 'Av. Juan Carlos I', 'streetnumber': '43', 'zipcode': '50009', 'category': 'Salud y Belleza'
     , 'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': True}
+                                                           'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'sunday': {'open_1': '9:00', 'close_1': '21:00'}},
+          'testing': True}
 create_company(salud1)
 
 salud2 = {'nif': 'H12345678', 'name': 'Farmacia', 'email': 'salud2@gmail.com', 'password': 'deportivo1234',
           'street': 'Calle de Miguel Servet', 'streetnumber': '84', 'zipcode': '50013', 'category': 'Salud y Belleza'
     , 'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': True}
+                                                           'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'sunday': {'open_1': '9:00', 'close_1': '21:00'}},
+          'testing': True}
 create_company(salud2)
 
 comercio1 = {'nif': 'I12345678', 'name': 'Mercado Central de Zaragoza', 'email': 'comercio1@gmail.com',
              'password': 'deportivo1234', 'street': 'Av. de César Augusto', 'streetnumber': '110', 'zipcode': '50003',
              'category': 'Comercio'
     , 'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': True}
+                                                           'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'sunday': {'open_1': '9:00', 'close_1': '21:00'}},
+             'testing': True}
 create_company(comercio1)
 
 comercio2 = {'nif': 'J12345678', 'name': 'Carrefour', 'email': 'comercio2@gmail.com', 'password': 'deportivo1234',
              'street': 'Calle de María Zambrano', 'streetnumber': '71', 'zipcode': '50018', 'category': 'Comercio'
     , 'service_duration': 30, 'capacity': 10, 'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'thursday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'friday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'saturday': {'open_1': '9:00', 'close_1': '21:00'},
-                                                              'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': True}
-create_company(comercio2)
+                                                           'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                                                           'sunday': {'open_1': '9:00', 'close_1': '21:00'}},
+             'testing': True}
 
+create_company(comercio2)
+veterinario = {
+    'name': 'Clínica Veterinaria Gavear', 'nif': 'JO2345678', 'email': 'vet1@gmail.com',
+    'password': 'deportivo1234', 'category': 'Salud y Belleza', 'service_duration': 30, 'capacity': 10,
+    'street': 'Poeta Jorge Manrique', 'streetnumber': '4', 'zipcode': '50018',
+    'schedule': {'monday': {'open_1': '9:00', 'close_1': '21:00'},
+                 'tuesday': {'open_1': '9:00', 'close_1': '21:00'},
+                 'wednesday': {'open_1': '9:00', 'close_1': '21:00'},
+                 'thursday': {'open_1': '9:00', 'close_1': '21:00'},
+                 'friday': {'open_1': '9:00', 'close_1': '21:00'},
+                 'saturday': {'open_1': '9:00', 'close_1': '21:00'},
+                 'sunday': {'open_1': '9:00', 'close_1': '21:00'}}, 'testing': True}
+
+create_company(veterinario)
 print('Companies created!')
 
 ## Populate SERVICES collection
@@ -285,7 +309,6 @@ company = {'email': deportivo2['email'], 'password': deportivo2['password']}
 deportivo2_token = log_company(company)
 company = {'email': civico1['email'], 'password': civico1['password']}
 civico1_token = log_company(company)
-
 
 print('Creating services...')
 ##Creating services for 1 company
@@ -405,6 +428,9 @@ create_booking(facundo_id, services_deportivo1_id, times, facundo_token)
 create_booking(isabel_id, services_comercio1_id, times, isabel_token)
 
 create_booking(borja_id, services_admin1_id, times, borja_token)
+
+create_booking(ramon_id, services_salud1_id, times, ramon_token)
+
 print('Bookings done!')
 
 ##BOOKING
