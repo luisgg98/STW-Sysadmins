@@ -46,7 +46,7 @@ function findOwner(opinion_id, user_id) {
  * @param message
  * @param e
  */
-function sendInternalError(message,e,res) {
+function sendInternalError(message, e, res) {
     res.status(500).send({error: message});
     console.log(e);
 }
@@ -86,16 +86,16 @@ let write_opinion = async (req, res, next) => {
                         res.status(404).send({error: "Error giving opinion, User not found"});
                     }
                 }).catch(() => {
-                    sendInternalError("Internal server error, User not found","Error while finding a user to give their opinion",res)
+                    sendInternalError("Internal server error, User not found", "Error while finding a user to give their opinion", res)
                 })
             } else {
                 res.status(404).send({error: "Error giving opinion, Company not found"});
             }
         }).catch((e) => {
-            sendInternalError("Error giving opinion, Company not found","Error while finding a company to give their opinion",res);
+            sendInternalError("Error giving opinion, Company not found", "Error while finding a company to give their opinion", res);
         })
     } catch (e) {
-        sendInternalError("Internal server error","Error while creating a commet " + e,res)
+        sendInternalError("Internal server error", "Error while creating a commet " + e, res)
     }
 }
 
@@ -118,7 +118,7 @@ let delete_opinion = async (req, res, next) => {
                 res.status(404).send({error: "Not found Opinion"});
             })
         }).catch((e) => {
-            sendInternalError( "Internal server error, could not delete an Opinion","Error while deleting an Opinion " + e,res);
+            sendInternalError("Internal server error, could not delete an Opinion", "Error while deleting an Opinion " + e, res);
         })
     }
 }
@@ -179,7 +179,7 @@ let vote_opinion = async (req, res, next) => {
             }
         })
         .catch(() => {
-            sendInternalError( "Internal server error, could find not the Opinion","Error while voting an Opinion, could find not the Opinion",res);
+            sendInternalError("Internal server error, could find not the Opinion", "Error while voting an Opinion, could find not the Opinion", res);
         })
 }
 

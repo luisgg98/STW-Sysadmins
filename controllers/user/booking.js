@@ -5,6 +5,8 @@ const Company = require('../../models/company')
 const {sendCancellation} = require("../../services/email");
 const {sendReminder} = require("../../services/email");
 const jwt_login_strategy = require('../../config/passport');
+const {sendReminderCompany} = require("../../services/email");
+const {sendCancellationCompany} = require("../../services/email");
 
 // /users/{ID}/bookings
 // GET (get all bookings or filter by id
@@ -160,6 +162,7 @@ let update_bookings = async (req, res) => {
                                         // Send email
                                         if (req.body.testing == undefined && req.body.testing != true) {
                                             sendReminder(user, new_booking, company);
+                                            sendReminderCompany(user, new_booking, company);
                                         }
                                     })
                                     .catch((e) => {
@@ -205,6 +208,7 @@ let delete_booking = async (req, res) => {
                     company.save().then(() => {
                         if (req.body.testing == undefined && req.body.testing != true) {
                             sendCancellation(user, booking, company);
+                            sendCancellationCompany(user, booking, company);
                         }
                         res.status(204).send()
                     }).catch((e) => {
@@ -355,7 +359,7 @@ let company_bookings = async (req, res) => {
  */
 let remaining_space_by_date = async (req, res) => {
     if (req.query.date) {
-        Company.findOne({nif: req.params.nif}).then(async(company) => {
+        Company.findOne({nif: req.params.nif}).then(async (company) => {
             // Parse date
             let array_date = req.query.date.split("-")
             let year = parseInt(array_date[0])
@@ -474,10 +478,14 @@ let remaining_space_by_date = async (req, res) => {
 async function get_capacities(time_slot, company, req, res) {
     return new Promise((resolve, reject) => {
         let result = {}
-        Booking.find({company_nif: req.params.nif, date: req.query.date, time: convertTime12to24(time_slot)}).then((bookings) =>{
+        Booking.find({
+            company_nif: req.params.nif,
+            date: req.query.date,
+            time: convertTime12to24(time_slot)
+        }).then((bookings) => {
             result = company.capacity - bookings.length
             resolve(result)
-        }).catch((e)=>{
+        }).catch((e) => {
             reject(e)
         })
     })
