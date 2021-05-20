@@ -23,7 +23,7 @@ const indexRouter = require('./routes/index');
 const apiRouter = require('./routes/api');
 // This allows us to do cron scheduled activities
 const cron = require('node-cron');
-const ta = require('./services/transparency_aragon')
+//const getCasesFile = require('./services/transparency_aragon')
 const app = express();
 
 // Add  fav icon
@@ -45,6 +45,7 @@ app.use(cookieParser());
 app.use(cors());
 
 const loadDistrict = require('./scripts/loadDistrict');
+const {getCasesFile} = require("./services/transparency_aragon");
 const {upDateStats} = require("./services/stats");
 
 //  In order not to duplicate the information about the
@@ -53,9 +54,9 @@ loadDistrict.loadCouncilInfo();
 // Schedule tasks to be run on the server.
 // Two in the morning '*/25 * * * *'
 // Due to covid most business close at the hour
-cron.schedule('15 21 * * *', async function () {
+cron.schedule('1 */4 * * *',  function () {
     console.log('Starting to update Health Zone information');
-    await ta.getCasesFile().then(() => {
+    getCasesFile().then(() => {
         console.log('Information updated working correctly');
     }).catch((error) => {
         console.log('Updating error, something goes wrong');
@@ -63,10 +64,14 @@ cron.schedule('15 21 * * *', async function () {
     });
 });
 
-cron.schedule('20 21 * * *', async function () {
+cron.schedule('8 */4 * * *',  function () {
     console.log('Starting to update Stats about Database');
-    await upDateStats();
-    console.log('Finishing to update Health Zone information');
+    upDateStats().then(()=>{
+        console.log('Finishing to update Health Zone information');
+    }).catch((error)=>{
+        console.log('Updating  stats error');
+        console.log('Error: ' + error);
+    })
 });
 
 app.use('/', indexRouter);

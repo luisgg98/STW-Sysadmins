@@ -283,8 +283,8 @@ company = {'email': deportivo1['email'], 'password': deportivo1['password']}
 deportivo1_token = log_company(company)
 company = {'email': deportivo2['email'], 'password': deportivo2['password']}
 deportivo2_token = log_company(company)
-#company = {'email': civico1['email'], 'password': civico1['password']}
-#civico1_token = log_company(company)
+company = {'email': civico1['email'], 'password': civico1['password']}
+civico1_token = log_company(company)
 
 
 print('Creating services...')
