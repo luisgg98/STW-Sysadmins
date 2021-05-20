@@ -59,9 +59,6 @@ def create_booking(user_id, services, times, bearer):
         for t in times:
             payload = {'service': i, 'date': x, 'time': t, 'testing': True}
             r = requests.post(url, data=json.dumps(payload), headers=headers)
-            if r.status_code != 201:
-                print(r.status_code)
-                print('Error creating booking')
 
 
 def create_master():
