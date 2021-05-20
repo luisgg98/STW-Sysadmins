@@ -36,7 +36,7 @@ function SendCompany(company, res) {
 
 /* istanbul ignore next */
 function InternalServerError(err, res) {
-    console.log(err)
+    console.log("Internal error server")
     res.status(500).send({error: "Internal error server"})
 }
 
@@ -150,7 +150,7 @@ let register = async (req, res) => {
                                         }
                                     }).catch((e) => {
                                         res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
-                                        console.log(e)
+                                        console.log("Wrong json format")
                                     })
                             }
                         );
@@ -262,7 +262,6 @@ let update = async (req, res) => {
                                 }
                             ).catch((e) => {
                                 res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
-                                console.log(e)
                             })
                     }
                 );
@@ -290,11 +289,9 @@ let delete_company = async (req, res) => {
                 Company.deleteOne({_id: req.params.id}).then((company) => {
                     res.status(204).send()
                 }).catch((e) => {
-                    console.log(e)
                     res.status(404).send({error: "Company not found"})
                 })
             }).catch((e) => {
-                console.log(e)
                 res.status(404).send({error: "Error while deleting company"})
             })
         }
@@ -325,7 +322,6 @@ let create_service = async (req, res, next) => {
                     }
                 ).catch((e) => {
                 res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
-                console.log(e)
             })
         } else {
             res.status(404).send({error: "Company not found"})
@@ -354,7 +350,6 @@ let get_services = async (req, res, next) => {
                     res.send({services: service, time_slots: company.time_slots})
                 }).catch((e) => {
                     res.status(404).send({error: "Service not found"})
-                    console.log(e)
                 })
             } else {
                 res.status(404).send({error: "Company not found"})
@@ -365,13 +360,11 @@ let get_services = async (req, res, next) => {
         // Check if company exists
         Company.findOne({nif: req.params.nif}).catch((err) => {
             res.status(404).send({error: "Company not found"})
-            console.log(err)
         }).then((company) => {
             if (company) {
                 Service.find({company: req.params.nif})
                     .catch((err) => {
                         res.status(500).send({error: "Internal error server"})
-                        console.log(err)
                     }).then((services) => {
                     if (services) {
                         res.send({services: services, time_slots: company.time_slots})

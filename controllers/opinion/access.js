@@ -80,7 +80,6 @@ let write_opinion = async (req, res, next) => {
                             res.status(201).send(opinion)
                         }).catch((e) => {
                             res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
-                            console.log(e)
                         })
                     } else {
                         res.status(404).send({error: "Error giving opinion, User not found"});
@@ -159,11 +158,9 @@ let vote_opinion = async (req, res, next) => {
                                         res.send(new_opinion);
                                     }).catch((e) => {
                                         res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
-                                        console.log(e)
                                     });
                             }).catch((e) => {
                                 res.status(405).send({error: "Wrong json format, check docs for further info /api-doc"})
-                                console.log(e)
                             });
                         } else {
                             res.status(401).send({error: "Error while voting an Opinion,STOP THE COUNT YOU HAVE ALREADY VOTE"});

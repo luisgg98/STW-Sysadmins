@@ -54,7 +54,7 @@ loadDistrict.loadCouncilInfo();
 // Schedule tasks to be run on the server.
 // Two in the morning '*/25 * * * *'
 // Due to covid most business close at the hour
-cron.schedule('1 */4 * * *',  function () {
+cron.schedule('1 */4 * * *', function () {
     console.log('Starting to update Health Zone information');
     getCasesFile().then(() => {
         console.log('Information updated working correctly');
@@ -64,11 +64,11 @@ cron.schedule('1 */4 * * *',  function () {
     });
 });
 
-cron.schedule('8 */2 * * *',  function () {
+cron.schedule('8 */2 * * *', function () {
     console.log('Starting to update Stats about Database');
-    upDateStats().then(()=>{
+    upDateStats().then(() => {
         console.log('Finishing to update Health Zone information');
-    }).catch((error)=>{
+    }).catch((error) => {
         console.log('Updating  stats error');
         console.log('Error: ' + error);
     })

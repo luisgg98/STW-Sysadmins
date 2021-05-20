@@ -79,7 +79,6 @@ let login = async (req, res) => {
             res.status(401).send({error: "Incorrect login"})
         }
     }).catch((e) => {
-        console.log(e)
         res.status(404).send({error: "Wrong user"})
     })
 }
@@ -140,7 +139,6 @@ let delete_user = async (req, res) => {
             })
         }).catch((e) => {
             res.status(404).send({error: "Error while deleting user"})
-            console.log(e)
         })
     }
 }

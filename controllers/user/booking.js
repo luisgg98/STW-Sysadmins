@@ -131,7 +131,6 @@ let fetchBooking = async (req, res) => {
             res.status(404).send({error: "Booking not found"})
         }
     }).catch((e) => {
-        console.log(e)
         res.status(500).send({error: "Internal error server"})
     })
 }
@@ -176,7 +175,6 @@ let update_bookings = async (req, res) => {
                         }
                     }).catch((e) => {
                         res.status(405).send({error: "Wrong user_id format"})
-                        console.log(e)
                     })
                 }
             }).catch((e) => {
@@ -213,7 +211,6 @@ let delete_booking = async (req, res) => {
                         res.status(204).send()
                     }).catch((e) => {
                         res.status(405).send({error: "Wrong json format, check docs for further info /api-doc, ERROR SAVING"})
-                        console.log(e)
                     })
                 } else {
                     res.status(401).send({error: "Access denied"})
@@ -227,7 +224,6 @@ let delete_booking = async (req, res) => {
         })
     }).catch((e) => {
         res.status(405).send({error: "Wrong booking id format,BOOKING NOT FOUND"})
-        console.log(e)
     })
 }
 

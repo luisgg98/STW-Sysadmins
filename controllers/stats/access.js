@@ -11,7 +11,6 @@ let getStatsBookings = async (req, res) => {
     StatsBooking.find({}).then((stats) => {
         res.status(200).send(stats);
     }).catch((e) => {
-        console.log(e)
         res.status(500).send({error: "Internal server error,something was wrong getting the stats"});
     })
 }
@@ -26,7 +25,6 @@ let getStatsCompanies = async (req, res) => {
     StatsCompany.find({}).then((stats) => {
         res.status(200).send(stats);
     }).catch((e) => {
-        console.log(e)
         res.status(500).send({error: "Internal server error,something was wrong getting the stats"});
     })
 }
@@ -41,7 +39,6 @@ let getStatsCategory = async (req, res) => {
     StatsCategory.find({}).then((stats) => {
         res.status(200).send(stats);
     }).catch((e) => {
-        console.log(e)
         res.status(500).send({error: "Internal server error,something was wrong getting the stats"});
     })
 
