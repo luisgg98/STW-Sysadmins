@@ -33,13 +33,20 @@ describe('Testing email service', function () {
 
 
     it('Sending reminder emails', function (done) {
-        sendReminder(user, booking, company);
-        done();
+        sendReminder(user, booking, company).then(
+            ()=>{
+                done();
+            }
+        )
+
     })
 
     it('Sending cancellation emails', function (done) {
-        sendCancellation(user, booking, company);
-        done();
+        sendCancellation(user, booking, company).then(
+            ()=>{
+                done();
+            }
+        )
     })
 
 

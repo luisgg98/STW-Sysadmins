@@ -3,12 +3,12 @@ const password = 'Zitation4aplicacion4stw123';
 const QRCode = require('qrcode');
 const url_login = 'https://zitation.herokuapp.com/login';
 const zitation_email = 'zitationunizarstw@gmail.com';
-
+//            expires: 1621963296907
 /**
  *
  * @param mailOptions
  */
-function sendMail(mailOptions) {
+async function sendMail(mailOptions) {
     let transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
@@ -16,9 +16,8 @@ function sendMail(mailOptions) {
             user: zitation_email,
             clientId: '389192230566-9sdamu7n7nidq8bta9aodm4f6s59agrj.apps.googleusercontent.com',
             clientSecret: '72ZfEvP7s72PWeDHdWnwsNgu',
-            refreshToken: '1//03rI-Yo9OTW_ICgYIARAAGAMSNwF-L9IrLmUM-ZFMTByVdNlbvk98NBx8lhSCrTUigPyNzo_L__49RBOOHZg387rupGYVzAG1BPw',
-            accessToken: 'ya29.a0AfH6SMBYLzlV8I5oWvZOkaHqTIr_OvhRlaDIhX0S10ftknqLrDUCov-_XfYNZo_eM-TJSr05-Tj3wipDcJitAskZLthYZm5JhKJSzDcZUPaT1Y_fBzBxJrXQfr5WrvJ7LHCtCHbALWWaROg3eV1VVlJsddm0',
-            expires: 1621245605911
+            refreshToken: '1//031xPoqaROKczCgYIARAAGAMSNwF-L9Ir36xpeb4FxQSGGdz5xn0yJtgvhXo896TXOvBl41r9EzJN3TijcBCl9OZFCNMtOvNWk9c',
+            accessToken: 'ya29.a0AfH6SMBtdZowCmfKAEQB801UiAA0Qdx_Jk9OtuSEgxMvOqO0n8I3ABKG87gFyRbvXbU1iPN_n5GJqaPYKsDdVkpEWK-MMFqytUJkOumCxmeZYYBbsvQiC7V2Xa4dYy1VfPof8yBg7Bot2rnYtnFpzWR49BVe',
         }
     });
     transporter.sendMail(
@@ -35,7 +34,7 @@ function sendMail(mailOptions) {
  * @param booking
  * @param company
  */
-module.exports.sendCancellation = function (user, booking, company) {
+module.exports.sendCancellation = async function (user, booking, company) {
     let name = user.first_name + ' ' + user.last_name;
     let date = booking.date + ' a las  ' + booking.time + ' en ' + company.name;
     let place = company.street + ' , ' + company.streetnumber.toString() + ', ' + company.zipcode;
@@ -47,7 +46,7 @@ module.exports.sendCancellation = function (user, booking, company) {
                     <p>Le informamos que se ha cancelado la reserva de fecha ${date} en ${company.name}</p>
                     <p> Ubicada en ${place} </p>`
     };
-    sendMail(mailOptions);
+    await sendMail(mailOptions);
 }
 /**
  *
@@ -79,7 +78,7 @@ module.exports.sendReminder = async function (user, booking, company) {
             cid: 'qr' //my mistake was putting "cid:logo@cid" here!
         }]
     };
-    sendMail(mailOptions);
+    await sendMail(mailOptions);
 }
 
 /**
@@ -98,7 +97,7 @@ module.exports.sendWelcome = async function (user) {
                     <p>Ya puede iniciar sesión en <a href=${url_login}>Zitation App</a></p>
                     <p>Comience a reservar ya los servicios que desee.</p>`,
     };
-    sendMail(mailOptions);
+    await sendMail(mailOptions);
 }
 
 /**
@@ -115,7 +114,7 @@ module.exports.sendWelcomeCompany = async function (company) {
                     <p>Le damos la bienvenida a Zitation.</p>
                     <p>Ya puede registrar sus servicios en <a href=${url_login}>Zitation App</a></p>`,
     };
-    sendMail(mailOptions);
+    await sendMail(mailOptions);
 }
 
 /**
@@ -134,7 +133,7 @@ module.exports.sendReminderCompany = async function (user, booking, company) {
         html: `<p>${company.name}</p>
                     <p>${user_1} ha reservado cita el ${date} en ${company.name}</p>`,
     };
-    sendMail(mailOptions);
+    await sendMail(mailOptions);
 }
 
 /**
@@ -154,5 +153,5 @@ module.exports.sendCancellationCompany = async function (user, booking, company)
         html: `<p>${company.name}</p>
                     <p>${user_1} ha cancelado la reserva el ${date} en ${company.name}</p>`,
     };
-    sendMail(mailOptions);
+    await sendMail(mailOptions);
 }
